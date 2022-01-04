@@ -1,7 +1,7 @@
 // Firebase modules
 import { initializeApp } from "firebase/app"
 import { getFirestore } from "firebase/firestore"
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 
 // Firebase configuration settings
 const firebaseConfig = {
@@ -19,6 +19,19 @@ const app = initializeApp(firebaseConfig)
 // Firestore initialization
 const db = getFirestore(app)
 
+// Authentication initialization
+const auth = getAuth(app) 
+
+// Authenticate new user
+const newUser = async (email, password) => {
+    try {
+        await createUserWithEmailAndPassword(auth, email, password)
+        const userCredential = await signInWithEmailAndPassword(auth, email, password)
+    } catch(error) {
+        // display error
+    }
+}
+
 // Add, login, logout user
 
 // Retrieve one post, all posts from posts, all posts from everyone
@@ -30,3 +43,5 @@ const db = getFirestore(app)
 // Add, remove like
 
 // Add new DM, retrieve all DMs
+
+export default { newUser }
