@@ -17,3 +17,15 @@ const app = initializeApp(firebaseConfig)
 
 // Firestore initialization
 const db = getFirestore(app)
+
+// Add, login, logout user
+
+// Retrieve one post, all posts from posts, all posts from everyone
+
+// Add, edit, remove post
+
+// Add, edit, remove comment
+
+// Add, remove like
+
+// Add new DM, retrieve all DMs
