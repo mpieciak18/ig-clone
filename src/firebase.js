@@ -32,6 +32,15 @@ const newUser = async (email, password) => {
     }
 }
 
+// Sign in user
+const signInUser = async (email, password) => {
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password)
+    } catch(error) {
+        // display error
+    }
+}
+
 // Add, login, logout user
 
 // Retrieve one post, all posts from posts, all posts from everyone
