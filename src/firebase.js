@@ -1,5 +1,6 @@
 // Firebase modules
 import { initializeApp } from "firebase/app"
+import { getFirestore } from "firebase/firestore"
 
 // Firebase configuration settings
 const firebaseConfig = {
@@ -13,3 +14,6 @@ const firebaseConfig = {
 
 // Firebase app initialization
 const app = initializeApp(firebaseConfig)
+
+// Firestore initialization
+const db = getFirestore(app)
