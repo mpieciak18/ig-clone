@@ -1,6 +1,7 @@
 // Firebase modules
 import { initializeApp } from "firebase/app"
 import { getFirestore } from "firebase/firestore"
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
 
 // Firebase configuration settings
 const firebaseConfig = {
