@@ -108,6 +108,23 @@ const findAllPosts = async () => {
     return posts
 }
 
+// Retrieve all posts from user
+const findAllPostsFromUser = async (id) => {
+    const usersRef = collection(db, 'users')
+    const userRef = doc(usersRef, id)
+    const postsRef = collection(userRef, 'posts')
+    const postDocs = await getDocs(postsRef)
+    let posts = []
+    postDocs.forEach((doc) => {
+        const post = {
+            id: doc.id,
+            data: doc.data()
+        }
+        posts = [...posts, post]
+    })
+    return posts
+}
+
 // Create new post & return new post ID
 const newPost = async (text, image, date) => {
     const user = auth.currentUser
