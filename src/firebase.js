@@ -4,7 +4,8 @@ import {
     getFirestore,
     doc,
     collection,
-    setDoc
+    setDoc,
+    getDoc
 } from "firebase/firestore"
 import { 
     getAuth,
@@ -33,22 +34,21 @@ const db = getFirestore(app)
 const auth = getAuth(app) 
 
 // Authenticate new user
-const newUser = async (email, password, username) => {
+const newUser = async (email, password, username, name) => {
     try {
-        await createUserWithEmailAndPassword(auth, email, password)
-        const userCredential = await signInWithEmailAndPassword(auth, email, password)
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password)
         const user = userCredential.user
-        await addUser(user.email, user.uid, username)
+        await addUser(user.email, user.uid, username, name)
     } catch(error) {
         // display error
     }
 }
 
 // Add user to users collection
-const addUser = async (email, id, username) => {
+const addUser = async (email, id, username, name) => {
     const usersRef = collection(db, 'users')
     const newUserRef = doc(usersRef, id)
-    const newUserData = {email: email, username: username}
+    const newUserData = {email: email, username: username, name: name}
     await setDoc(newUserRef, newUserData)
 }
 
@@ -64,6 +64,15 @@ const signInUser = async (email, password) => {
 // Sign out user
 const signOutUser = async () => {
     await signOut()
+}
+
+// Return user data
+const findUserData = async (id) => {
+    const usersRef = collection(db, 'users')
+    const userRef = doc(usersRef, id)
+    const userDoc = await getDoc(userRef)
+    const user = userDoc.data()
+    return user
 }
 
 // Retrieve one post, all posts from posts, all posts from everyone
