@@ -6,7 +6,8 @@ import {
     collection,
     setDoc,
     getDoc,
-    getDocs
+    getDocs,
+    deleteDoc
 } from "firebase/firestore"
 import { 
     getAuth,
@@ -158,6 +159,24 @@ const addPostToUserPostsCollection = async (data) => {
     const postsRef = collection(userRef, 'posts')
     const postRef = doc(postsRef, postId)
     setDoc(postRef, data)
+}
+
+// Remove post from posts collection & user posts subcollection
+const removePost = async (id) => {
+    const postId = id
+    // First, retrieve associated user ID from post in post collection
+    const postsRef = collection(db, 'posts')
+    const postRef = doc(postsRef, postId)
+    const postDoc = await getDoc(postRef)
+    const userId = postDoc.user
+    // Second, delete post from post collection
+    await deleteDoc(postRef)
+    // Third, delete post from user posts subcollection
+    const usersRef = collection(db, 'users')
+    const userRef = doc(usersRef, userId)
+    const userPostsRef = collection(userRef, 'posts')
+    const userPostRef = doc(userPostsRef, postId)
+    await deleteDoc(userPostRef)
 }
 
 // Add, edit, remove post
