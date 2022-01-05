@@ -33,25 +33,22 @@ const db = getFirestore(app)
 const auth = getAuth(app) 
 
 // Authenticate new user
-const newUser = async (email, password) => {
+const newUser = async (email, password, username) => {
     try {
         await createUserWithEmailAndPassword(auth, email, password)
         const userCredential = await signInWithEmailAndPassword(auth, email, password)
-        await addUser(userCredential.user)
+        const user = userCredential.user
+        await addUser(user.email, user.uid, username)
     } catch(error) {
         // display error
     }
 }
 
 // Add user to users collection
-const addUser = async (user) => {
+const addUser = async (email, id, username) => {
     const usersRef = collection(db, 'users')
-
-    const id = user.uid
-    const email = user.email
     const newUserRef = doc(usersRef, id)
-    const newUserData = {email: email}
-
+    const newUserData = {email: email, username: username}
     await setDoc(newUserRef, newUserData)
 }
 
@@ -72,9 +69,6 @@ const signOutUser = async () => {
 // Retrieve one post, all posts from posts, all posts from everyone
 
 // Add, edit, remove post
-const addPost = async () => {
-
-}
 
 // Add, edit, remove comment
 
