@@ -5,8 +5,7 @@ import {
     doc,
     collection,
     setDoc,
-    getDoc,
-    addDoc
+    getDoc
 } from "firebase/firestore"
 import { 
     getAuth,
@@ -95,12 +94,21 @@ const newPost = async (text, image, date) => {
 
 // Add post to posts collection in db & return post id
 const addPostToPosts = async (data) => {
-    //
+    const postsRef = collection(db, 'posts')
+    const postRef = doc(postsRef)
+    await setDoc(postRef, data)
+    return postRef.id
 }
 
 // Add post to posts subcollection in user doc
-const addPostToPosts = async (data) => {
-    //
+const addPostToUserPostsCollection = async (data) => {
+    const userId = data.user
+    const postId = data.postId
+    const usersRef = collection(db, 'users')
+    const userRef = doc(usersRef, userId)
+    const postsRef = collection(userRef, 'posts')
+    const postRef = doc(postsRef, postId)
+    setDoc(postRef, data)
 }
 
 // Add, edit, remove post
