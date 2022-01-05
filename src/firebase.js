@@ -80,8 +80,6 @@ const findUser = async (userId) => {
     return user
 }
 
-// Retrieve one post, all posts from posts, all posts from everyone
-
 // Retrieve single post
 const findSinglePost = async (postId) => {
     const postsRef = collection(db, 'posts')
@@ -137,8 +135,7 @@ const newPost = async (text, image, date) => {
         user: userId
     }
     const postId = await addPostToPosts(postData)
-    postData.postId = postId
-    await addPostToUserPostsCollection(postData)
+    await addPostToUserPostsCollection(postData, postId)
     return postId
 }
 
@@ -151,9 +148,8 @@ const addPostToPosts = async (data) => {
 }
 
 // Add post to posts subcollection in user doc
-const addPostToUserPostsCollection = async (data) => {
+const addPostToUserPostsCollection = async (data, postId) => {
     const userId = data.user
-    const postId = data.postId
     const usersRef = collection(db, 'users')
     const userRef = doc(usersRef, userId)
     const postsRef = collection(userRef, 'posts')
@@ -177,9 +173,32 @@ const removePost = async (postId) => {
     const userPostRef = doc(userPostsRef, postId)
     await deleteDoc(userPostRef)
 }
+// Create new comment & return comment ID
+const newComment = async (postId, date) => {
+    // First, set up comment data
+    const user = auth.currentUser()
+    const userId = user.uid
+    const commentData = {
+        post: postId,
+        date: date,
+        user: userId
+    }
+    // Second, add comment to db -> posts -> comments
+    // and assign the randomly generated comment id to a variable
+    const commentId = await addCommentToPost(commentData)
+    // Third, add comment to db -> users -> posts -> comments
+    await addCommentToUserPost(commentData, commentId)
+    // Fourth, return comment id
+    return commentId
+}
 
-// Add comment
-const addComment = (userId)
+const addCommentToPost = async (data) => {
+    //
+}
+
+const addCommentToUserPost = async (data) => {
+    //
+}
 
 // Add & remove comment
 
