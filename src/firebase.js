@@ -69,9 +69,9 @@ const signOutUser = async () => {
 }
 
 // Retrieve user
-const findUser = async (id) => {
+const findUser = async (userId) => {
     const usersRef = collection(db, 'users')
-    const userRef = doc(usersRef, id)
+    const userRef = doc(usersRef, userId)
     const userDoc = await getDoc(userRef)
     const user = {
         id: userDoc.id,
@@ -83,9 +83,9 @@ const findUser = async (id) => {
 // Retrieve one post, all posts from posts, all posts from everyone
 
 // Retrieve single post
-const findSinglePost = async (id) => {
+const findSinglePost = async (postId) => {
     const postsRef = collection(db, 'posts')
-    const postRef = doc(postsRef, id)
+    const postRef = doc(postsRef, postId)
     const postDoc = await getDoc(postRef)
     const post = {
         id: postDoc.id,
@@ -110,9 +110,9 @@ const findAllPosts = async () => {
 }
 
 // Retrieve all posts from user
-const findAllPostsFromUser = async (id) => {
+const findAllPostsFromUser = async (userId) => {
     const usersRef = collection(db, 'users')
-    const userRef = doc(usersRef, id)
+    const userRef = doc(usersRef, userId)
     const postsRef = collection(userRef, 'posts')
     const postDocs = await getDocs(postsRef)
     let posts = []
@@ -162,8 +162,7 @@ const addPostToUserPostsCollection = async (data) => {
 }
 
 // Remove post from posts collection & user posts subcollection
-const removePost = async (id) => {
-    const postId = id
+const removePost = async (postId) => {
     // First, retrieve associated user ID from post in post collection
     const postsRef = collection(db, 'posts')
     const postRef = doc(postsRef, postId)
@@ -179,9 +178,10 @@ const removePost = async (id) => {
     await deleteDoc(userPostRef)
 }
 
-// Add, edit, remove post
+// Add comment
+const addComment = (userId)
 
-// Add, edit, remove comment
+// Add & remove comment
 
 // Add, remove like
 
