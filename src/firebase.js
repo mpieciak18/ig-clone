@@ -1,7 +1,7 @@
 // Firebase modules
 import { initializeApp } from "firebase/app"
 import { getFirestore } from "firebase/firestore"
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
 
 // Firebase configuration settings
 const firebaseConfig = {
@@ -41,6 +41,11 @@ const signInUser = async (email, password) => {
     }
 }
 
+// Sign out user
+const signOutUser = async () => {
+    await signOut()
+}
+
 // Add, login, logout user
 
 // Retrieve one post, all posts from posts, all posts from everyone
@@ -53,4 +58,4 @@ const signInUser = async (email, password) => {
 
 // Add new DM, retrieve all DMs
 
-export default { newUser }
+export default { newUser, signInUser, }
