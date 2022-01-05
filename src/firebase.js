@@ -66,18 +66,33 @@ const signOutUser = async () => {
     await signOut()
 }
 
-// Return user data
+// Retrieve user snapshot
 const findUserData = async (id) => {
     const usersRef = collection(db, 'users')
     const userRef = doc(usersRef, id)
     const userDoc = await getDoc(userRef)
-    const user = userDoc.data()
+    const user = {
+        id: userDoc.id,
+        data: userDoc.data()
+    }
     return user
 }
 
 // Retrieve one post, all posts from posts, all posts from everyone
 
-// Create new post
+// Retrieve single post
+const findSinglePost = async (id) => {
+    const postsRef = collection(db, 'posts')
+    const postRef = doc(postsRef, id)
+    const postDoc = await getDoc(postRef)
+    const post = {
+        id: postDoc.id,
+        data: postDoc.data()
+    }
+    return post
+}
+
+// Create new post & return new post ID
 const newPost = async (text, image, date) => {
     const user = auth.currentUser
     const userId = user.uid
@@ -90,6 +105,7 @@ const newPost = async (text, image, date) => {
     const postId = await addPostToPosts(postData)
     postData.postId = postId
     await addPostToUserPostsCollection(postData)
+    return postId
 }
 
 // Add post to posts collection in db & return post id
@@ -119,4 +135,4 @@ const addPostToUserPostsCollection = async (data) => {
 
 // Add new DM, retrieve all DMs
 
-export default { newUser, signInUser, signOutUser }
+export default { newUser, signInUser, signOutUser, newPost }
