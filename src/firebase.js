@@ -1,7 +1,17 @@
 // Firebase modules
 import { initializeApp } from "firebase/app"
-import { getFirestore } from "firebase/firestore"
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
+import { 
+    getFirestore,
+    doc,
+    collection,
+    setDoc
+} from "firebase/firestore"
+import { 
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword, 
+    signOut 
+} from "firebase/auth"
 
 // Firebase configuration settings
 const firebaseConfig = {
@@ -27,9 +37,22 @@ const newUser = async (email, password) => {
     try {
         await createUserWithEmailAndPassword(auth, email, password)
         const userCredential = await signInWithEmailAndPassword(auth, email, password)
+        await addUser(userCredential.user)
     } catch(error) {
         // display error
     }
+}
+
+// Add user to users collection
+const addUser = async (user) => {
+    const usersRef = collection(db, 'users')
+
+    const id = user.uid
+    const email = user.email
+    const newUserRef = doc(usersRef, id)
+    const newUserData = {email: email}
+
+    await setDoc(newUserRef, newUserData)
 }
 
 // Sign in user
@@ -46,11 +69,12 @@ const signOutUser = async () => {
     await signOut()
 }
 
-// Add, login, logout user
-
 // Retrieve one post, all posts from posts, all posts from everyone
 
 // Add, edit, remove post
+const addPost = async () => {
+
+}
 
 // Add, edit, remove comment
 
@@ -58,4 +82,4 @@ const signOutUser = async () => {
 
 // Add new DM, retrieve all DMs
 
-export default { newUser, signInUser, }
+export default { newUser, signInUser, signOutUser }
