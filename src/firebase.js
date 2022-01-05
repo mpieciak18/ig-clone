@@ -5,7 +5,8 @@ import {
     doc,
     collection,
     setDoc,
-    getDoc
+    getDoc,
+    getDocs
 } from "firebase/firestore"
 import { 
     getAuth,
@@ -66,8 +67,8 @@ const signOutUser = async () => {
     await signOut()
 }
 
-// Retrieve user snapshot
-const findUserData = async (id) => {
+// Retrieve user
+const findUser = async (id) => {
     const usersRef = collection(db, 'users')
     const userRef = doc(usersRef, id)
     const userDoc = await getDoc(userRef)
@@ -90,6 +91,21 @@ const findSinglePost = async (id) => {
         data: postDoc.data()
     }
     return post
+}
+
+// Retrieve all posts
+const findAllPosts = async () => {
+    const postsRef = collection(db, 'posts')
+    const postDocs = await getDocs(postsRef)
+    let posts = []
+    postDocs.forEach((doc) => {
+        const post = {
+            id: doc.id,
+            data: doc.data()
+        }
+        posts = [...posts, post]
+    })
+    return posts
 }
 
 // Create new post & return new post ID
