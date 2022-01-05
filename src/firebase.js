@@ -193,7 +193,12 @@ const newComment = async (postId, date) => {
 }
 
 const addCommentToPost = async (data) => {
-    //
+    const postsRef = collection(db, 'posts')
+    const postRef = doc(postsRef, data.post)
+    const commentsRef = collection(postRef, 'comments')
+    const commentRef = doc(commentsRef)
+    await setDoc(commentRef, data)
+    return commentRef.id
 }
 
 const addCommentToUserPost = async (data) => {
