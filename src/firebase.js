@@ -35,7 +35,7 @@ const db = getFirestore(app)
 // Authentication initialization
 const auth = getAuth(app) 
 
-// Authenticate new user
+// Register new user
 const newUser = async (email, password, username, name) => {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password)
@@ -81,8 +81,10 @@ const findUser = async (userId) => {
 }
 
 // Retrieve single post
-const findSinglePost = async (postId) => {
-    const postsRef = collection(db, 'posts')
+const findSinglePost = async (postId, userId) => {
+    const usersRef = collection(db, 'users'),
+    const userRef = doc(usersRef, userId),
+    const postsRef = collection(userRef, 'posts')
     const postRef = doc(postsRef, postId)
     const postDoc = await getDoc(postRef)
     const post = {
@@ -134,96 +136,70 @@ const newPost = async (text, image, date) => {
         date: date,
         user: userId
     }
-    const postId = await addPostToPosts(postData)
-    await addPostToUserPostsCollection(postData, postId)
+    const postId = await addPostToUserPostsCollection(postData)
     return postId
 }
 
-// Add post to posts collection in db & return post id
-const addPostToPosts = async (data) => {
-    const postsRef = collection(db, 'posts')
+// Add post to posts subcollection in user doc & return post ID
+const addPostToUserPostsCollection = async (data) => {
+    const userId = data.user
+    const usersRef = collection(db, 'users')
+    const userRef = doc(usersRef, userId)
+    const postsRef = collection(userRef, 'posts')
     const postRef = doc(postsRef)
     await setDoc(postRef, data)
     return postRef.id
 }
 
-// Add post to posts subcollection in user doc
-const addPostToUserPostsCollection = async (data, postId) => {
-    const userId = data.user
-    const usersRef = collection(db, 'users')
-    const userRef = doc(usersRef, userId)
-    const postsRef = collection(userRef, 'posts')
-    const postRef = doc(postsRef, postId)
-    setDoc(postRef, data)
-}
-
-// Remove post from posts collection & user posts subcollection
-const removePost = async (postId) => {
-    // First, retrieve associated user ID from post in post collection
-    const postsRef = collection(db, 'posts')
-    const postRef = doc(postsRef, postId)
-    const postDoc = await getDoc(postRef)
-    const userId = postDoc.user
-    // Second, delete post from post collection
-    await deleteDoc(postRef)
-    // Third, delete post from user posts subcollection
+// Remove post from user's subcollection of posts
+const removePost = async (postId, userId) => {
     const usersRef = collection(db, 'users')
     const userRef = doc(usersRef, userId)
     const userPostsRef = collection(userRef, 'posts')
     const userPostRef = doc(userPostsRef, postId)
     await deleteDoc(userPostRef)
 }
+
 // Create new comment & return comment ID
-const newComment = async (postId, date) => {
+const newComment = async (postId, date, postOwnerId) => {
     // First, set up comment data
-    const user = auth.currentUser()
+    const user = await auth.currentUser()
     const userId = user.uid
     const commentData = {
         post: postId,
         date: date,
-        user: userId
+        user: userId,
+        postOwner: postOwnerId
     }
-    // Second, add comment to db -> posts -> comments
+    // Second, add comment to db -> users -> posts -> comments
     // and assign the randomly generated comment id to a variable
-    const commentId = await addCommentToPost(commentData)
-    // Third, add comment to db -> users -> posts -> comments
-    await addCommentToUserPost(commentData, commentId, postId)
+    await addCommentToUserPost(commentData, postId)
     // Fourth, return comment id
     return commentId
 }
 
-// Add comment to post in posts collection
-const addCommentToPost = async (data) => {
-    const postsRef = collection(db, 'posts')
-    const postRef = doc(postsRef, data.post)
+// Add comment to post in user's subcollection of posts & return id
+const addCommentToUserPost = async (data, postId, postOwnerId) => {
+    const usersRef = collection(db, 'users')
+    const userRef = doc(usersRef, postOwnerId)
+    const postsRef = collection(userRef, 'posts')
+    const postRef = doc(postsRef, postId)
     const commentsRef = collection(postRef, 'comments')
     const commentRef = doc(commentsRef)
     await setDoc(commentRef, data)
     return commentRef.id
 }
 
-// Add comment to post in user's subcollection of posts
-const addCommentToUserPost = async (data, commentId, postId) => {
-    const userId = await getUserIdFromPost(postId)
+// Remove comment 
+const removeComment = async (commentId, postId, postOwnerId) => {
     const usersRef = collection(db, 'users')
-    const userRef = doc(usersRef, userId)
+    const userRef = doc(usersRef, postOwnerId)
     const postsRef = collection(userRef, 'posts')
     const postRef = doc(postsRef, postId)
     const commentsRef = collection(postRef, 'comments')
     const commentRef = doc(commentsRef, commentId)
-    await setDoc(commentRef, data)
+    await deleteDoc(commentsRef)
 }
-
-// Retrieve user ID from post
-const getUserIdFromPost = async (postId) => {
-    const postsRef = collection(db, 'posts')
-    const postRef = doc(postsRef, postId)
-    const post = await getDoc(postRef)
-    const userId = post.data().user
-    return userId
-}
-
-// Add & remove comment
 
 // Add, remove like
 
