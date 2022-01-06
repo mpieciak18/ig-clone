@@ -5,7 +5,9 @@ import {
     setDoc,
     getDoc,
     getDocs,
-    deleteDoc
+    deleteDoc,
+    collectionGroup,
+    query
 } from "firebase/firestore"
 
 // Retrieve single post
@@ -24,15 +26,18 @@ const findSinglePost = async (postId, userId) => {
 
 // Retrieve all posts
 const findAllPosts = async () => {
-    const postsRef = collection(db, 'posts')
-    const postDocs = await getDocs(postsRef)
+    const postsQuery = query(collectionGroup(db, 'posts'))
+    const postsQueryDocs = await getDocs(postsQuery)
     let posts = []
-    postDocs.forEach((doc) => {
+    postsQueryDocs.forEach((doc) => {
         const post = {
             id: doc.id,
             data: doc.data()
         }
         posts = [...posts, post]
+    })
+    posts.sort((a, b) => {
+        return a.localeCompare(b)
     })
     return posts
 }
