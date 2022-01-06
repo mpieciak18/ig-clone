@@ -3,7 +3,8 @@ import { findUser } from './users.js'
 import { 
     collection,
     doc,
-    setDoc
+    setDoc,
+    deleteDoc
  } from 'firebase/firestore'
 
 // Add like to users -> user -> posts -> post -> likes
@@ -28,4 +29,15 @@ const addLike = async (postId, postOwnerId) => {
     return likeRef.id
 }
 
-export default { addLike }
+// Remove like from post in user -> posts -> post
+const removeLike = (likeId, postId, postOwnerId) => {
+    const usersRef = collection(db, 'users')
+    const userRef = doc(usersRef, postOwnerId)
+    const postsRef = collection(userRef, 'posts')
+    const postRef = doc(postsRef, postId)
+    const likesRef = collection(postRef, 'likes')
+    const likeRef = doc(likesRef, likeId)
+    await deleteDoc(likeRef)
+}
+
+export default { addLike, removeLike }
