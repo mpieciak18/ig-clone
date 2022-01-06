@@ -47,8 +47,4 @@ const removeComment = async (commentId, postId, postOwnerId) => {
     await deleteDoc(commentRef)
 }
 
-// Add, remove like
-
-// Add new DM, retrieve all DMs
-
 export default { newComment, removeComment }
