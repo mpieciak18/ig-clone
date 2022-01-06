@@ -25,7 +25,7 @@ const addLike = async (postId, postOwnerId) => {
     const likeRef = doc(likesRef)
     // Third, add like to likes collection & return like id
     await setDoc(likeRef, data)
-    return data
+    return likeRef.id
 }
 
 export default { addLike }
