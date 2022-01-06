@@ -1,5 +1,4 @@
 import { auth, db } from './firebase.js'
-import { findUser } from './users.js'
 import { 
     collection,
     doc,
