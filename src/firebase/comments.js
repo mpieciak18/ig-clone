@@ -20,7 +20,7 @@ const newComment = async (postId, date, postOwnerId) => {
     // Second, add comment to db -> users -> posts -> comments
     // and assign the randomly generated comment id to a variable
     await addCommentToUserPost(commentData, postId)
-    // Fourth, return comment id
+    // Third, return comment id
     return commentId
 }
 
