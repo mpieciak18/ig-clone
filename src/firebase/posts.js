@@ -36,9 +36,9 @@ const findAllPosts = async () => {
         }
         posts = [...posts, post]
     })
-    posts.sort((a, b) => {
-        return a.localeCompare(b)
-    })
+    // posts.sort((a, b) => {
+    //     return a.localeCompare(b)
+    // })
     return posts
 }
 
