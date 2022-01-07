@@ -22,8 +22,12 @@ const getConvosRef = (userId) => {
 const getConvoRef = (userId, otherUserId) => {
     return doc(getConvosRef(userId), otherUserId)
 }
-const getMessagesRef = (userId, otherUserId) => {
-    return collection(getConvoRef(userId, otherUserId), 'messages')
+const getMessagesRef = (userId, otherUserId, limitOne=false) => {
+    if (limitOne == false) {
+        return collection(getConvoRef(userId, otherUserId), 'messages')
+    } else {
+        return query((getConvoRef(userId, otherUserId), 'messages'), limit(1))
+    }
 }
 const getMessageRef = (userId, otherUserId, messageId=null) => {
     if (messageId == null) {
@@ -75,9 +79,7 @@ const retrieveSingleConvo = async (otherUserId) => {
 // NOTE: the other user's ID is the conversation ID for the user
 // and the user's ID is the conversation ID for the other user
 const retrieveLatestMessage = async (otherUserId) => {
-    const userId = auth.currentUser.uid
-    const convoRef = getConvoRef(userId, otherUserId)
-    const messageRef = query(convoRef, limit(1))
+    const messageRef = getMessagesRef(userId, otherUserId, true)
     const messageDoc = await getDoc(messageRef)
     const message = {
         id: messageDoc.id,
@@ -86,4 +88,24 @@ const retrieveLatestMessage = async (otherUserId) => {
     return message
 }
 
-export default { sendMessage, retrieveLatestMessage }
+// Retrieve all conversations and return array of objects containing
+// the convo id, the convo data, and the latest message as properties
+const retrieveAllConvos = () => {
+    const userId = auth.currentUser.id
+    const convosRef = getConvosRef(userId)
+    const convoDocs = await getDocs(convosRef)
+    let convos = []
+    convoDocs.forEach((doc) => {
+        const lastMessageRef = getMessagesRef(userId, doc.id) // each convo doc id is the other user's id
+        const lastMessageDoc = getDoc(lastMessageRef)
+        const lastMessage = lastMessageDoc.data()
+        const convo = {
+            id: doc.id,
+            lastMessage: lastMessage
+        }
+        convos = [...convos, convo]
+    })
+    return convos
+}
+
+export default { sendMessage, retrieveAllConvos, retrieveSingleConvo}
