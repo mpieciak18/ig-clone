@@ -1,5 +1,10 @@
 import { db, auth } from './firebase.js'
-import { doc, collection, setDoc } from 'firebase/firestore'
+import { 
+    doc,
+    collection,
+    setDoc,
+    getDocs,
+} from 'firebase/firestore'
 
 // Send message, add to both users (user -> conversation -> message),
 // and return message id
@@ -29,6 +34,26 @@ const sendMessage = async (message, date, recipientId) => {
     await setDoc(recipMessageRef, messageData)
     // Third, return message id
     return messageId
+}
+
+// Retrieve single conversation & return array of message objects
+const retrieveSingleConvo = async (otherUserId) => {
+    const userId = auth.currentUser.uid
+    const usersRef = collection(db, 'users')
+    const userRef = doc(usersRef, userId)
+    const convosRef = collection(userRef, 'conversations')
+    const convoRef = doc(convosRef, otherUserId)
+    const messagesRef = collection(convoRef, 'messages')
+    const messageDocs = await getDocs(messagesRef)
+    let messages = []
+    messageDocs.forEach((doc) => {
+        const message = {
+            id: doc.id,
+            data: doc.data()
+        }
+        messages = [...messages, message]
+    })
+    return messages
 }
 
 export default { sendMessage }
