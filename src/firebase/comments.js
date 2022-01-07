@@ -9,8 +9,7 @@ import {
 // Create new comment & return comment ID
 const newComment = async (postId, date, postOwnerId) => {
     // First, set up comment data
-    const user = await auth.currentUser
-    const userId = user.uid
+    const userId = auth.currentUser.uid
     const commentData = {
         post: postId,
         date: date,

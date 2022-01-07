@@ -10,7 +10,7 @@ import {
 // and return the like id
 const addLike = async (postId, postOwnerId) => {
     // First, set up data
-    const userId = auth.currentUser
+    const userId = auth.currentUser.uid
     const data = {
         post: postId,
         postOwner: postOwnerId,

@@ -61,8 +61,7 @@ const findAllPostsFromUser = async (userId) => {
 
 // Create new post & return new post ID
 const newPost = async (text, image, date) => {
-    const user = await auth.currentUser
-    const userId = user.uid
+    const userId = auth.currentUser.uid
     const postData = {
         text: text,
         image: image,
