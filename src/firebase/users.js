@@ -19,7 +19,7 @@ const newUser = async (email, password, username, name) => {
         const user = userCredential.user
         await addUser(user.email, user.uid, username, name)
     } catch(error) {
-        // display error
+        // return error
     }
 }
 
@@ -42,19 +42,24 @@ const signInUser = async (email, password) => {
 
 // Sign out user
 const signOutUser = async () => {
-    await signOut()
+    await signOut(auth)
 }
 
 // Retrieve user
 const findUser = async (userId) => {
+    console.log(1)
     const usersRef = collection(db, 'users')
+    console.log(2)
     const userRef = doc(usersRef, userId)
+    console.log(userRef)
     const userDoc = await getDoc(userRef)
+    console.log(4)
     const user = {
         id: userDoc.id,
         data: userDoc.data()
     }
+    console.log(5)
     return user
 }
 
-export default { newUser, signInUser, signOutUser, findUser }
+export { newUser, signInUser, signOutUser, findUser, auth }
