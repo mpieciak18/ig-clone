@@ -47,18 +47,13 @@ const signOutUser = async () => {
 
 // Retrieve user
 const findUser = async (userId) => {
-    console.log(1)
     const usersRef = collection(db, 'users')
-    console.log(2)
     const userRef = doc(usersRef, userId)
-    console.log(userRef)
     const userDoc = await getDoc(userRef)
-    console.log(4)
     const user = {
         id: userDoc.id,
         data: userDoc.data()
     }
-    console.log(5)
     return user
 }
 
