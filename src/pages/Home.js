@@ -2,6 +2,7 @@ import '../styles/Home.css'
 import { findPosts } from '../firebase/posts.js'
 import { Navbar } from '../components/Navbar.js'
 import { Post } from '../components/Post.js'
+import { UserCard } from '../components/UserCard.js'
 import { useEffect } from 'react'
 
 const Home = async (props) => {
@@ -50,6 +51,7 @@ const Home = async (props) => {
     return (
         <div id='home' class='page'>
             <Navbar user={user} />
+            <UserCard user={user} />
             {Posts}
             {LoadButton}
         </div>
