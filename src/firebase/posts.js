@@ -7,7 +7,8 @@ import {
     getDocs,
     deleteDoc,
     collectionGroup,
-    query
+    query,
+    limit
 } from "firebase/firestore"
 
 // Retrieve single post
@@ -25,8 +26,8 @@ const findSinglePost = async (postId, userId) => {
 }
 
 // Retrieve all posts
-const findAllPosts = async () => {
-    const postsQuery = query(collectionGroup(db, 'posts'))
+const findPosts = async (arrQuantity) => {
+    const postsQuery = query(collectionGroup(db, 'posts'), limit(arrQuantity))
     const postsQueryDocs = await getDocs(postsQuery)
     let posts = []
     postsQueryDocs.forEach((doc) => {
@@ -43,11 +44,12 @@ const findAllPosts = async () => {
 }
 
 // Retrieve all posts from user
-const findAllPostsFromUser = async (userId) => {
+const findPostsFromUser = async (userId, arrQuantity) => {
     const usersRef = collection(db, 'users')
     const userRef = doc(usersRef, userId)
     const postsRef = collection(userRef, 'posts')
-    const postDocs = await getDocs(postsRef)
+    const postsQuery = query(postsRef, limit(arrQuantity))
+    const postDocs = await getDocs(postsQuery)
     let posts = []
     postDocs.forEach((doc) => {
         const post = {
@@ -92,4 +94,4 @@ const removePost = async (postId, userId) => {
     await deleteDoc(userPostRef)
 }
 
-export default { findAllPosts, findAllPostsFromUser, findSinglePost, newPost, removePost }
+export default { findPosts, findPostsFromUser, findSinglePost, newPost, removePost }
