@@ -94,4 +94,4 @@ const removePost = async (postId, userId) => {
     await deleteDoc(userPostRef)
 }
 
-export default { findPosts, findPostsFromUser, findSinglePost, newPost, removePost }
+export { findPosts, findPostsFromUser, findSinglePost, newPost, removePost }
