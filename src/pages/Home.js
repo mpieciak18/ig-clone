@@ -21,7 +21,7 @@ const Home = async () => {
     }
 
     // Load More button
-    const loadMoreButton = (
+    const LoadButton = (
         <div id='load-more-button' onClick={loadMore}>Load More</div>
     )
 
@@ -51,6 +51,7 @@ const Home = async () => {
         <div id='home' class='page'>
             <Navbar user={user} />
             {Posts}
+            {LoadButton}
         </div>
     )
 }
