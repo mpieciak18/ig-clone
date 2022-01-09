@@ -51,11 +51,11 @@ const App = async () => {
     return (
         <BrowserRouter basename={process.env.PUBLIC_URL}>
             <Routes>
-                <Route exact path='/' element={<Home />} />
-                <Route exact path='/inbox' element={<Inbox />} />
-                <Route exact path='/post' element={<Post />} />
-                <Route exact path='/profile' element={<Profile />} />
-                <Route exact path='/settings' element={<Settings />} />
+                <Route exact path='/' element={<Home user={user}/>} />
+                <Route exact path='/inbox' element={<Inbox user={user}/>} />
+                <Route exact path='/post' element={<Post user={user}/>} />
+                <Route exact path='/profile' element={<Profile user={user}/>} />
+                <Route exact path='/settings' element={<Settings user={user}/>} />
             </Routes>
         </BrowserRouter>
     )
