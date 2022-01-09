@@ -9,14 +9,35 @@ import { auth } from "./firebase/firebase.js"
 import { findUser } from './firebase/users.js'
 
 const App = async () => {
-    // Initialize user object
+    // Initialize user state
     let userObject = {}
-    // Call findUser() to extract user id & data (name, email, username)
-    const getUserData = async (id) => {
-        const user = await findUser(id)
-        return user
+    if (auth.currentUser != null) {
+        const user = await findUser(auth.currentUser.uid)
+        userObject = updateUserObject(
+            true, user.id, user.data.name, user.data.username, user.data.email
+        )
+    } else {
+        userObject = updateUserObject(false, '', '', '', '')
     }
-    // Return new user object with arguments
+    const [user, setUser] = useState(userObject)
+
+    // Update user state when user signs in or signs out
+    auth.onAuthStateChanged(async (user) => {
+        // User signs in
+        if (user) {
+            const user = await findUser(user.uid)
+            const userObject = updateUserObject(
+                true, user.id, user.data.name, user.data.username, user.data.email
+            )
+            setUser(userObject)
+        // User signs out
+        } else {
+            const userObject = updateUserObject(false, '', '', '', '')
+            setUser(userObject)
+        }
+    })
+
+    // Return new user object from arguments
     const updateUserObject = (loggedIn, id, name, username, email) => {
         return {
             loggedIn: loggedIn,
@@ -26,19 +47,6 @@ const App = async () => {
             email: email
         }
     }
-    // Check if user is already logged in & update user object as needed
-    if (auth.currentUser != null) {
-        const user = await getUserData(auth.currentUser.uid)
-        userObject = updateUserObject(
-            true, user.id, user.data.name, user.data.username, user.data.email
-        )
-    } else {
-        userObject = updateUserObject(
-            false, '', '', '', ''
-        )
-    }
-    // Initialize user state with updated user object
-    const [user, setUser] = useState(userObject)
 
     return (
         <BrowserRouter basename={process.env.PUBLIC_URL}>
