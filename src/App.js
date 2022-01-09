@@ -21,6 +21,17 @@ const App = async () => {
     }
     const [user, setUser] = useState(userObject)
 
+    // Return new user object from arguments
+    const updateUserObject = (loggedIn, id, name, username, email) => {
+        return {
+            loggedIn: loggedIn,
+            id: id,
+            name: name,
+            username: username,
+            email: email
+        }
+    }
+
     // Update user state when user signs in or signs out
     auth.onAuthStateChanged(async (user) => {
         // User signs in
@@ -36,17 +47,6 @@ const App = async () => {
             setUser(userObject)
         }
     })
-
-    // Return new user object from arguments
-    const updateUserObject = (loggedIn, id, name, username, email) => {
-        return {
-            loggedIn: loggedIn,
-            id: id,
-            name: name,
-            username: username,
-            email: email
-        }
-    }
 
     return (
         <BrowserRouter basename={process.env.PUBLIC_URL}>
