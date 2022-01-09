@@ -4,7 +4,7 @@ import { Navbar } from '../components/Navbar.js'
 import { Post } from '../components/Post.js'
 import { useEffect } from 'react'
 
-const Home = async () => {
+const Home = async (props) => {
     const { user } = props
 
     // Init postsNumber state
@@ -55,3 +55,5 @@ const Home = async () => {
         </div>
     )
 }
+
+export {Home}
