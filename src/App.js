@@ -14,21 +14,29 @@ const App = async () => {
     if (auth.currentUser != null) {
         const user = await findUser(auth.currentUser.uid)
         userObject = updateUserObject(
-            true, user.id, user.data.name, user.data.username, user.data.email
+            true, 
+            user.id, 
+            user.data.name, 
+            user.data.username, 
+            user.data.email, 
+            user.data.image, 
+            user.data.followers
         )
     } else {
-        userObject = updateUserObject(false, '', '', '', '')
+        userObject = updateUserObject(false, '', '', '', '', '', '')
     }
     const [user, setUser] = useState(userObject)
 
     // Return new user object from arguments
-    const updateUserObject = (loggedIn, id, name, username, email) => {
+    const updateUserObject = (loggedIn, id, name, username, email, image, followers) => {
         return {
             loggedIn: loggedIn,
             id: id,
             name: name,
             username: username,
-            email: email
+            email: email, 
+            image: image,
+            followers: followers
         }
     }
 
@@ -38,12 +46,18 @@ const App = async () => {
         if (user) {
             const user = await findUser(user.uid)
             const userObject = updateUserObject(
-                true, user.id, user.data.name, user.data.username, user.data.email
+                true, 
+                user.id, 
+                user.data.name, 
+                user.data.username, 
+                user.data.email, 
+                user.data.image, 
+                user.data.followers
             )
             setUser(userObject)
         // User signs out
         } else {
-            const userObject = updateUserObject(false, '', '', '', '')
+            const userObject = updateUserObject(false, '', '', '', '', '', '')
             setUser(userObject)
         }
     })
