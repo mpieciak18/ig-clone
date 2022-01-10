@@ -27,7 +27,7 @@ const newUser = async (email, password, username, name) => {
 const addUser = async (email, id, username, name) => {
     const usersRef = collection(db, 'users')
     const newUserRef = doc(usersRef, id)
-    const newUserData = {email: email, username: username, name: name}
+    const newUserData = {email: email, username: username, name: name, followers: 0}
     await setDoc(newUserRef, newUserData)
 }
 
