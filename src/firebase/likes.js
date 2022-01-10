@@ -25,40 +25,44 @@ const getLikeRef = (userId, postId, likeId=null) => {
 // Add like to users -> user -> posts -> post -> likes
 // and return the like id
 const addLike = async (postId, postOwnerId) => {
-    // First, set up data
+    // First, update post like count
+    const postRef = getPostRef(postOwnerId, postId)
+    await changeLikeCount(postRef, true)
+    // Second, set up data
     const userId = auth.currentUser.uid
     const data = {
         post: postId,
         postOwner: postOwnerId,
         user: userId
     }
-    // Second, grab document reference
-    const likeRef = getLikeRef(postOwnerId, postId)
     // Third, add like to likes collection & return like id
+    const likeRef = getLikeRef(postOwnerId, postId)
     await setDoc(likeRef, data)
     return likeRef.id
 }
 
 // Remove like from post in user -> posts -> post
 const removeLike = (likeId, postId, postOwnerId) => {
-    const likeRef = getLikeRef(postOwnerId, postId, likeId)
+    // First, update post like count
+    const postRef = getPostRef(postOwnerId, postId)
+    await changeLikeCount(postRef, false)
+    // Second, remove like doc
+    const likeRef = doc(collection(postRef, 'posts'), likeId)
     await deleteDoc(likeRef)
 }
 
 // Change like count on post doc
-const changeLikeCount = (increase, postId, postOwnerId) => {
-    // First, query for post reference
-    const postRef = getPostRef(postOwnerId, postId)
-    // Second, grab old like count
+const changeLikeCount = async (postRef, increase) => {
+    // First, grab old like count
     const postDoc = await getDoc(postRef)
     let likeCount = postDoc.data().likes
-    // Third, increase or decrease like count
+    // Second, increase or decrease like count
     if (increase == true) {
         likeCount += 1
     } else {
         likeCount -= 1
     }
-    await updateDoc(postRef, {likes: newLikeCount})
+    await updateDoc(postRef, {"likes": newLikeCount})
 }
 
 export default { addLike, removeLike, changeLikeCount }
