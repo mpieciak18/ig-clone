@@ -13,21 +13,21 @@ import {
 } from "firebase/auth"
 
 // Register new user
-const newUser = async (email, password, username, name) => {
+const newUser = async (email, password, username, name, image) => {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password)
         const user = userCredential.user
-        await addUser(user.email, user.uid, username, name)
+        await addUser(user.email, user.uid, username, name, image)
     } catch(error) {
         // return error
     }
 }
 
 // Add user to users collection
-const addUser = async (email, id, username, name) => {
+const addUser = async (email, id, username, name, image) => {
     const usersRef = collection(db, 'users')
     const newUserRef = doc(usersRef, id)
-    const newUserData = {email: email, username: username, name: name, followers: 0}
+    const newUserData = {email: email, username: username, name: name, image: image, followers: 0}
     await setDoc(newUserRef, newUserData)
 }
 
