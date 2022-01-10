@@ -62,7 +62,7 @@ const changeLikeCount = async (postRef, increase) => {
     } else {
         likeCount -= 1
     }
-    await updateDoc(postRef, {"likes": newLikeCount})
+    await updateDoc(postRef, {"likes": likeCount})
 }
 
 export default { addLike, removeLike, changeLikeCount }
