@@ -15,13 +15,16 @@ const SinglePost = async (props) => {
                         <div class='post-user-link-username'></div>
                     </div>
                 </div>
-                <div class="post-top-right">···</div>
+                <div class="post-options-button">···</div>
             <div class="post-middle"></div>
             <div class="post-bottom">
                 <div class="post-buttons">
-                    <img class="like-button"/>
-                    <img class="comment-button"/>
-                    <img class="share-button"/>
+                    <div class="post-buttons-left">
+                        <img class="post-like-button"/>
+                        <img class="post-comment-button"/>
+                        <img class="post-share-button"/>
+                    </div>
+                    <div class="post-save-button"></div>
                 </div>
                 <div class="post-likes"></div>
                 <div class="post-view-comments"></div>
@@ -51,11 +54,11 @@ const SinglePost = async (props) => {
                 <div class="post-right-bottom">
                     <div class="post-right-bottom-one">
                         <div class="post-buttons">
-                            <img class="like-button"/>
-                            <img class="comment-button"/>
-                            <img class="share-button"/>
+                            <img class="post-like-button"/>
+                            <img class="post-comment-button"/>
+                            <img class="post-share-button"/>
                         </div>
-                        <div class="post-top-right">···</div>
+                        <div class="post-options-button">···</div>
                     </div>
                     <div class="post-right-bottom-two">
                         <div class="post-likes"></div>
