@@ -4,7 +4,8 @@ import {
     doc,
     setDoc,
     deleteDoc,
-    updateDoc
+    updateDoc,
+    getDoc
  } from 'firebase/firestore'
 
 // Helper functions for database
@@ -44,4 +45,20 @@ const removeLike = (likeId, postId, postOwnerId) => {
     await deleteDoc(likeRef)
 }
 
-export default { addLike, removeLike }
+// Change like count on post doc
+const changeLikeCount = (increase, postId, postOwnerId) => {
+    // First, query for post reference
+    const postRef = getPostRef(postOwnerId, postId)
+    // Second, grab old like count
+    const postDoc = await getDoc(postRef)
+    let likeCount = postDoc.data().likes
+    // Third, increase or decrease like count
+    if (increase == true) {
+        likeCount += 1
+    } else {
+        likeCount -= 1
+    }
+    await updateDoc(postRef, {likes: newLikeCount})
+}
+
+export default { addLike, removeLike, changeLikeCount }
