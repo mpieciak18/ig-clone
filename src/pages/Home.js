@@ -1,7 +1,7 @@
 import '../styles/Home.css'
 import { findPosts } from '../firebase/posts.js'
 import { Navbar } from '../components/Navbar.js'
-import { Post } from '../components/Post.js'
+import { SinglePost } from '../components/SinglePost.js'
 import { UserCard } from '../components/UserCard.js'
 import { useEffect } from 'react'
 
@@ -36,7 +36,8 @@ const Home = async (props) => {
         <div id='home-posts'>
             {posts.map((post) => {
                 return (
-                    <Post 
+                    <SinglePost
+                        page="false" 
                         id={post.id}
                         text={post.data.text}
                         image={post.data.image}
