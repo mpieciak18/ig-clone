@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { useState } from "react"
 import Home from "./pages/Home"
-import Inbox from "./pages/Inbox"
+import Messages from "./pages/Messages"
 import Post from "./pages/Post"
 import Profile from "./pages/Profile"
 import Settings from "./pages/Settings"
@@ -66,9 +66,9 @@ const App = async () => {
         <BrowserRouter basename={process.env.PUBLIC_URL}>
             <Routes>
                 <Route exact path='/' element={<Home user={user}/>} />
-                <Route exact path='/inbox' element={<Inbox user={user}/>} />
-                <Route exact path='/post' element={<Post user={user}/>} />
-                <Route exact path='/profile' element={<Profile user={user}/>} />
+                <Route exact path='/messages' element={<Messages user={user}/>} />
+                <Route exact path='/post/:postId' element={<Post user={user}/>} />
+                <Route exact path='/profile/:userId' element={<Profile user={user}/>} />
                 <Route exact path='/settings' element={<Settings user={user}/>} />
             </Routes>
         </BrowserRouter>
