@@ -3,17 +3,18 @@ import {
     sendMessage,
     retrieveAllConvos,
     retrieveSingleConvo,
-    retrieveLatestMessage 
 } from '../firebase/directmessages'
 import { useState } from 'react'
 import { Navbar } from '../components/Navbar.js'
 
 const Messages = async (props) => {
     const [user] = props
-    const [convos, setConvos] = useState(await retrieveAllConvos(user.id))
-    // This state determines conversation to render
-    const [currentConvoMessages, setCurrentConvoMessages] = useState(null)
-    // These states determine what's visible when on mobile
+
+    const [convos, setConvos] = useState(await retrieveAllConvos())
+
+    const [currentConvo, setCurrentConvo] = useState(null)
+
+    // The following React states determine mobile vs. desktop visibility
     const [allConvosClass, setAllConvosCall] = useState('visible')
     const [singleConvoClass, setSingleConvoClass] = useState('hidden')
 
@@ -22,14 +23,23 @@ const Messages = async (props) => {
         setSingleConvoClass('hidden')
     }
     const viewSingleConvo = async (event) => {
-        const convoId = event.target.id
+        const otherUserId = event.target.id
         setAllConvosCall('hidden')
         setSingleConvoClass('visible')
-        setCurrentConvo(await retrieveSingleConvo(convoId))
+        const messages = await retrieveSingleConvo(otherUserId)
+        setCurrentConvo({otherUserId: otherUserId, messages: messages})
+    }
+
+    const sendNewMessage = async (event) => {
+        event.preventDefault()
+        const message = document.getElementById('single-convo-message-bar-input').value
+        let date
+        const otherUserId = currentConvo.otherUserId
+        await sendMessage(message, date, otherUserId)
     }
 
     const AllConvos = (
-        <div id="all-convos">
+        <div id="all-convos" class={allConvosClass}>
             <div id='all-convos-top'>
                 <img id='all-convos-user-icon' />
                 <div id='all-convos-top-title'>
@@ -42,7 +52,7 @@ const Messages = async (props) => {
                     return (
                         <SingleConvoBlock
                             user={user}
-                            convoId={convo.id}
+                            otherUserId={convo.id}
                             lastMessage={convo.lastMessage}
                         />
                     )
@@ -52,9 +62,9 @@ const Messages = async (props) => {
     )
 
     const SingleConvo = (
-        <div id="single-convo">
+        <div id="single-convo" class={singleConvoClass}>
             <div id="single-convo-messages">
-                {currentConvoMessages.map((message) => {
+                {currentConvo.messages.map((message) => {
                     return (
                         <SingleMessageBlock
                             user={user}
@@ -64,10 +74,10 @@ const Messages = async (props) => {
                     )
                 })}
             </div>
-            <div class="single-convo-message-bar">
-                <div class="single-convo-message-bar-input"></div>
-                <div class="single-convo-message-button"></div>
-            </div>
+            <form class="single-convo-message-bar">
+                <input type="text" class="single-convo-message-bar-input" placeholder="Send a message..."></input>
+                <button type="submit" class="single-convo-message-button"></button>
+            </form>
         </div>
     )
 

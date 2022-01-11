@@ -39,20 +39,22 @@ const getMessageRef = (userId, otherUserId, messageId=null) => {
 
 // Send message, add to both users (user -> conversation -> message),
 // and return message id
-const sendMessage = async (message, date, recipientId) => {
+// NOTE: the other user's ID is the conversation ID for the user
+// and the user's ID is the conversation ID for the other user
+const sendMessage = async (message, date, otherUserId) => {
     // First, add message to sender's subcollection
-    const senderId = auth.currentUser.uid
-    const senderMessageRef = getMessageRef(senderId)
+    const userId = auth.currentUser.uid
+    const senderMessageRef = getMessageRef(userId, otherUserId)
     const messageData = {
-        sender: senderId,
-        recipient: recipientId,
+        sender: userId,
+        recipient: otherUserId,
         date: date,
         message: message
     }
     await setDoc(senderMessageRef, messageData)
     // Second, add message to recipient's subcollection
     const messageId = senderMessageRef.id
-    const recipMessageRef = getMessageRef(recipientId, messageId)
+    const recipMessageRef = getMessageRef(otherUserId, userId, messageId)
     await setDoc(recipMessageRef, messageData)
     // Third, return message id
     return messageId
