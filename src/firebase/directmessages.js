@@ -19,25 +19,21 @@ const getUserRef = (userId) => {
 const getConvosRef = (userId) => {
     return collection(getUserRef(userId), 'conversations')
 }
-const getConvoRef = (userId, convoId=null) => {
-    if (convoId == null) {
-        return doc(getConvosRef(userId))
-    } else {
-        return doc(getConvosRef(userId), convoId)
-    }
+const getConvoRef = (userId, otherUserId) => {
+    return doc(getConvosRef(userId), otherUserId)
 }
-const getMessagesRef = (userId, convoId, limitOne=false) => {
+const getMessagesRef = (userId, otherUserId, limitOne=false) => {
     if (limitOne == false) {
-        return collection(getConvoRef(userId, convoId), 'messages')
+        return collection(getConvoRef(userId, otherUserId), 'messages')
     } else {
-        return query((getConvoRef(userId, convoId), 'messages'), limit(1))
+        return query((getConvoRef(userId, otherUserId), 'messages'), limit(1))
     }
 }
-const getMessageRef = (userId, convoId, messageId=null) => {
+const getMessageRef = (userId, otherUserId, messageId=null) => {
     if (messageId == null) {
-        return doc(getMessagesRef(userId, convoId))
+        return doc(getMessagesRef(userId, otherUserId))
     } else {
-        return doc(getMessagesRef(userId, convoId), messageId)
+        return doc(getMessagesRef(userId, otherUserId), messageId)
     }
 }
 
@@ -63,9 +59,9 @@ const sendMessage = async (message, date, recipientId) => {
 }
 
 // Retrieve single conversation & return array of message objects
-const retrieveSingleConvo = async (convoId) => {
+const retrieveSingleConvo = async (otherUserId) => {
     const userId = auth.currentUser.uid
-    const messagesRef = getMessagesRef(userId, convoId)
+    const messagesRef = getMessagesRef(userId, otherUserId)
     const messageDocs = await getDocs(messagesRef)
     let messages = []
     messageDocs.forEach((doc) => {
@@ -81,9 +77,9 @@ const retrieveSingleConvo = async (convoId) => {
 // Retrieve latest message from a conversation
 // NOTE: the other user's ID is the conversation ID for the user
 // and the user's ID is the conversation ID for the other user
-const retrieveLatestMessage = async (convoId) => {
+const retrieveLatestMessage = async (otherUserId) => {
     const userId = auth.currentUser.id
-    const messageRef = getMessagesRef(userId, convoId, true)
+    const messageRef = getMessagesRef(userId, otherUserId, true)
     const messageDoc = await getDoc(messageRef)
     const message = {
         id: messageDoc.id,
