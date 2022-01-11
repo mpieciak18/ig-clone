@@ -8,7 +8,6 @@ const Navbar = (props) => {
             {/* Visible only on mobile screen dimensions*/}
             <div id="header-mobile">
                 <img class="logo" />
-                <img class="messages-button" />
             </div>
             <div id="footer-mobile">
                 <img class="home-button" />
@@ -25,7 +24,6 @@ const Navbar = (props) => {
                 <div id="header-desktop-right">
                     <img class="home-button" />
                     <img class="search-button" />
-                    <img class="messages-button" />
                     <img class="add-post-button" />
                     <img class="notifications-button" />
                     <img class="messages-button" />
