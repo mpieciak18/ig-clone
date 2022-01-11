@@ -87,7 +87,7 @@ const retrieveLatestMessage = async (convoId) => {
     const messageDoc = await getDoc(messageRef)
     const message = {
         id: messageDoc.id,
-        message: messageDoc.data()
+        data: messageDoc.data()
     }
     return message
 }
