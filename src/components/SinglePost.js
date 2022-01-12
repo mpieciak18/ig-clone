@@ -1,6 +1,4 @@
 import '../styles/SinglePost.css'
-import { findSinglePost } from '../firebase/posts.js'
-import { useParams } from 'react-router-dom'
 
 const SinglePost = async (props) => {
    const { page, id, text, date, postOwnerId, likes, user } = props
