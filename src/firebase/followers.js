@@ -23,7 +23,7 @@ const getFollowerRef = (followedUserId, followId=null) => {
 // Add follow to users -> user -> followers and return the follower id
 const addFollow = async (followedUserId) => {
     // First, update user follower count
-    await changeFollowCount(followedUserId, true)
+    await changeFollowerCount(followedUserId, true)
     // Second, set up data
     const followerId = auth.currentUser.uid
     const data = {
@@ -39,14 +39,14 @@ const addFollow = async (followedUserId) => {
 // Remove follow from users -> user -> followers
 const removeFollow = (followId, followedUserId) => {
     // First, update user follower count
-    await changeFollowCount(followedUserId, false)
+    await changeFollowerCount(followedUserId, false)
     // Second, remove follow doc
     const followRef = getFollowerRef(followedUserId, followId)
     await deleteDoc(followRef)
 }
 
 // Change follower count for user
-const changeFollowCount = async (followedUserId, increase) => {
+const changeFollowerCount = async (followedUserId, increase) => {
     // First, grab old follower count
     const userRef = getUserRef(followedUserId)
     const userDoc = await getDoc(userRef)
@@ -61,4 +61,4 @@ const changeFollowCount = async (followedUserId, increase) => {
     await updateDoc(userRef, {"followers": followCount})
 }
 
-export default { addFollow, removeFollow, changeFollowCount }
+export default { addFollow, removeFollow }
