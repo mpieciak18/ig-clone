@@ -3,7 +3,10 @@ import {
     doc,
     collection,
     deleteDoc,
-    setDoc
+    setDoc,
+    getDocs,
+    query,
+    limit
 } from 'firebase/firestore'
 
 // Helper functions that return doc/collection refs from the db
@@ -46,4 +49,19 @@ const removeSavedPost = async (savedPostId) => {
     await deleteDoc(savedPostRef)
 }
 
-export { addSavedPost, removeSavedPost }
+// Retrieve all saved posts
+const findSavedPosts = async (arrQuantity) => {
+    const postsQuery = query(collectionGroup(db, 'posts'), limit(arrQuantity))
+    const postsQueryDocs = await getDocs(postsQuery)
+    let posts = []
+    postsQueryDocs.forEach((doc) => {
+        const post = {
+            id: doc.id,
+            data: doc.data()
+        }
+        posts = [...posts, post]
+    })
+    return posts
+}
+
+export { addSavedPost, removeSavedPost, findSavedPosts }

@@ -1,10 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { useState } from "react"
-import Home from "./pages/Home"
-import Messages from "./pages/Messages"
-import Post from "./pages/Post"
-import Profile from "./pages/Profile"
-import Settings from "./pages/Settings"
+import Home from "./pages/Home.js"
+import Messages from "./pages/Messages.js"
+import Post from "./pages/Post.js"
+import Profile from "./pages/Profile.js"
+import Settings from "./pages/Settings.js"
+import SavedPosts from "./pages/SavedPosts.js"
 import { auth } from "./firebase/firebase.js"
 import { findUser } from './firebase/users.js'
 
@@ -69,10 +70,11 @@ const App = async () => {
                 <Route exact path='/messages' element={<Messages user={user}/>} />
                 <Route exact path='/:userId/:postId' element={<Post user={user}/>} />
                 <Route exact path='/:userId' element={<Profile user={user}/>} />
+                <Route exact path='/savedposts' element={<SavedPosts user={user} />} />
                 <Route exact path='/settings' element={<Settings user={user}/>} />
             </Routes>
         </BrowserRouter>
     )
 }
 
-export default App
+export { App }
