@@ -1,10 +1,11 @@
 import '../styles/components/SinglePostBox.css'
+import { useParams, Link } from 'react-router-dom'
 
 const SinglePostBox = async (props) => {
-    const { id, text, date, postOwnerId, likes, user } = props
+    const { id, postOwnerId, likes, user } = props
 
     return (
-        <div class="single-post-box">
+        <Link class="single-post-box" to={`/${postOwnerId}/${id}`} state={user}>
             <img class="single-post-box-image" />
             <div class="single-post-box-overlay">
                 <div class="single-post-box-likes">
@@ -16,7 +17,7 @@ const SinglePostBox = async (props) => {
                     <div class="single-post-box-comments-number"></div>
                 </div>
             </div>
-        </div>
+        </Link>
     )
 }
 
