@@ -8,7 +8,7 @@ const Post = (props) => {
     const [user] = props
 
     // Extract post id from url parameters
-    const { postOwnerId, postId} = useParams()
+    const { postOwnerId, postId } = useParams()
 
     // Get post data from database
     const post = findSinglePost(postId, postOwnerId)
