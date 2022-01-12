@@ -1,6 +1,6 @@
 import '../styles/SinglePost.css'
 
-const SinglePost = async (props) => {
+const PostFull = async (props) => {
    const { page, id, text, image, date, postOwnerId, likes, comments, user } = props
 
     let Post
@@ -76,4 +76,4 @@ const SinglePost = async (props) => {
     return {Post}
 }
 
-export { SinglePost }
+export { PostFull }

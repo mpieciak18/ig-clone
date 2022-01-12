@@ -1,6 +1,6 @@
 import '../styles/pages/SavedPosts.css'
 import { findSavedPosts } from '../firebase/savedposts.js'
-import { SinglePostBox } from '../components/SinglePostBox.js'
+import { PostPreview } from '../components/PostPreview.js'
 
 const SavedPosts = async (props) => {
     const { user } = props
@@ -34,7 +34,7 @@ const SavedPosts = async (props) => {
             <div id='saved-posts-title'>Saved Posts</div>
             {posts.map((post) => {
                 return (
-                    <SinglePostBox
+                    <PostPreview
                         id={post.id}
                         text={post.data.text}
                         image={post.data.image}

@@ -1,6 +1,6 @@
 import '../styles/Post.css'
 import { useParams, useLocation } from 'react-router-dom'
-import { SinglePost } from '../components/SinglePost.js'
+import { PostFull } from '../components/PostFull.js'
 import { findSinglePost } from '../firebase/posts.js'
 import { Navbar } from '../components/Navbar.js'
 
@@ -28,7 +28,7 @@ const Post = (props) => {
         <div id="post" class="page">
             <Navbar user={user} />
             {BackButton}
-            <SinglePost 
+            <PostFull 
                 page="true" 
                 id={postId}
                 text={post.data.text}
