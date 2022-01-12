@@ -1,7 +1,7 @@
 import '../styles/SinglePost.css'
 
 const SinglePost = async (props) => {
-   const { page, id, text, date, postOwnerId, likes, user } = props
+   const { page, id, text, image, date, postOwnerId, likes, comments, user } = props
 
     let Post
     // Render post for reel of posts (ie, home page or user page)

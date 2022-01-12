@@ -1,17 +1,21 @@
 import '../styles/Post.css'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import { SinglePost } from '../components/SinglePost.js'
 import { findSinglePost } from '../firebase/posts.js'
 import { Navbar } from '../components/Navbar.js'
 
+const { postOwnerId, postId } = useParams()
+
 const Post = (props) => {
     const { user } = props
 
-    // Extract post id from url parameters
-    const { postOwnerId, postId } = useParams()
-
-    // Get post data from database
-    const post = findSinglePost(postId, postOwnerId)
+    // Get post data from state passed via Link using useLocation
+    // If nothing is passed, then query post data from database
+    const location = useLocation()
+    let post = location.state
+    if (post == undefined) {
+        post = findSinglePost(postId, postOwnerId)
+    } 
 
     const BackButton = (
         <div id='post-back-button'>

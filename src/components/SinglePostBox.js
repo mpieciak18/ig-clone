@@ -2,13 +2,17 @@ import '../styles/components/SinglePostBox.css'
 import { Link } from 'react-router-dom'
 
 const SinglePostBox = async (props) => {
-    const { id, postOwnerId, image, likes, comments } = props
+    const { id, text, image, date, postOwnerId, likes, comments, user } = props
 
     const likesNum = likes.length
     const commentsNum = comments.length
 
     return (
-        <Link class="single-post-box" to={`/${postOwnerId}/${id}`}>
+        <Link 
+            class="single-post-box" 
+            to={`/${postOwnerId}/${id}`}
+            state={id, text, image, date, postOwnerId, likes, comments, user}
+        >
             <img class="single-post-box-image" src={image}/>
             <div class="single-post-box-overlay">
                 <div class="single-post-box-likes">
