@@ -1,4 +1,4 @@
-import '../styles/components/SinglePostBox.css'
+import '../styles/components/PostPreview.css'
 import { Link } from 'react-router-dom'
 
 const PostPreview = async (props) => {

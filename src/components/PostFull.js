@@ -1,4 +1,4 @@
-import '../styles/SinglePost.css'
+import '../styles/PostFull.css'
 
 const PostFull = async (props) => {
    const { page, id, text, image, date, postOwnerId, likes, comments, user } = props
