@@ -20,7 +20,7 @@ const CurrentConvo = (props) => {
             </div>
             <form class="single-convo-message-bar">
                 <input type="text" class="single-convo-message-bar-input" placeholder="Send a message..."></input>
-                <button type="submit" class="single-convo-message-button" onClick={() => sendNewMessage}></button>
+                <button type="submit" class="single-convo-message-button" onSubmit={() => sendNewMessage}></button>
             </form>
         </div>
     )
