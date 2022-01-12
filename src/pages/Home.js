@@ -44,6 +44,7 @@ const Home = async (props) => {
                         date={post.data.date}
                         postOwnerId={post.data.user}
                         likes={post.data.likes}
+                        comments={post.data.comments}
                         user={user}
                     />
                 )

@@ -41,6 +41,7 @@ const SavedPosts = async (props) => {
                         date={post.data.date}
                         postOwnerId={post.data.user}
                         likes={post.data.likes}
+                        comments={post.data.image}
                         user={user}
                     />
                 )

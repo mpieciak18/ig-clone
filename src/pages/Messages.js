@@ -9,7 +9,7 @@ import { Navbar } from '../components/Navbar.js'
 import { ConvosList } from '../components/ConvosList.js'
 
 const Messages = async (props) => {
-    const [user] = props
+    const { user } = props
 
     const [convos, setConvos] = useState(await retrieveAllConvos())
 

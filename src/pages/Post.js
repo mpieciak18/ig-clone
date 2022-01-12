@@ -5,7 +5,7 @@ import { findSinglePost } from '../firebase/posts.js'
 import { Navbar } from '../components/Navbar.js'
 
 const Post = (props) => {
-    const [user] = props
+    const { user } = props
 
     // Extract post id from url parameters
     const { postOwnerId, postId } = useParams()
@@ -32,6 +32,7 @@ const Post = (props) => {
                 date={post.data.date}
                 postOwnerId={postOwnerId}
                 likes={post.data.likes}
+                comments={post.data.comments}
                 user={user}
             />
         </div>

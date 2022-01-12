@@ -1,7 +1,7 @@
 import '../styles/components/ConvosList.css'
 
 const ConvosList = (props) => {
-    const [user, componentClass, convos, currentConvo, eventHandler] = props
+    const { user, componentClass, convos, currentConvo, eventHandler } = props
 
     const viewConvo = () => {return eventHandler()}
 

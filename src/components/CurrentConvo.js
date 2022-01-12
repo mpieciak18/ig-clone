@@ -1,7 +1,7 @@
 import '../styles/components/CurrentConvo.css'
 
 const CurrentConvo = (props) => {
-    const [user, componentClass, currentConvo, eventHandler] = props
+    const { user, componentClass, currentConvo, eventHandler } = props
 
     const sendNewMessage = () => {return eventHandler()}
 
@@ -26,4 +26,4 @@ const CurrentConvo = (props) => {
     )
 }
 
-export { currentConvo }
+export { CurrentConvo }

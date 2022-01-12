@@ -1,7 +1,7 @@
 import '../styles/Navbar.css'
 
 const Navbar = (props) => {
-    const [user] = props
+    const { user } = props
 
     return (
         <div id="navbar">
@@ -32,3 +32,5 @@ const Navbar = (props) => {
         </div>
     )
 }
+
+export { Navbar }
