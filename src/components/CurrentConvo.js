@@ -2,8 +2,9 @@ import '../styles/components/CurrentConvo.css'
 import { sendMessage } from '../firebase/directmessages.js'
 
 const CurrentConvo = (props) => {
-    const { user, componentClass, currentConvo } = props
+    const { user, componentClass, currentConvo, eventHandler } = props
 
+    // Add new message to specific convo in db
     const sendNewMessage = async (event) => {
         event.preventDefault()
         const comment = event.target.message
@@ -12,8 +13,16 @@ const CurrentConvo = (props) => {
         await sendMessage(comment, date, otherUserId)
     }
 
+    const viewAllConvos = () => {
+        eventHandler()
+    }
+
     return (
         <div id="single-convo" class={componentClass}>
+            <div id="single-convo-back-button" onClick={() => viewAllConvos}>
+                <div id='single-convo-back-arrow'>⇽</div>
+                <div id='single-convo-back-text'>Back to Messages</div>
+            </div>
             <div id="single-convo-messages">
                 {currentConvo.messages.map((message) => {
                     return (

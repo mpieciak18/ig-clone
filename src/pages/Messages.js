@@ -46,6 +46,7 @@ const Messages = async (props) => {
                     user={user}
                     componentClass={currConvoClass}
                     currConvo={currConvo}
+                    eventHandler={() => viewAllConvos}
                 />
             </div>
         </div>
