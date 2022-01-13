@@ -1,9 +1,17 @@
 import '../styles/PostFull.css'
 import { Link } from 'react-router-dom'
 import { addSavedPost, removeSavedPost } from '../firebase/savedposts.js'
+import { newComment } from '../firebase/comments.js'
 
 const PostFull = async (props) => {
     const { page, id, text, image, date, postOwnerId, likes, comments, user } = props
+
+    const addNewComment = (event) => {
+        event.preventDefault()
+        const comment = event.target.comment
+        let date
+        await newComment(id, date, postOwnerId, comment)
+    }
 
     let Post
     // Render post for reel of posts (ie, home page or user page)
@@ -38,10 +46,12 @@ const PostFull = async (props) => {
                         View more comments...
                     </Link>
                     <div class="post-comments"></div>
-                    <div class="post-comment-bar">
-                        <div class="post-comment-bar-input"></div>
-                        <div class="post-comment-bar-button"></div>
-                    </div>
+                    <form class="post-comment-bar" onSubmit={() => addNewComment}>
+                        <input type="text" name="comment" class="post-comment-bar-input" placeholder="Add a comment..." />
+                        <button type="submit" class="post-comment-bar-button">
+                            <img class="post-comment-bar-button-icon" />
+                        </button>
+                    </form>
                 </div>
             </div>
         )

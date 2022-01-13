@@ -1,8 +1,7 @@
 import '../styles/Messages.css'
 import {
-    sendMessage,
     retrieveAllConvos,
-    retrieveSingleConvo,
+    retrieveSingleConvo
 } from '../firebase/directmessages'
 import { useState } from 'react'
 import { Navbar } from '../components/Navbar.js'
@@ -31,14 +30,6 @@ const Messages = async (props) => {
         setCurrConvo({otherUserId: otherUserId, messages: messages})
     }
 
-    const sendNewMessage = async (event) => {
-        event.preventDefault()
-        const message = document.getElementById('single-convo-message-bar-input').value
-        let date
-        const otherUserId = currConvo.otherUserId
-        await sendMessage(message, date, otherUserId)
-    }
-
     return (
         <div id='messages' class='page'>
             <Navbar user={user} />
@@ -54,7 +45,6 @@ const Messages = async (props) => {
                     user={user}
                     componentClass={currConvoClass}
                     currConvo={currConvo}
-                    eventHandler={() => sendNewMessage}
                 />
             </div>
         </div>

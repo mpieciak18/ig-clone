@@ -7,18 +7,19 @@ import {
 } from "firebase/firestore"
 
 // Create new comment & return comment ID
-const newComment = async (postId, date, postOwnerId) => {
+const newComment = async (postId, date, postOwnerId, text) => {
     // First, set up comment data
     const userId = auth.currentUser.uid
     const commentData = {
         post: postId,
         date: date,
         user: userId,
-        postOwner: postOwnerId
+        postOwner: postOwnerId,
+        text: text
     }
     // Second, add comment to db -> users -> posts -> comments
     // and assign the randomly generated comment id to a variable
-    await addCommentToUserPost(commentData, postId)
+    await addCommentToUserPost(commentData, postId, postOwnerId)
     // Third, return comment id
     return commentId
 }

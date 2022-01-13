@@ -1,9 +1,16 @@
 import '../styles/components/CurrentConvo.css'
+import { sendMessage } from '../firebase/directmessages.js'
 
 const CurrentConvo = (props) => {
-    const { user, componentClass, currentConvo, eventHandler } = props
+    const { user, componentClass, currentConvo } = props
 
-    const sendNewMessage = () => {return eventHandler()}
+    const sendNewMessage = async (event) => {
+        event.preventDefault()
+        const comment = event.target.message
+        let date
+        const otherUserId = currConvo.otherUserId
+        await sendMessage(comment, date, otherUserId)
+    }
 
     return (
         <div id="single-convo" class={componentClass}>
@@ -18,9 +25,11 @@ const CurrentConvo = (props) => {
                     )
                 })}
             </div>
-            <form class="single-convo-message-bar">
-                <input type="text" class="single-convo-message-bar-input" placeholder="Send a message..."></input>
-                <button type="submit" class="single-convo-message-button" onSubmit={() => sendNewMessage}></button>
+            <form class="single-convo-message-bar" onSubmit={() => sendNewMessage}>
+                <input type="text" name="message" class="single-convo-message-bar-input" placeholder="Send a message..." />
+                <button type="submit" class="single-convo-message-button">
+                    <img class="single-convo-message-button-icon" />
+                </button>
             </form>
         </div>
     )
