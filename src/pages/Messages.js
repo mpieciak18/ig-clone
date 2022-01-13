@@ -10,20 +10,21 @@ import { ConvosList } from '../components/ConvosList.js'
 const Messages = async (props) => {
     const { user } = props
 
+    // State consisting of all available convos in user's collection
     const [convos, setConvos] = useState(await retrieveAllConvos())
 
+    // State determing which convo is selected, to be rendered on page
     const [currConvo, setCurrConvo] = useState(null)
 
-    // The following React states determine mobile vs. desktop visibility
+    // States & methods determining mobile vs. desktop visibility
     const [convosListClass, setConvosListClass] = useState('visible')
     const [currConvoClass, setCurrConvoClass] = useState('hidden')
-
     const viewAllConvos = () => {
         setConvosListClass('visible')
         setCurrConvoClass('hidden')
     }
-    const viewSingleConvo = async (event) => {
-        const otherUserId = event.target.id
+    const viewSingleConvo = async (convoId) => {
+        const otherUserId = convoId
         setConvosListClass('hidden')
         setCurrConvoClass('visible')
         const messages = await retrieveSingleConvo(otherUserId)
