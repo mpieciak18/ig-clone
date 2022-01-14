@@ -1,5 +1,6 @@
 import '../styles/components/CurrentConvo.css'
 import { sendMessage } from '../firebase/directmessages.js'
+import { ConvoMessageBlock } from '../components/ConvoPreview.js'
 
 const CurrentConvo = (props) => {
     const { user, componentClass, currentConvo, eventHandler } = props
@@ -26,7 +27,7 @@ const CurrentConvo = (props) => {
             <div id="single-convo-messages">
                 {currentConvo.messages.map((message) => {
                     return (
-                        <SingleMessageBlock
+                        <ConvoMessageBlock
                             user={user}
                             messageId={message.id}
                             message={message.data}
