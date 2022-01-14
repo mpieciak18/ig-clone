@@ -1,4 +1,4 @@
-import '../styles/components/ConvoPreview.css'
+import '../styles/components/Messages/ConvoPreview.css'
 import {useState, useEffect} from 'react'
 
 // Component for each available convo in the convo list

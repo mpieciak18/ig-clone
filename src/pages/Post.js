@@ -1,4 +1,4 @@
-import '../styles/Post.css'
+import '../styles/pages/Post.css'
 import { useParams, useLocation, useHistory } from 'react-router-dom'
 import { PostFull } from '../components/PostFull.js'
 import { findSinglePost } from '../firebase/posts.js'

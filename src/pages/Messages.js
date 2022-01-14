@@ -1,11 +1,12 @@
-import '../styles/Messages.css'
+import '../styles/pages/Messages.css'
 import {
     retrieveAllConvos,
     retrieveSingleConvo
 } from '../firebase/directmessages'
 import { useState } from 'react'
 import { Navbar } from '../components/Navbar.js'
-import { ConvosList } from '../components/ConvosList.js'
+import { ConvosList } from '../components/Messages/ConvosList.js'
+import { CurrentConvo } from '../components/Messages/CurrentConvo.js'
 
 const Messages = async (props) => {
     const { user } = props

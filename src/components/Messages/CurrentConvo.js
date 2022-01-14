@@ -1,4 +1,4 @@
-import '../styles/components/CurrentConvo.css'
+import '../styles/components/Messages/CurrentConvo.css'
 import { sendMessage } from '../firebase/directmessages.js'
 import { ConvoMessageBlock } from '../components/ConvoPreview.js'
 

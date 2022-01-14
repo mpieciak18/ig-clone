@@ -1,5 +1,5 @@
-import '../styles/components/ConvoMessageBlock.css'
-import { findUser } from '../firebase/users.js'
+import '../styles/components/Messages/ConvoMessageBlock.css'
+import { findUser } from '../../firebase/users.js'
 
 const ConvoMessageBlock = async (props) => {
     const { user, messageId, messageData } = props

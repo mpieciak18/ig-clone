@@ -1,4 +1,4 @@
-import '../styles/Home.css'
+import '../styles/pages/Home.css'
 import { findPosts } from '../firebase/posts.js'
 import { Navbar } from '../components/Navbar.js'
 import { PostFull } from '../components/PostFull.js'

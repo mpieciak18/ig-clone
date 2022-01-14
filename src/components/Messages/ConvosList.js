@@ -1,4 +1,4 @@
-import '../styles/components/ConvosList.css'
+import '../styles/components/Messages/ConvosList.css'
 import ConvoPreview from '../components/ConvoPreview.js'
 
 // Component for the list of all available convos in a user's messages page.
