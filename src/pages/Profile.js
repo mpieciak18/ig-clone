@@ -3,7 +3,9 @@ import Navbar from '../components/Navbar.js'
 import PostPreview from '../components/PostPreview.js'
 import { findPostsFromUser } from '../firebase/posts.js'
 import { findUser } from '../firebase/users.js'
-import { useParams } from 'react-router-dom'
+import { checkForFollow, addFollow, removeFollow } from '../firebase/followers.js'
+import { useParams, useHistory } from 'react-router-dom'
+import { useState } from 'react'
 
 const Profile = async (props) => {
     const { user } = props
@@ -50,6 +52,53 @@ const Profile = async (props) => {
                 <div id='profile-card-followers'>{otherUser.data.followers}</div>
             </div>
             <div id='profile-card-bio'>{otherUser.data.bio}</div>
+        </div>
+    )
+
+    // Set up history & back function
+    const history = useHistory()
+    const goBack = () => {history.goBack()}
+
+    // Init followText & followButtonClass states
+    const isFollowing = await checkForFollow(otherUserId)
+    const [followText, setFollowText] = useState(() => {
+        if (isFollowing == true) {
+            return 'Follow'
+        } else {
+            return 'Unfollow'
+        }
+    })
+    const [followButtonClass, setFollowButtonClass] = useState('loaded')
+
+    // Update follow status & associated states
+    const clickFollow = async () => {
+        setFollowButtonClass('not-loaded')
+        if (followText == 'Follow') {
+            await addFollow(otherUserId)
+            setFollowText('Unfollow')
+            setFollowButtonClass('loaded')
+        } else {
+            await removeFollow(otherUserId)
+            setFollowText('Follow')
+            setFollowButtonClass('loaded')
+        }
+    }
+
+    // Back, follow, & message button sections
+    const ButtonsSection = (
+        <div id='buttons-section'>
+            <div id='post-back-button' onClick={goBack}>
+                <div id='back-arrow'>⇽</div>
+                <div id='back-text'>Go Back</div>
+            </div>
+            <div id='buttons-section-right'>
+                <div id='follow-button' class={followButtonClass} onClick={clickFollow}>
+                    {followText}
+                </div>
+                <div id='direct-message-button-container'>
+                    <img id='direct-message-button' />
+                </div>
+            </div>
         </div>
     )
 

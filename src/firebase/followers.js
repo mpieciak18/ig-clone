@@ -5,7 +5,9 @@ import {
     setDoc,
     deleteDoc,
     updateDoc,
-    getDoc
+    getDoc,
+    query,
+    where
  } from 'firebase/firestore'
 
 // Helper functions for adding / removing follows in database
@@ -107,4 +109,17 @@ const changeSelfFollowingCount = async (selfId, increase) => {
     await updateDoc(selfRef, {"following": followingCount})
 }
 
-export default { addFollow, removeFollow }
+// Check if the signed-in user is following another user
+const checkForFollow = async (otherUserId) => {
+    const userId = auth.currentUser.uid
+    const followsRef = getOwnFollowsRef(userId)
+    const postRef = query(followsRef, where("otherUser", "==", otherUserId))
+    const postDoc = await getDoc(postRef)
+    if (postDoc.exists()) {
+        return true
+    } else {
+        return false
+    }
+}
+
+export default { addFollow, removeFollow, checkForFollow }

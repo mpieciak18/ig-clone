@@ -1,5 +1,5 @@
 import '../styles/Post.css'
-import { useParams, useLocation } from 'react-router-dom'
+import { useParams, useLocation, useHistory } from 'react-router-dom'
 import { PostFull } from '../components/PostFull.js'
 import { findSinglePost } from '../firebase/posts.js'
 import { Navbar } from '../components/Navbar.js'
@@ -17,10 +17,14 @@ const Post = (props) => {
         post = findSinglePost(postId, postOwnerId)
     } 
 
+    // Set up history & back button
+    const history = useHistory()
+    const goBack = () => {history.goBack()}
+
     const BackButton = (
-        <div id='post-back-button'>
+        <div id='post-back-button' onClick={goBack}>
             <div id='back-arrow'>⇽</div>
-            <div id='back-text'>Back to Profile</div>
+            <div id='back-text'>Go Back</div>
         </div>
     )
 
