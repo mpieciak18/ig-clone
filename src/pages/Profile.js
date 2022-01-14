@@ -3,9 +3,16 @@ import Navbar from '../components/Navbar.js'
 import PostPreview from '../components/PostPreview.js'
 import { findPostsFromUser } from '../firebase/posts.js'
 import { findUser } from '../firebase/users.js'
+import { useParams } from 'react-router-dom'
 
 const Profile = async (props) => {
     const { user } = props
+
+    // Get other user id from url parameters
+    const { otherUserId } = useParams()
+
+    // Get profile user data from database
+    const otherUser = await findUser(otherUserId)
 
     // Init postsNumber state
     const [postsNumber, setPostsNumber] = await useState(10)
@@ -34,15 +41,15 @@ const Profile = async (props) => {
     // Profile card section
     const ProfileCard = (
         <div id='profile-card'>
-            <img id='profile-card-icon' />
-            <div id='profile-card-name'></div>
-            <div id='profile-card-username'></div>
+            <img id='profile-card-icon' src={otherUser.data.image} />
+            <div id='profile-card-name'>{otherUser.data.name}</div>
+            <div id='profile-card-username'>{otherUser.username}</div>
             <div id='profile-card-stats'>
-                <div id='profile-card-posts'></div>
-                <div id='profile-card-following'></div>
-                <div id='profile-card-followers'></div>
+                <div id='profile-card-posts'>{otherUser.data.posts}</div>
+                <div id='profile-card-following'>{otherUser.data.following}</div>
+                <div id='profile-card-followers'>{otherUser.data.followers}</div>
             </div>
-            <div id='profile-card-bio'></div>
+            <div id='profile-card-bio'>{otherUser.data.bio}</div>
         </div>
     )
 
