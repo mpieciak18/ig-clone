@@ -10,6 +10,7 @@ import {
     query,
     limit
 } from "firebase/firestore"
+import comments from "./comments.js"
 
 // Retrieve single post
 const findSinglePost = async (postId, userId) => {
@@ -92,7 +93,27 @@ const removePost = async (postId, userId) => {
     const userRef = doc(usersRef, userId)
     const userPostsRef = collection(userRef, 'posts')
     const userPostRef = doc(userPostsRef, postId)
+    await removeLikes(userPostRef)
+    await removeComments(userPostRef)
     await deleteDoc(userPostRef)
+}
+
+// Remove all likes from a post
+const removeLikes = async (postRef) => {
+    const likesRef = collection(postRef, 'likes')
+    const likesDocs = await getDocs(likesRef)
+    likesDocs.forEach((like) => {
+        await deleteDoc(like)
+    })
+}
+
+// Remove all comments from a post
+const removeComments = async (postRef) => {
+    const commentsRef = collection(postRef, 'comments')
+    const commentsDocs = await getDocs(commentsRef)
+    commentsDocs.forEach((comment) => {
+        await deleteDoc(comment)
+    })
 }
 
 export { findPosts, findPostsFromUser, findSinglePost, newPost, removePost }
