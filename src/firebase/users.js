@@ -24,7 +24,7 @@ const newUser = async (email, password, username, name, image) => {
 }
 
 // Add user to users collection
-const addUser = async (email, id, username, name, image) => {
+const addUser = async (email, id, username, name, image, bio) => {
     const usersRef = collection(db, 'users')
     const newUserRef = doc(usersRef, id)
     const newUserData = {
@@ -32,6 +32,7 @@ const addUser = async (email, id, username, name, image) => {
         username: username, 
         name: name, 
         image: image, 
+        bio: bio,
         followers: 0, 
         following: 0, 
         posts: 0
