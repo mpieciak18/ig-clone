@@ -10,7 +10,6 @@ import {
     query,
     limit
 } from "firebase/firestore"
-import comments from "./comments.js"
 
 // Retrieve single post
 const findSinglePost = async (postId, userId) => {
@@ -73,6 +72,7 @@ const newPost = async (text, image, date) => {
         likes: 0
     }
     const postId = await addPostToUserPostsCollection(postData)
+    await changePostCount(userId, true)
     return postId
 }
 
@@ -87,12 +87,29 @@ const addPostToUserPostsCollection = async (data) => {
     return postRef.id
 }
 
+// Change post count for  user
+const changePostCount = async (userId, increase) => {
+    // First, grab old post count
+    const userRef = getUserRef(userId)
+    const userDoc = await getDoc(userRef)
+    let postCount = userDoc.data().posts
+    // Second, increase or decrease follower count
+    if (increase == true) {
+        postCount += 1
+    } else {
+        postCount -= 1
+    }
+    // Third, assign new follower count to user doc
+    await updateDoc(userRef, {"posts": postCount})
+}
+
 // Remove post from user's subcollection of posts
 const removePost = async (postId, userId) => {
     const usersRef = collection(db, 'users')
     const userRef = doc(usersRef, userId)
     const userPostsRef = collection(userRef, 'posts')
     const userPostRef = doc(userPostsRef, postId)
+    await changePostCount(userId, false)
     await removeLikes(userPostRef)
     await removeComments(userPostRef)
     await deleteDoc(userPostRef)
