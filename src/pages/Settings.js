@@ -1,4 +1,5 @@
 import '../styles/pages/Settings.css'
+import { Link } from 'react-router-dom'
 
 const Settings = (props) => {
     const { user } = props
@@ -15,7 +16,9 @@ const Settings = (props) => {
                 <label id='settings-bio-label' for='bio'>Your Bio:</label>
                 <textarea id='settings-bio-input' name='bio' type=''>{user.bio}</textarea>
                 <div id='settings-buttons'>
-                    <button type='button'>Back to Profile</button>
+                    <Link to={`/profile/${user.id}`}>
+                        <button type='button'>Back to Profile</button>
+                    </Link>
                     <button type='submit'>Update Settings</button>
                 </div>
             </form>
