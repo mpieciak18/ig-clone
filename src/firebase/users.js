@@ -4,7 +4,8 @@ import {
     doc,
     collection,
     setDoc,
-    getDoc
+    getDoc,
+    updateDoc
 } from "firebase/firestore"
 import { 
     createUserWithEmailAndPassword,
@@ -66,4 +67,16 @@ const findUser = async (userId) => {
     return user
 }
 
-export { newUser, signInUser, signOutUser, findUser, auth }
+// Update user
+const updateUser = async (name, username, bio) => {
+    const userId = auth.currentUser.uid
+    const usersRef = collection(db, 'users')
+    const userRef = doc(usersRef, userId)
+    await updateDoc (userRef, {
+        'name': name,
+        'username': username,
+        'bio': bio
+    })
+}
+
+export { newUser, signInUser, signOutUser, findUser, updateUser }

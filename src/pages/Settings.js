@@ -1,14 +1,25 @@
 import '../styles/pages/Settings.css'
 import { Link } from 'react-router-dom'
+import { updateUser } from '../firebase/users.js'
 
 const Settings = (props) => {
     const { user } = props
+
+    // Updates user's settings with form values
+    const updateSettings = async (e) => {
+        e.preventDefault()
+        await updateUser(
+            e.target.name.value,
+            e.target.username.value,
+            e.target.bio.value
+        )
+    }
 
     return (
         <div id='settings' className='page'>
             <div id='settings-title'>Settings</div>
             <img id='settings-image'/>
-            <form id='settings-form'>
+            <form id='settings-form' onSubmit={updateSettings}>
                 <label id='settings-name-label' for='name'>Your Name:</label>
                 <input id='settings-name-input' name='name' type='text'>{user.name}</input>
                 <label id='settings-username-label' for='username'>Your Display Name:</label>
