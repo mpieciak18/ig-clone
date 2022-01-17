@@ -5,7 +5,9 @@ import {
     collection,
     setDoc,
     getDoc,
-    updateDoc
+    updateDoc,
+    query,
+    where
 } from "firebase/firestore"
 import { 
     createUserWithEmailAndPassword,
@@ -79,4 +81,16 @@ const updateUser = async (name, username, bio) => {
     })
 }
 
-export { newUser, signInUser, signOutUser, findUser, updateUser }
+// Query for username & return true if it exists in db
+const usernameExists = async (username) => {
+    const usersRef = collection(db, 'users')
+    const userRef = query(usersRef, where('username', '==', username))
+    const userDoc = await getDoc(userRef)
+    if (userDoc.exists()) {
+        return true
+    } else {
+        return false
+    }
+}
+
+export { newUser, signInUser, signOutUser, findUser, updateUser, usernameExists }

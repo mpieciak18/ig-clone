@@ -1,8 +1,12 @@
 import '../styles/pages/SignUp.css'
 import { Navbar } from '../components/Navbar'
+import { UsernameFooter } from '../components/SignUp/UsernameFooter'
 
 const SignUp = (props) => {
     const { user } = props
+    const [usernamePasses, setUsernamePasses] = useState(false)
+    const [passwordPasses, setPasswordPasses] = useState(false)
+    const [emailPasses, setEmailPasses] = useState(false)
 
     return (
         <div id="sign-up" className="page">
@@ -16,9 +20,9 @@ const SignUp = (props) => {
                     <div id='sign-up-username-parent'>
                         <div id='sign-up-username-symbol'>@</div>
                         <div id='sign-up-username-divider' />
-                        <input id='sign-up-username-input' name='username' placeholder='username' />
+                        <input id='sign-up-username-input' name='username' placeholder='username' onChange={updateUsername} />
                     </div>
-                    {usernameStatus}
+                    <UsernameFooter eventHandler={setUsernamePasses} />
                     <div id='sign-up-name-parent'>
                         <input id='sign-up-name-input' name='name' placeholder='your name' />
                     </div>
