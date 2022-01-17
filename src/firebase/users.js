@@ -93,4 +93,16 @@ const usernameExists = async (username) => {
     }
 }
 
-export { newUser, signInUser, signOutUser, findUser, updateUser, usernameExists }
+// Query for email & return true if it exists in db
+const emailExists = async (email) => {
+    const usersRef = collection(db, 'users')
+    const userRef = query(usersRef, where('email', '==', email))
+    const userDoc = await getDoc(userRef)
+    if (userDoc.exists()) {
+        return true
+    } else {
+        return false
+    }
+}
+
+export { newUser, signInUser, signOutUser, findUser, updateUser, usernameExists, emailExists }

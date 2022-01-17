@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { usernameExists } from '../firebase/users.js'
 
 const PasswordFooter = async (props) => {
     const { eventHandler } = props
@@ -14,7 +13,7 @@ const PasswordFooter = async (props) => {
         eventHandler(bool)
     }
 
-    // Update username on input change
+    // Update password on input change
     const updatePassword = (e) => {
         const newPassword = e.target.value
         setPassword(newPassword)
@@ -22,8 +21,13 @@ const PasswordFooter = async (props) => {
 
     // Update password footer text, class, and passwordPasses state upon password change
     useEffect(async () => {
+        // Checks if no password is entered
+        if (password.length == 0) {
+            setPasswordPasses(false)
+            setFooterText('Must contain >8 characters, 1+ uppercase letter, 1+ lowercase letter, and 1+ number.')
+            setFooterClass('grey')
         // Checks for minimum length of 8
-        if (password.match(/^.{0,7}$/) != null) {
+        } else if (password.match(/^.{0,7}$/) != null) {
             setPasswordPasses(false)
             setFooterText('Password is too short!')
             setFooterClass('red')
@@ -36,18 +40,18 @@ const PasswordFooter = async (props) => {
         } else if (password.match(/^[^a-z]*$/) != null) {
             setPasswordPasses(false)
             setFooterText('Password needs an uppercase letter!')
-            setFooterClass('green')
+            setFooterClass('red')
         // Checks for at least one number
         } else if (password.match(/^[^0-9]*$/) != null) {
             setPasswordPasses(false)
             setFooterText('Password needs an uppercase letter!')
-            setFooterClass('green')
+            setFooterClass('red')
         } else {
-            setUsernamePasses(true)
+            setPasswordPasses(true)
             setFooterText('Password is good.')
             setFooterClass('grey')
         }
-    }, username) 
+    }, password) 
 
     return (
         <div id='sign-up-password-footer' className={footerClass} onChange={updatePassword}>
