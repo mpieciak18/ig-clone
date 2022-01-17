@@ -4,8 +4,8 @@ import { usernameExists } from '../firebase/users.js'
 const UsernameFooter = async (props) => {
     const { eventHandler } = props
     const [username, setUsername] = useState('')
-    const [unameFooterText, setUnameFooterText] = useState('Username must be 3-15 characters.')
-    const [unameFooterClass, setUnameFooterClass] = useState('grey')
+    const [footerText, setFooterText] = useState('Username must be 3-15 characters.')
+    const [footerClass, setFooterClass] = useState('grey')
 
     // Update usernamePasses state from SignUp page
     const setUsernamePasses = (bool) => {
@@ -18,37 +18,42 @@ const UsernameFooter = async (props) => {
         setUsername(newUsername)
     }
 
-    // Update username footer text, class, and unameExists state upon username change
+    // Update username footer text, class, and usernamePasses state upon username change
     useEffect(async () => {
-        // First, query db for username if > 0
+        // First, query db for username if > 3 and < 16
         let result = false
-        if (username.length > 3) {
+        if (username.length > 3 && username.length < 16) {
             result = await usernameExists(username)
         }
-        // Second, update username footer text, class, & unameExists
+        // Second, update username footer text, class, & usernamePasses
         if (username.length < 4) {
             setUsernamePasses(false)
-            setUnameFooterText('Username is too short!')
-            setUnameFooterClass('grey')
+            setFooterText('Username is too short!')
+            setFooterClass('red')
+        }
+        else if (username.length > 15) {
+            setUsernamePasses(false)
+            setFooterText('Username is too long!')
+            setFooterClass('red')
         }
         else if (result == true) {
             setUsernamePasses(false)
-            setUnameFooterText('Username is already taken!')
-            setUnameFooterClass('red')
+            setFooterText('Username is already taken!')
+            setFooterClass('red')
         } else if (username.length > 0 && result == false) {
             setUsernamePasses(true)
-            setUnameFooterText('Username can be used!')
-            setUnameFooterClass('green')
+            setFooterText('Username can be used!')
+            setFooterClass('green')
         } else {
             setUsernamePasses(false)
-            setUnameFooterText('Username must be 3-15 characters.')
-            setUnameFooterClass('grey')
+            setFooterText('Username must be 3-15 characters.')
+            setFooterClass('grey')
         }
     }, username) 
 
     return (
-        <div id='sign-up-username-footer' className={unameFooterClass} onChange={updateUsername}>
-            {unameFooterText}
+        <div id='sign-up-username-footer' className={footerClass} onChange={updateUsername}>
+            {footerText}
         </div>
     )
 }

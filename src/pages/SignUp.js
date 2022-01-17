@@ -1,6 +1,7 @@
 import '../styles/pages/SignUp.css'
 import { Navbar } from '../components/Navbar'
-import { UsernameFooter } from '../components/SignUp/UsernameFooter'
+import { UsernameFooter } from '../components/SignUp/UsernameFooter.js'
+import { PasswordFooter } from '../components/SignUp/PasswordFooter.js'
 
 const SignUp = (props) => {
     const { user } = props
@@ -29,7 +30,7 @@ const SignUp = (props) => {
                     <div id='sign-up-email-parent'>
                         <input id='sign-up-email-input' name='email' placeholder='email' />
                     </div>
-                    {emailStatus}
+                    <PasswordFooter eventHandler={setPasswordPasses} />
                     <div id='sign-up-password-parent'>
                         <input id='sign-up-password-input' name='password' placeholder='password' />
                     </div>
