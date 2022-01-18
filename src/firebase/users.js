@@ -21,8 +21,9 @@ const newUser = async (username, name, email, password) => {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password)
         const user = userCredential.user
         await addUser(user.email, user.uid, username, name)
+        return null
     } catch(error) {
-        // return error
+        return error
     }
 }
 

@@ -1,6 +1,8 @@
 import '../styles/pages/Settings.css'
 import { Link } from 'react-router-dom'
 import { updateUser } from '../firebase/users.js'
+import { useLocation } from 'react-router-dom'
+import { useState } from 'react'
 
 const Settings = (props) => {
     const { user } = props
@@ -15,8 +17,22 @@ const Settings = (props) => {
         )
     }
 
+    // Display pop-up upon new user registration
+    const [welcomeClass, setWelcomeClass] = useState('hidden')
+    const welcomeMessage = (
+        <div id='settings-welcome' className={welcomeClass}>
+            You've successfully registered! Please update your bio and image.
+        </div>
+    )
+    const {newSignUp} = useLocation().state || false
+    if (newSignUp == true) {
+        setWelcomeClass('visible')
+        setTimeout(() => {setWelcomeClass('hidden')}, 2000)
+    }
+
     return (
         <div id='settings' className='page'>
+            {welcomeMessage}
             <div id='settings-title'>Settings</div>
             <img id='settings-image'/>
             <form id='settings-form' onSubmit={updateSettings}>

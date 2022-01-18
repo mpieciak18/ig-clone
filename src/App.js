@@ -73,15 +73,7 @@ const App = async () => {
                 <Route exact path='/:userId' element={<Profile user={user}/>} />
                 <Route exact path='/savedposts' element={<SavedPosts user={user} />} />
                 <Route exact path='/settings' element={<Settings user={user}/>} />
-                <Route exact path='/signup' render={
-                    () => {
-                        if (user.loggedIn == true) {
-                            return <Home user={user}/>
-                        } else {
-                            return <SignUp user={user} />
-                        }
-                    }
-                } />
+                <Route exact path='/signup' element={<SignUp user={user} />} />
             </Routes>
         </BrowserRouter>
     )
