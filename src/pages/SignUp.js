@@ -8,6 +8,25 @@ const SignUp = (props) => {
     const [usernamePasses, setUsernamePasses] = useState(false)
     const [passwordPasses, setPasswordPasses] = useState(false)
     const [emailPasses, setEmailPasses] = useState(false)
+    const allPass = () => {
+        return (usernamePasses == true && passwordPasses == true && emailPasses == true)
+    }
+
+    const signUpButton = () => {
+        if (allPass() == true) {
+            return (
+                <button type='submit' id='sign-up-form-button' className='active'>
+                    Sign Up
+                </button>
+            )
+        } else {
+            return (
+                <button type='button' id='sign-up-form-button' className='inactive'>
+                    Sign Up
+                </button>
+            )
+        }
+    }
 
     return (
         <div id="sign-up" className="page">
@@ -35,6 +54,7 @@ const SignUp = (props) => {
                         <input id='sign-up-password-input' name='password' placeholder='password' />
                     </div>
                     <EmailFooter eventHandler={() => setEmailPasses} />
+                    {signUpButton}
                 </form>
             </div>
         </div>
