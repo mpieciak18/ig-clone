@@ -50,6 +50,12 @@ const UsernameFooter = async (props) => {
             setFooterText('Username is already taken!')
             setFooterClass('red')
         }
+        // Check if username contains spaces or symbols other than "-" or "_"
+        else if (username.match(/^[a-zA-Z0-9_.-]*$/) == null) {
+            setUsernamePasses(false)
+            setFooterText('No spaces or symbols, other than "-" or "_"!')
+            setFooterClass('red')
+        }
         // Username passes
         else {
             setUsernamePasses(true)
