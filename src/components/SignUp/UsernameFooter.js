@@ -20,34 +20,41 @@ const UsernameFooter = async (props) => {
 
     // Update username footer text, class, and usernamePasses state upon username change
     useEffect(async () => {
-        // First, query db for username if > 3 and < 16
+        // First, query db for username if > 2 and < 16
         let result = false
-        if (username.length > 3 && username.length < 16) {
+        if (username.length > 2 && username.length < 16) {
             result = await usernameExists(username)
         }
-        // Second, update username footer text, class, & usernamePasses
-        if (username.length < 4) {
+        // Second, check if username passes criteria
+        // Check if no username entered
+        if (username.match(/^.{0,0}$/) != null) {
+            setUsernamePasses(false)
+            setFooterText('Username must be 3-15 characters.')
+            setFooterClass('grey')
+        }
+        // Check if username is 1 or 2 characters
+        else if (username.match(/^.{1,2}$/) != null) {
             setUsernamePasses(false)
             setFooterText('Username is too short!')
             setFooterClass('red')
         }
-        else if (username.length > 15) {
+        // Check if username is more than 15 characters
+        else if (username.match(/^.{16,}$/) != null) {
             setUsernamePasses(false)
             setFooterText('Username is too long!')
             setFooterClass('red')
         }
+        // Check if username is taken already
         else if (result == true) {
             setUsernamePasses(false)
             setFooterText('Username is already taken!')
             setFooterClass('red')
-        } else if (username.length > 0 && result == false) {
+        }
+        // Username passes
+        else {
             setUsernamePasses(true)
             setFooterText('Username can be used!')
             setFooterClass('green')
-        } else {
-            setUsernamePasses(false)
-            setFooterText('Username must be 3-15 characters.')
-            setFooterClass('grey')
         }
     }, username) 
 
