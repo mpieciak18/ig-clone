@@ -30,14 +30,13 @@ const Post = (props) => {
             <Navbar user={user} />
             {BackButton}
             <PostPage 
-                page="true" 
-                id={postId}
-                text={post.data.text}
-                image={post.data.image}
-                date={post.data.date}
-                postOwnerId={postOwnerId}
-                likes={post.data.likes}
-                comments={post.data.comments}
+                postId={post.id}
+                postText={post.data.text}
+                postImage={post.data.image}
+                postDate={post.data.date}
+                postOwnerId={post.data.user}
+                postLikes={post.data.likes}
+                postComments={post.data.comments}
                 user={user}
             />
         </div>

@@ -37,14 +37,13 @@ const Home = async (props) => {
             {posts.map((post) => {
                 return (
                     <PostReel
-                        page="false" 
-                        id={post.id}
-                        text={post.data.text}
-                        image={post.data.image}
-                        date={post.data.date}
+                        postId={post.id}
+                        postText={post.data.text}
+                        postImage={post.data.image}
+                        postDate={post.data.date}
                         postOwnerId={post.data.user}
-                        likes={post.data.likes}
-                        comments={post.data.comments}
+                        postLikes={post.data.likes}
+                        postComments={post.data.comments}
                         user={user}
                     />
                 )
