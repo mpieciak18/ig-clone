@@ -1,16 +1,10 @@
-import '.../styles/components/Post.css'
+import '../../styles/components/Posts/Post.css'
 import { Link } from 'react-router-dom'
-import { newComment } from '../../firebase/comments.js'
+import { CommentsBar } from './CommentsBar.js'
+import { PostButtons } from './PostButtons.js'
 
 const PostReel = async (props) => {
-    const { page, id, text, image, date, postOwnerId, likes, comments, user } = props
-
-    const addNewComment = (event) => {
-        event.preventDefault()
-        const comment = event.target.comment
-        let date
-        await newComment(id, date, postOwnerId, comment)
-    }
+    const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user } = props
 
     return (
         <div class="single-post-component">
@@ -24,30 +18,15 @@ const PostReel = async (props) => {
                         </div>
                     </Link>
                 </div>
-                <div class="post-options-button">···</div>
             <div class="post-middle"></div>
             <div class="post-bottom">
-                <div class="post-buttons">
-                    <div class="post-buttons-left">
-                        <img class="post-like-button"/>
-                        <img class="post-comment-button"/>
-                        <Link to={`/${postOwnerId}/${id}`}>
-                            <img class="post-share-button"/>
-                        </Link>
-                    </div>
-                    <div class="post-save-button"></div>
-                </div>
+                <PostButtons user={user} postId={postId} postOwnerId={postOwnerId} />
                 <div class="post-likes"></div>
                 <Link class="post-view-comments" to={`/${postOwnerId}/${id}`}>
                     View more comments...
                 </Link>
                 <div class="post-comments"></div>
-                <form class="post-comment-bar" onSubmit={() => addNewComment}>
-                    <input type="text" name="comment" class="post-comment-bar-input" placeholder="Add a comment..." />
-                    <button type="submit" class="post-comment-bar-button">
-                        <img class="post-comment-bar-button-icon" />
-                    </button>
-                </form>
+                <CommentsBar user={user} postId={postId} postOwnerId={postOwnerId} />
             </div>
         </div>
     )

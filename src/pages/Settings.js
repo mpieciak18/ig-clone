@@ -5,7 +5,12 @@ import { useLocation } from 'react-router-dom'
 import { useState } from 'react'
 
 const Settings = (props) => {
+    // Redirect to signup page if not signed in
     const { user } = props
+    if (user.loggedIn == false) {
+        const path = useLocation().pathname
+        return <Navigate to='/signup' state={{path: path}} />
+    }
 
     // Updates user's settings with form values
     const updateSettings = async (e) => {

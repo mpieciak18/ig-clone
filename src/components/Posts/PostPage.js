@@ -1,8 +1,10 @@
-import '.../styles/components/Post.css'
+import '../../styles/components/Posts/Post.css'
 import { Link } from 'react-router-dom'
+import { CommentsBar } from './CommentsBar.js'
+import { PostButtons } from './PostButtons.js'
 
 const PostPage = async (props) => {
-    const { page, id, text, image, date, postOwnerId, likes, comments, user } = props
+    const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user } = props
 
     return (
         <div class="single-post-page">
@@ -20,22 +22,12 @@ const PostPage = async (props) => {
                 </div>
                 <div class="post-right-middle"></div>
                 <div class="post-right-bottom">
-                    <div class="post-right-bottom-one">
-                        <div class="post-buttons">
-                            <img class="post-like-button"/>
-                            <img class="post-comment-button"/>
-                            <img class="post-share-button"/>
-                        </div>
-                        <div class="post-options-button">···</div>
-                    </div>
+                    <PostButtons user={user} postId={postId} postOwnerId={postOwnerId} />
                     <div class="post-right-bottom-two">
                         <div class="post-likes"></div>
                         <div class="post-date"></div>
                     </div>
-                    <div class="post-comment-bar">
-                        <div class="post-comment-bar-input"></div>
-                        <div class="post-comment-bar-button"></div>
-                    </div>
+                    <CommentsBar user={user} postId={postId} postOwnerId={postOwnerId} />
                 </div>
             </div>
         </div>

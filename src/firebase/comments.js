@@ -7,12 +7,13 @@ import {
 } from "firebase/firestore"
 
 // Create new comment & return comment ID
-const newComment = async (postId, date, postOwnerId, text) => {
+const newComment = async (postId, postOwnerId, text) => {
     // First, set up comment data
     const userId = auth.currentUser.uid
+    let currentDate
     const commentData = {
         post: postId,
-        date: date,
+        date: currentDate,
         user: userId,
         postOwner: postOwnerId,
         text: text

@@ -18,8 +18,8 @@ const Login = (props) => {
         const possibleError = await signInUser(email, password)
         if (possibleError == null) {
             // Redirect to previous page (if available) OR home
-            const path = useLocation().state.path || '/'
-            return <Navigate to={path} />
+            const prevPath = useLocation().state.path || '/'
+            return <Navigate to={prevPath} />
         } else {
             setErrorClass('visible')
             setTimeout(() => {setErrorClass('hidden')}, 2000)

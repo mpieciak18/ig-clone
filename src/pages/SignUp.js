@@ -4,8 +4,8 @@ import { UsernameFooter } from '../components/SignUp/UsernameFooter.js'
 import { PasswordFooter } from '../components/SignUp/PasswordFooter.js'
 import { NameFooter } from '../components/SignUp/NameFooter'
 import { newUser } from '../firebase/users.js'
-import { Navigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { Navigate, useLocation } from 'react-router-dom'
+import { useState } from 'react'
 
 const SignUp = (props) => {
     // Redirect to settings if already signed in
@@ -70,6 +70,18 @@ const SignUp = (props) => {
         }
     }
 
+    const login = (
+        <div id='sign-up-login'>
+            <div id='sign-up-login-message'></div>
+            <button id='sign-up-login-button' onClick={goToLogin}></button>
+        </div>
+    )
+
+    const goToLogin = () => {
+        const prevPath = useLocation().state.path
+        return <Navigate to='/login' state={{path: prevPath}}/>
+    }
+
     return (
         <div id="sign-up" className="page">
             <Navbar user={user} />
@@ -100,6 +112,7 @@ const SignUp = (props) => {
                     <PasswordFooter eventHandler={() => setPasswordPasses} />
                     {signUpButton}
                 </form>
+                {login}
             </div>
         </div>
     )
