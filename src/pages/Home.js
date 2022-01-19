@@ -1,7 +1,7 @@
 import '../styles/pages/Home.css'
 import { findPosts } from '../firebase/posts.js'
 import { Navbar } from '../components/Navbar.js'
-import { PostFull } from '../components/PostFull.js'
+import { PostReel } from '../components/Posts/PostReel.js'
 import { UserCard } from '../components/UserCard.js'
 import { useEffect } from 'react'
 
@@ -36,7 +36,7 @@ const Home = async (props) => {
         <div id='home-posts'>
             {posts.map((post) => {
                 return (
-                    <PostFull
+                    <PostReel
                         page="false" 
                         id={post.id}
                         text={post.data.text}
