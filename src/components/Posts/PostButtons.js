@@ -20,7 +20,7 @@ const PostButtons = (props) => {
     }
     const redirect = () => {
         const path = useLocation().pathname
-        return <Navigate to='/' state={{path: path}} />
+        return <Navigate to='/signup' state={{path: path}} />
     }
     if (user.loggedIn == true) {
         return (
