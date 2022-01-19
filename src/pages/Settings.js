@@ -24,7 +24,7 @@ const Settings = (props) => {
             You've successfully registered! Please update your bio and image.
         </div>
     )
-    const {newSignUp} = useLocation().state || false
+    const newSignUp = useLocation().state.newSignUp || false
     if (newSignUp == true) {
         setWelcomeClass('visible')
         setTimeout(() => {setWelcomeClass('hidden')}, 2000)
