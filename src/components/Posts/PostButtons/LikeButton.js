@@ -1,4 +1,4 @@
-import { likeExists, addLike, removeLike } from '../../firebase/likes.js'
+import { likeExists, addLike, removeLike } from '../../.../firebase/likes.js'
 import { useState } from 'react'
 
 const LikeButton = async (props) => {
@@ -22,11 +22,12 @@ const LikeButton = async (props) => {
         // disable like button function while functions run
         lbfIsRunning = true
         // perform db updates & state changes
-        if (likeId != null) {
-            await removeLike(likeId, postId, postOwnerId)
+        if (likeId == null) {
+            setLikeId(await addLike(postId, postOwnerId))
             setLikeButtonClass('post-like-button liked')
         } else {
-            setLikeId(await addLike(postId, postOwnerId))
+            await removeLike(likeId, postId, postOwnerId)
+            setLikeId(null)
             setLikeButtonClass('post-like-button not-liked')
         }
         // enable like button once everything is done
