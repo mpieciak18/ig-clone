@@ -1,33 +1,54 @@
-import '../styles/Navbar.css'
+import '../styles/components/Navbar.css'
+import { Navigate, useLocation } from 'react-router-dom'
 
 const Navbar = (props) => {
     const { user } = props
 
+    const clickHome = () => {
+        return <Navigate to='/' />
+    }
+
+    const performSearch = (e) => {
+        //
+    }
+
+    const clickAddPost = () => {
+        if (user.loggedIn == false) {
+            const path = useLocation().pathname
+            return <Navigate to='/signup' state={{path: path}} />
+        } else {
+            //
+        }
+    }
+
+    const clickNotifications = () => {
+        if (user.loggedIn == false) {
+            const path = useLocation().pathname
+            return <Navigate to='/signup' state={{path: path}} />
+        } else {
+            //
+        }
+    }
+    const clickMessages = () => {
+        if (user.loggedIn == false) {
+            const path = useLocation().pathname
+            return <Navigate to='/signup' state={{path: path}} />
+        } else {
+            return <Navigate to='/messages' />
+        }
+    }
+
     return (
         <div id="navbar">
-            {/* Visible only on mobile screen dimensions*/}
-            <div id="header-mobile">
+            <div id="header">
                 <img class="logo" />
             </div>
-            <div id="footer-mobile">
-                <img class="home-button" />
-                <img class="search-button" />
-                <img class="add-post-button" />
-                <img class="notifications-button" />
-                <img class="messages-button" />
-            </div>
-            {/* Visible only on desktop screen dimensions*/}
-            <div id="header-desktop">
-                <div id="header-desktop-left">
-                    <img class="logo"></img>
-                </div>
-                <div id="header-desktop-right">
-                    <img class="home-button" />
-                    <img class="search-button" />
-                    <img class="add-post-button" />
-                    <img class="notifications-button" />
-                    <img class="messages-button" />
-                </div>
+            <div id="footer-or-header">
+                <img class="home-button" onClick={clickHome} />
+                <img class="search-button" onClick={performSearch} />
+                <img class="add-post-button" onClick={clickAddPost} />
+                <img class="notifications-button" onClick={clickNotifications} />
+                <img class="messages-button" onClick={clickMessages} />
             </div>
         </div>
     )

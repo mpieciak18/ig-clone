@@ -18,10 +18,12 @@ const PostButtons = (props) => {
     const clickSave = () => {
         //
     }
+    
     const redirect = () => {
         const path = useLocation().pathname
         return <Navigate to='/signup' state={{path: path}} />
     }
+
     if (user.loggedIn == true) {
         return (
             <div class="post-buttons">

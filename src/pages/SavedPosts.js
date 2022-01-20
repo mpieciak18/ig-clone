@@ -1,9 +1,15 @@
 import '../styles/pages/SavedPosts.css'
 import { findSavedPosts } from '../firebase/savedposts.js'
 import { PostPreview } from '../components/PostPreview.js'
+import { useLocation, Navigate } from 'react-router-dom'
 
 const SavedPosts = async (props) => {
+    // Redirect to signup page if not signed in
     const { user } = props
+    if (user.loggedIn == false) {
+        const path = useLocation().pathname
+        return <Navigate to='/signup' state={{path: path}} />
+    }
 
     // Init postsNumber state
     const [postsNumber, setPostsNumber] = await useState(10)

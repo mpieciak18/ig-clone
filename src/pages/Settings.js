@@ -1,7 +1,7 @@
 import '../styles/pages/Settings.css'
 import { Link } from 'react-router-dom'
 import { updateUser } from '../firebase/users.js'
-import { useLocation } from 'react-router-dom'
+import { useLocation, Navigate } from 'react-router-dom'
 import { useState } from 'react'
 
 const Settings = (props) => {

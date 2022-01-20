@@ -1,15 +1,19 @@
 import '../styles/pages/Messages.css'
-import {
-    retrieveAllConvos,
-    retrieveSingleConvo
-} from '../firebase/directmessages'
+import { retrieveAllConvos, retrieveSingleConvo } from '../firebase/directmessages.js'
 import { useState } from 'react'
 import { Navbar } from '../components/Navbar.js'
 import { ConvosList } from '../components/Messages/ConvosList.js'
 import { CurrentConvo } from '../components/Messages/CurrentConvo.js'
+import { useLocation, Navigate } from 'react-router-dom'
+
 
 const Messages = async (props) => {
+    // Redirect to signup page if not signed in
     const { user } = props
+    if (user.loggedIn == false) {
+        const path = useLocation().pathname
+        return <Navigate to='/signup' state={{path: path}} />
+    }
 
     // State consisting of all available convos in user's collection
     const [convos, setConvos] = useState(await retrieveAllConvos())

@@ -11,8 +11,7 @@ const Post = (props) => {
 
     // Get post data from state passed via Link using useLocation
     // If nothing is passed, then query post data from database
-    const location = useLocation()
-    const post = location.state || findSinglePost(postId, postOwnerId)
+    const post = useLocation().state.post || findSinglePost(postId, postOwnerId)
 
     // Set up history & back button
     const history = useHistory()

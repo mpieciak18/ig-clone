@@ -2,9 +2,9 @@ import '.../styles/components/PostPreview.css'
 import { Link } from 'react-router-dom'
 
 const PostPreview = async (props) => {
-    const { id, text, image, date, postOwnerId, likes, comments } = props
-    const likesNum = likes.length
-    const commentsNum = comments.length
+    const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments } = props
+    const likesNum = postLikes.length
+    const commentsNum = postComments.length
     const post = {
         id: id,
         text: text, 
@@ -18,10 +18,10 @@ const PostPreview = async (props) => {
     return (
         <Link 
             class="single-post-box" 
-            to={`/${postOwnerId}/${id}`}
-            state={post}
+            to={`/${postOwnerId}/${postId}`}
+            state={{post: post}}
         >
-            <img class="single-post-box-image" src={image}/>
+            <img class="single-post-box-image" src={postImage}/>
             <div class="single-post-box-overlay">
                 <div class="single-post-box-likes">
                     <img class="single-post-box-likes-icon" />
