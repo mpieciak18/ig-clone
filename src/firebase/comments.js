@@ -3,7 +3,10 @@ import {
     doc,
     collection,
     setDoc,
-    deleteDoc
+    deleteDoc,
+    getDocs,
+    limit,
+    query
 } from "firebase/firestore"
 
 // Create new comment & return comment ID
@@ -48,4 +51,24 @@ const removeComment = async (commentId, postId, postOwnerId) => {
     await deleteDoc(commentRef)
 }
 
-export default { newComment, removeComment }
+// Get comments
+const getComments = async (postId, postOwnerId, quantity) => {
+    const usersRef = collection(db, 'users')
+    const userRef = doc(usersRef, postOwnerId)
+    const postsRef = collection(userRef, 'posts')
+    const postRef = doc(postsRef, postId)
+    const commentsRef = collection(postRef, 'comments')
+    const commentsQuery = query(commentsRef, limit(quantity))
+    const commentsDocs = await getDocs(commentsQuery)
+    let comments
+    commentsDocs.forEach((doc) => {
+        const comment = {
+            id = doc.id,
+            data = doc.data()
+        }
+        comments = [...comments, comment]
+    })
+    return comments
+}
+
+export default { newComment, removeComment, getComments }

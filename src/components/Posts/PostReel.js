@@ -2,9 +2,29 @@ import '../../styles/components/Posts/Post.css'
 import { Link } from 'react-router-dom'
 import { CommentsBar } from './CommentsBar.js'
 import { PostButtons } from './PostButtons.js'
+import { getComments } from '../../firebase/comments.js'
+import { findUser } from '../../firebase/user.js'
 
 const PostReel = async (props) => {
     const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user } = props
+
+    // Set up comments preview for underneath image
+    const [comments, setComments] = useState(getComments(postId, postOwnerId, 2))
+    const commentsPreview = (
+        <div class="post-comments">
+            {comments.map(async (comment) => {
+                const commenterId = comment.data.user
+                const commenter = await findUser(commenterId)
+                const commenterName = commenter.name
+                return (
+                    <div className='post-comment'>
+                        <Link to={`/profile/${commenterId}`} className='post-comment-name'>{commenterName}</Link>
+                        <div className='post=comment-text'>{comment.data.text}</div>
+                    </div>
+                )
+            })}
+        </div>
+    )
 
     return (
         <div class="single-post-component">
@@ -25,7 +45,7 @@ const PostReel = async (props) => {
                 <Link class="post-view-comments" to={`/${postOwnerId}/${id}`}>
                     View more comments...
                 </Link>
-                <div class="post-comments"></div>
+                {commentsPreview}
                 <CommentsBar user={user} postId={postId} postOwnerId={postOwnerId} />
             </div>
         </div>
