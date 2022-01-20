@@ -5,7 +5,9 @@ import {
     setDoc,
     deleteDoc,
     updateDoc,
-    getDoc
+    getDoc,
+    query,
+    where
  } from 'firebase/firestore'
 
 // Helper functions for database
@@ -65,4 +67,17 @@ const changeLikeCount = async (postRef, increase) => {
     await updateDoc(postRef, {"likes": likeCount})
 }
 
-export default { addLike, removeLike, changeLikeCount }
+// Check if user liked post
+const likeExists = async (postId, postOwnerId) => {
+    const userId = auth.currentUser.uid
+    const likesRef = getLikesRef(postOwnerId, postId)
+    const likeRef = query(likesRef, where('user', '==', userId))
+    const likeDoc = await getDoc(likeRef)
+    if (likeDoc.exists() == true) {
+        return likeDoc.id
+    } else {
+        return null
+    }
+}
+
+export default { addLike, removeLike, changeLikeCount, likeExists }
