@@ -1,6 +1,6 @@
 import '../../styles/components/Posts/Post.css'
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CommentsBar } from './CommentsBar.js'
 import { PostButtons } from './PostButtons.js'
 import { getComments } from '../../firebase/comments.js'
@@ -39,14 +39,24 @@ const PostPage = async (props) => {
                     </div>
                 )
             })}
+            {/* Load-More button */}
+            <div id='load-more-button' onClick={loadMore}>Load More</div>
         </div>
     )
-    // Update comments section upon new comment submission
+    // Update comments section upon new comment submission or load more click
     const updateComments = async () => {
         const array = await getComments(postId, postOwnerId, commentQuantity)
         array.reverse()
         setComments(array)
     }
+    // Load more comments
+    const loadMore = () => {
+        const newCommentQuantity = commentQuantity + 10
+        setCommentQuantity(newCommentQuantity)
+    }
+    useEffect(() => {
+        updateComments()
+    }, commentQuantity)
 
     return (
         <div class="single-post-page">
