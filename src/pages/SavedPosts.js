@@ -1,5 +1,5 @@
 import '../styles/pages/SavedPosts.css'
-import { findSavedPosts } from '../firebase/savedposts.js'
+import { findSaves } from '../firebase/saves.js'
 import { PostPreview } from '../components/PostPreview.js'
 import { useLocation, Navigate } from 'react-router-dom'
 
@@ -15,7 +15,7 @@ const SavedPosts = async (props) => {
     const [postsNumber, setPostsNumber] = await useState(10)
 
     // Init posts state
-    const postsArr = await findSavedPosts(postsNumber)
+    const postsArr = await findSaves(postsNumber)
     const [posts, setPosts] = useState(postsArr)
 
     // Load-more function that updates the posts reel
