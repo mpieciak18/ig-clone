@@ -9,7 +9,10 @@ const PostReel = async (props) => {
     const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user } = props
 
     // Set up comments preview for underneath image
-    const [comments, setComments] = useState(getComments(postId, postOwnerId, 2))
+    const [comments, setComments] = useState(() => {
+        const array = await getComments(postId, postOwnerId, 2)
+        return array.reverse()
+    })
     const commentsPreview = (
         <div class="post-comments">
             {comments.map(async (comment) => {
@@ -25,6 +28,12 @@ const PostReel = async (props) => {
             })}
         </div>
     )
+    // Update comments preview upon new comment submission
+    const updateComments = async () => {
+        const array = await getComments(postId, postOwnerId, 2)
+        array.reverse()
+        setComments(array)
+    }
 
     return (
         <div class="single-post-component">
@@ -46,7 +55,7 @@ const PostReel = async (props) => {
                     View more comments...
                 </Link>
                 {commentsPreview}
-                <CommentsBar user={user} postId={postId} postOwnerId={postOwnerId} />
+                <CommentsBar user={user} postId={postId} postOwnerId={postOwnerId} updateComments={updateComments} />
             </div>
         </div>
     )
