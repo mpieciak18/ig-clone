@@ -49,7 +49,7 @@ const LikeButton = async (props) => {
     if (user.loggedIn == true) {
         return <img class={likeButtonClass} onClick={likeButtonFunction} /> 
     } else {
-        return <img class="post-like-button" onClick={redirectToSignUp} />
+        return <img class="post-like-button not-liked" onClick={redirectToSignUp} />
     }
 }
 
