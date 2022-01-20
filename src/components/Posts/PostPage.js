@@ -1,10 +1,52 @@
 import '../../styles/components/Posts/Post.css'
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
 import { CommentsBar } from './CommentsBar.js'
 import { PostButtons } from './PostButtons.js'
+import { getComments } from '../../firebase/comments.js'
 
 const PostPage = async (props) => {
     const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user } = props
+
+    // Set up comments
+    const [commentQuantity, setCommentQuantity] = useState(20)
+    const [comments, setComments] = useState(() => {
+        const array = await getComments(postId, postOwnerId, commentQuantity)
+        return array.reverse()
+    })
+    const commentsSection = (
+        <div class="post-comments">
+            {comments.map(async (comment) => {
+                const commenterId = comment.data.user
+                const commenter = await findUser(commenterId)
+                const commenterName = commenter.name
+                const commenterImage = commenter.image
+                const commentDate = comment.data.date
+                return (
+                    <div className='post-comment'>
+                        <div className='post-comment-left'>
+                            <Link to={`/profile/${commenterId}`} className='post-comment-icon'>
+                                <img src={commenterImage} />
+                            </Link>
+                            <div className='post-comment-text'>
+                                <Link to={`/profile/${commenterId}`} className='post-comment-name'>{commenterName}</Link>
+                                <div className='post=comment-text'>{comment.data.text}</div>
+                            </div>
+                        </div>
+                        <div className='post-comment-date'>
+                            {commentDate}
+                        </div>
+                    </div>
+                )
+            })}
+        </div>
+    )
+    // Update comments section upon new comment submission
+    const updateComments = async () => {
+        const array = await getComments(postId, postOwnerId, commentQuantity)
+        array.reverse()
+        setComments(array)
+    }
 
     return (
         <div class="single-post-page">
@@ -20,14 +62,14 @@ const PostPage = async (props) => {
                     </Link>
                     <div class="post-text"></div>
                 </div>
-                <div class="post-right-middle"></div>
+                {commentsSection}
                 <div class="post-right-bottom">
                     <PostButtons user={user} postId={postId} postOwnerId={postOwnerId} />
                     <div class="post-right-bottom-two">
                         <div class="post-likes"></div>
                         <div class="post-date"></div>
                     </div>
-                    <CommentsBar user={user} postId={postId} postOwnerId={postOwnerId} />
+                    <CommentsBar user={user} postId={postId} postOwnerId={postOwnerId} updateComments={updateComments} />
                 </div>
             </div>
         </div>
