@@ -1,4 +1,4 @@
-import { likeExists, addLike, removeLike } from '../../.../firebase/likes.js'
+import { likeExists, addLike, removeLike } from '../../../firebase/likes.js'
 import { useState } from 'react'
 
 const LikeButton = async (props) => {
@@ -35,7 +35,7 @@ const LikeButton = async (props) => {
     }
 
     // Runs when like button is clicked and calls addRemoveLike() when lbfIsrunning is false
-    let likeButtonFunction = () => {
+    const likeButtonFunction = () => {
         if (lbfIsRunning == false) {
             addRemoveLike()
         }

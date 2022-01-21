@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 
 const CommentsBar = (props) => {
-    const { user, postId, postOwnerId, updateComments } = props
+    const { user, postId, postOwnerId, updateComments, inputRef } = props
 
     // Adds comment to comments subcollection of post in firebase
     const addNewComment = async (e) => {
@@ -31,6 +31,7 @@ const CommentsBar = (props) => {
                     class="post-comment-bar-input"
                     placeholder="Add a comment..."
                     value={commentValue}
+                    ref={inputRef}
                 />
                 <button type="submit" class="post-comment-bar-button">
                     <img class="post-comment-bar-button-icon" />

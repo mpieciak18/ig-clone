@@ -1,12 +1,15 @@
 import '../../styles/components/Posts/Post.css'
 import { Link } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { CommentsBar } from './CommentsBar.js'
 import { PostButtons } from './PostButtons.js'
 import { getComments } from '../../firebase/comments.js'
 
 const PostPage = async (props) => {
     const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user } = props
+
+    // Set up ref for comment bar / comment button
+    const inputRef = useRef(null)
 
     // Set up comments
     const [commentQuantity, setCommentQuantity] = useState(20)
@@ -74,12 +77,18 @@ const PostPage = async (props) => {
                 </div>
                 {commentsSection}
                 <div class="post-right-bottom">
-                    <PostButtons user={user} postId={postId} postOwnerId={postOwnerId} />
+                    <PostButtons user={user} postId={postId} postOwnerId={postOwnerId} inputRef={inputRef} />
                     <div class="post-right-bottom-two">
                         <div class="post-likes"></div>
                         <div class="post-date"></div>
                     </div>
-                    <CommentsBar user={user} postId={postId} postOwnerId={postOwnerId} updateComments={updateComments} />
+                    <CommentsBar
+                        user={user}
+                        postId={postId}
+                        postOwnerId={postOwnerId}
+                        updateComments={updateComments}
+                        inputRef={inputRef} 
+                    />
                 </div>
             </div>
         </div>

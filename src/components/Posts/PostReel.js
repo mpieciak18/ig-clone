@@ -1,4 +1,5 @@
 import '../../styles/components/Posts/Post.css'
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { CommentsBar } from './CommentsBar.js'
 import { PostButtons } from './PostButtons.js'
@@ -7,6 +8,9 @@ import { findUser } from '../../firebase/user.js'
 
 const PostReel = async (props) => {
     const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user } = props
+
+    // Set up ref for comment bar / comment button
+    const inputRef = useRef(null)
 
     // Set up comments preview for underneath image
     const [comments, setComments] = useState(() => {
@@ -49,13 +53,18 @@ const PostReel = async (props) => {
                 </div>
             <div class="post-middle"></div>
             <div class="post-bottom">
-                <PostButtons user={user} postId={postId} postOwnerId={postOwnerId} />
+                <PostButtons user={user} postId={postId} postOwnerId={postOwnerId} inputRef={inputRef} />
                 <div class="post-likes"></div>
                 <Link class="post-view-comments" to={`/${postOwnerId}/${id}`}>
                     View more comments...
                 </Link>
                 {commentsPreview}
-                <CommentsBar user={user} postId={postId} postOwnerId={postOwnerId} updateComments={updateComments} />
+                <CommentsBar
+                    user={user}
+                    postId={postId}
+                    postOwnerId={postOwnerId}
+                    updateComments={updateComments}
+                    inputRef={inputRef} />
             </div>
         </div>
     )

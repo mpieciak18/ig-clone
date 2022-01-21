@@ -1,13 +1,10 @@
 import { Navigate, useLocation } from 'react-router-dom'
 import { LikeButton } from './PostButtons/LikeButton.js'
 import { SaveButton } from './PostButtons/SaveButton.js'
+import { CommentButton } from './PostButtons/CommentButton.js'
 
 const PostButtons = async (props) => {
-    const { user, postId, postOwnerId } = props
-    
-    const clickComment = () => {
-        //
-    }
+    const { user, postId, postOwnerId, inputRef } = props
     
     const clickShare = () => {
         //
@@ -22,7 +19,7 @@ const PostButtons = async (props) => {
         <div class="post-buttons">
             <div class="post-buttons-left">
                 <LikeButton user={user} postId={postId} postOwnerId={postOwnerId} redirect={redirectToSignUp} />
-                <img class="post-comment-button" onClick={clickComment}/>
+                <CommentButton user={user} redirect={redirectToSignUp} inputRef={inputRef} />
                 <img class="post-share-button" onClick={clickShare}/>
             </div>
             <SaveButton user={user} postId={postId} postOwnerId={postOwnerId} redirect={redirectToSignUp} />

@@ -1,4 +1,4 @@
-import { saveExists, addSave, removeSave } from '../../.../firebase/saves.js'
+import { saveExists, addSave, removeSave } from '../../../firebase/saves.js'
 import { useState } from 'react'
 
 const SaveButton = async (props) => {
@@ -35,7 +35,7 @@ const SaveButton = async (props) => {
     }
 
     // Runs when save button is clicked and calls addRemoveSave() when sbfIsrunning is false
-    let saveButtonFunction = () => {
+    const saveButtonFunction = () => {
         if (sbfIsRunning == false) {
             addRemoveSave()
         }
