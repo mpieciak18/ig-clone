@@ -20,7 +20,7 @@ const findNotification = (userId, notificationId=null) => {
     }
 }
 
-// Add new notification to user B when user A performs a trigger
+// Add new notification to other user when logged-in user performs a trigger
 // Triggers/types include new like, new comment, new follow, and new DM
 const addNotification = async (type, otherUserId) => {
     const selfId = auth.currentUser.uid
@@ -35,7 +35,6 @@ const addNotification = async (type, otherUserId) => {
 }
 
 // Retrieve logged-in user's notifcations
-// Returns array of objects, each containing notification id & data
 const getNotifications = async () => {
     const userId = auth.currentUser.uid
     const notiCollection = findNotifications(userId)
