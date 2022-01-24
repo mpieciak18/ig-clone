@@ -1,4 +1,5 @@
 import { auth, db } from './firebase.js'
+import { addNotification } from './notifications.js'
 import { 
     collection,
     doc,
@@ -24,8 +25,7 @@ const getLikeRef = (userId, postId, likeId=null) => {
     }
 }
 
-// Add like to users -> user -> posts -> post -> likes
-// and return the like id
+// Add like to post and return the like id
 const addLike = async (postId, postOwnerId) => {
     // First, update post like count
     const postRef = getPostRef(postOwnerId, postId)
@@ -37,13 +37,16 @@ const addLike = async (postId, postOwnerId) => {
         postOwner: postOwnerId,
         user: userId
     }
-    // Third, add like to likes collection & return like id
+    // Fourth, add like to post
     const likeRef = getLikeRef(postOwnerId, postId)
     await setDoc(likeRef, data)
+    // Fifth, add notification to recipient's subcollection
+    await addNotification('like', otherUserId)
+    // Sixth, return like id
     return likeRef.id
 }
 
-// Remove like from post in user -> posts -> post
+// Remove like from post
 const removeLike = (likeId, postId, postOwnerId) => {
     // First, update post like count
     const postRef = getPostRef(postOwnerId, postId)
@@ -53,7 +56,7 @@ const removeLike = (likeId, postId, postOwnerId) => {
     await deleteDoc(likeRef)
 }
 
-// Change like count on post doc
+// Change like count for post
 const changeLikeCount = async (postRef, increase) => {
     // First, grab old like count
     const postDoc = await getDoc(postRef)
@@ -67,7 +70,7 @@ const changeLikeCount = async (postRef, increase) => {
     await updateDoc(postRef, {"likes": likeCount})
 }
 
-// Check if user liked post
+// Check if user already liked post
 const likeExists = async (postId, postOwnerId) => {
     const userId = auth.currentUser.uid
     const likesRef = getLikesRef(postOwnerId, postId)

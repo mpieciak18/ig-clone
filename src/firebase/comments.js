@@ -8,6 +8,7 @@ import {
     limit,
     query
 } from "firebase/firestore"
+import { addNotification } from "./notifications.js"
 
 // Create new comment & return comment ID
 const newComment = async (postId, postOwnerId, text) => {
@@ -21,10 +22,11 @@ const newComment = async (postId, postOwnerId, text) => {
         postOwner: postOwnerId,
         text: text
     }
-    // Second, add comment to db -> users -> posts -> comments
-    // and assign the randomly generated comment id to a variable
-    await addCommentToUserPost(commentData, postId, postOwnerId)
-    // Third, return comment id
+    // Second, add comment to post's subcollection & assing new comment id to variable
+    const commentId = await addCommentToUserPost(commentData, postId, postOwnerId)
+    // Third, add notification to post owner's subcollection
+    await addNotification('comment', postOwnerId)
+    // Fourth, return comment id
     return commentId
 }
 
@@ -39,7 +41,6 @@ const addCommentToUserPost = async (data, postId, postOwnerId) => {
     await setDoc(commentRef, data)
     return commentRef.id
 }
-
 // Remove comment 
 const removeComment = async (commentId, postId, postOwnerId) => {
     const usersRef = collection(db, 'users')

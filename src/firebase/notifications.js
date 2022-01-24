@@ -1,4 +1,3 @@
-import {} from 'firebase/auth'
 import { collection, doc, setDoc, getDocs, deleteDoc } from 'firebase/firestore'
 import { db, auth } from './firebase.js'
 

@@ -1,4 +1,5 @@
 import { db, auth } from './firebase.js'
+import { addNotification } from './notifications.js'
 import { 
     doc,
     collection,
@@ -37,10 +38,8 @@ const getMessageRef = (userId, otherUserId, messageId=null) => {
     }
 }
 
-// Send message, add to both users (user -> conversation -> message),
-// and return message id
-// NOTE: the other user's ID is the conversation ID for the user
-// and the user's ID is the conversation ID for the other user
+// Send message from logged-in user to other user
+// NOTE: user A's ID is the convo ID for user B & vice-versa
 const sendMessage = async (message, date, otherUserId) => {
     // First, add message to sender's subcollection
     const userId = auth.currentUser.uid
@@ -56,7 +55,9 @@ const sendMessage = async (message, date, otherUserId) => {
     const messageId = senderMessageRef.id
     const recipMessageRef = getMessageRef(otherUserId, userId, messageId)
     await setDoc(recipMessageRef, messageData)
-    // Third, return message id
+    // Third, add notification to recipient's subcollection
+    await addNotification('message', otherUserId)
+    // Fourth, return message id
     return messageId
 }
 
@@ -77,8 +78,7 @@ const retrieveSingleConvo = async (otherUserId) => {
 }
 
 // Retrieve latest message from a conversation
-// NOTE: the other user's ID is the conversation ID for the user
-// and the user's ID is the conversation ID for the other user
+// NOTE: user A's ID is the convo ID for user B & vice-versa
 const retrieveLatestMessage = async (otherUserId) => {
     const userId = auth.currentUser.id
     const messageRef = getMessagesRef(userId, otherUserId, true)
@@ -90,8 +90,7 @@ const retrieveLatestMessage = async (otherUserId) => {
     return message
 }
 
-// Retrieve all conversations and return array of objects containing
-// the convo id, the convo data, and the latest message as properties
+// Retrieve all conversations
 const retrieveAllConvos = async () => {
     const userId = auth.currentUser.id
     const convosRef = getConvosRef(userId)
