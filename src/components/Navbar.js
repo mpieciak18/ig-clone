@@ -22,11 +22,11 @@ const Navbar = (props) => {
     }
 
     const clickNotifications = () => {
+        const path = useLocation().pathname
         if (user.loggedIn == false) {
-            const path = useLocation().pathname
             return <Navigate to='/signup' state={{path: path}} />
         } else {
-            //
+            return <Navigate to='/notifications' state={{path: path}} />
         }
     }
     const clickMessages = () => {

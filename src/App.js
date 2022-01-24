@@ -8,6 +8,7 @@ import Settings from "./pages/Settings.js"
 import SavedPosts from "./pages/SavedPosts.js"
 import SignUp from "./pages/SignUp.js"
 import Login from "./pages/Login.js"
+import Notifications from "./pages/Notifications.js"
 import { auth } from "./firebase/firebase.js"
 import { findUser } from './firebase/users.js'
 
@@ -74,6 +75,7 @@ const App = async () => {
                 <Route exact path='/:userId' element={<Profile user={user}/>} />
                 <Route exact path='/savedposts' element={<SavedPosts user={user} />} />
                 <Route exact path='/settings' element={<Settings user={user}/>} />
+                <Route exact path='/notifications' element={<Notifications user={user}/>} />
                 <Route exact path='/signup' element={<SignUp user={user} />} />
                 <Route exact path='/login' element={<Login user={user} />} />
             </Routes>

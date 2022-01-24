@@ -1,4 +1,14 @@
-import { collection, doc, setDoc, getDocs, deleteDoc } from 'firebase/firestore'
+import { 
+    collection,
+    doc, 
+    setDoc, 
+    getDocs, 
+    deleteDoc, 
+    limit, 
+    query,
+    where,
+    updateDoc
+} from 'firebase/firestore'
 import { db, auth } from './firebase.js'
 
 // Helper functions for getting firestore references
@@ -21,23 +31,26 @@ const findNotification = (userId, notificationId=null) => {
 
 // Add new notification to other user when logged-in user performs a trigger
 // Triggers/types include new like, new comment, new follow, and new DM
-const addNotification = async (type, otherUserId) => {
+const addNotification = async (type, otherUserId, postId=null) => {
     const selfId = auth.currentUser.uid
     const notiRef = findNotification(otherUserId)
     let date
     const notiData = {
         type: type,
         date: date,
-        otherUser: selfId
+        otherUser: selfId,
+        post: postId,
+        read: false
     }
     await setDoc(notiRef, notiData)
 }
 
 // Retrieve logged-in user's notifcations
-const getNotifications = async () => {
+const getNotifications = async (quantity) => {
     const userId = auth.currentUser.uid
     const notiCollection = findNotifications(userId)
-    const notiDocs = await getDocs(notiCollection)
+    const notiQuery = query(notiCollection, limit(quantity))
+    const notiDocs = await getDocs(notiQuery)
     let notiArr = []
     notiDocs.forEach((doc) => {
         const notification = {
@@ -49,14 +62,15 @@ const getNotifications = async () => {
     return notiArr
 }
 
-// Clear out logged-in user's notifications
-const clearNotifications = async () => {
+// Mark logged-in user's notifications as read
+const readNotifications = async () => {
     const userId = auth.currentUser.uid
     const notiCollection = findNotifications(userId)
-    const notiDocs = await getDocs(notiCollection)
-    notiDocs.forEach((notification) => {
-        await deleteDoc(notification)
+    const notiQuery = query(notiCollection, where("read", "==", true))
+    const notiDocs = await getDocs(notiQuery)
+    notiDocs.forEach((doc) => {
+        await updateDoc(doc, {"read": true})
     })
 }
 
-export { addNotification, getNotifications, clearNotifications }
+export { addNotification, getNotifications, readNotifications }

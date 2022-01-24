@@ -23,7 +23,7 @@ const Home = async (props) => {
 
     // Load More button
     const LoadButton = (
-        <div id='load-more-button' onClick={loadMore}>Load More</div>
+        <div id='home-load-button' onClick={loadMore}>Load More</div>
     )
 
     // Update posts state when postsNumber state changes
