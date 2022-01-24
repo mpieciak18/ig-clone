@@ -13,6 +13,17 @@ const Notifications = async (props) => {
         return <Navigate to='/signup' state={{path: path}} />
     }
 
+    // Set up history & back button
+    const history = useHistory()
+    const goBack = () => {history.goBack()}
+
+    const BackButton = (
+        <div id='post-back-button' onClick={goBack}>
+            <div id='back-arrow'>⇽</div>
+            <div id='back-text'>Go Back</div>
+        </div>
+    )
+
     const [notifNumber, setNotifNumber] = useState(10)
     const [notifs, setNotifs] = await getNotifications(10) 
 
@@ -77,6 +88,10 @@ const Notifications = async (props) => {
     return (
         <div id="notifications" className="page">
             <Navbar user={user} />
+            <div id="notifications-header">
+                {BackButton}
+                <div id="notification-header-text">Notifications</div>
+            </div>
             <div id="notifications-parent">
                 {Notifications}
                 {LoadButton}
