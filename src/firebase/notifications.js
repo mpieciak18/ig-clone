@@ -6,38 +6,39 @@ import { db, auth } from './firebase.js'
 const findUsers = () => {
     return collection(db, 'users')
 }
-const findUser = () => {
-    const userId = auth.currentUser.uid
+const findUser = (userId) => {
     return doc(findUsers(), userId)
 }
-const findNotifications = () => {
-    return collection(findUser(), 'notifications')
+const findNotifications = (userId) => {
+    return collection(findUser(userId), 'notifications')
 }
-const findNotification = (notificationId=null) => {
+const findNotification = (userId, notificationId=null) => {
     if (notificationId != null) {
-        return doc(findNotifications(), notificationId)
+        return doc(findNotifications(userId), notificationId)
     } else {
-        return doc(findNotifications())
+        return doc(findNotifications(userId))
     }
 }
 
-// Add new notification
-// Types include new like, new comment, new follow, and new DM
-const addNotification = async (type, otherUserId, ) => {
-    const notiRef = findNotification()
+// Add new notification to user B when user A performs a trigger
+// Triggers/types include new like, new comment, new follow, and new DM
+const addNotification = async (type, otherUserId) => {
+    const selfId = auth.currentUser.uid
+    const notiRef = findNotification(otherUserId)
     let date
     const notiData = {
         type: type,
         date: date,
-        otherUser = otherUserId
+        otherUser: selfId
     }
     await setDoc(notiRef, notiData)
 }
 
-// Retrieve notifcations
+// Retrieve logged-in user's notifcations
 // Returns array of objects, each containing notification id & data
 const getNotifications = async () => {
-    const notiCollection = findNotifications()
+    const userId = auth.currentUser.uid
+    const notiCollection = findNotifications(userId)
     const notiDocs = await getDocs(notiCollection)
     let notiArr = []
     notiDocs.forEach((doc) => {
@@ -50,9 +51,10 @@ const getNotifications = async () => {
     return notiArr
 }
 
-// Clear out notifications
+// Clear out logged-in user's notifications
 const clearNotifications = async () => {
-    const notiCollection = findNotifications()
+    const userId = auth.currentUser.uid
+    const notiCollection = findNotifications(userId)
     const notiDocs = await getDocs(notiCollection)
     notiDocs.forEach((notification) => {
         await deleteDoc(notification)
