@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app"
 import { getFirestore } from "firebase/firestore"
 import { getAuth } from "firebase/auth"
+import { getStorage } from "firebase/storage"
 
 // Firebase configuration settings
 const firebaseConfig = {
@@ -10,7 +11,8 @@ const firebaseConfig = {
     projectId: "ig-clone-5b7ab",
     storageBucket: "ig-clone-5b7ab.appspot.com",
     messagingSenderId: "183201976316",
-    appId: "1:183201976316:web:29b1157645349379792c79"
+    appId: "1:183201976316:web:29b1157645349379792c79",
+    storageBucket: 'ig-clone-5b7ab.appspot.com'
 }
 
 // Firebase app initialization
@@ -22,4 +24,7 @@ const db = getFirestore(app)
 // Authentication initialization
 const auth = getAuth(app)
 
-export { db, auth }
+// Storage initialization
+const storage = getStorage(app)
+
+export { db, auth, storage }
