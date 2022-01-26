@@ -1,4 +1,5 @@
 import '.../styles/components/Profile/ProfileCard.css'
+import { getUrl } from '../../firebase/storage'
 
 const ProfileCard = async (props) => {
     const { user } = props
