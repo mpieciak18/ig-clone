@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom'
 import { CommentsBar } from './CommentsBar.js'
 import { PostButtons } from './PostButtons.js'
 import { getComments } from '../../firebase/comments.js'
-import { findUser } from '../../firebase/user.js'
+import { findUser } from '../../firebase/users.js'
+import { getUrl } from '../../firebase/storage.js'
 
 const PostReel = async (props) => {
     const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user } = props
@@ -39,19 +40,24 @@ const PostReel = async (props) => {
         setComments(array)
     }
 
+    // Get post owner's profile image
+    const postOwnerImage = (await findUser(postOwnerId)).data.image
+
     return (
         <div class="single-post-component">
             <div class="post-top"></div>
                 <div class="post-top-left">
                     <Link class="post-user-link" to={`/${postOwnerId}`}>
-                        <img class="post-user-link-avatar" />
+                        <img class="post-user-link-avatar" src={async () => await getUrl(postOwnerImage)} />
                         <div class="post-user-link-name-and-username-parent">
                             <div class='post-user-link-name'></div>
                             <div class='post-user-link-username'></div>
                         </div>
                     </Link>
                 </div>
-            <div class="post-middle"></div>
+            <div class="post-middle">
+                <img class="post-image" src={async () => await getUrl(postImage)} />
+            </div>
             <div class="post-bottom">
                 <PostButtons user={user} postId={postId} postOwnerId={postOwnerId} inputRef={inputRef} />
                 <div class="post-likes"></div>

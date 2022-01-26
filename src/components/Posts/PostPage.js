@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react'
 import { CommentsBar } from './CommentsBar.js'
 import { PostButtons } from './PostButtons.js'
 import { getComments } from '../../firebase/comments.js'
+import { getUrl } from '../../firebase/storage.js'
 
 const PostPage = async (props) => {
     const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user } = props
@@ -23,7 +24,7 @@ const PostPage = async (props) => {
                 const commenterId = comment.data.user
                 const commenter = await findUser(commenterId)
                 const commenterName = commenter.name
-                const commenterImage = commenter.image
+                const commenterImage = await getUrl(commenter.image)
                 const commentDate = comment.data.date
                 return (
                     <div className='post-comment'>
@@ -61,13 +62,18 @@ const PostPage = async (props) => {
         updateComments()
     }, commentQuantity)
 
+    // Get post owner's profile image
+    const postOwnerImage = (await findUser(postOwnerId)).data.image
+
     return (
         <div class="single-post-page">
-            <div class="post-left"></div>
+            <div class="post-left">
+                <img class="post-image" src={async () => await getUrl(postImage)} />
+            </div>
             <div class="post-right">
                 <div class="post-right-top">
                     <Link class="post-user-link" to={`/${postOwnerId}`}>
-                        <img class="post-user-link-avatar" />
+                        <img class="post-user-link-avatar" src={postOwnerImage} />
                         <div class="post-user-link-name-and-username-parent">
                             <div class='post-user-link-name'></div>
                             <div class='post-user-link-username'></div>

@@ -16,12 +16,8 @@ const PostPreview = async (props) => {
     }
 
     return (
-        <Link 
-            class="single-post-box" 
-            to={`/${postOwnerId}/${postId}`}
-            state={{post: post}}
-        >
-            <img class="single-post-box-image" src={postImage}/>
+        <Link class="single-post-box" to={`/${postOwnerId}/${postId}`} state={{post: post}}>
+            <img class="single-post-box-image" src={async () => await getUrl(postImage)}/>
             <div class="single-post-box-overlay">
                 <div class="single-post-box-likes">
                     <img class="single-post-box-likes-icon" />
