@@ -3,7 +3,7 @@ import { uploadFile } from '../firebase/storage'
 import { newPost } from '../firebase/posts'
 
 const NewPost = (props) => {
-    const { user } = props
+    const { newPostOn, setNewPostOn } = props
 
     const inputRef = useRef()
 
@@ -41,10 +41,12 @@ const NewPost = (props) => {
             const image = file.name
             await uploadFile('images', file)
             await newPost(caption, image)
+            await setNewPostOn(false)
         } 
     }
 
-    const InputPreview = () => {
+    // Preview of uploaded file
+    const inputPreview = () => {
         if (isValid == true) {
             return (
                 <div id="new-post-image-preview">
@@ -61,9 +63,16 @@ const NewPost = (props) => {
         }
     }
 
+    // Closes newPost
+    const hideNewPost = (e) => {
+        const id = e.target.id
+        if (id == "new-post" || id == "new-post-x-button") {
+            setNewPostOn(false)
+        }
+    }
+
     return (
-        <div id="new-post">
-            <div id="new-post-background" />
+        <div id="new-post" onClick={hideNewPost}>
             <div id="new-post-pop-up">
                 <div id="new-post-header">
                     <div id="new-post-title">Create New Post</div>
@@ -79,7 +88,7 @@ const NewPost = (props) => {
                         accept=".jpg, .jpeg, .png" 
                         onChange={validateFile}
                     >
-                        {InputPreview}
+                        {inputPreview}
                     </input>
                     <input type="text" id="new-post-caption" name="caption">Enter a caption...</input>
                     <button type={formButton} id="new-post-button"></button>

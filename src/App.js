@@ -70,8 +70,8 @@ const App = async () => {
         <BrowserRouter basename={process.env.PUBLIC_URL}>
             <Routes>
                 <Route exact path='/' element={<Home user={user}/>} />
-                <Route exact path='/messages' element={<Messages user={user}/>} />
-                <Route exact path='/:userId/:postId' element={<Post user={user}/>} />
+                <Route exact path='/messages' element={<Messages user={user} />} />
+                <Route exact path='/:userId/:postId' element={<Post user={user} />} />
                 <Route exact path='/:userId' element={<Profile user={user}/>} />
                 <Route exact path='/savedposts' element={<SavedPosts user={user} />} />
                 <Route exact path='/settings' element={<Settings user={user}/>} />

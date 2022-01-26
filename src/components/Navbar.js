@@ -1,5 +1,7 @@
 import '../styles/components/Navbar.css'
+import { useState } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
+import { NewPost } from './NewPost.js'
 
 const Navbar = (props) => {
     const { user } = props
@@ -12,12 +14,24 @@ const Navbar = (props) => {
         //
     }
 
+    const [newPostOn, setNewPostOn] = useState(false)
+
     const clickAddPost = () => {
         if (user.loggedIn == false) {
             const path = useLocation().pathname
             return <Navigate to='/signup' state={{path: path}} />
         } else {
-            //
+            setNewPostOn(true)
+        }
+    }
+
+    const renderNewPost = () => {
+        if (newPostOn == true) {
+            return (
+                <NewPost newPostOn={newPostOn} setNewPostOn={setNewPostOn} />
+            )
+        } else {
+            return null
         }
     }
 
@@ -50,6 +64,7 @@ const Navbar = (props) => {
                 <img class="notifications-button" onClick={clickNotifications} />
                 <img class="messages-button" onClick={clickMessages} />
             </div>
+            {renderNewPost}
         </div>
     )
 }
