@@ -1,4 +1,4 @@
-import '.../styles/components/Profile/ProfileCard.css'
+import '../../styles/components/Profile/ProfileCard.css'
 import { getUrl } from '../../firebase/storage'
 
 const ProfileCard = async (props) => {
@@ -10,9 +10,18 @@ const ProfileCard = async (props) => {
             <div id='profile-card-name'>{user.name}</div>
             <div id='profile-card-username'>{user.username}</div>
             <div id='profile-card-stats'>
-                <div id='profile-card-posts'>{user.posts}</div>
-                <div id='profile-card-following'>{user.following}</div>
-                <div id='profile-card-followers'>{user.followers}</div>
+                <div id='profile-card-posts'>
+                    <p className='profile-stats-child'>{user.posts}</p>
+                    <p className='profile-stats-child'>Posts</p>
+                </div>
+                <div id='profile-card-following'>
+                    <p className='profile-stats-child'>{user.following}</p>
+                    <p className='profile-stats-child'>Following</p>
+                </div>
+                <div id='profile-card-followers'>
+                    <p className='profile-stats-child'>{user.followers}</p>
+                    <p className='profile-stats-child'>Followers</p>
+                </div>
             </div>
             <div id='profile-card-bio'>{user.bio}</div>
         </div>

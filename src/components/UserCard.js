@@ -22,9 +22,18 @@ const UserCard = (props) => {
                     </div>
                 </div>
                 <div id='user-card-stats'>
-                    <div id='user-card-posts'>{user.posts}</div>
-                    <div id='user-card-following'>{user.following}</div>
-                    <div id='user-card-followers'>{user.followers}</div>
+                    <div id='user-card-posts'>
+                        <p className='user-stats-child'>{user.posts}</p>
+                        <p className='user-stats-child'>Posts</p>
+                    </div>
+                    <div id='user-card-following'>
+                        <p className='user-stats-child'>{user.following}</p>
+                        <p className='user-stats-child'>Following</p>
+                    </div>
+                    <div id='user-card-followers'>
+                        <p className='user-stats-child'>{user.followers}</p>
+                        <p className='user-stats-child'>Followers</p>
+                    </div>
                 </div>
             </Link>
         )
