@@ -8,7 +8,7 @@ const Login = (props) => {
     // Redirect to home if already logged in
     const { user } = props
     if (user.loggedIn == true) {
-        return <Navigate to='/settings' />
+        return <Navigate to='/' />
     }
 
     const newLogin = async (e) => {
