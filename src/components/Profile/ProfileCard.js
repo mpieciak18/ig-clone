@@ -5,7 +5,7 @@ const ProfileCard = async (props) => {
 
     return (
         <div id='profile-card'>
-            <img id='profile-card-icon' src={user.image} />
+            <img id='profile-card-icon' src={async () => await getUrl(user.image)} />
             <div id='profile-card-name'>{user.name}</div>
             <div id='profile-card-username'>{user.username}</div>
             <div id='profile-card-stats'>
