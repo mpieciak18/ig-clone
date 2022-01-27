@@ -6,6 +6,7 @@ import { PostButtons } from './PostButtons.js'
 import { getComments } from '../../firebase/comments.js'
 import { findUser } from '../../firebase/users.js'
 import { getUrl } from '../../firebase/storage.js'
+import { timeSince } from '../../other/timeSince.js'
 
 const PostReel = async (props) => {
     const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user } = props
@@ -61,10 +62,14 @@ const PostReel = async (props) => {
             <div class="post-bottom">
                 <PostButtons user={user} postId={postId} postOwnerId={postOwnerId} inputRef={inputRef} />
                 <div class="post-likes"></div>
+                <div class="post-text"></div>
                 <Link class="post-view-comments" to={`/${postOwnerId}/${id}`}>
                     View more comments...
                 </Link>
                 {commentsPreview}
+                <div id='post-date'>
+                    {timeSince(postDate)}
+                </div>
                 <CommentsBar
                     user={user}
                     postId={postId}

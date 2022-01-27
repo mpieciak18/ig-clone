@@ -4,6 +4,7 @@ import { Navigate } from "react-router-dom"
 import { getNotifications } from "../firebase/notifications.js"
 import { findUser } from "../firebase/users.js"
 import { findSinglePost } from "../firebase/posts.js"
+import { timeSince } from "../other/timeSince.js"
 
 const Notifications = async (props) => {
     // Redirect to signup page if not signed in
@@ -40,7 +41,7 @@ const Notifications = async (props) => {
                     }
                     let notifText
                     let notifLink
-                    const notifTime = notif.data.date
+                    const notifTime = timeSince(notif.data.date)
                     if (type == "like") {
                         notifText = `${otherUser.data.username} liked your post.`
                         notifLink = `/${user.id}/${(await findSinglePost(notif.data.post)).id}`

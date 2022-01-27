@@ -1,5 +1,6 @@
 import '../styles/components/Messages/ConvoPreview.css'
 import {useState, useEffect} from 'react'
+import {timeSince} from '../../other/timeSince.js'
 
 // Component for each available convo in the convo list
 const ConvoPreview = async (props) => {
@@ -35,12 +36,18 @@ const ConvoPreview = async (props) => {
         updateClass()
     }, [currentConvo])
 
+    // Time since last message
+    const time = timeSince(lastMessage.data.date)
+
     return (
         <div className={convoPreviewClass} onClick={() => viewSingleConvo}>
             <img className='convo-preview-left' />
             <div className='convo-preview-right'>
                 <div className='convo-preview-name'></div>
-                <div className='convo-preview-text'></div>
+                <div className='convo-preview-right-bottom'>
+                    <div className='convo-preview-text'></div>
+                    <div className='convo-preview-date'>{time}</div>
+                </div>
             </div>
         </div>
     )

@@ -9,9 +9,8 @@ const CurrentConvo = (props) => {
     const sendNewMessage = async (event) => {
         event.preventDefault()
         const comment = event.target.message
-        let date
         const otherUserId = currConvo.otherUserId
-        await sendMessage(comment, date, otherUserId)
+        await sendMessage(comment, otherUserId)
     }
 
     const viewAllConvos = () => {
@@ -30,7 +29,7 @@ const CurrentConvo = (props) => {
                         <ConvoMessageBlock
                             user={user}
                             messageId={message.id}
-                            message={message.data}
+                            messageData={message.data}
                         />
                     )
                 })}

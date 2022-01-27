@@ -5,6 +5,7 @@ import { CommentsBar } from './CommentsBar.js'
 import { PostButtons } from './PostButtons.js'
 import { getComments } from '../../firebase/comments.js'
 import { getUrl } from '../../firebase/storage.js'
+import { timeSince } from '../../other/timeSince.js'
 
 const PostPage = async (props) => {
     const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user } = props
@@ -25,7 +26,7 @@ const PostPage = async (props) => {
                 const commenter = await findUser(commenterId)
                 const commenterName = commenter.name
                 const commenterImage = await getUrl(commenter.image)
-                const commentDate = comment.data.date
+                const commentDate = timeSince(comment.data.date)
                 return (
                     <div className='post-comment'>
                         <div className='post-comment-left'>
@@ -86,7 +87,7 @@ const PostPage = async (props) => {
                     <PostButtons user={user} postId={postId} postOwnerId={postOwnerId} inputRef={inputRef} />
                     <div class="post-right-bottom-two">
                         <div class="post-likes"></div>
-                        <div class="post-date"></div>
+                        <div class="post-date">{timeSince(postDate)}</div>
                     </div>
                     <CommentsBar
                         user={user}
