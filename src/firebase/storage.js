@@ -16,7 +16,7 @@ const uploadFile = async (folder, file) => {
 // Delete file from storage & return outcome
 const deleteFile = async (folder, fileName) => {
     const path = `/${folder}/${fileName}`
-    const reference = ref(storage, fileName)
+    const reference = ref(storage, path)
     try {
         await deleteObject(reference)
         return 'success'

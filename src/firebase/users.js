@@ -35,7 +35,7 @@ const addUser = async (username, name, email, id) => {
         email: email, 
         username: username, 
         name: name, 
-        image: '', 
+        image: 'no-profile.png', 
         bio: '',
         followers: 0, 
         following: 0, 
@@ -72,11 +72,12 @@ const findUser = async (userId) => {
 }
 
 // Update user
-const updateUser = async (name, username, bio) => {
+const updateUser = async (image, name, username, bio) => {
     const userId = auth.currentUser.uid
     const usersRef = collection(db, 'users')
     const userRef = doc(usersRef, userId)
     await updateDoc (userRef, {
+        'image': image,
         'name': name,
         'username': username,
         'bio': bio
