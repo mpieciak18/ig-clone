@@ -14,10 +14,9 @@ import { addNotification } from "./notifications.js"
 const newComment = async (postId, postOwnerId, text) => {
     // First, set up comment data
     const userId = auth.currentUser.uid
-    let currentDate
     const commentData = {
         post: postId,
-        date: currentDate,
+        date: Date.now(),
         user: userId,
         postOwner: postOwnerId,
         text: text

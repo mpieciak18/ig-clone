@@ -64,11 +64,10 @@ const findPostsFromUser = async (userId, arrQuantity) => {
 // Create new post & return new post ID
 const newPost = async (text, image) => {
     const userId = auth.currentUser.uid
-    let date
     const postData = {
         text: text,
         image: image,
-        date: date,
+        date: Date.now(),
         user: userId,
         likes: 0
     }

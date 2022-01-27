@@ -34,10 +34,9 @@ const findNotification = (userId, notificationId=null) => {
 const addNotification = async (type, otherUserId, postId=null) => {
     const selfId = auth.currentUser.uid
     const notiRef = findNotification(otherUserId)
-    let date
     const notiData = {
         type: type,
-        date: date,
+        date: Date.now(),
         otherUser: selfId,
         post: postId,
         read: false

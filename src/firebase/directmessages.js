@@ -40,14 +40,14 @@ const getMessageRef = (userId, otherUserId, messageId=null) => {
 
 // Send message from logged-in user to other user
 // NOTE: user A's ID is the convo ID for user B & vice-versa
-const sendMessage = async (message, date, otherUserId) => {
+const sendMessage = async (message, otherUserId) => {
     // First, add message to sender's subcollection
     const userId = auth.currentUser.uid
     const senderMessageRef = getMessageRef(userId, otherUserId)
     const messageData = {
         sender: userId,
         recipient: otherUserId,
-        date: date,
+        date: Date.now(),
         message: message
     }
     await setDoc(senderMessageRef, messageData)
