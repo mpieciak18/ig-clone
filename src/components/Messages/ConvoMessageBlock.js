@@ -7,7 +7,6 @@ const ConvoMessageBlock = async (props) => {
     const userId = user.id
     const senderId = messageData.sender
 
-
     let messageClass
     let iconSrc
     if (userId == senderId) {

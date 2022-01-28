@@ -42,14 +42,23 @@ const getMessageRef = (userId, otherUserId, messageId=null) => {
 // Send message from logged-in user to other user
 // NOTE: user A's ID is the convo ID for user B & vice-versa
 const sendMessage = async (message, otherUserId) => {
-    // First, add message to sender's subcollection
     const userId = auth.currentUser.uid
+    // First, determine if last message in convo was also sent by user
+    let senderChange
+    const lastMessage = await retrieveLatestMessage(otherUserId)
+    if (lastMessage == null) {
+        senderChange = false
+    } else {
+        senderChange = (lastMessage.data.sender != userId)
+    }
+    // Second, add message to sender's subcollection
     const senderMessageRef = getMessageRef(userId, otherUserId)
     const messageData = {
         sender: userId,
         recipient: otherUserId,
         date: Date.now(),
-        message: message
+        message: message,
+        senderChange: senderChange
     }
     await setDoc(senderMessageRef, messageData)
     // Second, add message to recipient's subcollection
