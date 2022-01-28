@@ -103,10 +103,11 @@ const retrieveLatestMessage = async (otherUserId) => {
 }
 
 // Retrieve all conversations
-const retrieveAllConvos = async () => {
+const retrieveAllConvos = async (arrQuantity) => {
     const userId = auth.currentUser.id
     const convosRef = getConvosRef(userId)
-    const convoDocs = await getDocs(convosRef)
+    const convosQuery = query(convosRef, orderBy("date", "desc"), limit(arrQuantity))
+    const convoDocs = await getDocs(convosQuery)
     let convos = []
     convoDocs.forEach((doc) => {
         const convo = {
@@ -114,9 +115,6 @@ const retrieveAllConvos = async () => {
             lastMessage: await retrieveLatestMessage(doc.id)
         }
         convos = [...convos, convo]
-    })
-    convos.sort((a, b) => {
-        return b.lastMessage.date - a.lastMessage.date
     })
     return convos
 }
