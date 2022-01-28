@@ -21,7 +21,15 @@ const ConvoMessageBlock = async (props) => {
 
     return (
         <div className={messageClass}>
-            <img className='convo-message-block-icon' src={iconSrc}></img>
+            <div className='convo-message-block-icon'>
+                {() => {
+                    if (messageData.senderChange == true) {
+                        return <img className='convo-message-block-image' src={iconSrc} />
+                    } else {
+                        return null
+                    }
+                }}
+            </div>
             <div className='convo-message-block-message'>{messageData.message}</div>
             <div className='convo-message-block-time'>{time}</div>
         </div>
