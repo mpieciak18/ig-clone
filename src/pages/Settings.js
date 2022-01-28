@@ -2,10 +2,9 @@ import '../styles/pages/Settings.css'
 import { Link } from 'react-router-dom'
 import { updateUser, useRef } from '../firebase/users.js'
 import { useLocation, Navigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { getUrl } from '../firebase/storage'
 import { NameFooter } from '../components/Settings/NameFooter.js'
-import { useEffect } from 'react/cjs/react.development'
 
 const Settings = (props) => {
     // Redirect to signup page if not signed in
