@@ -3,11 +3,11 @@ import {
     doc, 
     setDoc, 
     getDocs, 
-    Timestamp, 
     limit, 
     query,
     where,
-    updateDoc
+    updateDoc,
+    orderBy
 } from 'firebase/firestore'
 import { db, auth } from './firebase.js'
 
@@ -34,11 +34,9 @@ const findNotification = (userId, notificationId=null) => {
 const addNotification = async (type, otherUserId, postId=null) => {
     const selfId = auth.currentUser.uid
     const notiRef = findNotification(otherUserId)
-    const timestamp = Timestamp.now()
     const notiData = {
         type: type,
-        timestamp: timestamp,
-        date: timestamp.toDate(),
+        date: Date.now(),
         otherUser: selfId,
         post: postId,
         read: false
@@ -50,7 +48,7 @@ const addNotification = async (type, otherUserId, postId=null) => {
 const getNotifications = async (quantity) => {
     const userId = auth.currentUser.uid
     const notiCollection = findNotifications(userId)
-    const notiQuery = query(notiCollection, limit(quantity))
+    const notiQuery = query(notiCollection, orderBy("date", "desc"), limit(quantity))
     const notiDocs = await getDocs(notiQuery)
     let notiArr = []
     notiDocs.forEach((doc) => {

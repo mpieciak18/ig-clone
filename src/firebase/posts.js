@@ -9,7 +9,7 @@ import {
     collectionGroup,
     query,
     limit,
-    Timestamp
+    orderBy
 } from "firebase/firestore"
 
 // Retrieve single post
@@ -28,19 +28,17 @@ const findSinglePost = async (postId, userId) => {
 
 // Retrieve all posts
 const findPosts = async (arrQuantity) => {
-    const postsQuery = query(collectionGroup(db, 'posts'), limit(arrQuantity))
-    const postsQueryDocs = await getDocs(postsQuery)
+    const postsRef = collectionGroup(db, 'posts')
+    const postsQuery = query(postsRef, orderBy("date", "desc"), limit(arrQuantity))
+    const postDocs = await getDocs(postsQuery)
     let posts = []
-    postsQueryDocs.forEach((doc) => {
+    postDocs.forEach((doc) => {
         const post = {
             id: doc.id,
             data: doc.data()
         }
         posts = [...posts, post]
     })
-    // posts.sort((a, b) => {
-    //     return a.localeCompare(b)
-    // })
     return posts
 }
 
@@ -49,7 +47,7 @@ const findPostsFromUser = async (userId, arrQuantity) => {
     const usersRef = collection(db, 'users')
     const userRef = doc(usersRef, userId)
     const postsRef = collection(userRef, 'posts')
-    const postsQuery = query(postsRef, limit(arrQuantity))
+    const postsQuery = query(postsRef, orderBy("date", "desc"), limit(arrQuantity))
     const postDocs = await getDocs(postsQuery)
     let posts = []
     postDocs.forEach((doc) => {
@@ -65,12 +63,10 @@ const findPostsFromUser = async (userId, arrQuantity) => {
 // Create new post & return new post ID
 const newPost = async (text, image) => {
     const userId = auth.currentUser.uid
-    const timestamp = Timestamp.now()
     const postData = {
         text: text,
         image: image,
-        timestamp: timestamp,
-        date: timestamp.toDate(),
+        date: Date.now(),
         user: userId,
         likes: 0
     }

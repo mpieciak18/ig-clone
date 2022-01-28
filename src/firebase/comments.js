@@ -7,7 +7,7 @@ import {
     getDocs,
     limit,
     query,
-    Timestamp
+    orderBy
 } from "firebase/firestore"
 import { addNotification } from "./notifications.js"
 
@@ -15,11 +15,9 @@ import { addNotification } from "./notifications.js"
 const newComment = async (postId, postOwnerId, text) => {
     // First, set up comment data
     const userId = auth.currentUser.uid
-    const timestamp = Timestamp.now()
     const commentData = {
         post: postId,
-        timestamp: timestamp,
-        date: timestamp.toDate(),
+        date: Date.now(),
         user: userId,
         postOwner: postOwnerId,
         text: text
@@ -61,7 +59,7 @@ const getComments = async (postId, postOwnerId, quantity) => {
     const postsRef = collection(userRef, 'posts')
     const postRef = doc(postsRef, postId)
     const commentsRef = collection(postRef, 'comments')
-    const commentsQuery = query(commentsRef, limit(quantity))
+    const commentsQuery = query(commentsRef, orderBy("date", "desc"), limit(quantity))
     const commentsDocs = await getDocs(commentsQuery)
     let comments
     commentsDocs.forEach((doc) => {

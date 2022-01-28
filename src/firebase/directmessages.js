@@ -8,7 +8,7 @@ import {
     getDocs,
     query,
     limit,
-    Timestamp
+    orderBy
 } from 'firebase/firestore'
 
 // Helper functions that return doc/collection references from db
@@ -45,12 +45,10 @@ const sendMessage = async (message, otherUserId) => {
     // First, add message to sender's subcollection
     const userId = auth.currentUser.uid
     const senderMessageRef = getMessageRef(userId, otherUserId)
-    const timestamp = Timestamp.now()
     const messageData = {
         sender: userId,
         recipient: otherUserId,
-        timestamp: timestamp,
-        date: timestamp.toDate(),
+        date: Date.now(),
         message: message
     }
     await setDoc(senderMessageRef, messageData)
@@ -68,7 +66,8 @@ const sendMessage = async (message, otherUserId) => {
 const retrieveSingleConvo = async (otherUserId) => {
     const userId = auth.currentUser.uid
     const messagesRef = getMessagesRef(userId, otherUserId)
-    const messageDocs = await getDocs(messagesRef)
+    const messagesQuery = query(messagesRef, orderBy("date", "desc"))
+    const messageDocs = await getDocs(messagesQuery)
     let messages = []
     messageDocs.forEach((doc) => {
         const message = {
@@ -84,8 +83,9 @@ const retrieveSingleConvo = async (otherUserId) => {
 // NOTE: user A's ID is the convo ID for user B & vice-versa
 const retrieveLatestMessage = async (otherUserId) => {
     const userId = auth.currentUser.id
-    const messageRef = getMessagesRef(userId, otherUserId, true)
-    const messageDoc = await getDoc(messageRef)
+    const messagesRef = getMessagesRef(userId, otherUserId, true)
+    const singleMessageRef = query(messagesRef, orderBy("date", "desc"), limit(1))
+    const messageDoc = await getDoc(singleMessageRef)
     const message = {
         id: messageDoc.id,
         data: messageDoc.data()
@@ -105,6 +105,9 @@ const retrieveAllConvos = async () => {
             lastMessage: await retrieveLatestMessage(doc.id)
         }
         convos = [...convos, convo]
+    })
+    convos.sort((a, b) => {
+        return b.lastMessage.date - a.lastMessage.date
     })
     return convos
 }
