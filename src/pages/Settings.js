@@ -4,6 +4,8 @@ import { updateUser, useRef } from '../firebase/users.js'
 import { useLocation, Navigate } from 'react-router-dom'
 import { useState } from 'react'
 import { getUrl } from '../firebase/storage'
+import { NameFooter } from '../components/Settings/NameFooter.js'
+import { useEffect } from 'react/cjs/react.development'
 
 const Settings = (props) => {
     // Redirect to signup page if not signed in
@@ -17,11 +19,7 @@ const Settings = (props) => {
 
     const [file, setFile] = useState(null)
 
-    // const [isValid, setIsValid] = useState(false)
-
     const [filePreview, setFilePreview] = useState(await getUrl('images', user.image))
-
-    const [formButton, setFormButton] = useState("submit")
 
     const maxFileSize = 10 * 1024 * 1024 // 5 MB
 
@@ -31,36 +29,37 @@ const Settings = (props) => {
             imageRef.current.value = ''
             setFile(null)
             setFilePreview(getUrl('images', user.image))
-            setFormButton("button")
         } else {
             setFile(e.target.files[0])
             setFilePreview(URL.createObjectURL(e.target.files[0]))
-            setFormButton("submit")
         }
     }
 
     // Updates user's settings with form values
     const updateSettings = async (e) => {
         e.preventDefault()
-        let image
-        if (file == null) {
-            image = user.image
-        } else {
-            image = file.name
-            await uploadFile('images', file)
-        }
-        const possibleError = await updateUser(
-            image,
-            e.target.name.value,
-            e.target.username.value,
-            e.target.bio.value
-        )
-        if (possibleError == null) {
-            // Redirect to own profile upon successful settings update
-            return <Navigate to={`/${user.id}`} />
-        } else {
-            setErrorClass('visible')
-            setTimeout(() => {setErrorClass('hidden')}, 2000)
+        // Check validation first
+        if (namePasses == true) {
+            let image
+            if (file == null) {
+                image = user.image
+            } else {
+                image = file.name
+                await uploadFile('images', file)
+            }
+            const possibleError = await updateUser(
+                image,
+                e.target.name.value,
+                e.target.username.value,
+                e.target.bio.value
+            )
+            if (possibleError == null) {
+                // Redirect to own profile upon successful settings update
+                return <Navigate to={`/${user.id}`} />
+            } else {
+                setErrorClass('visible')
+                setTimeout(() => {setErrorClass('hidden')}, 2000)
+            }
         }
     }
     
@@ -95,6 +94,19 @@ const Settings = (props) => {
         setTimeout(() => {setWelcomeOn(false)}, 2000)
     }
 
+    // Allow form to submit if name input is valid
+    const [namePasses, setNamePasses] = useState(true)
+
+    const [formButton, setFormButton] = useState("submit")
+
+    useEffect(() => {
+        if (namePasses == true) {
+            setFormButton('submit')
+        } else {
+            setFormButton('button')
+        }
+    }, namePasses)
+
     return (
         <div id='settings' className='page'>
             {welcomeMessage}
@@ -118,13 +130,14 @@ const Settings = (props) => {
                     <div id='settings-image-footer'>File size limit: 5 mb</div>
                     <label id='settings-name-label' for='name'>Your Name:</label>
                     <input id='settings-name-input' name='name' type='text' value={user.name}></input>
+                    <NameFooter setNamePasses={setNamePasses} />
                     <label id='settings-bio-label' for='bio'>Your Bio:</label>
-                    <input id='settings-bio-input' name='bio' type='text' value={user.bio}></input>
+                    <textarea id='settings-bio-input' name='bio' type='text' value={user.bio} maxLength='150' />
                     <div id='settings-buttons'>
                         <Link to={`/profile/${user.id}`}>
-                            <button type='button'>Back to Profile</button>
+                            <button id='settings-form-back' type='button'>Back to Profile</button>
                         </Link>
-                        <button type={formButton}>Update Settings</button>
+                        <button id='settings-form-submit' type={formButton} className={formButton}>Update Settings</button>
                     </div>
                 </form>
             </div>
