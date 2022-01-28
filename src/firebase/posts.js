@@ -8,7 +8,8 @@ import {
     deleteDoc,
     collectionGroup,
     query,
-    limit
+    limit,
+    Timestamp
 } from "firebase/firestore"
 
 // Retrieve single post
@@ -64,10 +65,12 @@ const findPostsFromUser = async (userId, arrQuantity) => {
 // Create new post & return new post ID
 const newPost = async (text, image) => {
     const userId = auth.currentUser.uid
+    const timestamp = Timestamp.now()
     const postData = {
         text: text,
         image: image,
-        date: Date.now(),
+        timestamp: timestamp,
+        date: timestamp.toDate(),
         user: userId,
         likes: 0
     }

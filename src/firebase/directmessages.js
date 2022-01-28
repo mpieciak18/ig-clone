@@ -7,7 +7,8 @@ import {
     getDoc,
     getDocs,
     query,
-    limit
+    limit,
+    Timestamp
 } from 'firebase/firestore'
 
 // Helper functions that return doc/collection references from db
@@ -44,10 +45,12 @@ const sendMessage = async (message, otherUserId) => {
     // First, add message to sender's subcollection
     const userId = auth.currentUser.uid
     const senderMessageRef = getMessageRef(userId, otherUserId)
+    const timestamp = Timestamp.now()
     const messageData = {
         sender: userId,
         recipient: otherUserId,
-        date: Date.now(),
+        timestamp: timestamp,
+        date: timestamp.toDate(),
         message: message
     }
     await setDoc(senderMessageRef, messageData)

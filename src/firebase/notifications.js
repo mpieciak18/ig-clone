@@ -3,7 +3,7 @@ import {
     doc, 
     setDoc, 
     getDocs, 
-    deleteDoc, 
+    Timestamp, 
     limit, 
     query,
     where,
@@ -34,9 +34,11 @@ const findNotification = (userId, notificationId=null) => {
 const addNotification = async (type, otherUserId, postId=null) => {
     const selfId = auth.currentUser.uid
     const notiRef = findNotification(otherUserId)
+    const timestamp = Timestamp.now()
     const notiData = {
         type: type,
-        date: Date.now(),
+        timestamp: timestamp,
+        date: timestamp.toDate(),
         otherUser: selfId,
         post: postId,
         read: false

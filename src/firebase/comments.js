@@ -6,7 +6,8 @@ import {
     deleteDoc,
     getDocs,
     limit,
-    query
+    query,
+    Timestamp
 } from "firebase/firestore"
 import { addNotification } from "./notifications.js"
 
@@ -14,9 +15,11 @@ import { addNotification } from "./notifications.js"
 const newComment = async (postId, postOwnerId, text) => {
     // First, set up comment data
     const userId = auth.currentUser.uid
+    const timestamp = Timestamp.now()
     const commentData = {
         post: postId,
-        date: Date.now(),
+        timestamp: timestamp,
+        date: timestamp.toDate(),
         user: userId,
         postOwner: postOwnerId,
         text: text
