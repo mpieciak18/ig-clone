@@ -1,16 +1,9 @@
 import { useState, useEffect } from 'react'
 
 const NameFooter = async (props) => {
-    const { setNamePasses } = props
-    const [name, setName] = useState('')
+    const { setNamePasses, name } = props
     const [footerText, setFooterText] = useState('Name must contain letters & spaces only.')
     const [footerClass, setFooterClass] = useState('grey')
-
-    // Update username on input change
-    const updateName = (e) => {
-        const newName = e.target.value
-        setName(newName)
-    }
 
     // Update name footer text, class, and namePasses state upon username change
     useEffect(async () => {

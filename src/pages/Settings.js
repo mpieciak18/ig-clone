@@ -1,10 +1,10 @@
 import '../styles/pages/Settings.css'
 import { Link } from 'react-router-dom'
-import { updateUser, useRef } from '../firebase/users.js'
+import { updateUser } from '../firebase/users.js'
 import { useLocation, Navigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { getUrl } from '../firebase/storage'
 import { NameFooter } from '../components/Settings/NameFooter.js'
+import { ImageInput } from '../components/Settings/ImageInput.js'
 
 const Settings = (props) => {
     // Redirect to signup page if not signed in
@@ -14,25 +14,7 @@ const Settings = (props) => {
         return <Navigate to='/signup' state={{path: path}} />
     }
 
-    const imageRef = useRef()
-
     const [file, setFile] = useState(null)
-
-    const [filePreview, setFilePreview] = useState(await getUrl('images', user.image))
-
-    const maxFileSize = 10 * 1024 * 1024 // 5 MB
-
-    // Runs when user selects image to upload
-    const validateImage = async (e) => {
-        if (e.target.files[0].size > maxFileSize) {
-            imageRef.current.value = ''
-            setFile(null)
-            setFilePreview(getUrl('images', user.image))
-        } else {
-            setFile(e.target.files[0])
-            setFilePreview(URL.createObjectURL(e.target.files[0]))
-        }
-    }
 
     // Updates user's settings with form values
     const updateSettings = async (e) => {
@@ -96,6 +78,10 @@ const Settings = (props) => {
     // Allow form to submit if name input is valid
     const [namePasses, setNamePasses] = useState(true)
 
+    const [name, setName] = useState(user.name)
+
+    const updateName = (e) => setName(e.target.value)
+
     const [formButton, setFormButton] = useState("submit")
 
     useEffect(() => {
@@ -116,20 +102,11 @@ const Settings = (props) => {
                         <div id='settings-title'>Settings</div>
                         <img id='settings-image'/>
                     </div>
-                    <input 
-                        ref={imageRef} 
-                        type="file" 
-                        id="settings-image" 
-                        name="image" 
-                        accept=".jpg, .jpeg, .png" 
-                        onChange={validateImage}
-                    >
-                        <img src={filePreview} />
-                    </input>
+                    <ImageInput user={user} setFile={setFile} />
                     <div id='settings-image-footer'>File size limit: 5 mb</div>
                     <label id='settings-name-label' for='name'>Your Name:</label>
                     <input id='settings-name-input' name='name' type='text' value={user.name}></input>
-                    <NameFooter setNamePasses={setNamePasses} />
+                    <NameFooter setNamePasses={setNamePasses} name={name} updateName={updateName} />
                     <label id='settings-bio-label' for='bio'>Your Bio:</label>
                     <textarea id='settings-bio-input' name='bio' type='text' value={user.bio} maxLength='150' />
                     <div id='settings-buttons'>
