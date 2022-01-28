@@ -2,16 +2,9 @@ import { useState, useEffect } from 'react'
 import { usernameExists } from '../firebase/users.js'
 
 const UsernameFooter = async (props) => {
-    const { setUsernamePasses } = props
-    const [username, setUsername] = useState('')
+    const { setUsernamePasses, username } = props
     const [footerText, setFooterText] = useState('Username must be 3-15 characters.')
     const [footerClass, setFooterClass] = useState('grey')
-
-    // Update username on input change
-    const updateUsername = (e) => {
-        const newUsername = e.target.value
-        setUsername(newUsername)
-    }
 
     // Update username footer text, class, and usernamePasses state upon username change
     useEffect(async () => {
@@ -60,7 +53,7 @@ const UsernameFooter = async (props) => {
     }, username) 
 
     return (
-        <div id='sign-up-username-footer' className={footerClass} onChange={updateUsername}>
+        <div id='sign-up-username-footer' className={footerClass}>
             {footerText}
         </div>
     )

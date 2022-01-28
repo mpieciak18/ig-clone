@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react'
 import { emailExists } from '../firebase/users.js'
 
 const EmailFooter = async (props) => {
-    const { setEmailPasses } = props
-    const [email, setEmail] = useState('')
+    const { setEmailPasses, email } = props
     const [footerText, setFooterText] = useState(
         'Email address must be valid.'
     )
@@ -44,7 +43,7 @@ const EmailFooter = async (props) => {
     }, email) 
 
     return (
-        <div id='sign-up-email-footer' className={footerClass} onChange={updateEmail}>
+        <div id='sign-up-email-footer' className={footerClass}>
             {footerText}
         </div>
     )

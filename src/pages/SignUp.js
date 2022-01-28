@@ -14,11 +14,22 @@ const SignUp = (props) => {
         return <Navigate to='/settings' />
     }
 
-    // Init criteria for allowing form to be submitted
+    // Init criteria for form validation
+    const [username, setUsername] = useState('')
     const [usernamePasses, setUsernamePasses] = useState(false)
+    const updateUsername = (e) => setUsername(e.target.value)
+
+    const [name, setName] = useState('')
     const [namePasses, setNamePasses] = useState(false)
-    const [passwordPasses, setPasswordPasses] = useState(false)
+    const updateName = (e) => setName(e.target.value)
+
+    const [email, setEmail] = useState('')
     const [emailPasses, setEmailPasses] = useState(false)
+    const updateEmail = (e) => setEmail(e.target.value)
+
+    const [password, setPassword] = useState('')
+    const [passwordPasses, setPasswordPasses] = useState(false)
+    const updatePassword = (e) => setPassword(e.target.value)
 
     const allPass = () => {
         return (
@@ -97,19 +108,19 @@ const SignUp = (props) => {
                         <div id='sign-up-username-divider' />
                         <input id='sign-up-username-input' name='username' placeholder='username' onChange={updateUsername} />
                     </div>
-                    <UsernameFooter setUsernamePasses={setUsernamePasses} />
+                    <UsernameFooter setUsernamePasses={setUsernamePasses} username={username} />
                     <div id='sign-up-name-parent'>
-                        <input id='sign-up-name-input' name='name' placeholder='your real name' />
+                        <input id='sign-up-name-input' name='name' placeholder='your real name' onChange={updateName} />
                     </div>
-                    <NameFooter setNamePasses={setNamePasses} />
+                    <NameFooter setNamePasses={setNamePasses} name={name}  />
                     <div id='sign-up-email-parent'>
-                        <input id='sign-up-email-input' name='email' placeholder='email' />
+                        <input id='sign-up-email-input' name='email' placeholder='email' onChange={updateEmail} />
                     </div>
-                    <EmailFooter setEmailPasses={setEmailPasses} />
+                    <EmailFooter setEmailPasses={setEmailPasses} email={email}  />
                     <div id='sign-up-password-parent'>
-                        <input id='sign-up-password-input' name='password' placeholder='password' />
+                        <input id='sign-up-password-input' name='password' placeholder='password' onChange={updatePassword} />
                     </div>
-                    <PasswordFooter setPasswordPasses={setPasswordPasses} />
+                    <PasswordFooter setPasswordPasses={setPasswordPasses} password={password}  />
                     {signUpButton}
                 </form>
                 {login}

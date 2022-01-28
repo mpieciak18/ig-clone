@@ -1,16 +1,9 @@
 import { useState, useEffect } from 'react'
 
 const NameFooter = async (props) => {
-    const { setNamePasses } = props
-    const [name, setName] = useState('')
+    const { setNamePasses, name } = props
     const [footerText, setFooterText] = useState('Name must contain letters & spaces only.')
     const [footerClass, setFooterClass] = useState('grey')
-
-    // Update username on input change
-    const updateName = (e) => {
-        const newName = e.target.value
-        setName(newName)
-    }
 
     // Update name footer text, class, and namePasses state upon username change
     useEffect(async () => {
@@ -27,9 +20,15 @@ const NameFooter = async (props) => {
             setFooterClass('red')
         }
         // Check if name is greater than 30 characters
-        else if (name.match(/^{31,}*$/) == null) {
+        else if (name.match(/^.{31,}$/) == null) {
             setNamePasses(false)
             setFooterText('Name is too long!')
+            setFooterClass('red')
+        }
+        // Check if name is greater than 3 characters
+        else if (name.match(/^.{0,2}$/) != null) {
+            setNamePasses(false)
+            setFooterText('Name is too short!')
             setFooterClass('red')
         }
         // Username passes
@@ -41,7 +40,7 @@ const NameFooter = async (props) => {
     }, name) 
 
     return (
-        <div id='sign-up-name-footer' className={footerClass} onChange={updateName}>
+        <div id='sign-up-name-footer' className={footerClass}>
             {footerText}
         </div>
     )

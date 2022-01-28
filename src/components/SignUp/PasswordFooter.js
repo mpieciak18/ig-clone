@@ -1,18 +1,11 @@
 import { useState, useEffect } from 'react'
 
 const PasswordFooter = async (props) => {
-    const { setPasswordPasses } = props
-    const [password, setPassword] = useState('')
+    const { setPasswordPasses, password } = props
     const [footerText, setFooterText] = useState(
         'Must contain >8 characters, 1+ uppercase letter, 1+ lowercase letter, and 1+ number.'
     )
     const [footerClass, setFooterClass] = useState('grey')
-
-    // Update password on input change
-    const updatePassword = (e) => {
-        const newPassword = e.target.value
-        setPassword(newPassword)
-    }
 
     // Update password footer text, class, and passwordPasses state upon password change
     useEffect(async () => {
@@ -49,7 +42,7 @@ const PasswordFooter = async (props) => {
     }, password) 
 
     return (
-        <div id='sign-up-password-footer' className={footerClass} onChange={updatePassword}>
+        <div id='sign-up-password-footer' className={footerClass}>
             {footerText}
         </div>
     )
