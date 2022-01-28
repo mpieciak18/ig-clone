@@ -97,19 +97,19 @@ const SignUp = (props) => {
                         <div id='sign-up-username-divider' />
                         <input id='sign-up-username-input' name='username' placeholder='username' onChange={updateUsername} />
                     </div>
-                    <UsernameFooter eventHandler={() => setUsernamePasses} />
+                    <UsernameFooter setUsernamePasses={setUsernamePasses} />
                     <div id='sign-up-name-parent'>
                         <input id='sign-up-name-input' name='name' placeholder='your real name' />
                     </div>
-                    <NameFooter eventHandler={() => setNamePasses} />
+                    <NameFooter setNamePasses={setNamePasses} />
                     <div id='sign-up-email-parent'>
                         <input id='sign-up-email-input' name='email' placeholder='email' />
                     </div>
-                    <EmailFooter eventHandler={() => setEmailPasses} />
+                    <EmailFooter setEmailPasses={setEmailPasses} />
                     <div id='sign-up-password-parent'>
                         <input id='sign-up-password-input' name='password' placeholder='password' />
                     </div>
-                    <PasswordFooter eventHandler={() => setPasswordPasses} />
+                    <PasswordFooter setPasswordPasses={setPasswordPasses} />
                     {signUpButton}
                 </form>
                 {login}

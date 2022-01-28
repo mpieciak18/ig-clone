@@ -1,17 +1,12 @@
 import { useState, useEffect } from 'react'
 
 const PasswordFooter = async (props) => {
-    const { eventHandler } = props
+    const { setPasswordPasses } = props
     const [password, setPassword] = useState('')
     const [footerText, setFooterText] = useState(
         'Must contain >8 characters, 1+ uppercase letter, 1+ lowercase letter, and 1+ number.'
     )
     const [footerClass, setFooterClass] = useState('grey')
-
-    // Update passwordPasses state from SignUp page
-    const setPasswordPasses = (bool) => {
-        eventHandler(bool)
-    }
 
     // Update password on input change
     const updatePassword = (e) => {

@@ -1,15 +1,10 @@
 import { useState, useEffect } from 'react'
 
 const NameFooter = async (props) => {
-    const { eventHandler } = props
+    const { setNamePasses } = props
     const [name, setName] = useState('')
     const [footerText, setFooterText] = useState('Name must contain letters & spaces only.')
     const [footerClass, setFooterClass] = useState('grey')
-
-    // Update usernamePasses state from SignUp page
-    const setNamePasses = (bool) => {
-        eventHandler(bool)
-    }
 
     // Update username on input change
     const updateName = (e) => {
@@ -43,7 +38,7 @@ const NameFooter = async (props) => {
             setFooterText(' ')
             setFooterClass('grey')
         }
-    }, username) 
+    }, name) 
 
     return (
         <div id='sign-up-name-footer' className={footerClass} onChange={updateName}>

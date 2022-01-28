@@ -2,17 +2,12 @@ import { useState, useEffect } from 'react'
 import { emailExists } from '../firebase/users.js'
 
 const EmailFooter = async (props) => {
-    const { eventHandler } = props
+    const { setEmailPasses } = props
     const [email, setEmail] = useState('')
     const [footerText, setFooterText] = useState(
         'Email address must be valid.'
     )
     const [footerClass, setFooterClass] = useState('grey')
-
-    // Update emailPasses state from SignUp page
-    const setEmailPasses = (bool) => {
-        eventHandler(bool)
-    }
 
     // Update email on input change
     const updateEmail = (e) => {
