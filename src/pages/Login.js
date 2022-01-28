@@ -12,6 +12,7 @@ const Login = (props) => {
     }
 
     const newLogin = async (e) => {
+        e.preventDefault()
         const email = e.target.email.value
         const password = e.target.password.value
         // Add new user to firebase/auth & return any errors
@@ -34,28 +35,12 @@ const Login = (props) => {
         </div>
     )
 
-    const loginButton = () => {
-        if (allPass() == true) {
-            return (
-                <button type='submit' id='login-form-button' className='active'>
-                    Login
-                </button>
-            )
-        } else {
-            return (
-                <button type='button' id='login-form-button' className='inactive'>
-                    Login
-                </button>
-            )
-        }
-    }
-
     return (
         <div id="login" className="page">
             <Navbar user={user} />
             <div id='login-parent'>
-                {errorMessage}
                 <form id='login-form' onSubmit={newLogin}>
+                    {errorMessage}
                     <div id='login-header'>
                         <img id='login-logo' />
                         <div id='login-title'>Login</div>
@@ -66,7 +51,9 @@ const Login = (props) => {
                     <div id='login-password-parent'>
                         <input id='login-password-input' name='password' placeholder='password' />
                     </div>
-                    {loginButton}
+                    <button type='submit' id='login-form-button' className='active'>
+                        Login
+                    </button>
                 </form>
             </div>
         </div>
