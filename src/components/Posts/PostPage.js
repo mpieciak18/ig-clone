@@ -6,6 +6,7 @@ import { PostButtons } from './PostButtons.js'
 import { getComments } from '../../firebase/comments.js'
 import { getUrl } from '../../firebase/storage.js'
 import { timeSince } from '../../other/timeSince.js'
+import { timeSinceTrunc } from '../../other/timeSinceTrunc'
 
 const PostPage = async (props) => {
     const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user } = props
@@ -26,7 +27,7 @@ const PostPage = async (props) => {
                 const commenter = await findUser(commenterId)
                 const commenterName = commenter.name
                 const commenterImage = await getUrl(commenter.image)
-                const commentDate = timeSince(comment.data.date)
+                const commentDate = timeSinceTrunc(comment.data.date)
                 return (
                     <div className='post-comment'>
                         <div className='post-comment-left'>

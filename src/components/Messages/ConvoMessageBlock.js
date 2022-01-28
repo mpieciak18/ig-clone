@@ -1,6 +1,6 @@
 import '../styles/components/Messages/ConvoMessageBlock.css'
 import { findUser } from '../../firebase/users.js'
-import { timeSince } from '../../other/timeSince'
+import { timeSince } from '../../other/timeSince.js'
 
 const ConvoMessageBlock = async (props) => {
     const { user, messageId, messageData } = props

@@ -3,19 +3,27 @@ const timeSince = (date) => {
     
     let interval = seconds / 31536000
   
-    // Return as years
-    if (interval >= 2) {
-        return `${Math.floor(interval)} years ago`
-    } else if (interval >= 1) {
-        return "1 year ago"
-    }
+    // // Return as years
+    // if (interval >= 2) {
+    //     return `${Math.floor(interval)} years ago`
+    // } else if (interval >= 1) {
+    //     return "1 year ago"
+    // }
 
-    // Return as months
-    interval = seconds / 2592000;
+    // // Return as months
+    // interval = seconds / 2592000;
+    // if (interval >= 2) {
+    //     return `${Math.floor(interval)} months ago`
+    // } else if (interval >= 1) {
+    //     return "1 month ago"
+    // }
+
+    // Return as weeks
+    interval = seconds / 604800;
     if (interval >= 2) {
-        return `${Math.floor(interval)} months ago`
+        return `${Math.floor(interval)} weeks ago`
     } else if (interval >= 1) {
-        return "1 month ago"
+        return "1 week ago"
     }
 
     // Return as days
