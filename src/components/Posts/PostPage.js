@@ -87,7 +87,7 @@ const PostPage = async (props) => {
                 <div class="post-right-bottom">
                     <PostButtons user={user} postId={postId} postOwnerId={postOwnerId} inputRef={inputRef} />
                     <div class="post-right-bottom-two">
-                        <div class="post-likes"></div>
+                        <div class="post-likes">{postLikes} Likes</div>
                         <div class="post-date">{timeSince(postDate)}</div>
                     </div>
                     <CommentsBar

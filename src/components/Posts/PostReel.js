@@ -61,7 +61,7 @@ const PostReel = async (props) => {
             </div>
             <div class="post-bottom">
                 <PostButtons user={user} postId={postId} postOwnerId={postOwnerId} inputRef={inputRef} />
-                <div class="post-likes"></div>
+                <div class="post-likes">{postLikes} Likes</div>
                 <div class="post-text"></div>
                 <Link class="post-view-comments" to={`/${postOwnerId}/${id}`}>
                     View more comments...
@@ -75,7 +75,8 @@ const PostReel = async (props) => {
                     postId={postId}
                     postOwnerId={postOwnerId}
                     updateComments={updateComments}
-                    inputRef={inputRef} />
+                    inputRef={inputRef}
+                />
             </div>
         </div>
     )
