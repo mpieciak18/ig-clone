@@ -1,8 +1,8 @@
 import { Navigate } from 'react-router-dom'
 import { getFollowing, getFollowers } from '../firebase/followers.js'
 import { FollowButton } from '../FollowButton.js'
-import '../../styles/components/Posts/Likes.css'
-import { useEffect, useState } from 'react/cjs/react.development'
+import '../../styles/components/FollowerFollowing.css'
+import { useEffect, useState } from 'react'
 
 const Follows = async (props) => {
     const { setFollowsOn, userId } = props
