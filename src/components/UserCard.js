@@ -13,14 +13,14 @@ const UserCard = (props) => {
         )
     } else {
         return (
-            <Link id="user-card" to={`/${user.id}`}>
-                <div id="user-card-top">
+            <div id="user-card">
+                <Link id="user-card-top" to={`/${user.id}`}>
                     <img id='user-card-icon' src={async () => await getUrl(user.image)} />
                     <div id="user-card-names">
                         <div id='user-card-name'>{user.name}</div>
                         <div id='user-card-username'>{user.username}</div>
                     </div>
-                </div>
+                </Link>
                 <div id='user-card-stats'>
                     <div id='user-card-posts'>
                         <p className='user-stats-child'>{user.posts}</p>
@@ -35,7 +35,7 @@ const UserCard = (props) => {
                         <p className='user-stats-child'>Followers</p>
                     </div>
                 </div>
-            </Link>
+            </div>
         )
     }
 }
