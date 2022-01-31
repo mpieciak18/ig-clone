@@ -93,13 +93,13 @@ const Follows = async (props) => {
         <div id="follow" onClick={hideFollows}>
             <div id="follows-pop-up">
                 <div id="follows-header">
-                    <div id="follow-header-left">
+                    <div id="follows-header-left">
                         <div id='following-button' className={followingButtonClass} onClick={followersClick}>Following</div>
                         <div id='followers-button' className={followersButtonClass} onClick={followingClick}>Followers</div>
                     </div>
-                    <div id="follow-x-button">✕</div>
+                    <div id="follows-x-button">✕</div>
                 </div>
-                <div id="follow-divider" />
+                <div id="follows-divider" />
                 {followsList()}
             </div>
         </div>
