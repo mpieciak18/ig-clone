@@ -8,8 +8,10 @@ import {
     updateDoc,
     getDoc,
     query,
-    where
+    where,
+    getDocs
  } from 'firebase/firestore'
+ import { findUser } from './users.js'
 
 // Helper functions for database
 const getUsersRef = () => {return collection(db, 'users')}
@@ -83,4 +85,14 @@ const likeExists = async (postId, postOwnerId) => {
     }
 }
 
-export default { addLike, removeLike, changeLikeCount, likeExists }
+// Retrieve all users who like a post
+const getLikes = async (postId, postOwnerId) => {
+    const likesRef = getLikesRef(postOwnerId, postId)
+    const likesDocs = await getDocs(likesRef)
+    return likesDocs.map((like) => {
+        const user = await findUser(like.data.user)
+        return user
+    })
+}
+
+export default { addLike, removeLike, changeLikeCount, likeExists, getLikes }
