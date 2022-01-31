@@ -7,6 +7,7 @@ import { getComments } from '../../firebase/comments.js'
 import { findUser } from '../../firebase/users.js'
 import { getUrl } from '../../firebase/storage.js'
 import { timeSince } from '../../other/timeSince.js'
+import { Likes } from './Likes.js'
 
 const PostReel = async (props) => {
     const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user } = props
@@ -44,6 +45,29 @@ const PostReel = async (props) => {
     // Get post owner's profile image
     const postOwnerImage = (await findUser(postOwnerId)).data.image
 
+    // Init likesOn state
+    const [likesOn, setLikesOn] = useState(false)
+
+    // Set likesOn to true
+    const clickLikes = () => {
+        if (user.loggedIn == false) {
+            const path = useLocation().pathname
+            return <Navigate to='/signup' state={{path: path}} />
+        } else {
+            setLikesOn(true)
+        }
+    }
+
+    // Render likes pop-up
+    let likes = null
+    useEffect(() => {
+        if (likesOn == false) {
+            likes = null
+        } else {
+            likes = <Likes setLikesOn={() => setLikesOn} postId={postId} postOwnerId={postOwnerId} />
+        }
+    }, likesOn)
+
     return (
         <div class="single-post-component">
             <div class="post-top"></div>
@@ -61,7 +85,7 @@ const PostReel = async (props) => {
             </div>
             <div class="post-bottom">
                 <PostButtons user={user} postId={postId} postOwnerId={postOwnerId} inputRef={inputRef} />
-                <div class="post-likes">{postLikes} Likes</div>
+                <div class="post-likes" clickLikes={() => clickLikes}>{postLikes} Likes</div>
                 <div class="post-text">{postText}</div>
                 <Link class="post-view-comments" to={`/${postOwnerId}/${id}`}>
                     View more comments...

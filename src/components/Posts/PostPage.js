@@ -7,6 +7,7 @@ import { getComments } from '../../firebase/comments.js'
 import { getUrl } from '../../firebase/storage.js'
 import { timeSince } from '../../other/timeSince.js'
 import { timeSinceTrunc } from '../../other/timeSinceTrunc'
+import { Likes } from './Likes.js'
 
 const PostPage = async (props) => {
     const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user } = props
@@ -67,8 +68,32 @@ const PostPage = async (props) => {
     // Get post owner's profile image
     const postOwnerImage = (await findUser(postOwnerId)).data.image
 
+    // Init likesOn state
+    const [likesOn, setLikesOn] = useState(false)
+
+    // Set likesOn to true
+    const clickLikes = () => {
+        if (user.loggedIn == false) {
+            const path = useLocation().pathname
+            return <Navigate to='/signup' state={{path: path}} />
+        } else {
+            setLikesOn(true)
+        }
+    }
+
+    // Render likes pop-up
+    let likes = null
+    useEffect(() => {
+        if (likesOn == false) {
+            likes = null
+        } else {
+            likes = <Likes setLikesOn={() => setLikesOn} postId={postId} postOwnerId={postOwnerId} />
+        }
+    }, likesOn)
+
     return (
         <div class="single-post-page">
+            {likes}
             <div class="post-left">
                 <img class="post-image" src={async () => await getUrl(postImage)} />
             </div>
@@ -85,9 +110,10 @@ const PostPage = async (props) => {
                 </div>
                 {commentsSection}
                 <div class="post-right-bottom">
-                    <PostButtons user={user} postId={postId} postOwnerId={postOwnerId} inputRef={inputRef} />
+                    <PostButtons 
+                        user={user} postId={postId} postOwnerId={postOwnerId} inputRef={inputRef} />
                     <div class="post-right-bottom-two">
-                        <div class="post-likes">{postLikes} Likes</div>
+                        <div class="post-likes" clickLikes={() => clickLikes}>{postLikes} Likes</div>
                         <div class="post-date">{timeSince(postDate)}</div>
                     </div>
                     <CommentsBar
