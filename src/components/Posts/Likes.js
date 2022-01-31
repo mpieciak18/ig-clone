@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom'
 import { getLikes } from '../../firebase/likes.js'
 import { getUrl } from '../../firebase/storage.js'
-import { FollowButton } from './Follow.js'
+import { FollowButton } from '../FollowButton.js'
 import '../../styles/components/Posts/Likes.css'
 
 const Likes = async (props) => {
