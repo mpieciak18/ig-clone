@@ -7,6 +7,7 @@ import {
     deleteDoc,
     updateDoc,
     getDoc,
+    getDocs,
     query,
     where
  } from 'firebase/firestore'
@@ -14,22 +15,22 @@ import {
 // Helper functions for adding / removing follows in database
 const getUsersRef = () => {return collection(db, 'users')}
 const getUserRef = (userId) => {return doc(getUsersRef(), userId)}
-// Grabs other user's follower subcollection
-const getOtherUserFollowersRef = (otherUserId) => {return collection(getUserRef(otherUserId), 'followers')}
-const getOtherUserFollowerRef = (otherUserId, followId=null) => {
-    if (followId != null) {
-        return doc(getOtherUserFollowersRef(otherUserId), followId)
+// Grabs user's follower subcollection
+const getFollowersRef = (userId) => {return collection(getUserRef(userId), 'followers')}
+const getFollowerRef = (userId, followerId=null) => {
+    if (followerId != null) {
+        return doc(getFollowersRef(userId), followerId)
     } else {
-        return doc(getOtherUserFollowersRef(otherUserId))
+        return doc(getFollowersRef(userId))
     }
 }
-// Grabs own user's following subcollection
-const getOwnFollowsRef = (ownId) => {return collection(getUserRef(ownId), 'followers')}
-const getOwnFollowRef = (ownId, followId=null) => {
-    if (followId != null) {
-        return doc(getOwnFollowsRef(ownId), followId)
+// Grabs user's following subcollection
+const getFollowingsRef = (userId) => {return collection(getUserRef(userId), 'following')}
+const getFollowingRef = (userId, followingId=null) => {
+    if (followingId != null) {
+        return doc(getFollowingsRef(userId), followingId)
     } else {
-        return doc(getOwnFollowsRef(ownId))
+        return doc(getFollowingsRef(userId))
     }
 }
 
@@ -50,11 +51,11 @@ const addFollow = async (otherUserId) => {
         otherUser: otherUserId
     }
     // Forth, add new follower to other user
-    const otherUserFollowerRef = getOtherUserFollowerRef(otherUserId)
+    const otherUserFollowerRef = getFollowerRef(otherUserId)
     const followId = otherUserFollowerRef.id
     await setDoc(otherUserFollowerRef, otherUserData)
     // Fifth, add new follow to self
-    const selfFollowingRef = getOwnFollowRef(selfId, followId)
+    const selfFollowingRef = getFollowingRef(selfId, followId)
     await setDoc(selfFollowingRef, selfData)
     // Third, add notification to recipient's subcollection
     await addNotification('follow', otherUserId)
@@ -69,10 +70,10 @@ const removeFollow = (followId, otherUserId) => {
     const selfId = auth.currentUser.uid
     await changeSelfFollowingCount(selfId, false)
     // Second, remove follower from other user
-    const otherUserFollowerRef = getOtherUserFollowerRef(otherUserId, followId)
+    const otherUserFollowerRef = getFollowerRef(otherUserId, followId)
     await deleteDoc(otherUserFollowerRef)
     // Third, remove follow from self
-    const selfFollowingRef = getOwnFollowRef(selfId, followId)
+    const selfFollowingRef = getFollowingRef(selfId, followId)
     await deleteDoc(selfFollowingRef)
 }
 
@@ -111,8 +112,8 @@ const changeSelfFollowingCount = async (selfId, increase) => {
 // Check if the signed-in user is following another user
 const checkForFollow = async (otherUserId) => {
     const userId = auth.currentUser.uid
-    const followsRef = getOwnFollowsRef(userId)
-    const postRef = query(followsRef, where("otherUser", "==", otherUserId))
+    const followingsRef = getFollowingsRef(userId)
+    const postRef = query(followingsRef, where("otherUser", "==", otherUserId))
     const postDoc = await getDoc(postRef)
     if (postDoc.exists()) {
         return true
@@ -121,4 +122,22 @@ const checkForFollow = async (otherUserId) => {
     }
 }
 
-export default { addFollow, removeFollow, checkForFollow }
+// Return array of user id's that given user follows
+const getFollowing = async (userId) => {
+    const followingsRef = getFollowingsRef(userId)
+    const followingsDocs = await getDocs(followingsRef)
+    return followingsDocs.map(async (following) => {
+        return await following.data().otherUser
+    })
+}
+
+// Return array of user id's that follow the given user
+const getFollowers = async (userId) => {
+    const followersRef = getFollowersRef(userId)
+    const followersDocs = await getDocs(followersRef)
+    return followersDocs.map(async (follower) => {
+        return await follower.data().otherUser
+    })
+}
+
+export default { addFollow, removeFollow, checkForFollow, getFollowing, getFollowers }
