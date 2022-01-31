@@ -1,10 +1,10 @@
-import { useState, useRef } from 'react'
 import { Navigate } from 'react-router-dom'
 import { getLikes } from '../../firebase/likes.js'
-import { checkForFollow, addFollow, removeFollow } from '../../firebase/followers.js'
 import { getUrl } from '../../firebase/storage.js'
+import { FollowButton } from './Follow.js'
+import '../../styles/components/Posts/Likes.css'
 
-const Likes = (props) => {
+const Likes = async (props) => {
     const { setLikesOn, postId, postOwnerId } = props
 
     // Closes likes pop-up
@@ -15,34 +15,28 @@ const Likes = (props) => {
         }
     }
 
-    // Renders follow (or unfollow) button
-    const followButton = (user) => {
-        //
-    }
-
-    // Redirect to user's profile
-    const redirect = (id) => {
-        //
-    }
-
     // Renders like of users who liked the post
     const likesList = async () => {
         const users = await getLikes(postId, postOwnerId)
         return (
             <div id='likes-list'>
-                {users.map((user) => {
-                    <div className='like-row' onClick={() => redirect(user.id)}>
-                        <div className='like-row-left'>
-                            <img className='like-image' src={getUrl(user.data.image)} />
-                            <div className='like-text'>
-                                <div className='like-name'>{user.data.name}</div>
-                                <div className='like-username'>@{user.data.username}</div>
+                {users.map(async (user) => {
+                    const redirect = () => <Navigate to={`/${user.id}`} />
+                    const image = await getUrl(user.data.image)
+                    return (
+                        <div className='like-row' onClick={redirect}>
+                            <div className='like-row-left'>
+                                <img className='like-image' src={image} />
+                                <div className='like-text'>
+                                    <div className='like-name'>{user.data.name}</div>
+                                    <div className='like-username'>@{user.data.username}</div>
+                                </div>
+                            </div>
+                            <div className='like-row-right'>
+                                <FollowButton otherUserId={user.id} />
                             </div>
                         </div>
-                        <div className='like-row-right'>
-                            {followButton(user.id)}
-                        </div>
-                    </div>
+                    )
                 })}
             </div>
         )
