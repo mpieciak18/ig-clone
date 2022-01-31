@@ -2,6 +2,7 @@ import '../styles/components/Navbar.css'
 import { useState } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { NewPost } from './NewPost.js'
+import { useEffect } from 'react/cjs/react.development'
 
 const Navbar = (props) => {
     const { user } = props
@@ -24,6 +25,15 @@ const Navbar = (props) => {
             setNewPostOn(true)
         }
     }
+
+    let newPost = null
+    useEffect(() => {
+        if (newPostOn != true) {
+            newPost = null
+        } else {
+            newPost = <NewPost setNewPostOn={setNewPostOn} />
+        }
+    }, newPostOn)
 
     const renderNewPost = () => {
         if (newPostOn == true) {
@@ -64,7 +74,7 @@ const Navbar = (props) => {
                 <img class="notifications-button" onClick={clickNotifications} />
                 <img class="messages-button" onClick={clickMessages} />
             </div>
-            {renderNewPost}
+            {newPost}
         </div>
     )
 }

@@ -3,7 +3,7 @@ import { uploadFile } from '../firebase/storage'
 import { newPost } from '../firebase/posts'
 
 const NewPost = (props) => {
-    const { newPostOn, setNewPostOn } = props
+    const { setNewPostOn } = props
 
     const inputRef = useRef()
 
