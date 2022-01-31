@@ -2,7 +2,7 @@ import { checkForFollow, addFollow, removeFollow } from '../firebase/followers.j
 import { useState } from 'react'
 
 const FollowButton = async (props) => {
-    const { otherUserId } = props
+    const { userId } = props
 
     // Init followText & followButtonClass states
     const isFollowing = await checkForFollow(otherUserId)
@@ -13,19 +13,19 @@ const FollowButton = async (props) => {
             return 'Unfollow'
         }
     })
-    const [followButtonClass, setFollowButtonClass] = useState('like-follow-button-loaded')
+    const [followButtonClass, setFollowButtonClass] = useState('follow-button-loaded')
 
     // Update follow status & associated states
     const clickFollow = async () => {
-        setFollowButtonClass('like-follow-button-not-loaded')
+        setFollowButtonClass('follow-button-not-loaded')
         if (followText == 'Follow') {
             await addFollow(userId)
             setFollowText('Unfollow')
-            setFollowButtonClass('like-follow-button-loaded')
+            setFollowButtonClass('follow-button-loaded')
         } else {
             await removeFollow(userId)
             setFollowText('Follow')
-            setFollowButtonClass('like-follow-button-loaded')
+            setFollowButtonClass('follow-button-loaded')
         }
     }
 
