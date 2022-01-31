@@ -81,7 +81,7 @@ const PostPage = async (props) => {
                             <div class='post-user-link-username'></div>
                         </div>
                     </Link>
-                    <div class="post-text"></div>
+                    <div class="post-text">{postText}</div>
                 </div>
                 {commentsSection}
                 <div class="post-right-bottom">
