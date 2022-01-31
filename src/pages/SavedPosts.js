@@ -12,7 +12,7 @@ const SavedPosts = async (props) => {
     }
 
     // Init postsNumber state
-    const [postsNumber, setPostsNumber] = await useState(10)
+    const [postsNumber, setPostsNumber] = await useState(18)
 
     // Init posts state
     const postsArr = await findSaves(postsNumber)
@@ -20,9 +20,16 @@ const SavedPosts = async (props) => {
 
     // Load-more function that updates the posts reel
     const loadMore = () => {
-        const newPostsNumber = postsNumber + 10
+        const newPostsNumber = postsNumber + 18
         setPostsNumber(newPostsNumber)
     }
+
+    // Load more content when user reaches bottom of document
+    window.addEventListener(() => {
+        if ((window.innerHeight + Math.ceil(window.pageYOffset)) >= document.body.offsetHeight - 2) {
+            loadMore()
+      }
+    })
 
     // Load More button
     const LoadButton = (

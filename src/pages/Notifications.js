@@ -75,6 +75,13 @@ const Notifications = async (props) => {
         setNotifNumber(newNotifNumber)
     }
 
+    // Load more content when user reaches bottom of document
+    window.addEventListener(() => {
+        if ((window.innerHeight + Math.ceil(window.pageYOffset)) >= document.body.offsetHeight - 2) {
+            loadMore()
+      }
+    })
+
     // Load More button
     const LoadButton = (
         <div id='notifications-load-button' onClick={loadMore}>Load More</div>

@@ -21,6 +21,13 @@ const Home = async (props) => {
         setPostsNumber(newPostsNumber)
     }
 
+    // Load more content when user reaches bottom of document
+    window.addEventListener(() => {
+        if ((window.innerHeight + Math.ceil(window.pageYOffset)) >= document.body.offsetHeight - 2) {
+            loadMore()
+      }
+    })
+
     // Load More button
     const LoadButton = (
         <div id='home-load-button' onClick={loadMore}>Load More</div>
