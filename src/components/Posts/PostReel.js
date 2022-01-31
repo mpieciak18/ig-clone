@@ -70,6 +70,7 @@ const PostReel = async (props) => {
 
     return (
         <div class="single-post-component">
+            {likes}
             <div class="post-top"></div>
                 <div class="post-top-left">
                     <Link class="post-user-link" to={`/${postOwnerId}`}>
