@@ -25,8 +25,14 @@ const Notifications = async (props) => {
         </div>
     )
 
+    // Init notifications number state
     const [notifNumber, setNotifNumber] = useState(10)
-    const [notifs, setNotifs] = await getNotifications(10) 
+
+    // Init notifications array state
+    const [notifs, setNotifs] = useState(await getNotifications(10))
+
+     // Init all loaded state
+    const [allLoaded, setAllLoaded] = useState(false)
 
     const notifications = () => {
         return (
@@ -71,8 +77,10 @@ const Notifications = async (props) => {
 
     // Load-more function that updates the posts reel
     const loadMore = async () => {
-        const newNotifNumber = notifNumber + 10
-        setNotifNumber(newNotifNumber)
+        if (allLoaded == false) {
+            const newNotifNumber = notifNumber + 10
+            setNotifNumber(newNotifNumber)
+        }
     }
 
     // Load more content when user reaches bottom of document
@@ -86,6 +94,9 @@ const Notifications = async (props) => {
     useEffect(async () => {
         const newNotifsArr = await getNotifications(notifNumber)
         setNotifs(newPostsArr)
+        if (newNotifsArr.length < notifNumber) {
+            setAllLoaded(true)
+        }
     }, notifNumber)
 
     return (

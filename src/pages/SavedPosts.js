@@ -2,6 +2,7 @@ import '../styles/pages/SavedPosts.css'
 import { findSaves } from '../firebase/saves.js'
 import { PostPreview } from '../components/PostPreview.js'
 import { useLocation, Navigate } from 'react-router-dom'
+import { useState } from 'react'
 
 const SavedPosts = async (props) => {
     // Redirect to signup page if not signed in
@@ -18,10 +19,15 @@ const SavedPosts = async (props) => {
     const postsArr = await findSaves(postsNumber)
     const [posts, setPosts] = useState(postsArr)
 
+    // Init all loaded state
+    const [allLoaded, setAllLoaded] = useState(false)
+
     // Load-more function that updates the posts reel
     const loadMore = () => {
-        const newPostsNumber = postsNumber + 18
-        setPostsNumber(newPostsNumber)
+        if (allLoaded == false) {
+            const newPostsNumber = postsNumber + 18
+            setPostsNumber(newPostsNumber)
+        }
     }
 
     // Load more content when user reaches bottom of document
@@ -35,6 +41,9 @@ const SavedPosts = async (props) => {
     useEffect(async () => {
         const newPostsArr = await findPosts(postsNumber)
         setPosts(newPostsArr)
+        if (newPostsArr.length < postsNumber) {
+            setAllLoaded(true)
+        }
     }, postsNumber)
 
     const posts = (

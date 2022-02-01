@@ -21,6 +21,8 @@ const PostPage = async (props) => {
         const array = await getComments(postId, postOwnerId, commentQuantity)
         return array.reverse()
     })
+    const [allLoaded, setAllLoaded] = useState(false)
+
     const commentsSection = (
         <div class="post-comments" onScroll={loadMore}>
             {comments.map(async (comment) => {
@@ -53,11 +55,15 @@ const PostPage = async (props) => {
         const array = await getComments(postId, postOwnerId, commentQuantity)
         array.reverse()
         setComments(array)
+        if (array.length < commentQuantity) {
+            setAllLoaded(true)
+        }
     }
     // Load more comments
     const loadMore = (e) => {
         const elem = e.target
-        if (Math.ceil(elem.scrollHeight - elem.scrollTop) == elem.clientHeight) {
+        if ((Math.ceil(elem.scrollHeight - elem.scrollTop) == elem.clientHeight) &&
+        (allLoaded == false)) {
             const newCommentQuantity = commentQuantity + 20
             setCommentQuantity(newCommentQuantity)
         }

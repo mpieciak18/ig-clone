@@ -24,10 +24,15 @@ const Profile = async (props) => {
     const postsArr = await findPostsFromUser(postsNumber)
     const [posts, setPosts] = useState(postsArr)
 
+    // Init all loaded state
+    const [allLoaded, setAllLoaded] = useState(false)   
+
     // Load-more function that updates the posts reel
     const loadMore = () => {
-        const newPostsNumber = postsNumber + 18
-        setPostsNumber(newPostsNumber)
+        if (allLoaded == false) {
+            const newPostsNumber = postsNumber + 18
+            setPostsNumber(newPostsNumber)
+        }
     }
 
     // Load more content when user reaches bottom of document
@@ -41,6 +46,9 @@ const Profile = async (props) => {
     useEffect(async () => {
         const newPostsArr = await findPosts(postsNumber)
         setPosts(newPostsArr)
+        if (newPostsArr.length < postsNumber) {
+            setAllLoaded(true)
+        }
     }, postsNumber)
 
     // Posts section

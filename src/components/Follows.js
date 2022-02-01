@@ -27,6 +27,9 @@ const Follows = async (props) => {
     // Init following/follower users count
     const [usersNumber, setUsersNumber] = useState(20)
 
+    // Init all loaded state
+    const [allLoaded, setAllLoaded] = useState(false)
+
     // Init followers & following button classes
     const [followingButtonClass, setFollowingButtonClass] = useState(() => {
         if (followingVsFollower = 'following') {
@@ -60,13 +63,20 @@ const Follows = async (props) => {
     // Load more follows/followers when user reaches bottom of pop-up
     const loadMore = (e) => {
         const elem = e.target
-        if (Math.ceil(elem.scrollHeight - elem.scrollTop) == elem.clientHeight) {
+        if ((Math.ceil(elem.scrollHeight - elem.scrollTop) == elem.clientHeight) &&
+        (allLoaded == false)) {
             const newUsersNumber = usersNumber + 20
             setUsersNumber(newUsersNumber)
+            let newUsers 
             if (followingVsFollower == 'follower') {
-                setUsers(getFollowers(userId, newUsersNumber))
+                newUsers = await getFollowers(userId, newUsersNumber)
+                setUsers(newUsers)
             } else {
-                setUsers(getFollowing(userId, newUsersNumber))
+                newUsers = await getFollowing(userId, newUsersNumber)
+                setUsers(newUsers)
+            }
+            if (newUsers.length < newUsersNumber) {
+                setAllLoaded(true)
             }
         }
     }
@@ -98,8 +108,14 @@ const Follows = async (props) => {
     }
 
     // Event handlers for header buttons
-    const followersClick = () => setFollowingVsFollower('followers')
-    const followingClick = () => setFollowingVsFollower('following')
+    const followersClick = () => {
+        setFollowingVsFollower('followers')
+        setAllLoaded(false)
+    }
+    const followingClick = () => {
+        setFollowingVsFollower('following')
+        setAllLoaded(false)
+    }
 
     return (
         <div id="follow" onClick={hideFollows}>

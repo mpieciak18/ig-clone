@@ -4,6 +4,7 @@ import { Navbar } from '../components/Navbar.js'
 import { PostReel } from '../components/Posts/PostReel.js'
 import { UserCard } from '../components/UserCard.js'
 import { useEffect } from 'react'
+import { useState } from 'react/cjs/react.development'
 
 const Home = async (props) => {
     const { user } = props
@@ -15,10 +16,15 @@ const Home = async (props) => {
     const postsArr = await findPosts(postsNumber)
     const [posts, setPosts] = useState(postsArr)
 
+    // Init all loaded state
+    const [allLoaded, setAllLoaded] = useState(false)
+
     // Load-more function that updates the posts reel
     const loadMore = () => {
-        const newPostsNumber = postsNumber + 10
-        setPostsNumber(newPostsNumber)
+        if (allLoaded == false) {
+            const newPostsNumber = postsNumber + 10
+            setPostsNumber(newPostsNumber)
+        }
     }
 
     // Load more content when user reaches bottom of document
@@ -32,6 +38,9 @@ const Home = async (props) => {
     useEffect(async () => {
         const newPostsArr = await findPosts(postsNumber)
         setPosts(newPostsArr)
+        if (newPostsArr.length < postsNumber) {
+            setAllLoaded(true)
+        }
     }, postsNumber)
 
     const posts = (
