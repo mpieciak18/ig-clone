@@ -28,7 +28,7 @@ const Notifications = async (props) => {
     const [notifNumber, setNotifNumber] = useState(10)
     const [notifs, setNotifs] = await getNotifications(10) 
 
-    const Notifications = () => {
+    const notifications = () => {
         return (
             <div id='notifications-content'>
                 {notifs.map(async (notif) => {
@@ -82,11 +82,6 @@ const Notifications = async (props) => {
       }
     })
 
-    // Load More button
-    const LoadButton = (
-        <div id='notifications-load-button' onClick={loadMore}>Load More</div>
-    )
-
     // Update notifications state when notifNumber state changes
     useEffect(async () => {
         const newNotifsArr = await getNotifications(notifNumber)
@@ -101,8 +96,7 @@ const Notifications = async (props) => {
                 <div id="notification-header-text">Notifications</div>
             </div>
             <div id="notifications-parent">
-                {Notifications}
-                {LoadButton}
+                {notifications}
             </div>
         </div>
     )

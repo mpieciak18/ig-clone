@@ -31,18 +31,13 @@ const SavedPosts = async (props) => {
       }
     })
 
-    // Load More button
-    const LoadButton = (
-        <div id='load-more-button' onClick={loadMore}>Load More</div>
-    )
-
     // Update posts state when postsNumber state changes
     useEffect(async () => {
         const newPostsArr = await findPosts(postsNumber)
         setPosts(newPostsArr)
     }, postsNumber)
 
-    const Posts = (
+    const posts = (
         <div id='saved-posts'>
             <div id='saved-posts-title'>Saved Posts</div>
             {posts.map((post) => {
@@ -66,8 +61,7 @@ const SavedPosts = async (props) => {
         <div id='saved' class='page'>
             <Navbar user={user} />
             <UserCard user={user} />
-            {Posts}
-            {LoadButton}
+            {posts}
         </div>
     )
 }

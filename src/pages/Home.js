@@ -28,18 +28,13 @@ const Home = async (props) => {
       }
     })
 
-    // Load More button
-    const LoadButton = (
-        <div id='home-load-button' onClick={loadMore}>Load More</div>
-    )
-
     // Update posts state when postsNumber state changes
     useEffect(async () => {
         const newPostsArr = await findPosts(postsNumber)
         setPosts(newPostsArr)
     }, postsNumber)
 
-    const Posts = (
+    const posts = (
         <div id='home-posts'>
             {posts.map((post) => {
                 return (
@@ -62,8 +57,7 @@ const Home = async (props) => {
         <div id='home' class='page'>
             <Navbar user={user} />
             <UserCard user={user} />
-            {Posts}
-            {LoadButton}
+            {posts}
         </div>
     )
 }

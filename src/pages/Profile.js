@@ -37,11 +37,6 @@ const Profile = async (props) => {
       }
     })
 
-    // Load More button
-    const LoadButton = (
-        <div id='load-more-button' onClick={loadMore}>Load More</div>
-    )
-
     // Update posts state when postsNumber state changes
     useEffect(async () => {
         const newPostsArr = await findPosts(postsNumber)
@@ -49,7 +44,7 @@ const Profile = async (props) => {
     }, postsNumber)
 
     // Posts section
-    const Posts = (
+    const posts = (
         <div id='user-posts'>
             {posts.map((post) => {
                 return (
@@ -77,8 +72,7 @@ const Profile = async (props) => {
                 </div>
                 <div id='profile-contents-right'>
                     <ProfileButtons self={user} userId={otherUserId} />
-                    {Posts}
-                    {LoadButton}
+                    {posts}
                 </div>
             </div>
         </div>
