@@ -1,30 +1,39 @@
 import '.../styles/components/Profile/ProfileButtons.css'
-import { checkForFollow, addFollow, removeFollow } from '../firebase/followers.js'
-import { useHistory } from 'react-router-dom'
-import { useState } from 'react'
 import { FollowButton } from '../FollowButton.js'
+import { Navigate } from 'react-router-dom'
+import { signOutUser } from '../../firebase/users.js'
 
 const ProfileButtons = async (props) => {
-    const { userId } = props
+    const { self, userId } = props
 
-    // Set up history & back function
-    const history = useHistory()
-    const goBack = () => {history.goBack()}
+    // Logs user out
+    const logout = async () => {
+        await signOutUser()
+        return <Navigate to='/' />
+    }
 
-    return (
-        <div id='buttons-section'>
-            <div id='post-back-button' onClick={goBack}>
-                <div id='back-arrow'>⇽</div>
-                <div id='back-text'>Go Back</div>
+    // Sends user to settings
+    const settings = () => {
+        return <Navigate to='/settings' />
+    }
+
+    if (self.id == userId) {
+        return (
+            <div id='profile-buttons-section'>
+                <div id='profile-settings-button' onClick={settings}>Settings</div>
+                <div id='profile-logout-button' onClick={logout}>Logout</div>
             </div>
-            <div id='buttons-section-right'>
+        )
+    } else {
+        return (
+            <div id='profile-buttons-section'>
                 <FollowButton userId={userId} />
-                <div id='direct-message-button-container'>
-                    <img id='direct-message-button' />
+                <div id='profile-direct-message-button-container'>
+                    <img id='profile-direct-message-button' />
                 </div>
             </div>
-        </div>
-    )
+        )
+    }
 }
 
 export { ProfileButtons }

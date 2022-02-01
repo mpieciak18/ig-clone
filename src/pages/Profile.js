@@ -76,7 +76,7 @@ const Profile = async (props) => {
                     <ProfileCard user={otherUser}/>
                 </div>
                 <div id='profile-contents-right'>
-                    <ProfileButtons userId={otherUserId} />
+                    <ProfileButtons self={user} userId={otherUserId} />
                     {Posts}
                     {LoadButton}
                 </div>
