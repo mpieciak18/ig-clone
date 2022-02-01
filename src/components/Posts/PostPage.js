@@ -22,7 +22,7 @@ const PostPage = async (props) => {
         return array.reverse()
     })
     const commentsSection = (
-        <div class="post-comments">
+        <div class="post-comments" onScroll={loadMore}>
             {comments.map(async (comment) => {
                 const commenterId = comment.data.user
                 const commenter = await findUser(commenterId)
@@ -46,20 +46,21 @@ const PostPage = async (props) => {
                     </div>
                 )
             })}
-            {/* Load-More button */}
-            <div id='load-more-button' onClick={loadMore}>Load More</div>
         </div>
     )
-    // Update comments section upon new comment submission or load more click
+    // Update comments section upon new comment submission or scroll-to-bottom
     const updateComments = async () => {
         const array = await getComments(postId, postOwnerId, commentQuantity)
         array.reverse()
         setComments(array)
     }
     // Load more comments
-    const loadMore = () => {
-        const newCommentQuantity = commentQuantity + 10
-        setCommentQuantity(newCommentQuantity)
+    const loadMore = (e) => {
+        const elem = e.target
+        if (Math.ceil(elem.scrollHeight - elem.scrollTop) == elem.clientHeight) {
+            const newCommentQuantity = commentQuantity + 20
+            setCommentQuantity(newCommentQuantity)
+        }
     }
     useEffect(() => {
         updateComments()

@@ -9,6 +9,7 @@ import {
     getDoc,
     query,
     where,
+    limit,
     getDocs
  } from 'firebase/firestore'
  import { findUser } from './users.js'
@@ -86,9 +87,10 @@ const likeExists = async (postId, postOwnerId) => {
 }
 
 // Retrieve all users who like a post
-const getLikes = async (postId, postOwnerId) => {
+const getLikes = async (postId, postOwnerId, arrQuantity) => {
     const likesRef = getLikesRef(postOwnerId, postId)
-    const likesDocs = await getDocs(likesRef)
+    const likesQuery = query(likesRef, limit(arrQuantity))
+    const likesDocs = await getDocs(likesQuery)
     return likesDocs.map((like) => {
         const user = await findUser(like.data.user)
         return user

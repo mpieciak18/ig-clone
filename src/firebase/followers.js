@@ -9,6 +9,7 @@ import {
     getDoc,
     getDocs,
     query,
+    limit,
     where
  } from 'firebase/firestore'
 
@@ -123,18 +124,20 @@ const checkForFollow = async (otherUserId) => {
 }
 
 // Return array of user id's that given user follows
-const getFollowing = async (userId) => {
-    const followingsRef = getFollowingsRef(userId)
-    const followingsDocs = await getDocs(followingsRef)
+const getFollowing = async (userId, arrQuantity) => {
+    const followingsRef = getFollowingsRef(userId, arrQuantity)
+    const followingsQuery = query(followingsRef, limit(arrQuantity))
+    const followingsDocs = await getDocs(followingsQuery)
     return followingsDocs.map(async (following) => {
         return await following.data().otherUser
     })
 }
 
 // Return array of user id's that follow the given user
-const getFollowers = async (userId) => {
-    const followersRef = getFollowersRef(userId)
-    const followersDocs = await getDocs(followersRef)
+const getFollowers = async (userId, arrQuantity) => {
+    const followersRef = getFollowersRef(userId, arrQuantity)
+    const followersQuery = query(followersRef, limit(arrQuantity))
+    const followersDocs = await getDocs(followersQuery)
     return followersDocs.map(async (follower) => {
         return await follower.data().otherUser
     })

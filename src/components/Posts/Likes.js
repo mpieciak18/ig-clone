@@ -1,11 +1,33 @@
 import { Navigate } from 'react-router-dom'
+import { useState } from 'react'
 import { getLikes } from '../../firebase/likes.js'
 import { getUrl } from '../../firebase/storage.js'
 import { FollowButton } from '../FollowButton.js'
 import '../../styles/components/Posts/Likes.css'
+import { useEffect } from 'react/cjs/react.development'
 
 const Likes = async (props) => {
     const { setLikesOn, postId, postOwnerId } = props
+
+    // Init likesNumber state
+    const [likesNumber, setLikesNumber] = useState(20)
+
+    // Init users state
+    const [users, setUsers] = useState(await getLikes(postId, postOwnerId, 20))
+
+    // Update users when likesNumber changes
+    useEffect(() => {
+        setUsers(await getLikes(postId, postOwnerId, likesNumber))
+    }, likesNumber)
+
+    // Load more likes when user reaches bottom of pop-up
+    const loadMore = (e) => {
+        const elem = e.target
+        if (Math.ceil(elem.scrollHeight - elem.scrollTop) == elem.clientHeight) {
+            const newLikesNumber = likesNumber + 20
+            setLikesNumber(newLikesNumber)
+        }
+    }
 
     // Closes likes pop-up
     const hideLikes = (e) => {
@@ -17,9 +39,8 @@ const Likes = async (props) => {
 
     // Renders like of users who liked the post
     const likesList = async () => {
-        const users = await getLikes(postId, postOwnerId)
         return (
-            <div id='likes-list'>
+            <div id='likes-list' onScroll={loadMore}>
                 {users.map(async (user) => {
                     const redirect = () => <Navigate to={`/${user.id}`} />
                     const image = await getUrl(user.data.image)

@@ -17,23 +17,26 @@ const Follows = async (props) => {
 
     // Init following/follower users arr state
     const [users, setUsers] = useState(() => {
-        if (initState == 'following') {
+        if (followingVsFollower == 'following') {
             return getFollowing(userId)
         } else {
             return getFollowers(userId)
         }
     })
 
+    // Init following/follower users count
+    const [usersNumber, setUsersNumber] = useState(20)
+
     // Init followers & following button classes
     const [followingButtonClass, setFollowingButtonClass] = useState(() => {
-        if (initState = 'following') {
+        if (followingVsFollower = 'following') {
             return 'active'
         } else {
             return 'inactive'
         }
     })
     const [followersButtonClass, setFollowerButtonClass] = useState(() => {
-        if (initState = 'follower') {
+        if (followingVsFollower = 'follower') {
             return 'active'
         } else {
             return 'inactive'
@@ -42,21 +45,36 @@ const Follows = async (props) => {
 
     // Change users & buttons states when followingVsFollower state changes
     useEffect(() => {
+        setUsersNumber(20)
         if (followingVsFollower == 'follower') {
             setFollowerButtonClass('follower-button active')
             setFollowingButtonClass('following-button')
-            setUsers(getFollowers(userId))
+            setUsers(getFollowers(userId, 20))
         } else {
             setFollowerButtonClass('follower-button')
             setFollowingButtonClass('following-button active')
-            setUsers(getFollowing(userId))
+            setUsers(getFollowing(userId, 20))
         }
     }, followingVsFollower)
+
+    // Load more follows/followers when user reaches bottom of pop-up
+    const loadMore = (e) => {
+        const elem = e.target
+        if (Math.ceil(elem.scrollHeight - elem.scrollTop) == elem.clientHeight) {
+            const newUsersNumber = usersNumber + 20
+            setUsersNumber(newUsersNumber)
+            if (followingVsFollower == 'follower') {
+                setUsers(getFollowers(userId, newUsersNumber))
+            } else {
+                setUsers(getFollowing(userId, newUsersNumber))
+            }
+        }
+    }
 
     // Renders list of followers/following
     const followsList = async () => {
         return (
-            <div id='follows-list'>
+            <div id='follows-list' onScroll={loadMore}>
                 {users.map(async (user) => {
                     const redirect = () => <Navigate to={`/${user.id}`} />
                     const image = await getUrl(user.data.image)
