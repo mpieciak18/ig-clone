@@ -5,13 +5,7 @@ import '../../styles/components/FollowerFollowing.css'
 import { useEffect, useState } from 'react'
 
 const Follows = async (props) => {
-    const { setFollowsOn, userId } = props
-
-    // Init state = 'follower' or 'following'
-    const initState = props.followVsFollower || 'following'
-
-    // Init followingVsFollower state
-    const [followingVsFollower, setFollowingVsFollower] = useState(initState)
+    const { setFollowsOn, userId, followingVsFollower, setFollowingVsFollower } = props
 
     // Closes follows pop-up
     const hideFollows = (e) => {

@@ -73,7 +73,7 @@ const Profile = async (props) => {
             <Navbar user={user} />
             <div id='profile-contents'>
                 <div id='profile-contents-left'>
-                    <ProfileCard user={otherUser.data}/>
+                    <ProfileCard user={otherUser}/>
                 </div>
                 <div id='profile-contents-right'>
                     <ProfileButtons userId={otherUserId} />

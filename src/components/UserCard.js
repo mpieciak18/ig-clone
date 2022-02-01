@@ -1,8 +1,44 @@
 import { Link } from "react-router-dom"
 import { getUrl } from "../firebase/storage"
+import { Follows } from "./Follows"
 
 const UserCard = (props) => {
     const { user } = props
+
+    // Init state to show/hide Follows pop-up
+    const [followsOn, setFollowsOn] = useState(false)
+
+    // Init state to determine if pop-up shows following or followers
+    const [followingVsFollower, setFollowingVsFollower] = useState('following')
+
+    // Open Follows pop-up (following)
+    const clickFollowing = () => {
+        setFollowingVsFollower('following')
+        setFollowsOn(true)
+    }
+
+    // Open Follows pop-up (followers)
+    const clickFollowers = () => {
+        setFollowingVsFollower('followers')
+        setFollowsOn(true)
+    }
+
+    // Renders Follows pop-up when followsOn == true
+    let follows = null
+    useEffect(() => {
+        if (followsOn == false) {
+            follows = null
+        } else {
+            follows = (
+                <Follows
+                    setFollowsOn={setFollowsOn}
+                    userId={user.id}
+                    followingVsFollower={followingVsFollower}
+                    setFollowingVsFollower={setFollowingVsFollower}
+                />
+            )
+        }
+    }, followsOn)
 
     if (user.loggedIn == false) {
         return (
@@ -28,13 +64,14 @@ const UserCard = (props) => {
                     </div>
                     <div id='user-card-following'>
                         <p className='user-stats-child'>{user.following}</p>
-                        <p className='user-stats-child'>Following</p>
+                        <p className='user-stats-child' onClick={clickFollowing}>Following</p>
                     </div>
                     <div id='user-card-followers'>
                         <p className='user-stats-child'>{user.followers}</p>
-                        <p className='user-stats-child'>Followers</p>
+                        <p className='user-stats-child' onClick={clickFollowers}>Followers</p>
                     </div>
                 </div>
+                {follows}
             </div>
         )
     }
