@@ -4,11 +4,11 @@ import {timeSinceTrunc} from '../../other/timeSinceTrunc.js'
 
 // Component for each available convo in the convo list
 const ConvoPreview = async (props) => {
-    const { user, otherUserId, lastMessage, currentConvo, viewSingleConvo } = props
+    const { user, otherUserId, lastMessage, currConvo, viewSingleConvo } = props
     
     // Determine init value for convoPreviewClass state
     let initClass
-    if (currentConvo == true) {
+    if (currConvo.id == otherUserId) {
         initClass = 'convo-prevew current'
     } else {
         initClass = 'convo-preview' 
@@ -19,7 +19,7 @@ const ConvoPreview = async (props) => {
 
     // Update convoPreviewClass based on currentConvo
     const updateClass = () => {
-        if (currentConvo == true) {
+        if (currConvo.id == otherUserId) {
             setConvoPreviewClass('convo-preview current')
         } else {
             setConvoPreviewClass('convo-preview')
@@ -29,7 +29,7 @@ const ConvoPreview = async (props) => {
     // Trigger updateclass() whenever currentConvo changes
     useEffect(() => {
         updateClass()
-    }, [currentConvo])
+    }, [currConvo])
 
     // Time since last message
     const time = timeSinceTrunc(lastMessage.data.date)

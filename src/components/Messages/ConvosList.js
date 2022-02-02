@@ -5,35 +5,53 @@ import ConvoPreview from '../components/ConvoPreview.js'
 // Clicking on a ConvoPreview subcomponent will then render it on the CurrentConvo
 // sibling component, found on the Messages page.
 const ConvosList = (props) => {
-    const { user, componentClass, convos, currentConvo, viewSingleConvo } = props
+    const { user, componentClass, convos, currConvo, viewSingleConvo, recipient, setConvos } = props
+
+    // Update convos list if a recipient is designated
+    if (recipient != undefined) {
+        // Check if recipient is in pre-existing convo
+        const convosItem = convos.find((user) => {
+            return user.id == recipient
+        })
+        // Move recipient's convo to the front of the list if pre-existing
+        if (convosItem != undefined) {
+            const index = convos.indexOf(convosItem)
+            const newConvos = [convosItem, ...convos.slice(0, index), ...convos.slice(index + 1)]
+            setConvos(newConvos)
+        } else {
+            const newConvo = {
+                id: recipient,
+                lastMessage: {
+                    id: 'test',
+                    data: {
+                        sender: '',
+                        recipient: '',
+                        date: '',
+                        message: '',
+                        senderChange: ''
+                    }
+                }
+            }
+            const newConvos = [newConvo, ...convos]
+            setConvos(newConvos)
+        }
+    }
 
     // JSX element containing child elements that display each
     // available convo in the users messages.
-    const AllConvosList = (
+    const allConvosList = (
         <div id='convos-list-bottom'>
             {convos.map((convo) => {
-                    if (currentConvo.otherUserId == convo.id) {
-                        return (
-                            <ConvoPreview
-                                eventHandler={() => viewSingleConvo}
-                                user={user}
-                                otherUserId={convo.id}
-                                lastMessage={convo.lastMessage}
-                                currentConvo={true}
-                            />
-                        )
-                    } else {
-                        return (
-                            <ConvoPreview
-                                eventHandler={() => viewSingleConvo}
-                                user={user}
-                                otherUserId={convo.id}
-                                lastMessage={convo.lastMessage}
-                                currentConvo={false}
-                            />
-                        )
-                    }
-                })}
+                return (
+                    <ConvoPreview
+                        eventHandler={viewSingleConvo}
+                        user={user}
+                        otherUserId={convo.id}
+                        lastMessage={convo.lastMessage}
+                        currConvo={currConvo}
+                    />
+                )
+            })}
         </div>
     )
 
@@ -46,7 +64,7 @@ const ConvosList = (props) => {
                 </div>
                 <img id='convos-list-message-icon' />
             </div>
-            {AllConvosList}
+            {allConvosList}
         </div>
     )
 }

@@ -7,28 +7,33 @@ const ProfileButtons = async (props) => {
     const { self, userId } = props
 
     // Logs user out
-    const logout = async () => {
+    const clickLogout = async () => {
         await signOutUser()
         return <Navigate to='/' />
     }
 
     // Sends user to settings
-    const settings = () => {
+    const clickSettings = () => {
         return <Navigate to='/settings' />
+    }
+
+    // Sends user to messages
+    const clickMessages = () => {
+        return <Navigate to='/messages' recipient={userId} />
     }
 
     if (self.id == userId) {
         return (
             <div id='profile-buttons-section'>
-                <div id='profile-settings-button' onClick={settings}>Settings</div>
-                <div id='profile-logout-button' onClick={logout}>Logout</div>
+                <div id='profile-settings-button' onClick={clickSettings}>Settings</div>
+                <div id='profile-logout-button' onClick={clickLogout}>Logout</div>
             </div>
         )
     } else {
         return (
             <div id='profile-buttons-section'>
                 <FollowButton userId={userId} />
-                <div id='profile-direct-message-button-container'>
+                <div id='profile-direct-message-button-container' onClick={clickMessages}>
                     <img id='profile-direct-message-button' />
                 </div>
             </div>

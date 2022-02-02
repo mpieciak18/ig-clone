@@ -36,6 +36,14 @@ const Messages = async (props) => {
         setCurrConvo({otherUserId: otherUserId, messages: messages})
     }
 
+    // Check if coming from user profile
+    const recipient = props.recipient
+
+    // View single convo  if coming from user profile
+    if (recipient != undefined) {
+        viewSingleConvo(recipient)
+    }
+
     return (
         <div id='messages' class='page'>
             <Navbar user={user} />
@@ -44,8 +52,10 @@ const Messages = async (props) => {
                     user={user}
                     componentClass={convosListClass}
                     convos={convos}
+                    setConvos={setConvos}
                     currConvo={currConvo}
                     viewSingleConvo={viewSingleConvo}
+                    recipient={recipient}
                 />
                 <CurrentConvo
                     user={user}
