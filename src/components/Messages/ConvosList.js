@@ -5,12 +5,7 @@ import ConvoPreview from '../components/ConvoPreview.js'
 // Clicking on a ConvoPreview subcomponent will then render it on the CurrentConvo
 // sibling component, found on the Messages page.
 const ConvosList = (props) => {
-    const { user, componentClass, convos, currentConvo, eventHandler } = props
-
-    // Method passed from Messages to ConvosList to ConvoPreview
-    const viewSingleConvo = (convoId) => {
-        eventHandler(convoId)
-    }
+    const { user, componentClass, convos, currentConvo, viewSingleConvo } = props
 
     // JSX element containing child elements that display each
     // available convo in the users messages.

@@ -45,13 +45,13 @@ const Messages = async (props) => {
                     componentClass={convosListClass}
                     convos={convos}
                     currConvo={currConvo}
-                    eventHandler={() => viewSingleConvo}
+                    viewSingleConvo={viewSingleConvo}
                 />
                 <CurrentConvo
                     user={user}
                     componentClass={currConvoClass}
                     currConvo={currConvo}
-                    eventHandler={() => viewAllConvos}
+                    viewAllConvos={viewAllConvos}
                 />
             </div>
         </div>

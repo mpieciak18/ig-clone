@@ -4,12 +4,7 @@ import {timeSinceTrunc} from '../../other/timeSinceTrunc.js'
 
 // Component for each available convo in the convo list
 const ConvoPreview = async (props) => {
-    const { user, otherUserId, lastMessage, currentConvo, eventHandler } = props
-
-    // Trigger viewSingleConvo() from Messages.js
-    const viewSingleConvo = () => {
-        eventHandler(otherUserId)
-    }
+    const { user, otherUserId, lastMessage, currentConvo, viewSingleConvo } = props
     
     // Determine init value for convoPreviewClass state
     let initClass
@@ -40,7 +35,7 @@ const ConvoPreview = async (props) => {
     const time = timeSinceTrunc(lastMessage.data.date)
 
     return (
-        <div className={convoPreviewClass} onClick={() => viewSingleConvo}>
+        <div className={convoPreviewClass} onClick={() => viewSingleConvo(otherUserId)}>
             <img className='convo-preview-left' />
             <div className='convo-preview-right'>
                 <div className='convo-preview-name'></div>

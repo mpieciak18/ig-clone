@@ -3,7 +3,7 @@ import { sendMessage } from '../firebase/directmessages.js'
 import { ConvoMessageBlock } from '../components/ConvoPreview.js'
 
 const CurrentConvo = (props) => {
-    const { user, componentClass, currentConvo, eventHandler } = props
+    const { user, componentClass, currentConvo, viewAllConvos } = props
 
     // Add new message to specific convo in db
     const sendNewMessage = async (event) => {
@@ -13,13 +13,9 @@ const CurrentConvo = (props) => {
         await sendMessage(comment, otherUserId)
     }
 
-    const viewAllConvos = () => {
-        eventHandler()
-    }
-
     return (
         <div id="single-convo" class={componentClass}>
-            <div id="single-convo-back-button" onClick={() => viewAllConvos}>
+            <div id="single-convo-back-button" onClick={viewAllConvos}>
                 <div id='single-convo-back-arrow'>⇽</div>
                 <div id='single-convo-back-text'>Back to Messages</div>
             </div>
@@ -34,7 +30,7 @@ const CurrentConvo = (props) => {
                     )
                 })}
             </div>
-            <form class="single-convo-message-bar" onSubmit={() => sendNewMessage}>
+            <form class="single-convo-message-bar" onSubmit={sendNewMessage}>
                 <input type="text" name="message" class="single-convo-message-bar-input" placeholder="Send a message..." />
                 <button type="submit" class="single-convo-message-button">
                     <img class="single-convo-message-button-icon" />
