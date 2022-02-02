@@ -1,64 +1,46 @@
 import '../styles/components/Messages/ConvosList.css'
-import ConvoPreview from '../components/ConvoPreview.js'
+import { timeSinceTrunc } from '../../other/timeSinceTrunc.js'
+import { getUrl } from '../../firebase/storage.js'
 
-// Component for the list of all available convos in a user's messages page.
-// Clicking on a ConvoPreview subcomponent will then render it on the CurrentConvo
-// sibling component, found on the Messages page.
+// Component list all available convos in a user's messages
 const ConvosList = (props) => {
-    const { user, componentClass, convos, currConvo, viewSingleConvo, recipient, setConvos } = props
+    const { user, convosArr } = props
 
-    // Update convos list if a recipient is designated
-    if (recipient != undefined) {
-        // Check if recipient is in pre-existing convo
-        const convosItem = convos.find((user) => {
-            return user.id == recipient
-        })
-        // Move recipient's convo to the front of the list if pre-existing
-        if (convosItem != undefined) {
-            const index = convos.indexOf(convosItem)
-            const newConvos = [convosItem, ...convos.slice(0, index), ...convos.slice(index + 1)]
-            setConvos(newConvos)
-        } else {
-            const newConvo = {
-                id: recipient,
-                lastMessage: {
-                    id: 'test',
-                    data: {
-                        sender: '',
-                        recipient: '',
-                        date: '',
-                        message: '',
-                        senderChange: ''
-                    }
-                }
-            }
-            const newConvos = [newConvo, ...convos]
-            setConvos(newConvos)
-        }
+    // Redirect to inidividual conversation page
+    const redirect = (userId) => {
+        return <Navigate to={`/messages/${userId}`} />
     }
 
-    // JSX element containing child elements that display each
-    // available convo in the users messages.
+    // Renders individual convo preview
+    const convoPreview = (otherUserId, lastMessage) => {
+        const time = timeSinceTrunc(lastMessage.data.date)
+        const message = lastMessage.data.message
+
+        return (
+            <div className='convo-preview-block' onClick={() => redirect(otherUserId)}>
+                <img className='convo-preview-left' />
+                <div className='convo-preview-right'>
+                    <div className='convo-preview-name'></div>
+                    <div className='convo-preview-right-bottom'>
+                        <div className='convo-preview-text'>{message}</div>
+                        <div className='convo-preview-date'>{time}</div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    // Renders each convo preview
     const allConvosList = (
         <div id='convos-list-bottom'>
-            {convos.map((convo) => {
-                return (
-                    <ConvoPreview
-                        eventHandler={viewSingleConvo}
-                        user={user}
-                        otherUserId={convo.id}
-                        lastMessage={convo.lastMessage}
-                        currConvo={currConvo}
-                    />
-                )
-            })}
+            {convosArr.map((convo) => convoPreview(convo.id, convo.lastMessage))}
         </div>
     )
 
     return (
         <div id="convos-list" class={componentClass}>
             <div id='convos-list-top'>
-                <img id='convos-list-user-icon' />
+                <img id='convos-list-user-icon' src={`/${getUrl(user.image)}`} />
                 <div id='convos-list-top-title'>
                     Messages
                 </div>

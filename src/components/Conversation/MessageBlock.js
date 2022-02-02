@@ -2,18 +2,18 @@ import '../styles/components/Messages/ConvoMessageBlock.css'
 import { findUser } from '../../firebase/users.js'
 import { timeSince } from '../../other/timeSince.js'
 
-const ConvoMessageBlock = async (props) => {
-    const { user, messageId, messageData } = props
+const MessageBlock = async (props) => {
+    const { user, messageData } = props
     const userId = user.id
     const senderId = messageData.sender
 
     let messageClass
     let iconSrc
     if (userId == senderId) {
-        messageClass = 'convo-message-block self'
+        messageClass = 'message-block self'
         iconSrc = user.image
     } else {
-        messageClass = 'convo-message-block other'
+        messageClass = 'message-block other'
         iconSrc = (await findUser(senderId)).data.image
     }
 
@@ -21,19 +21,19 @@ const ConvoMessageBlock = async (props) => {
 
     return (
         <div className={messageClass}>
-            <div className='convo-message-block-icon'>
+            <div className='message-block-icon'>
                 {() => {
                     if (messageData.senderChange == true) {
-                        return <img className='convo-message-block-image' src={iconSrc} />
+                        return <img className='message-block-image' src={iconSrc} />
                     } else {
                         return null
                     }
                 }}
             </div>
-            <div className='convo-message-block-message'>{messageData.message}</div>
-            <div className='convo-message-block-time'>{time}</div>
+            <div className='message-block-message'>{messageData.message}</div>
+            <div className='message-block-time'>{time}</div>
         </div>
     )
 }
 
-export { ConvoMessageBlock }
+export { MessageBlock }
