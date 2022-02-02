@@ -1,4 +1,3 @@
-import '../styles/components/Messages/ConvosList.css'
 import { timeSinceTrunc } from '../../other/timeSinceTrunc.js'
 import { getUrl } from '../../firebase/storage.js'
 

@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { uploadFile } from '../firebase/storage'
 import { newPost } from '../firebase/posts'
+import '../styles/components/NewPost.css'
 
 const NewPost = (props) => {
     const { setNewPostOn } = props

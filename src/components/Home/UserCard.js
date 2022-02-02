@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
-import { getUrl } from "../firebase/storage"
-import { Follows } from "./Follows"
+import { getUrl } from "../../firebase/storage"
+import { Follows } from "../Follows"
 
 const UserCard = (props) => {
     const { user } = props

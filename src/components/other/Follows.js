@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom'
 import { getFollowing, getFollowers } from '../firebase/followers.js'
-import { FollowButton } from '../FollowButton.js'
-import '../../styles/components/FollowerFollowing.css'
+import { FollowButton } from './FollowButton.js'
+import '../../styles/components/Follows.css'
 import { useEffect, useState } from 'react'
 
 const Follows = async (props) => {

@@ -1,5 +1,6 @@
-import { checkForFollow, addFollow, removeFollow } from '../firebase/followers.js'
+import { checkForFollow, addFollow, removeFollow } from '../../firebase/followers.js'
 import { useState } from 'react'
+import '../styles/components/FollowButton.css'
 
 const FollowButton = async (props) => {
     const { userId } = props

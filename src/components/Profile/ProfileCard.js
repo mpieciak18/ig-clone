@@ -1,4 +1,3 @@
-import '../../styles/components/Profile/ProfileCard.css'
 import { getUrl } from '../../firebase/storage'
 import { Follows } from '../Follows.js'
 

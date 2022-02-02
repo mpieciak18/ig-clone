@@ -1,4 +1,3 @@
-import '.../styles/components/Profile/ProfileButtons.css'
 import { FollowButton } from '../FollowButton.js'
 import { Navigate } from 'react-router-dom'
 import { signOutUser } from '../../firebase/users.js'

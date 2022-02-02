@@ -1,4 +1,3 @@
-import '../styles/components/Messages/ConvoMessageBlock.css'
 import { findUser } from '../../firebase/users.js'
 import { timeSince } from '../../other/timeSince.js'
 
