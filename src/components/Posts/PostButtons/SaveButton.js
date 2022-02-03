@@ -40,16 +40,11 @@ const SaveButton = async (props) => {
             addRemoveSave()
         }
     }
-    
-    // Redirect user to sign-up page if not signed in / signed up
-    const redirectToSignUp = () => {
-        redirect()
-    }
 
     if (user.loggedIn == true) {
         return <img class={saveButtonClass} onClick={saveButtonFunction} /> 
     } else {
-        return <img class="post-save-button not-saved" onClick={redirectToSignUp} />
+        return <img class="post-save-button not-saved" onClick={redirect} />
     }
 }
 

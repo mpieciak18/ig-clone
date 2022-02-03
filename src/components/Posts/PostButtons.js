@@ -7,10 +7,6 @@ import { ShareButton } from './PostButtons/ShareButton.js'
 const PostButtons = async (props) => {
     const { user, postId, postOwnerId, inputRef } = props
     
-    const clickShare = () => {
-        //
-    }
-    
     const redirectToSignUp = () => {
         const path = useLocation().pathname
         return <Navigate to='/signup' state={{path: path}} />

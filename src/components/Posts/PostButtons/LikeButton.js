@@ -40,16 +40,11 @@ const LikeButton = async (props) => {
             addRemoveLike()
         }
     }
-    
-    // Redirect user to sign-up page if not signed in / signed up
-    const redirectToSignUp = () => {
-        redirect()
-    }
 
     if (user.loggedIn == true) {
         return <img class={likeButtonClass} onClick={likeButtonFunction} /> 
     } else {
-        return <img class="post-like-button not-liked" onClick={redirectToSignUp} />
+        return <img class="post-like-button not-liked" onClick={redirect} />
     }
 }
 
