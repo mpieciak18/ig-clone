@@ -67,7 +67,7 @@ const readNotifications = async () => {
     const notiCollection = findNotifications(userId)
     const notiQuery = query(notiCollection, where("read", "==", true))
     const notiDocs = await getDocs(notiQuery)
-    notiDocs.forEach((doc) => {
+    notiDocs.forEach(async (doc) => {
         await updateDoc(doc, {"read": true})
     })
 }

@@ -65,7 +65,7 @@ const addFollow = async (otherUserId) => {
 }
 
 // Remove follow from other user and self
-const removeFollow = (followId, otherUserId) => {
+const removeFollow = async (followId, otherUserId) => {
     // First, decrease other user follower count and self following count
     await changeOtherUserFollowerCount(otherUserId, false)
     const selfId = auth.currentUser.uid
@@ -143,4 +143,4 @@ const getFollowers = async (userId, arrQuantity) => {
     })
 }
 
-export default { addFollow, removeFollow, checkForFollow, getFollowing, getFollowers }
+export { addFollow, removeFollow, checkForFollow, getFollowing, getFollowers }

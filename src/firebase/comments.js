@@ -64,12 +64,12 @@ const getComments = async (postId, postOwnerId, quantity) => {
     let comments
     commentsDocs.forEach((doc) => {
         const comment = {
-            id = doc.id,
-            data = doc.data()
+            id: doc.id,
+            data: doc.data()
         }
         comments = [...comments, comment]
     })
     return comments
 }
 
-export default { newComment, removeComment, getComments }
+export { newComment, removeComment, getComments }

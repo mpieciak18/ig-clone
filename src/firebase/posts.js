@@ -14,8 +14,8 @@ import {
 
 // Retrieve single post
 const findSinglePost = async (postId, userId) => {
-    const usersRef = collection(db, 'users'),
-    const userRef = doc(usersRef, userId),
+    const usersRef = collection(db, 'users')
+    const userRef = doc(usersRef, userId)
     const postsRef = collection(userRef, 'posts')
     const postRef = doc(postsRef, postId)
     const postDoc = await getDoc(postRef)
@@ -118,7 +118,7 @@ const removePost = async (postId, userId) => {
 const removeLikes = async (postRef) => {
     const likesRef = collection(postRef, 'likes')
     const likesDocs = await getDocs(likesRef)
-    likesDocs.forEach((like) => {
+    likesDocs.forEach(async (like) => {
         await deleteDoc(like)
     })
 }
@@ -127,7 +127,7 @@ const removeLikes = async (postRef) => {
 const removeComments = async (postRef) => {
     const commentsRef = collection(postRef, 'comments')
     const commentsDocs = await getDocs(commentsRef)
-    commentsDocs.forEach((comment) => {
+    commentsDocs.forEach(async (comment) => {
         await deleteDoc(comment)
     })
 }

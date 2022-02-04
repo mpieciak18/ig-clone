@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom'
-import { getFollowing, getFollowers } from '../firebase/followers.js'
+import { getFollowing, getFollowers } from '../../firebase/followers.js'
 import { FollowButton } from './FollowButton.js'
-import '../../styles/components/Follows.css'
+import './other.css'
 import { useEffect, useState } from 'react'
 
 const Follows = async (props) => {
@@ -61,7 +61,7 @@ const Follows = async (props) => {
     }, followingVsFollower)
 
     // Load more follows/followers when user reaches bottom of pop-up
-    const loadMore = (e) => {
+    const loadMore = async (e) => {
         const elem = e.target
         if ((Math.ceil(elem.scrollHeight - elem.scrollTop) == elem.clientHeight) &&
         (allLoaded == false)) {

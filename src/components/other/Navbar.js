@@ -1,8 +1,8 @@
-import '../styles/components/Navbar.css'
+import './other.css'
 import { useState } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { NewPost } from './NewPost.js'
-import { useEffect } from 'react/cjs/react.development'
+import { useEffect } from 'react'
 
 const Navbar = (props) => {
     const { user } = props

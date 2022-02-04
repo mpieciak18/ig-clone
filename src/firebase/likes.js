@@ -50,7 +50,7 @@ const addLike = async (postId, postOwnerId) => {
 }
 
 // Remove like from post
-const removeLike = (likeId, postId, postOwnerId) => {
+const removeLike = async (likeId, postId, postOwnerId) => {
     // First, update post like count
     const postRef = getPostRef(postOwnerId, postId)
     await changeLikeCount(postRef, false)
@@ -91,10 +91,10 @@ const getLikes = async (postId, postOwnerId, arrQuantity) => {
     const likesRef = getLikesRef(postOwnerId, postId)
     const likesQuery = query(likesRef, limit(arrQuantity))
     const likesDocs = await getDocs(likesQuery)
-    return likesDocs.map((like) => {
+    return likesDocs.map(async (like) => {
         const user = await findUser(like.data.user)
         return user
     })
 }
 
-export default { addLike, removeLike, changeLikeCount, likeExists, getLikes }
+export { addLike, removeLike, changeLikeCount, likeExists, getLikes }

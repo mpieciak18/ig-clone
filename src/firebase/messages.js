@@ -109,7 +109,7 @@ const retrieveAllConvos = async () => {
     const convosQuery = query(convosRef, orderBy("date", "desc"))
     const convoDocs = await getDocs(convosQuery)
     let convos = []
-    convoDocs.forEach((doc) => {
+    convoDocs.forEach(async (doc) => {
         const convo = {
             id: doc.id,
             lastMessage: await retrieveLatestMessage(doc.id)
@@ -119,4 +119,4 @@ const retrieveAllConvos = async () => {
     return convos
 }
 
-export default { sendMessage, retrieveAllConvos, retrieveSingleConvo, retrieveLatestMessage }
+export { sendMessage, retrieveAllConvos, retrieveSingleConvo, retrieveLatestMessage }
