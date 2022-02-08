@@ -42,9 +42,9 @@ const SaveButton = async (props) => {
     }
 
     if (user.loggedIn == true) {
-        return <img class={saveButtonClass} onClick={saveButtonFunction} /> 
+        return <img className={saveButtonClass} onClick={saveButtonFunction} /> 
     } else {
-        return <img class="post-save-button not-saved" onClick={redirect} />
+        return <img className="post-save-button not-saved" onClick={redirect} />
     }
 }
 

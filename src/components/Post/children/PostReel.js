@@ -1,6 +1,6 @@
 import './styles/PostPage_and_Reel.css'
-import { useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { useRef, useState, useEffect } from 'react'
+import { Link, useLocation, Navigate } from 'react-router-dom'
 import { CommentsBar } from './CommentsBar.js'
 import { PostButtons } from './PostButtons.js'
 import { getComments } from '../../../firebase/comments.js'
@@ -49,9 +49,9 @@ const PostReel = async (props) => {
     const [likesOn, setLikesOn] = useState(false)
 
     // Set likesOn to true
+    const path = useLocation().pathname
     const clickLikes = () => {
         if (user.loggedIn == false) {
-            const path = useLocation().pathname
             return <Navigate to='/signup' state={{path: path}} />
         } else {
             setLikesOn(true)
@@ -66,29 +66,29 @@ const PostReel = async (props) => {
         } else {
             likes = <Likes setLikesOn={() => setLikesOn} postId={postId} postOwnerId={postOwnerId} />
         }
-    }, likesOn)
+    }, [likesOn])
 
     return (
-        <div class="single-post-component">
+        <div className="single-post-component">
             {likes}
-            <div class="post-top"></div>
-                <div class="post-top-left">
-                    <Link class="post-user-link" to={`/${postOwnerId}`}>
-                        <img class="post-user-link-avatar" src={getUrl(postOwnerImage)} />
-                        <div class="post-user-link-name-and-username-parent">
-                            <div class='post-user-link-name'></div>
-                            <div class='post-user-link-username'></div>
+            <div className="post-top"></div>
+                <div className="post-top-left">
+                    <Link className="post-user-link" to={`/${postOwnerId}`}>
+                        <img className="post-user-link-avatar" src={getUrl(postOwnerImage)} />
+                        <div className="post-user-link-name-and-username-parent">
+                            <div className='post-user-link-name'></div>
+                            <div className='post-user-link-username'></div>
                         </div>
                     </Link>
                 </div>
-            <div class="post-middle">
-                <img class="post-image" src={getUrl(postImage)} />
+            <div className="post-middle">
+                <img className="post-image" src={getUrl(postImage)} />
             </div>
-            <div class="post-bottom">
+            <div className="post-bottom">
                 <PostButtons user={user} postId={postId} postOwnerId={postOwnerId} inputRef={inputRef} />
-                <div class="post-likes" clickLikes={() => clickLikes}>{postLikes} Likes</div>
-                <div class="post-text">{postText}</div>
-                <Link class="post-view-comments" to={`/${postOwnerId}/${id}`}>
+                <div className="post-likes" clickLikes={() => clickLikes}>{postLikes} Likes</div>
+                <div className="post-text">{postText}</div>
+                <Link className="post-view-comments" to={`/${postOwnerId}/${postId}`}>
                     View more comments...
                 </Link>
                 {commentsPreview}

@@ -1,5 +1,6 @@
 import { getUrl } from '../../../firebase/storage.js'
 import { Follows } from '../../other/Follows.js'
+import { useState, useEffect } from 'react'
 
 const ProfileCard = async (props) => {
     const { user } = props
@@ -37,7 +38,7 @@ const ProfileCard = async (props) => {
                 />
             )
         }
-    }, followsOn)
+    }, [followsOn])
 
     return (
         <div id='profile-card'>

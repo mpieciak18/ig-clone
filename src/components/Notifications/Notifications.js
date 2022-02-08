@@ -1,17 +1,19 @@
 import { Navbar } from "../other/Navbar.js"
-import { useState } from "react"
-import { Navigate, useNavigate } from "react-router-dom"
+import { useState, useEffect } from "react"
+import { Navigate, useNavigate, useLocation } from "react-router-dom"
 import { getNotifications } from "../../firebase/notifications.js"
 import { findUser } from "../../firebase/users.js"
 import { findSinglePost } from "../../firebase/posts.js"
 import { timeSince } from "../../other/timeSince.js"
 
-const Notifications = async (props) => {
+const Notifications = (props) => {
     // Redirect to signup page if not signed in
     const { user } = props
+    const path = useLocation().pathname
+
+    const redirect = () => <Navigate to='/signup' state={{path: path}} />
     if (user.loggedIn == false) {
-        const path = useLocation().pathname
-        return <Navigate to='/signup' state={{path: path}} />
+        redirect() 
     }
 
     // Set up navigate & back button
@@ -29,7 +31,9 @@ const Notifications = async (props) => {
     const [notifNumber, setNotifNumber] = useState(10)
 
     // Init notifications array state
-    const [notifs, setNotifs] = useState(await getNotifications(10))
+    const [notifs, setNotifs] = useState(
+        (async () => await getNotifications(10))()
+    )
 
      // Init all loaded state
     const [allLoaded, setAllLoaded] = useState(false)
@@ -40,7 +44,7 @@ const Notifications = async (props) => {
                 {notifs.map(async (notif) => {
                     const otherUser = await findUser(notif.data.otherUser)
                     let notifClass
-                    if (read == true) {
+                    if (notif.read == true) {
                         notifClass = "single-notification read"
                     } else {
                         notifClass = "single-notification unread"
@@ -48,16 +52,16 @@ const Notifications = async (props) => {
                     let notifText
                     let notifLink
                     const notifTime = timeSince(notif.data.date)
-                    if (type == "like") {
+                    if (notif.type == "like") {
                         notifText = `${otherUser.data.username} liked your post.`
                         notifLink = `/${user.id}/${(await findSinglePost(notif.data.post)).id}`
-                    } else if (type == "comment") {
+                    } else if (notif.type == "comment") {
                         notifText = `${otherUser.data.username} commented on your post.`
                         notifLink = `/${user.id}/${(await findSinglePost(notif.data.post)).id}`
-                    } else if (type == "message") {
+                    } else if (notif.type == "message") {
                         notifText = `${otherUser.data.username} messaged you.`
                         notifLink = `/messages`
-                    } else if (type == "follow") {
+                    } else if (notif.type == "follow") {
                         notifText = `${otherUser.data.username} followed you.`
                         notifLink = `/${otherUser.data.id}`
                     }
@@ -76,7 +80,7 @@ const Notifications = async (props) => {
     }
 
     // Load-more function that updates the posts reel
-    const loadMore = async () => {
+    const loadMore = () => {
         if (allLoaded == false) {
             const newNotifNumber = notifNumber + 10
             setNotifNumber(newNotifNumber)
@@ -93,11 +97,11 @@ const Notifications = async (props) => {
     // Update notifications state when notifNumber state changes
     useEffect(async () => {
         const newNotifsArr = await getNotifications(notifNumber)
-        setNotifs(newPostsArr)
+        setNotifs(newNotifsArr)
         if (newNotifsArr.length < notifNumber) {
             setAllLoaded(true)
         }
-    }, notifNumber)
+    }, [notifNumber])
 
     return (
         <div id="notifications" className="page">

@@ -17,33 +17,34 @@ const CommentsBar = (props) => {
     // Set initial comment input value & reset it on submission
     const [commentValue, setCommentValue] = useState('')
 
+    const path = useLocation().pathname
+
     const redirect = () => {
-        const path = useLocation().pathname
         return <Navigate to='/signup' state={{path: path}} />
     }
 
     if (user.loggedIn == true) {
         return (
-            <form class="post-comment-bar" onSubmit={() => addNewComment}>
+            <form className="post-comment-bar" onSubmit={() => addNewComment}>
                 <input 
                     type="text"
                     name="comment"
-                    class="post-comment-bar-input"
+                    className="post-comment-bar-input"
                     placeholder="Add a comment..."
                     value={commentValue}
                     ref={inputRef}
                 />
-                <button type="submit" class="post-comment-bar-button">
-                    <img class="post-comment-bar-button-icon" />
+                <button type="submit" className="post-comment-bar-button">
+                    <img className="post-comment-bar-button-icon" />
                 </button>
             </form>
         )
     } else {
         return (
-            <form to='/login' class="post-comment-bar" onClick={redirect}>
-                <input type="text" name="comment" class="post-comment-bar-input" placeholder="Add a comment..." />
-                <button type="button" class="post-comment-bar-button">
-                    <img class="post-comment-bar-button-icon" />
+            <form to='/login' className="post-comment-bar" onClick={redirect}>
+                <input type="text" name="comment" className="post-comment-bar-input" placeholder="Add a comment..." />
+                <button type="button" className="post-comment-bar-button">
+                    <img className="post-comment-bar-button-icon" />
                 </button>
             </form>
         )

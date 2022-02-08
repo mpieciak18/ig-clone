@@ -6,7 +6,7 @@ import { ProfileButtons } from './children/ProfileButtons.js'
 import { findPostsFromUser } from '../../firebase/posts.js'
 import { findUser } from '../../firebase/users.js'
 import { useParams } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const Profile = async (props) => {
     const { user } = props
@@ -43,12 +43,12 @@ const Profile = async (props) => {
 
     // Update posts state when postsNumber state changes
     useEffect(async () => {
-        const newPostsArr = await findPosts(postsNumber)
+        const newPostsArr = await findPostsFromUser(postsNumber)
         setPostsArr(newPostsArr)
         if (newPostsArr.length < postsNumber) {
             setAllLoaded(true)
         }
-    }, postsNumber)
+    }, [postsNumber])
 
     // Posts section
     const posts = (

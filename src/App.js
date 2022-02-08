@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {Home} from "./components/Home/Home.js"
 import {Messages} from "./components/Messages/Messages.js"
 import {Post} from "./components/Post/Post.js"
@@ -13,25 +13,7 @@ import {Conversation} from './components/Conversation/Conversation.js'
 import { auth } from "./firebase/firebase.js"
 import { findUser } from './firebase/users.js'
 
-const App = async () => {
-    // Initialize user state
-    let userObject = {}
-    if (auth.currentUser != null) {
-        const user = await findUser(auth.currentUser.uid)
-        userObject = updateUserObject(
-            true, 
-            user.id, 
-            user.data.name, 
-            user.data.username, 
-            user.data.email, 
-            user.data.image, 
-            user.data.followers
-        )
-    } else {
-        userObject = updateUserObject(false, '', '', '', '', '', '')
-    }
-    const [user, setUser] = useState(userObject)
-
+const App = () => {
     // Return new user object from arguments
     const updateUserObject = (loggedIn, id, name, username, email, image, followers) => {
         return {
@@ -45,11 +27,32 @@ const App = async () => {
         }
     }
 
+    // Initialize user state
+    let userObject = {}
+    if (auth.currentUser != null) {
+        (async () => {
+            const user = await findUser(auth.currentUser.uid)
+            userObject = updateUserObject(
+                true, 
+                user.id, 
+                user.data.name, 
+                user.data.username, 
+                user.data.email, 
+                user.data.image, 
+                user.data.followers
+            )
+        })()
+    } else {
+        userObject = updateUserObject(false, '', '', '', '', '', '')
+    }
+    const [user, setUser] = useState(userObject)
+    console.log(user)
+
     // Update user state when user signs in or signs out
-    auth.onAuthStateChanged(async (user) => {
+    useEffect(() => {
         // User signs in
-        if (user) {
-            const user = await findUser(user.uid)
+        if (auth.currentUser != null) {
+            const user = findUser(auth.currentUser.uid)
             const userObject = updateUserObject(
                 true, 
                 user.id, 
@@ -65,14 +68,35 @@ const App = async () => {
             const userObject = updateUserObject(false, '', '', '', '', '', '')
             setUser(userObject)
         }
-    })
+      }, [auth.currentUser])
+
+    // auth.onAuthStateChanged((user) => {
+    //     // User signs in
+    //     if (user) {
+    //         const user = findUser(user.uid)
+    //         const userObject = updateUserObject(
+    //             true, 
+    //             user.id, 
+    //             user.data.name, 
+    //             user.data.username, 
+    //             user.data.email, 
+    //             user.data.image, 
+    //             user.data.followers
+    //         )
+    //         setUser(userObject)
+    //     // User signs out
+    //     } else {
+    //         const userObject = updateUserObject(false, '', '', '', '', '', '')
+    //         setUser(userObject)
+    //     }
+    // })
 
     return (
         <BrowserRouter basename={process.env.PUBLIC_URL}>
             <Routes>
-                <Route exact path='/' element={<Home user={user}/>} />
+                <Route exact path='/' element={<Home user={user} />} />
                 <Route exact path='/messages' element={<Messages user={user} />} />
-                <Route exact path='/:userId/:postId' element={<Post user={user} />} />
+                <Route exact path='/:postOwnerId/:postId' element={<Post user={user} />} />
                 <Route exact path='/:userId' element={<Profile user={user}/>} />
                 <Route exact path='/messages/:userId' element={<Conversation user={user}/>} />
                 <Route exact path='/savedposts' element={<SavedPosts user={user} />} />

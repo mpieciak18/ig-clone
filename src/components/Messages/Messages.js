@@ -6,19 +6,23 @@ import { ConvosList } from './children/ConvosList.js'
 import { useLocation, Navigate } from 'react-router-dom'
 
 
-const Messages = async (props) => {
+const Messages = (props) => {
     // Redirect to signup page if not signed in
     const { user } = props
+    const path = useLocation().pathname
+
+    const redirect = () => <Navigate to='/signup' state={{path: path}} />
     if (user.loggedIn == false) {
-        const path = useLocation().pathname
-        return <Navigate to='/signup' state={{path: path}} />
+        redirect() 
     }
 
     // State consisting of all available convos in user's collection
-    const [convosArr, setConvosArr] = useState(await retrieveAllConvos())
+    const [convosArr, setConvosArr] = useState(
+        (async () => await retrieveAllConvos())()
+    )
 
     return (
-        <div id='messages' class='page'>
+        <div id='messages' className='page'>
             <Navbar user={user} />
             <ConvosList
                 user={user}

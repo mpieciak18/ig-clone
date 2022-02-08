@@ -7,14 +7,15 @@ import { ShareButton } from './PostButtons/ShareButton.js'
 const PostButtons = async (props) => {
     const { user, postId, postOwnerId, inputRef } = props
     
+    const path = useLocation().pathname
+
     const redirectToSignUp = () => {
-        const path = useLocation().pathname
         return <Navigate to='/signup' state={{path: path}} />
     }
 
     return (
-        <div class="post-buttons">
-            <div class="post-buttons-left">
+        <div className="post-buttons">
+            <div className="post-buttons-left">
                 <LikeButton user={user} postId={postId} postOwnerId={postOwnerId} redirect={redirectToSignUp} />
                 <CommentButton user={user} redirect={redirectToSignUp} inputRef={inputRef} />
                 <ShareButton />

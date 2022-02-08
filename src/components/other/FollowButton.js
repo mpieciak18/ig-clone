@@ -6,7 +6,7 @@ const FollowButton = async (props) => {
     const { userId } = props
 
     // Init followText & followButtonClass states
-    const isFollowing = await checkForFollow(otherUserId)
+    const isFollowing = await checkForFollow(userId)
     const [followText, setFollowText] = useState(() => {
         if (isFollowing == true) {
             return 'Follow'
@@ -31,7 +31,7 @@ const FollowButton = async (props) => {
     }
 
     return (
-        <div class={followButtonClass} onClick={clickFollow}>
+        <div className={followButtonClass} onClick={clickFollow}>
             {followText}
         </div>
     )

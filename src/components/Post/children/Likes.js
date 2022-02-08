@@ -24,7 +24,7 @@ const Likes = async (props) => {
         if (array.length < likesNumber) {
             setAllLoaded(true)
         }
-    }, likesNumber)
+    }, [likesNumber])
 
     // Load more likes when user reaches bottom of pop-up
     const loadMore = (e) => {

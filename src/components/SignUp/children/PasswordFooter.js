@@ -7,7 +7,7 @@ const PasswordFooter = async (props) => {
     )
     const [footerClass, setFooterClass] = useState('grey')
 
-    // Update password footer text, class, and passwordPasses state upon password change
+    // Update password footer text, className, and passwordPasses state upon password change
     useEffect(async () => {
         // Checks if no password is entered
         if (password.length == 0) {
@@ -39,7 +39,7 @@ const PasswordFooter = async (props) => {
             setFooterText('Password is good.')
             setFooterClass('grey')
         }
-    }, password) 
+    }, [password]) 
 
     return (
         <div id='sign-up-password-footer' className={footerClass}>

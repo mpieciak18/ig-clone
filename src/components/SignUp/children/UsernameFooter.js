@@ -6,7 +6,7 @@ const UsernameFooter = async (props) => {
     const [footerText, setFooterText] = useState('Username must be 3-15 characters.')
     const [footerClass, setFooterClass] = useState('grey')
 
-    // Update username footer text, class, and usernamePasses state upon username change
+    // Update username footer text, className, and usernamePasses state upon username change
     useEffect(async () => {
         // First, query db for username if > 2 and < 16
         let result = false
@@ -50,7 +50,7 @@ const UsernameFooter = async (props) => {
             setFooterText('Username can be used!')
             setFooterClass('green')
         }
-    }, username) 
+    }, [username]) 
 
     return (
         <div id='sign-up-username-footer' className={footerClass}>

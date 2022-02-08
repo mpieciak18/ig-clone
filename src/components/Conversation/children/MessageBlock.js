@@ -1,6 +1,6 @@
 import { timeSince } from '../../../other/timeSince.js'
 
-const MessageBlock = async (props) => {
+const MessageBlock = (props) => {
     const { user, messageData } = props
     const userId = user.id
     const senderId = messageData.sender

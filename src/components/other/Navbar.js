@@ -17,9 +17,10 @@ const Navbar = (props) => {
 
     const [newPostOn, setNewPostOn] = useState(false)
 
+    const path = useLocation().pathname
+
     const clickAddPost = () => {
         if (user.loggedIn == false) {
-            const path = useLocation().pathname
             return <Navigate to='/signup' state={{path: path}} />
         } else {
             setNewPostOn(true)
@@ -33,7 +34,7 @@ const Navbar = (props) => {
         } else {
             newPost = <NewPost setNewPostOn={setNewPostOn} />
         }
-    }, newPostOn)
+    }, [newPostOn])
 
     const renderNewPost = () => {
         if (newPostOn == true) {
@@ -46,7 +47,6 @@ const Navbar = (props) => {
     }
 
     const clickNotifications = () => {
-        const path = useLocation().pathname
         if (user.loggedIn == false) {
             return <Navigate to='/signup' state={{path: path}} />
         } else {
@@ -55,7 +55,6 @@ const Navbar = (props) => {
     }
     const clickMessages = () => {
         if (user.loggedIn == false) {
-            const path = useLocation().pathname
             return <Navigate to='/signup' state={{path: path}} />
         } else {
             return <Navigate to='/messages' />
@@ -65,14 +64,14 @@ const Navbar = (props) => {
     return (
         <div id="navbar">
             <div id="header">
-                <img class="logo" />
+                <img className="logo" />
             </div>
             <div id="footer-or-header">
-                <img class="home-button" onClick={clickHome} />
-                <img class="search-button" onClick={performSearch} />
-                <img class="add-post-button" onClick={clickAddPost} />
-                <img class="notifications-button" onClick={clickNotifications} />
-                <img class="messages-button" onClick={clickMessages} />
+                <img className="home-button" onClick={clickHome} />
+                <img className="search-button" onClick={performSearch} />
+                <img className="add-post-button" onClick={clickAddPost} />
+                <img className="notifications-button" onClick={clickNotifications} />
+                <img className="messages-button" onClick={clickMessages} />
             </div>
             {newPost}
         </div>

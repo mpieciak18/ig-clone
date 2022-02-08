@@ -7,9 +7,9 @@ const CommentButton = async (props) => {
     }
 
     if (user.loggedIn == true) {
-        return <img class="post-comment-button" onClick={commentButtonFunction}/> 
+        return <img className="post-comment-button" onClick={commentButtonFunction}/> 
     } else {
-        return <img class="post-comment-button" onClick={redirect} />
+        return <img className="post-comment-button" onClick={redirect} />
     }
 }
 

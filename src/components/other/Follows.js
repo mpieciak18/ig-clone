@@ -3,6 +3,7 @@ import { getFollowing, getFollowers } from '../../firebase/followers.js'
 import { FollowButton } from './FollowButton.js'
 import './other.css'
 import { useEffect, useState } from 'react'
+import { getUrl } from '../../firebase/storage.js'
 
 const Follows = async (props) => {
     const { setFollowsOn, userId, followingVsFollower, setFollowingVsFollower } = props
@@ -58,7 +59,7 @@ const Follows = async (props) => {
             setFollowingButtonClass('following-button active')
             setUsers(getFollowing(userId, 20))
         }
-    }, followingVsFollower)
+    }, [followingVsFollower])
 
     // Load more follows/followers when user reaches bottom of pop-up
     const loadMore = async (e) => {

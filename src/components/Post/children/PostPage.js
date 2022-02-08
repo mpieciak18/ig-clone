@@ -1,16 +1,23 @@
 import './styles/PostPage_and_Reel.css'
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useParams, useLocation } from 'react-router-dom'
 import { useEffect, useState, useRef } from 'react'
 import { CommentsBar } from './CommentsBar.js'
 import { PostButtons } from './PostButtons.js'
 import { getComments } from '../../../firebase/comments.js'
+import { findSinglePost } from '../../../firebase/posts.js'
+import { findUser } from '../../../firebase/users.js'
 import { getUrl } from '../../../firebase/storage.js'
 import { timeSince } from '../../../other/timeSince.js'
 import { timeSinceTrunc } from '../../../other/timeSinceTrunc.js'
 import { Likes } from './Likes.js'
 
 const PostPage = async (props) => {
-    const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user } = props
+    const { user } = props
+
+    const { postOwnerId, postId } = useParams()
+
+    // postId, postText, postImage, postDate, postOwnerId, postLikes, postComments
+    const { post } = findSinglePost(postId, postOwnerId)
 
     // Set up ref for comment bar / comment button
     const inputRef = useRef(null)
@@ -24,7 +31,7 @@ const PostPage = async (props) => {
     const [allLoaded, setAllLoaded] = useState(false)
 
     const commentsSection = (
-        <div class="post-comments" onScroll={loadMore}>
+        <div className="post-comments" onScroll={loadMore}>
             {comments.map(async (comment) => {
                 const commenterId = comment.data.user
                 const commenter = await findUser(commenterId)
@@ -70,18 +77,18 @@ const PostPage = async (props) => {
     }
     useEffect(() => {
         updateComments()
-    }, commentQuantity)
+    }, [commentQuantity])
 
     // Get post owner's profile image
-    const postOwnerImage = (await findUser(postOwnerId)).data.image
+    const postOwnerImage = async () => (await findUser(postOwnerId)).data.image
 
     // Init likesOn state
     const [likesOn, setLikesOn] = useState(false)
 
     // Set likesOn to true
+    const path = useLocation().pathname
     const clickLikes = () => {
         if (user.loggedIn == false) {
-            const path = useLocation().pathname
             return <Navigate to='/signup' state={{path: path}} />
         } else {
             setLikesOn(true)
@@ -96,32 +103,32 @@ const PostPage = async (props) => {
         } else {
             likes = <Likes setLikesOn={() => setLikesOn} postId={postId} postOwnerId={postOwnerId} />
         }
-    }, likesOn)
+    }, [likesOn])
 
     return (
-        <div class="single-post-page">
+        <div className="single-post-page">
             {likes}
-            <div class="post-left">
-                <img class="post-image" src={async () => await getUrl(postImage)} />
+            <div className="post-left">
+                <img className="post-image" src={async () => await getUrl(post.data.image)} />
             </div>
-            <div class="post-right">
-                <div class="post-right-top">
-                    <Link class="post-user-link" to={`/${postOwnerId}`}>
-                        <img class="post-user-link-avatar" src={postOwnerImage} />
-                        <div class="post-user-link-name-and-username-parent">
-                            <div class='post-user-link-name'></div>
-                            <div class='post-user-link-username'></div>
+            <div className="post-right">
+                <div className="post-right-top">
+                    <Link className="post-user-link" to={`/${postOwnerId}`}>
+                        <img className="post-user-link-avatar" src={postOwnerImage} />
+                        <div className="post-user-link-name-and-username-parent">
+                            <div className='post-user-link-name'></div>
+                            <div className='post-user-link-username'></div>
                         </div>
                     </Link>
-                    <div class="post-text">{postText}</div>
+                    <div className="post-text">{post.data.text}</div>
                 </div>
                 {commentsSection}
-                <div class="post-right-bottom">
+                <div className="post-right-bottom">
                     <PostButtons 
                         user={user} postId={postId} postOwnerId={postOwnerId} inputRef={inputRef} />
-                    <div class="post-right-bottom-two">
-                        <div class="post-likes" clickLikes={() => clickLikes}>{postLikes} Likes</div>
-                        <div class="post-date">{timeSince(postDate)}</div>
+                    <div className="post-right-bottom-two">
+                        <div className="post-likes" clickLikes={() => clickLikes}>{post.data.likes} Likes</div>
+                        <div className="post-date">{timeSince(post.data.date)}</div>
                     </div>
                     <CommentsBar
                         user={user}

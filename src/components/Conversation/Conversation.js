@@ -39,10 +39,10 @@ const Conversation = (props) => {
                     )
                 })}
             </div>
-            <form class="convo-message-bar" onSubmit={sendNewMessage}>
-                <input type="text" name="message" class="convo-message-bar-input" placeholder="Send a message..." />
-                <button type="submit" class="convo-message-button">
-                    <img class="convo-message-button-icon" />
+            <form className="convo-message-bar" onSubmit={sendNewMessage}>
+                <input type="text" name="message" className="convo-message-bar-input" placeholder="Send a message..." />
+                <button type="submit" className="convo-message-button">
+                    <img className="convo-message-button-icon" />
                 </button>
             </form>
         </div>

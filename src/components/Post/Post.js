@@ -4,10 +4,10 @@ import { PostPage } from './children/PostPage.js'
 import { findSinglePost } from '../../firebase/posts.js'
 import { Navbar } from '../other/Navbar.js'
 
-const { postOwnerId, postId } = useParams()
-
 const Post = (props) => {
     const { user } = props
+
+    const { postOwnerId, postId } = useParams()
 
     // Get post data from state passed via Link using useLocation
     // If nothing is passed, then query post data from database
@@ -17,7 +17,7 @@ const Post = (props) => {
     const navigate = useNavigate()
     const goBack = () => navigate(-1)
 
-    const BackButton = (
+    const backButton = (
         <div id='post-back-button' onClick={goBack}>
             <div id='back-arrow'>⇽</div>
             <div id='back-text'>Go Back</div>
@@ -25,9 +25,9 @@ const Post = (props) => {
     )
 
     return (
-        <div id="post" class="page">
+        <div id="post" className="page">
             <Navbar user={user} />
-            {BackButton}
+            {backButton}
             <PostPage 
                 postId={post.id}
                 postText={post.data.text}

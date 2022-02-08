@@ -39,13 +39,13 @@ const UserCard = (props) => {
                 />
             )
         }
-    }, followsOn)
+    }, [followsOn])
 
     if (user.loggedIn == false) {
         return (
             <div id="user-card">
-                <Link id="user-card-sign-up">Sign Up</Link>
-                <Link id="user-card-login">Login</Link>
+                <Link id="user-card-sign-up" to='/signup'>Sign Up</Link>
+                <Link id="user-card-login" to='/login'>Login</Link>
             </div>
         )
     } else {

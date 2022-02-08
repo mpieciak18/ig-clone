@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 
-const NameFooter = async (props) => {
+const NameFooter = (props) => {
     const { setNamePasses, name } = props
     const [footerText, setFooterText] = useState('Name must contain letters & spaces only.')
     const [footerClass, setFooterClass] = useState('grey')
 
-    // Update name footer text, class, and namePasses state upon username change
+    // Update name footer text, className, and namePasses state upon username change
     useEffect(async () => {
         // Check if no name is entered
         if (name.match(/^.{0,0}$/) != null) {
@@ -37,10 +37,10 @@ const NameFooter = async (props) => {
             setFooterText(' ')
             setFooterClass('grey')
         }
-    }, name) 
+    }, [name]) 
 
     return (
-        <div id='settings-name-footer' className={footerClass} onChange={updateName}>
+        <div id='settings-name-footer' className={footerClass}>
             {footerText}
         </div>
     )

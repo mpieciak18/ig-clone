@@ -3,6 +3,7 @@ import { Navbar } from '../other/Navbar.js'
 import { UsernameFooter } from './children/UsernameFooter.js'
 import { PasswordFooter } from './children/PasswordFooter.js'
 import { NameFooter } from './children/NameFooter.js'
+import { EmailFooter } from './children/EmailFooter.js'
 import { newUser } from '../../firebase/users.js'
 import { Navigate, useLocation } from 'react-router-dom'
 import { useState } from 'react'
@@ -10,8 +11,11 @@ import { useState } from 'react'
 const SignUp = (props) => {
     // Redirect to settings if already signed in
     const { user } = props
-    if (user.loggedIn == true) {
+    const redirect = () => {
         return <Navigate to='/settings' />
+    }
+    if (user.loggedIn == true) {
+        redirect()
     }
 
     // Init criteria for form validation
@@ -40,11 +44,7 @@ const SignUp = (props) => {
         )
     }
 
-    const newSignUp = async (e) => {
-        const username = e.target.username.value
-        const name = e.target.name.value
-        const email = e.target.email.value
-        const password = e.target.password.value
+    const newSignUp = async () => {
         // Add new user to firebase/auth & return any errors
         const possibleError = await newUser(username, name, email, password)
         if (possibleError == null) {
@@ -88,8 +88,8 @@ const SignUp = (props) => {
         </div>
     )
 
+    const prevPath = useLocation().state.path
     const goToLogin = () => {
-        const prevPath = useLocation().state.path
         return <Navigate to='/login' state={{path: prevPath}}/>
     }
 
@@ -106,22 +106,22 @@ const SignUp = (props) => {
                     <div id='sign-up-username-parent'>
                         <div id='sign-up-username-symbol'>@</div>
                         <div id='sign-up-username-divider' />
-                        <input id='sign-up-username-input' name='username' placeholder='username' onChange={updateUsername} />
+                        <input id='sign-up-username-input' value={username} placeholder='username' onChange={updateUsername} />
                     </div>
                     <UsernameFooter setUsernamePasses={setUsernamePasses} username={username} />
                     <div id='sign-up-name-parent'>
-                        <input id='sign-up-name-input' name='name' placeholder='your real name' onChange={updateName} />
+                        <input id='sign-up-name-input' value={name} placeholder='your real name' onChange={updateName} />
                     </div>
                     <NameFooter setNamePasses={setNamePasses} name={name}  />
                     <div id='sign-up-email-parent'>
-                        <input id='sign-up-email-input' name='email' placeholder='email' onChange={updateEmail} />
+                        <input id='sign-up-email-input' value={email} placeholder='email' onChange={updateEmail} />
                     </div>
                     <EmailFooter setEmailPasses={setEmailPasses} email={email}  />
                     <div id='sign-up-password-parent'>
-                        <input id='sign-up-password-input' name='password' placeholder='password' onChange={updatePassword} />
+                        <input id='sign-up-password-input' value={password} placeholder='password' onChange={updatePassword} />
                     </div>
                     <PasswordFooter setPasswordPasses={setPasswordPasses} password={password}  />
-                    {signUpButton}
+                    {signUpButton()}
                 </form>
                 {login}
             </div>
