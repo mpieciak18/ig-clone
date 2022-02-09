@@ -1,5 +1,5 @@
 import { useState } from "react"
-import ShareIcon from '../../../../assets/messages.png'
+import ShareIcon from '../../../../assets/images/messages.png'
 
 const ShareButton = () => {
 
