@@ -46,7 +46,6 @@ const App = () => {
         userObject = updateUserObject(false, '', '', '', '', '', '')
     }
     const [user, setUser] = useState(userObject)
-    console.log(user)
 
     // Update user state when user signs in or signs out
     useEffect(() => {
@@ -69,27 +68,6 @@ const App = () => {
             setUser(userObject)
         }
       }, [auth.currentUser])
-
-    // auth.onAuthStateChanged((user) => {
-    //     // User signs in
-    //     if (user) {
-    //         const user = findUser(user.uid)
-    //         const userObject = updateUserObject(
-    //             true, 
-    //             user.id, 
-    //             user.data.name, 
-    //             user.data.username, 
-    //             user.data.email, 
-    //             user.data.image, 
-    //             user.data.followers
-    //         )
-    //         setUser(userObject)
-    //     // User signs out
-    //     } else {
-    //         const userObject = updateUserObject(false, '', '', '', '', '', '')
-    //         setUser(userObject)
-    //     }
-    // })
 
     return (
         <BrowserRouter basename={process.env.PUBLIC_URL}>

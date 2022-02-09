@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { emailExists } from '../../../firebase/users.js'
 
-const EmailFooter = async (props) => {
+const EmailFooter = (props) => {
     const { setEmailPasses, email } = props
     const [footerText, setFooterText] = useState(
         'Email address must be valid.'

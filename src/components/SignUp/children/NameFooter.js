@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-const NameFooter = async (props) => {
+const NameFooter = (props) => {
     const { setNamePasses, name } = props
     const [footerText, setFooterText] = useState('Name must contain letters & spaces only.')
     const [footerClass, setFooterClass] = useState('grey')

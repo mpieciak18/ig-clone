@@ -5,17 +5,15 @@ import { PasswordFooter } from './children/PasswordFooter.js'
 import { NameFooter } from './children/NameFooter.js'
 import { EmailFooter } from './children/EmailFooter.js'
 import { newUser } from '../../firebase/users.js'
-import { Navigate, useLocation } from 'react-router-dom'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 
 const SignUp = (props) => {
     // Redirect to settings if already signed in
     const { user } = props
-    const redirect = () => {
-        return <Navigate to='/settings' />
-    }
+    const navigate = useNavigate()
     if (user.loggedIn == true) {
-        redirect()
+        navigate('/settings')
     }
 
     // Init criteria for form validation
@@ -83,15 +81,10 @@ const SignUp = (props) => {
 
     const login = (
         <div id='sign-up-login'>
-            <div id='sign-up-login-message'></div>
-            <button id='sign-up-login-button' onClick={goToLogin}></button>
+            <div id='sign-up-login-message'>Already Sign Up?</div>
+            <button id='sign-up-login-button' onClick={() => navigate('/login')}>Login</button>
         </div>
     )
-
-    const prevPath = useLocation().state.path
-    const goToLogin = () => {
-        return <Navigate to='/login' state={{path: prevPath}}/>
-    }
 
     return (
         <div id="sign-up" className="page">
