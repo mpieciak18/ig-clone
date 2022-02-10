@@ -1,13 +1,72 @@
-/* User Card Styling */
+/* Home Page Styling */
 
 @media (min-width: 800px) {
-    #user-card-icon {
-        max-width: 50%;
+    #home-container {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-around;
+        margin: 20px 0px;
     }
 }
 
 @media (max-width: 800px) {
-    #user-card-icon {
-        max-width: 50%;
+    #home-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 20px 0px;
     }
+}
+
+/* User Card Styling */
+
+#user-card-icon {
+    width: 80px;
+    height: auto;
+    border-radius: 50%;
+}
+
+#user-card-top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#user-card-name {
+    font-size: larger;
+    font-weight: bold;
+}
+
+#user-card-username {
+    color: rgb(150, 150, 150);
+}
+
+#user-card-top:link, #user-card-top:visited, #user-card-top:active, #user-card-top:hover {
+    text-decoration: none;
+    color: black;
+}
+
+#user-card-bottom {
+    display: flex;
+    flex-direction: row;
+}
+
+#user-card-bottom > * {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#user-card-bottom > * > * {
+    margin: 5px 10px;
+}
+
+.user-stats-child-num {
+    font-weight: bolder;
+    font-size: small;
+}
+
+.user-stats-child-type {
+    font-size: small;
 }

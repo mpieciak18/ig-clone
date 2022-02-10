@@ -4,7 +4,6 @@ import { Navbar } from '../other/Navbar.js'
 import { PostReel } from '../Post/children/PostReel.js'
 import { UserCard } from '../Home/children/UserCard.js'
 import { useEffect, useState } from 'react'
-import { getUrl } from '../../firebase/storage.js'
 
 const Home = (props) => {
     const { user } = props
@@ -68,15 +67,16 @@ const Home = (props) => {
                     })
                 }
             })()}
-        )
         </div>
     )
 
     return (
         <div id='home' className='page'>
             <Navbar user={user} />
-            <UserCard user={user} />
-            {posts}
+            <div id='home-container'>
+                <UserCard user={user} />
+                {posts}
+            </div>
         </div>
     )
 }
