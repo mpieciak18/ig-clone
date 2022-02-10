@@ -1,0 +1,13 @@
+/* User Card Styling */
+
+@media (min-width: 800px) {
+    #user-card-icon {
+        max-width: 50%;
+    }
+}
+
+@media (max-width: 800px) {
+    #user-card-icon {
+        max-width: 50%;
+    }
+}

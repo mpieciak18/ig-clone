@@ -1,6 +1,6 @@
 import './other.css'
 import { useState } from 'react'
-import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { NewPost } from './NewPost.js'
 import { useEffect } from 'react'
 import LogoSolid from '../../assets/images/ig-logo-4.png'
