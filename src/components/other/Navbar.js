@@ -38,7 +38,7 @@ const Navbar = (props) => {
     }
 
     const clickAddPost = () => {
-        if (user.loggedIn == false) {
+        if (user == null) {
             navigate('/signup', {state: {path: path}})
         } else {
             setNewPostOn(true)
@@ -55,7 +55,7 @@ const Navbar = (props) => {
     }, [newPostOn])
 
     const clickNotifications = () => {
-        if (user.loggedIn == false) {
+        if (user == null) {
             return navigate('/signup', {state: {path: path}})
         } else {
             return navigate('/notifications', {state: {path: path}})
@@ -63,7 +63,7 @@ const Navbar = (props) => {
     }
 
     const clickMessages = () => {
-        if (user.loggedIn == false) {
+        if (user == null) {
             return navigate('/signup', {state: {path: path}})
         } else {
             return navigate('/messages')
@@ -71,7 +71,7 @@ const Navbar = (props) => {
     }
 
     const clickSettings = () => {
-        if (user.loggedIn == false) {
+        if (user == null) {
             return navigate('/signup', {state: {path: path}})
         } else {
             return navigate('/settings')

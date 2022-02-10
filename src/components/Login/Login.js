@@ -1,14 +1,17 @@
 import './Login.css'
 import { Navbar } from '../other/Navbar.js'
 import { signInUser } from '../../firebase/users.js'
-import { Navigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 
 const Login = (props) => {
     // Redirect to home if already logged in
     const { user } = props
-    if (user.loggedIn == true) {
-        return <Navigate to='/' />
+
+    const navigate = useNavigate()
+
+    if (user == null) {
+        navigate('/')
     }
 
     const newLogin = async (e) => {
@@ -18,9 +21,7 @@ const Login = (props) => {
         // Add new user to firebase/auth & return any errors
         const possibleError = await signInUser(email, password)
         if (possibleError == null) {
-            // Redirect to previous page (if available) OR home
-            const prevPath = useLocation().state.path || '/'
-            return <Navigate to={prevPath} />
+            navigate('/')
         } else {
             setErrorClass('visible')
             setTimeout(() => {setErrorClass('hidden')}, 2000)
@@ -49,7 +50,7 @@ const Login = (props) => {
                         <input id='login-email-input' name='email' placeholder='email' />
                     </div>
                     <div id='login-password-parent'>
-                        <input id='login-password-input' name='password' placeholder='password' />
+                        <input id='login-password-input' type='password' name='password' placeholder='password' />
                     </div>
                     <button type='submit' id='login-form-button' className='active'>
                         Login

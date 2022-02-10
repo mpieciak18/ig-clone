@@ -26,14 +26,14 @@ const deleteFile = async (folder, fileName) => {
 }
 
 // Get file url from storage & return URL as string
-const getUrl = async(folder, fileName) => {
-    const path = `/${folder}/${fileName}`
+const getUrl = async(fileName) => {
+    const path = `/images/${fileName}`
     const reference = ref(storage, path)
     try {
         const url = await getDownloadURL(reference)
         return url
     } catch(error) {
-        return null
+        return error
     }
 }
 

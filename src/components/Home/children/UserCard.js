@@ -41,7 +41,7 @@ const UserCard = (props) => {
         }
     }, [followsOn])
 
-    if (user.loggedIn == false) {
+    if (user == null) {
         return (
             <div id="user-card">
                 <Link id="user-card-sign-up" to='/signup'>Sign Up</Link>
@@ -52,23 +52,23 @@ const UserCard = (props) => {
         return (
             <div id="user-card">
                 <Link id="user-card-top" to={`/${user.id}`}>
-                    <img id='user-card-icon' src={async () => await getUrl(user.image)} />
+                    <img id='user-card-icon' src={user.data.image} />
                     <div id="user-card-names">
-                        <div id='user-card-name'>{user.name}</div>
-                        <div id='user-card-username'>{user.username}</div>
+                        <div id='user-card-name'>{user.data.name}</div>
+                        <div id='user-card-username'>{user.data.username}</div>
                     </div>
                 </Link>
                 <div id='user-card-stats'>
                     <div id='user-card-posts'>
-                        <p className='user-stats-child'>{user.posts}</p>
+                        <p className='user-stats-child'>{user.data.posts}</p>
                         <p className='user-stats-child'>Posts</p>
                     </div>
                     <div id='user-card-following'>
-                        <p className='user-stats-child'>{user.following}</p>
+                        <p className='user-stats-child'>{user.data.following}</p>
                         <p className='user-stats-child' onClick={clickFollowing}>Following</p>
                     </div>
                     <div id='user-card-followers'>
-                        <p className='user-stats-child'>{user.followers}</p>
+                        <p className='user-stats-child'>{user.data.followers}</p>
                         <p className='user-stats-child' onClick={clickFollowers}>Followers</p>
                     </div>
                 </div>

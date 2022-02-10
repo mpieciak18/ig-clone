@@ -1,8 +1,9 @@
-// Firebase modules
+// Firebase & React modules
 import { initializeApp } from "firebase/app"
 import { getFirestore } from "firebase/firestore"
-import { getAuth } from "firebase/auth"
+import { getAuth, onAuthStateChanged } from "firebase/auth"
 import { getStorage } from "firebase/storage"
+import { useEffect } from "react"
 
 // Firebase configuration settings
 const firebaseConfig = {
@@ -26,5 +27,35 @@ const auth = getAuth(app)
 
 // Storage initialization
 const storage = getStorage(app)
+
+// // Custom hook
+// const useFirebaseAuthentication = (firebase) => {
+//     const [user, setUser] = useState({
+//         loggedIn: false,
+//         id: '',
+//         name: '',
+//         username: '',
+//         email: '', 
+//         image: '',
+//         followers: ''
+//     })
+
+//     useEffect(() =>{
+//        const unlisten = onAuthStateChanged(
+//           authUser => {
+//             authUser
+//               ? setAuthUser(authUser)
+//               : setAuthUser(null);
+//           },
+//        );
+//        return () => {
+//            unlisten();
+//        }
+//     }, []);
+
+//     return authUser
+// }
+
+// export default useFirebaseAuthentication;
 
 export { db, auth, storage }

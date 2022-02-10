@@ -12,62 +12,25 @@ import {Notifications} from "./components/Notifications/Notifications.js"
 import {Conversation} from './components/Conversation/Conversation.js'
 import { auth } from "./firebase/firebase.js"
 import { findUser } from './firebase/users.js'
+import { onAuthStateChanged } from "firebase/auth"
 
 const App = () => {
-    // Return new user object from arguments
-    const updateUserObject = (loggedIn, id, name, username, email, image, followers) => {
-        return {
-            loggedIn: loggedIn,
-            id: id,
-            name: name,
-            username: username,
-            email: email, 
-            image: image,
-            followers: followers
-        }
-    }
 
     // Initialize user state
-    let userObject = {}
-    if (auth.currentUser != null) {
-        (async () => {
-            const user = await findUser(auth.currentUser.uid)
-            userObject = updateUserObject(
-                true, 
-                user.id, 
-                user.data.name, 
-                user.data.username, 
-                user.data.email, 
-                user.data.image, 
-                user.data.followers
-            )
-        })()
-    } else {
-        userObject = updateUserObject(false, '', '', '', '', '', '')
-    }
-    const [user, setUser] = useState(userObject)
+    const [user, setUser] = useState(null)
 
-    // Update user state when user signs in or signs out
     useEffect(() => {
-        // User signs in
-        if (auth.currentUser != null) {
-            const user = findUser(auth.currentUser.uid)
-            const userObject = updateUserObject(
-                true, 
-                user.id, 
-                user.data.name, 
-                user.data.username, 
-                user.data.email, 
-                user.data.image, 
-                user.data.followers
-            )
-            setUser(userObject)
-        // User signs out
-        } else {
-            const userObject = updateUserObject(false, '', '', '', '', '', '')
-            setUser(userObject)
-        }
-      }, [auth.currentUser])
+        onAuthStateChanged(auth, async (authUser) => {
+            console.log(authUser)
+            console.log(authUser.uid)
+            if (authUser != null) {
+                const newUser = await findUser(authUser.uid)
+                setUser(newUser)
+            } else {
+                setUser(null)
+            }
+        })
+    }, [])
 
     return (
         <BrowserRouter basename={process.env.PUBLIC_URL}>
