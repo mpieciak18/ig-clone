@@ -14,7 +14,6 @@ import {
     signInWithEmailAndPassword, 
     signOut 
 } from "firebase/auth"
-import { getUrl } from "./storage.js"
 
 // Register new user
 const newUser = async (username, name, email, password) => {
@@ -69,7 +68,6 @@ const findUser = async (userId) => {
         id: userDoc.id,
         data: userDoc.data()
     }
-    user.data.image = await getUrl(user.data.image)
     return user
 }
 

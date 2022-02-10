@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { getFollowing, getFollowers } from '../../firebase/followers.js'
 import { FollowButton } from './FollowButton.js'
 import './other.css'
@@ -7,6 +7,8 @@ import { getUrl } from '../../firebase/storage.js'
 
 const Follows = async (props) => {
     const { setFollowsOn, userId, followingVsFollower, setFollowingVsFollower } = props
+
+    const navigate = useNavigate()
 
     // Closes follows pop-up
     const hideFollows = (e) => {
@@ -87,7 +89,7 @@ const Follows = async (props) => {
         return (
             <div id='follows-list' onScroll={loadMore}>
                 {users.map(async (user) => {
-                    const redirect = () => <Navigate to={`/${user.id}`} />
+                    const redirect = () => navigate(`/${user.id}`)
                     const image = await getUrl(user.data.image)
                     return (
                         <div className='follow-row' onClick={redirect}>

@@ -4,7 +4,7 @@ import { getUrl } from "../../../firebase/storage.js"
 const ImageInput = (props) => {
     const { user, inputRef, setFile } = props
 
-    const [filePreview, setFilePreview] = useState(getUrl('images', user.image))
+    const [filePreview, setFilePreview] = useState(getUrl(user.data.image))
 
     const maxFileSize = 10 * 1024 * 1024 // 5 MB
 
@@ -13,7 +13,7 @@ const ImageInput = (props) => {
         if (inputRef.current.files[0].size > maxFileSize) {
             inputRef.current.value = ''
             setFile(null)
-            setFilePreview(getUrl('images', user.image))
+            setFilePreview(getUrl(user.data.image))
         } else {
             setFile(inputRef.current.files[0])
             setFilePreview(URL.createObjectURL(inputRef.current.files[0]))

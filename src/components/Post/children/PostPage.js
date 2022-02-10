@@ -35,8 +35,8 @@ const PostPage = async (props) => {
             {comments.map(async (comment) => {
                 const commenterId = comment.data.user
                 const commenter = await findUser(commenterId)
-                const commenterName = commenter.name
-                const commenterImage = await getUrl(commenter.image)
+                const commenterName = commenter.data.name
+                const commenterImage = await getUrl(commenter.data.image)
                 const commentDate = timeSinceTrunc(comment.data.date)
                 return (
                     <div className='post-comment'>
@@ -80,7 +80,11 @@ const PostPage = async (props) => {
     }, [commentQuantity])
 
     // Get post owner's profile image
-    const postOwnerImage = async () => (await findUser(postOwnerId)).data.image
+    const postOwnerImage = async () => {
+        const image = await (findUser(postOwnerId).data.image)
+        const imgUrl = await getUrl(image) 
+        return imgUrl
+    }
 
     // Init likesOn state
     const [likesOn, setLikesOn] = useState(false)
@@ -114,7 +118,7 @@ const PostPage = async (props) => {
             <div className="post-right">
                 <div className="post-right-top">
                     <Link className="post-user-link" to={`/${postOwnerId}`}>
-                        <img className="post-user-link-avatar" src={postOwnerImage} />
+                        <img className="post-user-link-avatar" src={postOwnerImage()} />
                         <div className="post-user-link-name-and-username-parent">
                             <div className='post-user-link-name'></div>
                             <div className='post-user-link-username'></div>

@@ -29,10 +29,11 @@ const Settings = (props) => {
                 image = user.image
             } else {
                 image = file.name
-                await uploadFile('images', file)
+                const path = `/${user.id}/${image}`
+                await uploadFile(file, path)
             }
             const possibleError = await updateUser(
-                image,
+                path,
                 name,
                 bio
             )

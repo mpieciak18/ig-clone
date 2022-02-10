@@ -4,7 +4,7 @@ import { newPost } from '../../firebase/posts.js'
 import './other.css'
 
 const NewPost = (props) => {
-    const { setNewPostOn } = props
+    const { user, setNewPostOn } = props
 
     const inputRef = useRef()
 
@@ -40,8 +40,9 @@ const NewPost = (props) => {
         if (isValid == true) {
             const caption = e.target.caption.value
             const image = file.name
-            await uploadFile('images', file)
-            await newPost(caption, image)
+            const path = `/${user.id}/${image}`
+            await uploadFile(file, path)
+            await newPost(caption, path)
             await setNewPostOn(false)
         } 
     }

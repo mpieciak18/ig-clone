@@ -6,6 +6,20 @@ import { useState, useEffect } from "react"
 const UserCard = (props) => {
     const { user } = props
 
+    // Init state for user's profile image
+    const [userImage, setUserImage] = useState(null)
+
+    // Updates user image state when user prop changes
+    useEffect(async() => {
+        if (user == null) {
+            setUserImage(null)
+        } else {
+            const path = `/${user.data.image}`
+            const img = await getUrl(path)
+            setUserImage(img)
+        }
+    }, user)
+
     // Init state to show/hide Follows pop-up
     const [followsOn, setFollowsOn] = useState(false)
 
@@ -52,7 +66,7 @@ const UserCard = (props) => {
         return (
             <div id="user-card">
                 <Link id="user-card-top" to={`/${user.id}`}>
-                    <img id='user-card-icon' src={user.data.image} />
+                    <img id='user-card-icon' src={userImage} />
                     <div id="user-card-names">
                         <div id='user-card-name'>{user.data.name}</div>
                         <div id='user-card-username'>{`@${user.data.username}`}</div>

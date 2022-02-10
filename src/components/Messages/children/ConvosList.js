@@ -1,13 +1,16 @@
 import { timeSinceTrunc } from '../../../other/timeSinceTrunc.js'
 import { getUrl } from '../../../firebase/storage.js'
+import { useNavigate } from 'react-router-dom'
 
 // Component list all available convos in a user's messages
 const ConvosList = (props) => {
     const { user, convosArr } = props
 
+    const navigate = useNavigate()
+
     // Redirect to inidividual conversation page
     const redirect = (userId) => {
-        return <Navigate to={`/messages/${userId}`} />
+        return navigate(`/messages/${userId}`)
     }
 
     // Renders individual convo preview
@@ -36,10 +39,14 @@ const ConvosList = (props) => {
         </div>
     )
 
+    const userIcon = async () => {
+        return await getUrl(user.data.image)
+    }
+
     return (
-        <div id="convos-list" class={componentClass}>
+        <div id="convos-list">
             <div id='convos-list-top'>
-                <img id='convos-list-user-icon' src={`/${getUrl(user.image)}`} />
+                <img id='convos-list-user-icon' src={`/${userIcon()}`} />
                 <div id='convos-list-top-title'>
                     Messages
                 </div>

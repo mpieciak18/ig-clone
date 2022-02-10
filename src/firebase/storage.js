@@ -1,9 +1,9 @@
 import { storage } from "./firebase.js"
 import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage"
+import { auth } from "./firebase.js"
 
 // Upload file to storage & return file pathname for future retrieval
-const uploadFile = async (folder, file) => {
-    const path = `/${folder}/${file.name}`
+const uploadFile = async (file, path) => {
     const reference = ref(storage, path)
     try {
         await uploadBytes(reference, file)
@@ -14,8 +14,7 @@ const uploadFile = async (folder, file) => {
 }
 
 // Delete file from storage & return outcome
-const deleteFile = async (folder, fileName) => {
-    const path = `/${folder}/${fileName}`
+const deleteFile = async (path) => {
     const reference = ref(storage, path)
     try {
         await deleteObject(reference)
@@ -26,8 +25,7 @@ const deleteFile = async (folder, fileName) => {
 }
 
 // Get file url from storage & return URL as string
-const getUrl = async(fileName) => {
-    const path = `/images/${fileName}`
+const getUrl = async (path) => {
     const reference = ref(storage, path)
     try {
         const url = await getDownloadURL(reference)

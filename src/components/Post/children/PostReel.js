@@ -74,7 +74,7 @@ const PostReel = async (props) => {
             <div className="post-top"></div>
                 <div className="post-top-left">
                     <Link className="post-user-link" to={`/${postOwnerId}`}>
-                        <img className="post-user-link-avatar" src={getUrl(postOwnerImage)} />
+                        <img className="post-user-link-avatar" src={async () => await getUrl(postImage)} />
                         <div className="post-user-link-name-and-username-parent">
                             <div className='post-user-link-name'></div>
                             <div className='post-user-link-username'></div>
@@ -82,7 +82,7 @@ const PostReel = async (props) => {
                     </Link>
                 </div>
             <div className="post-middle">
-                <img className="post-image" src={getUrl(postImage)} />
+                <img className="post-image" src={async () => await getUrl(postImage)} />
             </div>
             <div className="post-bottom">
                 <PostButtons user={user} postId={postId} postOwnerId={postOwnerId} inputRef={inputRef} />
