@@ -5,6 +5,7 @@ import {
     setDoc,
     getDoc,
     getDocs,
+    updateDoc,
     deleteDoc,
     collectionGroup,
     query,
@@ -89,7 +90,8 @@ const addPostToUserPostsCollection = async (data) => {
 // Change post count for  user
 const changePostCount = async (userId, increase) => {
     // First, grab old post count
-    const userRef = getUserRef(userId)
+    const usersRef = collection(db, 'users')
+    const userRef = doc(usersRef, userId)
     const userDoc = await getDoc(userRef)
     let postCount = userDoc.data().posts
     // Second, increase or decrease follower count

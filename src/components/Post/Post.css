@@ -1,0 +1,68 @@
+/* Post Reel Styling */
+
+@media (max-width: 800px) {
+    .single-post-component .post-image {
+        width: 350px;
+        height: 350px;
+        object-fit: cover;
+    }
+}
+
+@media (min-width: 800px) {
+    .single-post-component .post-image {
+        width: 550px;
+        height: 550px;
+        object-fit: cover;
+    }
+}
+
+.single-post-component {
+    border-radius: 10px;
+    box-shadow: 0 0 20px 10px rgba(0,0,0,.1);
+    font-size: small;
+}
+
+.single-post-component .post-user-link-avatar {
+    width: 40px;
+    height: auto;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.single-post-component .post-top {
+    padding: 10px;
+}
+
+.single-post-component .post-user-link {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+}
+
+.single-post-component .post-user-link-name {
+    font-weight: bold;
+    color: black;
+}
+
+.single-post-component .post-user-link-username {
+    color: rgb(150, 150, 150);
+}
+
+.single-post-component .post-user-link:link, .single-post-component .post-user-link:visited, .single-post-component .post-user-link:active, .single-post-component .post-user-link:hover {
+    text-decoration: none;
+}
+
+.single-post-component .post-bottom {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+/* Buttons Styling */
+
+.post-like-button, .post-save-button, .post-comment-button, .post-share-button {
+    height: 20px;
+    width: auto;
+    cursor: pointer;
+}

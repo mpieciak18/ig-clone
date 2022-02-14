@@ -13,22 +13,24 @@ const Home = (props) => {
 
     // Init posts array state
     const [postsArr, setPostsArr] = useState(
-        (async () => {
+        async () => {
             const value = await findPosts(postsNumber)
             return value
-        })()
+        }
     )
+
+    // Init posts component state
+    const [posts, setPosts] = useState(null)
 
     // Init all loaded state
     const [allLoaded, setAllLoaded] = useState(false)
 
     // Load-more function that updates the posts reel
     const loadMore = () => {
-        // if (allLoaded == false) {
-        //     const newPostsNumber = postsNumber + 10
-        //     setPostsNumber(newPostsNumber)
-        // }
-        console.log('yes')
+        if (allLoaded == false) {
+            const newPostsNumber = postsNumber + 10
+            setPostsNumber(newPostsNumber)
+        }
     }
 
     // Load more content when user reaches bottom of document
@@ -38,37 +40,37 @@ const Home = (props) => {
       }
     })
 
-    // Update posts state when postsNumber state changes
+    // Update postsArr state when postsNumber state changes
     useEffect(async () => {
         const newPostsArr = await findPosts(postsNumber)
         setPostsArr(newPostsArr)
         if (newPostsArr.length < postsNumber) {
-            setAllLoaded(true)
+            setAllLoaded('true')
         }
     }, [postsNumber])
 
-    const posts = (
-        <div id='home-posts'>
-            {(() => {
-                if (postsArr.length != null) {
-                    postsArr.map((post) => {
-                        return (
-                            <PostReel
-                                postId={post.id}
-                                postText={post.data.text}
-                                postImage={post.data.image}
-                                postDate={post.data.date}
-                                postOwnerId={post.data.user}
-                                postLikes={post.data.likes}
-                                postComments={post.data.comments}
-                                user={user}
-                            />
-                        )
-                    })
-                }
-            })()}
-        </div>
-    )
+    // Update posts component state when postArr state changes
+    useEffect(async () => {
+        const newPosts = (
+            <div id='home-posts'>
+                {postsArr.map((post) => {
+                    return (
+                        <PostReel
+                            postId={post.id}
+                            postText={post.data.text}
+                            postImage={post.data.image}
+                            postDate={post.data.date}
+                            postOwnerId={post.data.user}
+                            postLikes={post.data.likes}
+                            postComments={post.data.comments}
+                            user={user}
+                        />
+                    )
+                })}
+            </div>
+        )
+        setPosts(newPosts)
+    }, [postsArr])
 
     return (
         <div id='home' className='page'>

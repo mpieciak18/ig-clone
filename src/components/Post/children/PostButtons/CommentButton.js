@@ -1,4 +1,4 @@
-const CommentButton = async (props) => {
+const CommentButton = (props) => {
     const { user, redirect, inputRef } = props
 
     // Runs when comment button is clicked and sets focus on ref (which is the comment input bar on the post)

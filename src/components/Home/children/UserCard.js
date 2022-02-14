@@ -14,11 +14,11 @@ const UserCard = (props) => {
         if (user == null) {
             setUserImage(null)
         } else {
-            const path = `/${user.data.image}`
+            const path = user.data.image
             const img = await getUrl(path)
             setUserImage(img)
         }
-    }, user)
+    }, [user])
 
     // Init state to show/hide Follows pop-up
     const [followsOn, setFollowsOn] = useState(false)

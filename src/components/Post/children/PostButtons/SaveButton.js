@@ -1,11 +1,11 @@
 import { saveExists, addSave, removeSave } from '../../../../firebase/saves.js'
 import { useState } from 'react'
 
-const SaveButton = async (props) => {
+const SaveButton = (props) => {
     const { user, postId, postOwnerId, redirect } = props
 
     // Init saves & add functionality to the save button
-    const [saveId, setSaveId] =  useState(await saveExists(saveId))
+    const [saveId, setSaveId] =  useState(async () => await saveExists(saveId))
     const [saveButtonClass, setSaveButtonClass] = useState(() => {
         if (saveId != null) {
             return 'post-save-button saved'

@@ -21,8 +21,6 @@ const App = () => {
 
     useEffect(() => {
         onAuthStateChanged(auth, async (authUser) => {
-            console.log(authUser)
-            console.log(authUser.uid)
             if (authUser != null) {
                 const newUser = await findUser(authUser.uid)
                 setUser(newUser)

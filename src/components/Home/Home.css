@@ -5,7 +5,7 @@
         display: flex;
         flex-direction: row-reverse;
         justify-content: space-around;
-        margin: 20px 0px;
+        max-width: 1000px;
     }
 }
 
@@ -14,11 +14,20 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin: 20px 0px;
+        padding-bottom: 40px;
     }
 }
 
+#home-container {
+    display: flex;
+    margin: 20px auto;
+}
+
 /* User Card Styling */
+
+#user-card {
+    margin-bottom: 20px;
+}
 
 #user-card-icon {
     width: 80px;
@@ -36,6 +45,7 @@
 #user-card-name {
     font-size: larger;
     font-weight: bold;
+    color: black;
 }
 
 #user-card-username {
@@ -44,7 +54,6 @@
 
 #user-card-top:link, #user-card-top:visited, #user-card-top:active, #user-card-top:hover {
     text-decoration: none;
-    color: black;
 }
 
 #user-card-bottom {
