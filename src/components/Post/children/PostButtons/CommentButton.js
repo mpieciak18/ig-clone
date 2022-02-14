@@ -1,16 +1,32 @@
+import CommentHollow from '../../../../assets/images/messages.png'
+import CommentSolid from '../../../../assets/images/messages-solid.png'
+import {useState} from 'react'
+
 const CommentButton = (props) => {
     const { user, redirect, inputRef } = props
 
+    const [img, setImg] = useState(CommentHollow)
+
     // Runs when comment button is clicked and sets focus on ref (which is the comment input bar on the post)
     const commentButtonFunction = () => {
-        inputRef.current.focus()
+        if (user.loggedIn == true) {
+            inputRef.current.focus()
+        } else {
+            redirect()
+        }
     }
 
-    if (user.loggedIn == true) {
-        return <img className="post-comment-button" onClick={commentButtonFunction}/> 
-    } else {
-        return <img className="post-comment-button" onClick={redirect} />
-    }
+    return (
+        <img
+            className="post-comment-button"
+            onClick={commentButtonFunction}
+            onMouseDown={() => setImg(CommentSolid)}
+            onMouseUp={() => setImg(CommentHollow)}
+            onMouseOver={() => setImg(CommentSolid)}
+            onMouseOut={() => setImg(CommentHollow)}
+            src={img}
+        />
+    )
 }
 
 export { CommentButton }

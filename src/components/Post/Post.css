@@ -30,7 +30,11 @@
 }
 
 .single-post-component .post-top {
+    display: flex;
+    flex-direction: row;
     padding: 12px 20px;
+    justify-content: space-between;
+    align-items: flex-end;
 }
 
 .single-post-component .post-user-link {
@@ -45,8 +49,12 @@
     color: black;
 }
 
-.single-post-component .post-user-link-username {
+.single-post-component .post-user-link-username, .single-post-component .post-date {
     color: rgb(150, 150, 150);
+}
+
+.single-post-component .post-date {
+    padding-bottom: 5px;
 }
 
 .single-post-component .post-user-link:link, .single-post-component .post-user-link:visited, .single-post-component .post-user-link:active, .single-post-component .post-user-link:hover {
@@ -57,6 +65,11 @@
     display: flex;
     flex-direction: column;
     padding: 12px 20px;
+}
+
+.single-post-component .post-view-comments:link, .single-post-component .post-view-comments:visited, .single-post-component .post-view-comments:active, .single-post-component .post-view-comments:hover {
+    text-decoration: none;
+    color: rgb(150, 150, 150);
 }
 
 /* Buttons Styling */

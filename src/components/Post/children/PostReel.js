@@ -136,6 +136,11 @@ const PostReel = (props) => {
                         <div className='post-user-link-username'>@{postOwnerUsername}</div>
                     </div>
                 </Link>
+                <div className='post-top-right'>
+                    <div className='post-date'>
+                        {timeSince(postDate)}
+                    </div>
+                </div>
             </div>
             <div className="post-middle">
                 <img className="post-image" src={postImgSrc} />
@@ -163,9 +168,6 @@ const PostReel = (props) => {
                     })()}
                 </Link>
                 {/* {comments} */}
-                <div id='post-date'>
-                    {timeSince(postDate)}
-                </div>
                 {/* <CommentsBar
                     user={user}
                     postId={postId}
