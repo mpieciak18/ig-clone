@@ -10,15 +10,15 @@ const LikeButton = (props) => {
 
     const [isUpdating, setIsUpdating] = useState(false)
 
-    const [imgSrc, setImgSrc] = useState(LikeHollow)
+    const [img, setImg] = useState(LikeHollow)
 
     useEffect(async () => {
         const id = await likeExists(postId, postOwnerId)
         setLikeId(id)
         if (id != null) {
-            setImgSrc(LikeSolid)
+            setImg(LikeSolid)
         } else {
-            setImgSrc(LikeHollow)
+            setImg(LikeHollow)
         }
     }, [])
 
@@ -30,12 +30,12 @@ const LikeButton = (props) => {
         if (likeId == null) {
             const id = await addLike(postId, postOwnerId)
             setLikeId(id)
-            setImgSrc(LikeSolid)
+            setImg(LikeSolid)
             setLikesNum(likesNum + 1)
         } else {
             await removeLike(likeId, postId, postOwnerId)
             setLikeId(null)
-            setImgSrc(LikeHollow)
+            setImg(LikeHollow)
             setLikesNum(likesNum - 1)
         }
         // enable like button once everything is done
@@ -45,14 +45,47 @@ const LikeButton = (props) => {
     // Runs when like button is clicked and calls addRemoveLike() when lbfIsrunning is false
     const likeButtonFunction = () => {
         if (user == null) {
-            console.log(user)
             redirect()
         } else if (isUpdating == false && user != null) {
             addRemoveLike()
         }
     }
 
-    return <img className="post-like-button" src={imgSrc} onClick={likeButtonFunction} />
+    return (
+        <img
+            className="post-like-button"
+            src={img}
+            onClick={likeButtonFunction}
+            onMouseDown={() => {
+                if (likeId == null) {
+                    setImg(LikeSolid)
+                } else {
+                    setImg(LikeHollow)
+                }
+            }}
+            onMouseUp={() => {
+                if (likeId == null) {
+                    setImg(LikeHollow)
+                } else {
+                    setImg(LikeSolid)
+                }
+            }}
+            onMouseOver={() => {
+                if (likeId == null) {
+                    setImg(LikeSolid)
+                } else {
+                    setImg(LikeHollow)
+                }
+            }}
+            onMouseOut={() => {
+                if (likeId == null) {
+                    setImg(LikeHollow)
+                } else {
+                    setImg(LikeSolid)
+                }
+            }}
+        />
+    )
 }
 
 export { LikeButton }

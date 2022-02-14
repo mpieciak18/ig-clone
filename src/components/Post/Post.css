@@ -72,10 +72,11 @@
     color: rgb(150, 150, 150);
 }
 
-/* Buttons Styling */
+/* Post Reel Buttons Styling */
 
-.post-like-button, .post-save-button, .post-comment-button, .post-share-button {
-    height: 20px;
+.single-post-component .post-like-button, .single-post-component .post-save-button, .single-post-component .post-comment-button, .single-post-component .post-share-button {
+    height: 25px;
     width: auto;
     cursor: pointer;
+    padding-right: 10px;
 }
