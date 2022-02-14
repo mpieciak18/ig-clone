@@ -28,6 +28,9 @@ const PostReel = (props) => {
     // Init post image state
     const [postImgSrc, setPostImgSrc] = useState(null)
 
+    // Init post likes count state
+    const [likesNum, setLikesNum] = useState(postLikes)
+ 
     // Update previous states on render & changes
     useEffect(async () => {
         const pOwner = await findUser(postOwnerId)
@@ -135,8 +138,15 @@ const PostReel = (props) => {
                 <img className="post-image" src={postImgSrc} />
             </div>
             <div className="post-bottom">
-                <PostButtons user={user} postId={postId} postOwnerId={postOwnerId} inputRef={inputRef} />
-                <div className="post-likes" onClick={() => clickLikes}>{postLikes} Likes</div>
+                <PostButtons
+                    user={user}
+                    postId={postId}
+                    postOwnerId={postOwnerId}
+                    inputRef={inputRef}
+                    likesNum={likesNum}
+                    setLikesNum={setLikesNum}
+                />
+                <div className="post-likes" onClick={() => clickLikes}>{likesNum} Likes</div>
                 <div className="post-text">{postText}</div>
                 <Link className="post-view-comments" to={`/${postOwnerId}/${postId}`}>
                     View more comments...

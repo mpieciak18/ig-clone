@@ -10,7 +10,8 @@ import {
     query,
     where,
     limit,
-    getDocs
+    getDocs,
+    QuerySnapshot
  } from 'firebase/firestore'
  import { findUser } from './users.js'
 
@@ -44,7 +45,7 @@ const addLike = async (postId, postOwnerId) => {
     const likeRef = getLikeRef(postOwnerId, postId)
     await setDoc(likeRef, data)
     // Fifth, add notification to recipient's subcollection
-    await addNotification('like', otherUserId)
+    await addNotification('like', postOwnerId)
     // Sixth, return like id
     return likeRef.id
 }
@@ -55,7 +56,7 @@ const removeLike = async (likeId, postId, postOwnerId) => {
     const postRef = getPostRef(postOwnerId, postId)
     await changeLikeCount(postRef, false)
     // Second, remove like doc
-    const likeRef = doc(collection(postRef, 'posts'), likeId)
+    const likeRef = doc(collection(postRef, 'likes'), likeId)
     await deleteDoc(likeRef)
 }
 
@@ -78,11 +79,11 @@ const likeExists = async (postId, postOwnerId) => {
     const userId = auth.currentUser.uid
     const likesRef = getLikesRef(postOwnerId, postId)
     const likeRef = query(likesRef, where('user', '==', userId))
-    const likeDoc = await getDoc(likeRef)
-    if (likeDoc.exists() == true) {
-        return likeDoc.id
-    } else {
+    const likeDoc = await getDocs(likeRef)
+    if (likeDoc.empty == true) {
         return null
+    } else {
+        return likeDoc.docs[0].id
     }
 }
 

@@ -4,27 +4,22 @@ import LikeSolid from '../../../../assets/images/like-solid.png'
 import { useEffect, useState } from 'react'
 
 const LikeButton = (props) => {
-    const { user, postId, postOwnerId, redirect } = props
+    const { user, postId, postOwnerId, redirect, setLikesNum, likesNum } = props
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
-
-    const [likeId, setLikeId] =  useState(null)
+    const [likeId, setLikeId] = useState(null)
 
     const [isUpdating, setIsUpdating] = useState(false)
 
     const [imgSrc, setImgSrc] = useState(LikeHollow)
 
     useEffect(async () => {
-        const likeExists = await likeExists(postId, postOwnerId)
-        setLikeId(likeExists)
-        setImgSrc (() => {
-            if (likeExists != null) {
-                return LikeSolid
-            } else {
-                return LikeHollow
-            }
-        })
-        setIsLoggedIn(user != null)
+        const id = await likeExists(postId, postOwnerId)
+        setLikeId(id)
+        if (id != null) {
+            setImgSrc(LikeSolid)
+        } else {
+            setImgSrc(LikeHollow)
+        }
     }, [])
 
     // Called on by likeButtonFunction and runs lbfIsRunning is false
@@ -33,10 +28,15 @@ const LikeButton = (props) => {
         setIsUpdating(true)
         // perform db updates & state changes
         if (likeId == null) {
-            setLikeId(await addLike(postId, postOwnerId))
+            const id = await addLike(postId, postOwnerId)
+            setLikeId(id)
+            setImgSrc(LikeSolid)
+            setLikesNum(likesNum + 1)
         } else {
             await removeLike(likeId, postId, postOwnerId)
             setLikeId(null)
+            setImgSrc(LikeHollow)
+            setLikesNum(likesNum - 1)
         }
         // enable like button once everything is done
         setIsUpdating(false)
@@ -44,9 +44,10 @@ const LikeButton = (props) => {
 
     // Runs when like button is clicked and calls addRemoveLike() when lbfIsrunning is false
     const likeButtonFunction = () => {
-        if (isLoggedIn == false) {
+        if (user == null) {
+            console.log(user)
             redirect()
-        } else if (isUpdating == false && isLoggedIn == true) {
+        } else if (isUpdating == false && user != null) {
             addRemoveLike()
         }
     }
