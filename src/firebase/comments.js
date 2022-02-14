@@ -7,9 +7,25 @@ import {
     getDocs,
     limit,
     query,
-    orderBy
+    orderBy,
+    getDoc,
+    updateDoc
 } from "firebase/firestore"
 import { addNotification } from "./notifications.js"
+
+// Helper functions for db
+const getUsersRef = () => {return collection(db, 'users')}
+const getUserRef = (userId) => {return doc(getUsersRef(), userId)}
+const getPostsRef = (userId) => {return collection(getUserRef(userId), 'posts')}
+const getPostRef = (userId, postId) => {return doc(getPostsRef(userId), postId)}
+const getCommentsRef = (userId, postId) => {return collection(getPostRef(userId, postId), 'likes')}
+const getCommentRef = (userId, postId, commentId=null) => {
+    if (commentId != null) {
+        return doc(getCommentsRef(userId, postId), commentId)
+    } else {
+        return doc(getCommentsRef(userId, postId))
+    }
+}
 
 // Create new comment & return comment ID
 const newComment = async (postId, postOwnerId, text) => {
@@ -26,39 +42,31 @@ const newComment = async (postId, postOwnerId, text) => {
     const commentId = await addCommentToUserPost(commentData, postId, postOwnerId)
     // Third, add notification to post owner's subcollection
     await addNotification('comment', postOwnerId)
-    // Fourth, return comment id
+    // Fourth, change post's comment count
+    await changeCommentCount(postId, postOwnerId, true)
+    // Fifth, return comment id
     return commentId
 }
 
 // Add comment to post in user's subcollection of posts & return id
 const addCommentToUserPost = async (data, postId, postOwnerId) => {
-    const usersRef = collection(db, 'users')
-    const userRef = doc(usersRef, postOwnerId)
-    const postsRef = collection(userRef, 'posts')
-    const postRef = doc(postsRef, postId)
-    const commentsRef = collection(postRef, 'comments')
-    const commentRef = doc(commentsRef)
+    const commentRef = getCommentRef(postOwnerId, postId)
     await setDoc(commentRef, data)
     return commentRef.id
 }
+
 // Remove comment 
 const removeComment = async (commentId, postId, postOwnerId) => {
-    const usersRef = collection(db, 'users')
-    const userRef = doc(usersRef, postOwnerId)
-    const postsRef = collection(userRef, 'posts')
-    const postRef = doc(postsRef, postId)
-    const commentsRef = collection(postRef, 'comments')
-    const commentRef = doc(commentsRef, commentId)
+    // First, change post's comment count
+    await changeCommentCount(postId, postOwnerId, false)
+    // Second, delete comment
+    const commentRef = getCommentRef(postOwnerId, postId, commentId)
     await deleteDoc(commentRef)
 }
 
 // Get comments
 const getComments = async (postId, postOwnerId, quantity) => {
-    const usersRef = collection(db, 'users')
-    const userRef = doc(usersRef, postOwnerId)
-    const postsRef = collection(userRef, 'posts')
-    const postRef = doc(postsRef, postId)
-    const commentsRef = collection(postRef, 'comments')
+    const commentsRef = getCommentsRef(postOwnerId, postId)
     const commentsQuery = query(commentsRef, orderBy("date", "desc"), limit(quantity))
     const commentsDocs = await getDocs(commentsQuery)
     let comments
@@ -70,6 +78,22 @@ const getComments = async (postId, postOwnerId, quantity) => {
         comments = [...comments, comment]
     })
     return comments
+}
+
+// Change comment count for post
+const changeCommentCount = async (postOwnerId, postId, increase) => {
+    // First, grab post ref
+    const postRef = getPostRef(postOwnerId, postId)
+    // Second, grab old comment count
+    const postDoc = await getDoc(postRef)
+    let commentCount = postDoc.data().comments
+    // Third, increase or decrease like count
+    if (increase == true) {
+        commentCount += 1
+    } else {
+        commentCount -= 1
+    }
+    await updateDoc(postRef, {"comments": commentCount})
 }
 
 export { newComment, removeComment, getComments }

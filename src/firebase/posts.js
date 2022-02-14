@@ -69,7 +69,8 @@ const newPost = async (text, image) => {
         image: image,
         date: Date.now(),
         user: userId,
-        likes: 0
+        likes: 0,
+        comments: 0
     }
     const postId = await addPostToUserPostsCollection(postData)
     await changePostCount(userId, true)

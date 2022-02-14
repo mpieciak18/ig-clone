@@ -30,6 +30,9 @@ const PostReel = (props) => {
 
     // Init post likes count state
     const [likesNum, setLikesNum] = useState(postLikes)
+
+    // Init post comments count state
+    const [commentsNum, setCommentsNum] = useState(postComments)
  
     // Update previous states on render & changes
     useEffect(async () => {
@@ -149,7 +152,15 @@ const PostReel = (props) => {
                 <div className="post-likes" onClick={() => clickLikes}>{likesNum} Likes</div>
                 <div className="post-text">{postText}</div>
                 <Link className="post-view-comments" to={`/${postOwnerId}/${postId}`}>
-                    View more comments...
+                    {(() => {
+                        if (commentsNum == 0) {
+                            return (`No comments yet...`)
+                        } else if (commentsNum == 1) {
+                            return (`View 1 comment...`)
+                        } else {
+                            return (`View all ${commentsNum} comments...`)
+                        }
+                    })()}
                 </Link>
                 {/* {comments} */}
                 <div id='post-date'>
