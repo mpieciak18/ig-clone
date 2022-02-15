@@ -67,6 +67,14 @@
     padding: 12px 20px;
 }
 
+.single-post-component .post-likes {
+    font-weight: bold;
+}
+
+.single-post-component .post-bottom > * {
+    padding: 0px 0px 5px 0px;
+}
+
 .single-post-component .post-view-comments:link, .single-post-component .post-view-comments:visited, .single-post-component .post-view-comments:active, .single-post-component .post-view-comments:hover {
     text-decoration: none;
     color: rgb(150, 150, 150);
@@ -80,6 +88,11 @@
 .single-post-component .post-text-name {
     padding-right: 8px;
     font-weight: bold;
+}
+
+.single-post-component .post-text-name:link, .single-post-component .post-text-name:visited, .single-post-component .post-text-name:active, .single-post-component .post-text-name:hover {
+    text-decoration: none;
+    color: black;
 }
 
 .single-post-component .post-comment {

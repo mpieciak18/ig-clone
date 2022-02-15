@@ -116,7 +116,7 @@ const PostReel = (props) => {
                     })()}
                 </div>
                 <div className="post-text-parent">
-                    <div className="post-text-name">{postOwnerName}</div>
+                    <Link className="post-text-name" to={`/${postOwnerId}`}>{postOwnerName}</Link>
                     <div className="post-text">{postText}</div>
                 </div>
                 <Link className="post-view-comments" to={`/${postOwnerId}/${postId}`}>
