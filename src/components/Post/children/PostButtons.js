@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { LikeButton } from './PostButtons/LikeButton.js'
-// import { SaveButton } from './PostButtons/SaveButton.js'
+import { SaveButton } from './PostButtons/SaveButton.js'
 import { CommentButton } from './PostButtons/CommentButton.js'
 // import { ShareButton } from './PostButtons/ShareButton.js'
 
@@ -29,7 +29,7 @@ const PostButtons = (props) => {
                 <CommentButton user={user} redirect={redirectToSignUp} inputRef={inputRef} />
                 {/* <ShareButton /> */}
             </div>
-            {/* <SaveButton user={user} postId={postId} postOwnerId={postOwnerId} redirect={redirectToSignUp} /> */}
+            <SaveButton user={user} postId={postId} postOwnerId={postOwnerId} redirect={redirectToSignUp} />
         </div>
     ) 
 }

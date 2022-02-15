@@ -9,7 +9,7 @@ const CommentButton = (props) => {
 
     // Runs when comment button is clicked and sets focus on ref (which is the comment input bar on the post)
     const commentButtonFunction = () => {
-        if (user.loggedIn == true) {
+        if (user != null) {
             inputRef.current.focus()
         } else {
             redirect()

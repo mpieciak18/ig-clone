@@ -1,51 +1,90 @@
 import { saveExists, addSave, removeSave } from '../../../../firebase/saves.js'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import SaveHollow from '../../../../assets/images/save.png'
+import SaveSolid from '../../../../assets/images/save-solid.png'
 
 const SaveButton = (props) => {
     const { user, postId, postOwnerId, redirect } = props
 
-    // Init saves & add functionality to the save button
-    const [saveId, setSaveId] =  useState(async () => await saveExists(saveId))
-    const [saveButtonClass, setSaveButtonClass] = useState(() => {
-        if (saveId != null) {
-            return 'post-save-button saved'
-        } else {
-            return 'post-save-button not-saved'
-        }
-    })
+    // Init saveId state
+    const [saveId, setSaveId] =  useState(null)
 
-    // Variable which prevents the saveButtonFunction from running more than once simultaneously
-    let sbfIsRunning = false
+    // Init isUpdating state
+    const [isUpdating, setIsUpdating] = useState(false)
 
-    // Called on by saveButtonFunction and runs sbfIsRunning is false
+    // Init icon image source state
+    const [img, setImg] = useState(SaveHollow)
+
+    // Add or removes save from post
     const addRemoveSave = async () => {
-        // disable save button function while functions run
-        sbfIsRunning = true
-        // perform db updates & state changes
+        setIsUpdating(true)
         if (saveId == null) {
-            setSaveId(await addSave(postId, postOwnerId))
-            setSaveButtonClass('post-save-button saved')
+            const id = await addSave(postId, postOwnerId)
+            setSaveId(id)
+            setImg(SaveSolid)
         } else {
             await removeSave(saveId)
             setSaveId(null)
-            setSaveButtonClass('post-save-button not-saved')
+            setImg(SaveHollow)
         }
-        // enable like button once everything is done
-        sbfIsRunning = false
+        setIsUpdating(false)
     }
 
-    // Runs when save button is clicked and calls addRemoveSave() when sbfIsrunning is false
+    // Calls addRemoveSave() if not already running
     const saveButtonFunction = () => {
-        if (sbfIsRunning == false) {
+        if (user == null) {
+            redirect()
+        } else if (isUpdating == false) {
             addRemoveSave()
         }
     }
 
-    if (user.loggedIn == true) {
-        return <img className={saveButtonClass} onClick={saveButtonFunction} /> 
-    } else {
-        return <img className="post-save-button not-saved" onClick={redirect} />
-    }
+    // Update states upon initial mounting
+    useEffect(async () => {
+        const id = await saveExists(postId)
+        setSaveId(id)
+        if (id != null) {
+            setImg(SaveSolid)
+        } else {
+            setImg(SaveHollow)
+        }
+    }, [])
+
+    return (
+        <img
+            className="post-save-button"
+            src={img}
+            onClick={saveButtonFunction}
+            onMouseDown={() => {
+                if (saveId == null) {
+                    setImg(SaveSolid)
+                } else {
+                    setImg(SaveHollow)
+                }
+            }}
+            onMouseUp={() => {
+                if (saveId == null) {
+                    setImg(SaveHollow)
+                } else {
+                    setImg(SaveSolid)
+                }
+            }}
+            onMouseOver={() => {
+                if (saveId == null) {
+                    setImg(SaveSolid)
+                } else {
+                    setImg(SaveHollow)
+                }
+            }}
+            onMouseOut={() => {
+                if (saveId == null) {
+                    setImg(SaveHollow)
+                } else {
+                    setImg(SaveSolid)
+                }
+            }} 
+        />
+    )
 }
 
 export { SaveButton }

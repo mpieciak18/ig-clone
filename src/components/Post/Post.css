@@ -155,3 +155,9 @@
     cursor: pointer;
     padding-right: 10px;
 }
+
+.single-post-component .post-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

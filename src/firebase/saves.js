@@ -7,7 +7,6 @@ import {
     getDocs,
     query,
     limit,
-    getDoc,
     where
 } from 'firebase/firestore'
 
@@ -67,11 +66,12 @@ const findSaves = async (arrQuantity) => {
 }
 
 // Check if user saved post
-const saveExists = async (saveId) => {
-    const saveRef = getSaveRef(saveId)
-    const saveDoc = await getDoc(saveRef)
-    if (saveDoc.exists() == true) {
-        return saveDoc.id
+const saveExists = async (postId) => {
+    const savesRef = getSavesRef()
+    const saveQuery = query(savesRef, where("postId", "==", postId))
+    const saveDoc = await getDocs(saveQuery)
+    if (saveDoc.empty != true) {
+        return saveDoc.docs[0].id
     } else {
         return null
     }
