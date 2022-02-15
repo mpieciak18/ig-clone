@@ -135,13 +135,14 @@ const PostReel = (props) => {
                     postOwnerId={postOwnerId}
                     commentsNum={commentsNum}
                 />
-                {/* <CommentsBar
+                <CommentsBar
                     user={user}
                     postId={postId}
                     postOwnerId={postOwnerId}
-                    updateComments={updateComments}
+                    commentsNum={commentsNum}
+                    setCommentsNum={setCommentsNum}
                     inputRef={inputRef}
-                /> */}
+                />
             </div>
         </div>
     )

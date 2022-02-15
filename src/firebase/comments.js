@@ -28,7 +28,7 @@ const getCommentRef = (userId, postId, commentId=null) => {
 }
 
 // Create new comment & return comment ID
-const newComment = async (postId, postOwnerId, text) => {
+const newComment = async (postOwnerId, postId, text) => {
     // First, set up comment data
     const userId = auth.currentUser.uid
     const commentData = {
@@ -39,40 +39,41 @@ const newComment = async (postId, postOwnerId, text) => {
         text: text
     }
     // Second, add comment to post's subcollection & assing new comment id to variable
-    const commentId = await addCommentToUserPost(commentData, postId, postOwnerId)
+    const commentId = await addCommentToUserPost(postOwnerId, postId, commentData)
     // Third, add notification to post owner's subcollection
     await addNotification('comment', postOwnerId)
     // Fourth, change post's comment count
-    await changeCommentCount(postId, postOwnerId, true)
+    await changeCommentCount(postOwnerId, postId, true)
     // Fifth, return comment id
     return commentId
 }
 
 // Add comment to post in user's subcollection of posts & return id
-const addCommentToUserPost = async (data, postId, postOwnerId) => {
+const addCommentToUserPost = async (postOwnerId, postId, data) => {
     const commentRef = getCommentRef(postOwnerId, postId)
     await setDoc(commentRef, data)
     return commentRef.id
 }
 
 // Remove comment 
-const removeComment = async (commentId, postId, postOwnerId) => {
+const removeComment = async (postOwnerId, postId, commentId) => {
     // First, change post's comment count
-    await changeCommentCount(postId, postOwnerId, false)
+    await changeCommentCount(postOwnerId, postId, false)
     // Second, delete comment
     const commentRef = getCommentRef(postOwnerId, postId, commentId)
     await deleteDoc(commentRef)
 }
 
 // Get comments
-const getComments = async (postId, postOwnerId, quantity) => {
+const getComments = async (postOwnerId, postId, quantity) => {
     const commentsRef = getCommentsRef(postOwnerId, postId)
-    const commentsQuery = query(commentsRef, orderBy("date", "desc"), limit(quantity))
+    const commentsPreQuery = query(commentsRef, orderBy("date", "desc"))
+    const commentsQuery = query(commentsPreQuery, limit(quantity))
     const commentsDocs = await getDocs(commentsQuery)
-    const comments = commentsDocs.docs.map((doc) => {
+    const comments = (commentsDocs.docs).map((comment) => {
         return {
-            id: doc.id,
-            data: doc.data()
+            id: comment.id,
+            data: comment.data()
         }
     })
     return comments
