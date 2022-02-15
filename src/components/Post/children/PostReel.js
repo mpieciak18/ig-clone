@@ -1,9 +1,9 @@
 import './styles/PostPage_and_Reel.css'
 import { useRef, useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { CommentsBar } from './CommentsBar.js'
+import { CommentsBar } from './Comments/CommentsBar.js'
+import { CommentsPreview } from './Comments/CommentsPreview.js'
 import { PostButtons } from './PostButtons.js'
-import { getComments } from '../../../firebase/comments.js'
 import { findUser } from '../../../firebase/users.js'
 import { getUrl } from '../../../firebase/storage.js'
 import { timeSince } from '../../../other/timeSince.js'
@@ -33,7 +33,10 @@ const PostReel = (props) => {
 
     // Init post comments count state
     const [commentsNum, setCommentsNum] = useState(postComments)
- 
+
+    // Set up ref for comment bar / comment button
+    const inputRef = useRef(null)
+
     // Update previous states on render & changes
     useEffect(async () => {
         const pOwner = await findUser(postOwnerId)
@@ -45,59 +48,6 @@ const PostReel = (props) => {
         const pImgSrc = await getUrl(postImage)
         setPostImgSrc(pImgSrc)
     }, [])
-
-    // Set up ref for comment bar / comment button
-    const inputRef = useRef(null)
-
-    // Init comments component state
-    const [comments, setComments] = useState(async () => {
-        const array = await getComments(postId, postOwnerId, 2)
-        if (array != undefined) {
-            array.reverse()
-            return (
-                <div class="post-comments">
-                    {array.map(async (comment) => {
-                        const commenterId = comment.data.user
-                        const commenter = await findUser(commenterId)
-                        const commenterName = commenter.name
-                        return (
-                            <div className='post-comment' key={comment.id}>
-                                <Link to={`/profile/${commenterId}`} className='post-comment-name'>{commenterName}</Link>
-                                <div className='post=comment-text'>{comment.data.text}</div>
-                            </div>
-                        )
-                    })}
-                </div>
-            )
-        } else {
-            return null
-        }
-    })
-
-    // Update comments preview arr upon new comment submission
-    const updateComments = async () => {
-        const array = await getComments(postId, postOwnerId, 2)
-        if (array != undefined) {
-            array.reverse()
-            setComments(
-                <div class="post-comments">
-                    {array.map(async (comment) => {
-                        const commenterId = comment.data.user
-                        const commenter = await findUser(commenterId)
-                        const commenterName = commenter.name
-                        return (
-                            <div className='post-comment' key={comment.id}>
-                                <Link to={`/profile/${commenterId}`} className='post-comment-name'>{commenterName}</Link>
-                                <div className='post=comment-text'>{comment.data.text}</div>
-                            </div>
-                        )
-                    })}
-                </div>
-            )
-        } else {
-            setComments(null)
-        }
-    }
 
     // Init likes component state
     const [likes, setLikes] = useState(null)
@@ -154,8 +104,21 @@ const PostReel = (props) => {
                     likesNum={likesNum}
                     setLikesNum={setLikesNum}
                 />
-                <div className="post-likes" onClick={() => clickLikes}>{likesNum} Likes</div>
-                <div className="post-text">{postText}</div>
+                <div className="post-likes" onClick={() => clickLikes}>
+                    {(() => {
+                        if (likesNum == 0) {
+                            return (`0 likes`)
+                        } else if (likesNum == 1) {
+                            return (`1 like`)
+                        } else {
+                            return (`${likesNum} likes`)
+                        }
+                    })()}
+                </div>
+                <div className="post-text-parent">
+                    <div className="post-text-name">{postOwnerName}</div>
+                    <div className="post-text">{postText}</div>
+                </div>
                 <Link className="post-view-comments" to={`/${postOwnerId}/${postId}`}>
                     {(() => {
                         if (commentsNum == 0) {
@@ -167,7 +130,11 @@ const PostReel = (props) => {
                         }
                     })()}
                 </Link>
-                {/* {comments} */}
+                <CommentsPreview
+                    postId={postId}
+                    postOwnerId={postOwnerId}
+                    commentsNum={commentsNum}
+                />
                 {/* <CommentsBar
                     user={user}
                     postId={postId}

@@ -1,7 +1,7 @@
 import './styles/PostPage_and_Reel.css'
 import { Link, Navigate, useParams, useLocation } from 'react-router-dom'
 import { useEffect, useState, useRef } from 'react'
-import { CommentsBar } from './CommentsBar.js'
+import { CommentsBar } from './Comments/CommentsBar.js'
 import { PostButtons } from './PostButtons.js'
 import { getComments } from '../../../firebase/comments.js'
 import { findSinglePost } from '../../../firebase/posts.js'

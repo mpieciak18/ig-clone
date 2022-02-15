@@ -14,11 +14,11 @@ import {
 import { addNotification } from "./notifications.js"
 
 // Helper functions for db
-const getUsersRef = () => {return collection(db, 'users')}
-const getUserRef = (userId) => {return doc(getUsersRef(), userId)}
-const getPostsRef = (userId) => {return collection(getUserRef(userId), 'posts')}
-const getPostRef = (userId, postId) => {return doc(getPostsRef(userId), postId)}
-const getCommentsRef = (userId, postId) => {return collection(getPostRef(userId, postId), 'likes')}
+const getUsersRef = () => collection(db, 'users')
+const getUserRef = (userId) => doc(getUsersRef(), userId)
+const getPostsRef = (userId) => collection(getUserRef(userId), 'posts')
+const getPostRef = (userId, postId) => doc(getPostsRef(userId), postId)
+const getCommentsRef = (userId, postId) => collection(getPostRef(userId, postId), 'comments')
 const getCommentRef = (userId, postId, commentId=null) => {
     if (commentId != null) {
         return doc(getCommentsRef(userId, postId), commentId)
@@ -69,13 +69,11 @@ const getComments = async (postId, postOwnerId, quantity) => {
     const commentsRef = getCommentsRef(postOwnerId, postId)
     const commentsQuery = query(commentsRef, orderBy("date", "desc"), limit(quantity))
     const commentsDocs = await getDocs(commentsQuery)
-    let comments
-    commentsDocs.forEach((doc) => {
-        const comment = {
+    const comments = commentsDocs.docs.map((doc) => {
+        return {
             id: doc.id,
             data: doc.data()
         }
-        comments = [...comments, comment]
     })
     return comments
 }

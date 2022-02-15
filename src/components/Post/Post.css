@@ -72,6 +72,31 @@
     color: rgb(150, 150, 150);
 }
 
+.single-post-component .post-text-parent {
+    display: flex;
+    flex-direction: row;
+}
+
+.single-post-component .post-text-name {
+    padding-right: 8px;
+    font-weight: bold;
+}
+
+.single-post-component .post-comment {
+    display: flex;
+    flex-direction: row;
+}
+
+.single-post-component .post-comment-name {
+    padding-right: 8px;
+    font-weight: bold;
+}
+
+.single-post-component .post-comment-name:link, .single-post-component .post-comment-name:visited, .single-post-component .post-comment-name:active, .single-post-component .post-comment-name:hover {
+    text-decoration: none;
+    color: rgb(100, 100, 100);
+}
+
 /* Post Reel Buttons Styling */
 
 .single-post-component .post-like-button, .single-post-component .post-save-button, .single-post-component .post-comment-button, .single-post-component .post-share-button {

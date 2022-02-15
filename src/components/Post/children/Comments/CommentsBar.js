@@ -1,4 +1,4 @@
-import { newComment } from '../../../firebase/comments.js'
+import { newComment } from '../../../../firebase/comments.js'
 import { useState } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 
