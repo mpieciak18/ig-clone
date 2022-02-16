@@ -1,22 +1,31 @@
 import { useState } from "react"
-import ShareIcon from '../../../../assets/images/messages.png'
+import ShareHollow from '../../../../assets/images/dm.png'
+import ShareSolid from '../../../../assets/images/dm-solid.png'
 
-const ShareButton = () => {
+const ShareButton = (props) => {
+    const {postOwnerId, postId, setLinkCopied} = props
 
+    // Init icon image source state
+    const [img, setImg] = useState(ShareHollow)
+
+    // Copy post's url to clipboard
     const shareButtonFunction = () => {
-        const url = window.location.href
+        const url = `${window.location.orgin}/${postOwnerId}/${postId}`
         navigator.clipboard.writeText(url)
-        setPopUpClass("post-share-button-pop-up visible")
-        setTimeout(() => {setPopUpClass("post-share-button-pop-up hidden")}, 1500)
+        setLinkCopied(true)
+        setTimeout(() => {setLinkCopied(false)}, 1500)
     }
 
-    const [popUpClass, setPopUpClass] = useState("post-share-button-pop-up hidden")
-
     return (
-        <div className="post-share-button" onClick={shareButtonFunction}>
-            <img className="post-share-button-image" src={ShareIcon} />
-            <div className={popUpClass}>Link Copied!</div>
-        </div>
+        <img
+            onClick={shareButtonFunction}
+            className="post-share-button"
+            src={img}
+            onMouseDown={() => setImg(ShareSolid)}
+            onMouseUp={() => setImg(ShareHollow)}
+            onMouseOver={() => setImg(ShareSolid)}
+            onMouseOut={() => setImg(ShareHollow)} 
+        />
     )
 }
 

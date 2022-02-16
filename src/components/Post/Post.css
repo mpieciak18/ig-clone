@@ -6,6 +6,9 @@
         height: 300px;
         object-fit: cover;
     }
+    .single-post-component .post-middle {
+        height: 300px;
+    }
 }
 
 @media (min-width: 800px) {
@@ -13,6 +16,9 @@
         width: 500px;
         height: 500px;
         object-fit: cover;
+    }
+    .single-post-component .post-middle {
+        height: 500px;
     }
 }
 
@@ -62,10 +68,46 @@
 }
 
 .single-post-component .post-bottom {
+    position: relative;
     display: flex;
     flex-direction: column;
     padding: 12px 20px;
 }
+
+/*  */
+
+.single-post-component .post-bottom-link-copied {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    transition: all .2s ease-in-out;
+}
+.single-post-component .post-bottom-link-copied > div {
+    color: white;
+    transition: all .2s ease-in-out;
+    margin: 0;
+}
+.single-post-component .post-bottom-link-copied.active {
+    height: 100%;
+    padding: 0px;
+}
+.single-post-component .post-bottom-link-copied.active > div {
+    height: auto;
+    font-size: xx-large;
+}
+.single-post-component .post-bottom-link-copied.inactive, .single-post-component .post-bottom-link-copied.inactive > div {
+    height: 0%;
+    font-size: 0px;
+    padding: 0px;
+}
+
+/*  */
 
 .single-post-component .post-likes {
     font-weight: bold;
@@ -97,9 +139,6 @@
 
 .single-post-component .post-comment {
     padding-bottom: 5px;
-}
-
-.single-post-component .post-comment {
     display: flex;
     flex-direction: row;
 }
@@ -139,25 +178,46 @@
     background-color: white;
     padding: 0;
     display: flex;
+    font-weight: bold;
 }
 
-.single-post-component .post-comment-bar-button-icon {
-    height: 25px;
-    width: auto;
+.single-post-component .post-comment-bar-button.active {
     cursor: pointer;
+    color: rgb(100, 100, 100);
+}
+
+.single-post-component .post-comment-bar-button.inactive {
+    cursor: default;
+    color: rgb(200, 200, 200);
 }
 
 /* Post Reel Buttons Styling */
 
-.single-post-component .post-like-button, .single-post-component .post-save-button, .single-post-component .post-comment-button, .single-post-component .post-share-button {
+.single-post-component .post-buttons-left > *, .single-post-component .post-share-button-image {
     height: 25px;
     width: auto;
     cursor: pointer;
     padding-right: 10px;
 }
 
+.single-post-component .post-buttons-left {
+    display: flex;
+    flex-direction: row;
+}
+
+.single-post-component .post-save-button {
+    height: 25px;
+    width: auto;
+    cursor: pointer;
+}
+
 .single-post-component .post-buttons {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+.single-post-component .post-share-button-pop-up {
+    position: relative;
+    top: 0;
 }

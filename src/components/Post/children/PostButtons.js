@@ -2,10 +2,10 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { LikeButton } from './PostButtons/LikeButton.js'
 import { SaveButton } from './PostButtons/SaveButton.js'
 import { CommentButton } from './PostButtons/CommentButton.js'
-// import { ShareButton } from './PostButtons/ShareButton.js'
+import { ShareButton } from './PostButtons/ShareButton.js'
 
 const PostButtons = (props) => {
-    const { user, postId, postOwnerId, inputRef, likesNum, setLikesNum } = props
+    const { user, postId, postOwnerId, inputRef, likesNum, setLikesNum, setLinkCopied } = props
     
     const path = useLocation().pathname
 
@@ -27,7 +27,7 @@ const PostButtons = (props) => {
                     setLikesNum={setLikesNum}
                 />
                 <CommentButton user={user} redirect={redirectToSignUp} inputRef={inputRef} />
-                {/* <ShareButton /> */}
+                <ShareButton postId={postId} postOwnerId={postOwnerId} setLinkCopied={setLinkCopied} />
             </div>
             <SaveButton user={user} postId={postId} postOwnerId={postOwnerId} redirect={redirectToSignUp} />
         </div>

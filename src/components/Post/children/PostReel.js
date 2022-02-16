@@ -8,6 +8,7 @@ import { findUser } from '../../../firebase/users.js'
 import { getUrl } from '../../../firebase/storage.js'
 import { timeSince } from '../../../other/timeSince.js'
 import { Likes } from './Likes.js'
+import { LinkCopied } from './LinkCopied.js'
 
 const PostReel = (props) => {
     // Init props
@@ -48,6 +49,9 @@ const PostReel = (props) => {
         const pImgSrc = await getUrl(postImage)
         setPostImgSrc(pImgSrc)
     }, [])
+
+    // Init linkCopied state for share button
+    const [linkCopied, setLinkCopied] = useState(false)
 
     // Init likes component state
     const [likes, setLikes] = useState(null)
@@ -96,6 +100,7 @@ const PostReel = (props) => {
                 <img className="post-image" src={postImgSrc} />
             </div>
             <div className="post-bottom">
+                <LinkCopied linkCopied={linkCopied} />
                 <PostButtons
                     user={user}
                     postId={postId}
@@ -103,6 +108,7 @@ const PostReel = (props) => {
                     inputRef={inputRef}
                     likesNum={likesNum}
                     setLikesNum={setLikesNum}
+                    setLinkCopied={setLinkCopied}
                 />
                 <div className="post-likes" onClick={() => clickLikes}>
                     {(() => {

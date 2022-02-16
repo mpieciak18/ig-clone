@@ -49,8 +49,8 @@ const CommentsBar = (props) => {
                         value={commentValue}
                         ref={inputRef}
                     />
-                    <button type="submit" className="post-comment-bar-button">
-                        <img className="post-comment-bar-button-icon" src={SendHollow} />
+                    <button type="submit" className="post-comment-bar-button inactive">
+                        Post
                     </button>
                 </form>
             )
@@ -58,13 +58,49 @@ const CommentsBar = (props) => {
             setForm(
                 <form className="post-comment-bar" onClick={redirect}>
                     <input type="text" className="post-comment-bar-input" placeholder="Add a comment..." />
-                    <button type="button" className="post-comment-bar-button">
-                        <img className="post-comment-bar-button-icon" src={SendHollow} />
+                    <button type="button" className="post-comment-bar-button inactive">
+                        Post
                     </button>
                 </form>
             )
         }
-    }, [user, commentValue])
+    }, [user])
+
+    useEffect(() => {
+        if (commentValue.length > 0) {
+            setForm(
+                <form className="post-comment-bar" onSubmit={addNewComment}>
+                    <input 
+                        type="text"
+                        className="post-comment-bar-input"
+                        placeholder="Add a comment..."
+                        onChange={updateComment}
+                        value={commentValue}
+                        ref={inputRef}
+                    />
+                    <button type="submit" className="post-comment-bar-button active">
+                        Post
+                    </button>
+                </form>
+            )
+        } else {
+            setForm(
+                <form className="post-comment-bar">
+                    <input 
+                        type="text"
+                        className="post-comment-bar-input"
+                        placeholder="Add a comment..."
+                        onChange={updateComment}
+                        value={commentValue}
+                        ref={inputRef}
+                    />
+                    <button type="button" className="post-comment-bar-button inactive">
+                        Post
+                    </button>
+                </form>
+            )
+        }
+    }, [commentValue])
 
     return(form)
 }
