@@ -9,8 +9,9 @@
     #navbar {
         display: flex;
         flex-direction: row;
-        padding: 10px 50px;
-        justify-content: space-between;
+        padding: 10px 0;
+        width: 100%;
+        justify-content: space-around;
         align-items: center;
         background-color: white;
         box-shadow: 0 0 20px 10px rgba(0,0,0,.1);
@@ -42,6 +43,7 @@
         flex-direction: row;
         justify-content: space-around;
         padding: 10px 0px;
+        width: 100%;
         align-items: center;
         background-color: white;
         box-shadow: 0 0 20px 10px rgba(0,0,0,.1);

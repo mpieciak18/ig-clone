@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { getLikes } from '../../../firebase/likes.js'
 import { getUrl } from '../../../firebase/storage.js'
 import { FollowButton } from '../../other/FollowButton.js'
-import './styles/Likes.css'
+import '../styles/Likes.css'
 
 const Likes = async (props) => {
     const { setLikesOn, postId, postOwnerId } = props

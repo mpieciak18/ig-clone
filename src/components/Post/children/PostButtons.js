@@ -26,10 +26,23 @@ const PostButtons = (props) => {
                     likesNum={likesNum}
                     setLikesNum={setLikesNum}
                 />
-                <CommentButton user={user} redirect={redirectToSignUp} inputRef={inputRef} />
-                <ShareButton postId={postId} postOwnerId={postOwnerId} setLinkCopied={setLinkCopied} />
+                <CommentButton
+                    user={user}
+                    redirect={redirectToSignUp}
+                    inputRef={inputRef}
+                />
+                <ShareButton
+                    postId={postId}
+                    postOwnerId={postOwnerId}
+                    setLinkCopied={setLinkCopied}
+                />
             </div>
-            <SaveButton user={user} postId={postId} postOwnerId={postOwnerId} redirect={redirectToSignUp} />
+            <SaveButton
+                user={user}
+                postId={postId}
+                postOwnerId={postOwnerId}
+                redirect={redirectToSignUp}
+            />
         </div>
     ) 
 }

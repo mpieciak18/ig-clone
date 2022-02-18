@@ -39,16 +39,18 @@ const SaveButton = (props) => {
         }
     }
 
-    // Update states upon initial mounting
     useEffect(async () => {
         const id = await saveExists(postId)
         setSaveId(id)
-        if (id != null) {
+    }, [user])
+
+    useEffect(() => {
+        if (saveId != null) {
             setImg(SaveSolid)
         } else {
             setImg(SaveHollow)
         }
-    }, [])
+    }, [saveId])
 
     return (
         <img

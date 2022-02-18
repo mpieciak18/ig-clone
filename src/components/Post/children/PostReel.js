@@ -1,4 +1,4 @@
-import './styles/PostPage_and_Reel.css'
+import '../styles/PostReel.css'
 import { useRef, useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { CommentsBar } from './Comments/CommentsBar.js'
@@ -13,9 +13,6 @@ import { LinkCopied } from './LinkCopied.js'
 const PostReel = (props) => {
     // Init props
     const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user } = props
-
-    // Init post owner state
-    const [postOwner, setPostOwner] = useState(null)
 
     // Init post owner name
     const [postOwnerName, setPostOwnerName] = useState(null)
@@ -41,7 +38,6 @@ const PostReel = (props) => {
     // Update previous states on render & changes
     useEffect(async () => {
         const pOwner = await findUser(postOwnerId)
-        setPostOwner(pOwner)
         setPostOwnerName(pOwner.data.name)
         setPostOwnerUsername(pOwner.data.username)
         const pOwnerImgSrc = await getUrl(pOwner.data.image)

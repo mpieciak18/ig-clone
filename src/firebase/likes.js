@@ -12,8 +12,8 @@ import {
     limit,
     getDocs,
     QuerySnapshot
- } from 'firebase/firestore'
- import { findUser } from './users.js'
+} from 'firebase/firestore'
+import { findUser } from './users.js'
 
 // Helper functions for database
 const getUsersRef = () => {return collection(db, 'users')}
@@ -76,10 +76,14 @@ const changeLikeCount = async (postRef, increase) => {
 
 // Check if user already liked post
 const likeExists = async (postId, postOwnerId) => {
-    const userId = auth.currentUser.uid
+    const userId = await auth.currentUser.uid
+    console.log(userId)
     const likesRef = getLikesRef(postOwnerId, postId)
+    console.log(likesRef)
     const likeRef = query(likesRef, where('user', '==', userId))
+    console.log(likeRef)
     const likeDoc = await getDocs(likeRef)
+    console.log(likeDoc)
     if (likeDoc.empty == true) {
         return null
     } else {

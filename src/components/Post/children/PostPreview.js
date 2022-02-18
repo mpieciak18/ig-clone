@@ -1,4 +1,4 @@
-import './styles/PostPreview.css'
+import '../styles/PostPreview.css'
 import { Link } from 'react-router-dom'
 import { getUrl } from '../../../firebase/storage.js'
 

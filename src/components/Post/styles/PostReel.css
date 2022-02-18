@@ -1,23 +1,23 @@
 /* Post Reel Styling */
 
 @media (max-width: 800px) {
-    .single-post-component .post-image {
+    .post-image {
         width: 300px;
         height: 300px;
         object-fit: cover;
     }
-    .single-post-component .post-middle {
+    .post-middle {
         height: 300px;
     }
 }
 
 @media (min-width: 800px) {
-    .single-post-component .post-image {
+    .post-image {
         width: 500px;
         height: 500px;
         object-fit: cover;
     }
-    .single-post-component .post-middle {
+    .post-middle {
         height: 500px;
     }
 }
@@ -28,14 +28,14 @@
     font-size: small;
 }
 
-.single-post-component .post-user-link-avatar {
+.post-user-link-avatar {
     width: 40px;
     height: auto;
     border-radius: 50%;
     margin-right: 10px;
 }
 
-.single-post-component .post-top {
+.post-top {
     display: flex;
     flex-direction: row;
     padding: 12px 20px;
@@ -43,96 +43,61 @@
     align-items: flex-end;
 }
 
-.single-post-component .post-user-link {
+.post-user-link {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: left;
 }
 
-.single-post-component .post-user-link-name {
+.post-user-link-name {
     font-weight: bold;
     color: black;
 }
 
-.single-post-component .post-user-link-username, .single-post-component .post-date {
+.post-user-link-username, .post-date {
     color: rgb(150, 150, 150);
 }
 
-.single-post-component .post-date {
+.post-date {
     padding-bottom: 5px;
 }
 
-.single-post-component .post-user-link:link, .single-post-component .post-user-link:visited, .single-post-component .post-user-link:active, .single-post-component .post-user-link:hover {
+.post-user-link:link, .post-user-link:visited, .post-user-link:active, .post-user-link:hover {
     text-decoration: none;
 }
 
-.single-post-component .post-bottom {
+.post-bottom {
     position: relative;
     display: flex;
     flex-direction: column;
     padding: 12px 20px;
 }
 
-/*  */
-
-.single-post-component .post-bottom-link-copied {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    justify-content: center;
-    align-items: center;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.75);
-    transition: all .2s ease-in-out;
-}
-.single-post-component .post-bottom-link-copied > div {
-    color: white;
-    transition: all .2s ease-in-out;
-    margin: 0;
-}
-.single-post-component .post-bottom-link-copied.active {
-    height: 100%;
-    padding: 0px;
-}
-.single-post-component .post-bottom-link-copied.active > div {
-    height: auto;
-    font-size: xx-large;
-}
-.single-post-component .post-bottom-link-copied.inactive, .single-post-component .post-bottom-link-copied.inactive > div {
-    height: 0%;
-    font-size: 0px;
-    padding: 0px;
-}
-
-/*  */
-
-.single-post-component .post-likes {
+.post-likes {
     font-weight: bold;
 }
 
-.single-post-component .post-bottom > * {
+.post-bottom > * {
     padding: 0px 0px 5px 0px;
 }
 
-.single-post-component .post-view-comments:link, .single-post-component .post-view-comments:visited, .single-post-component .post-view-comments:active, .single-post-component .post-view-comments:hover {
+.post-view-comments:link, .post-view-comments:visited, .post-view-comments:active, .post-view-comments:hover {
     text-decoration: none;
     color: rgb(150, 150, 150);
 }
 
-.single-post-component .post-text-parent {
+.post-text-parent {
     display: flex;
     flex-direction: row;
 }
 
-.single-post-component .post-text-name {
+.post-text-name {
     padding-right: 8px;
     font-weight: bold;
 }
 
-.single-post-component .post-text-name:link, .single-post-component .post-text-name:visited, .single-post-component .post-text-name:active, .single-post-component .post-text-name:hover {
+.post-text-name:link, .post-text-name:visited, .post-text-name:active, .post-text-name:hover {
     text-decoration: none;
     color: black;
 }
@@ -191,33 +156,66 @@
     color: rgb(200, 200, 200);
 }
 
+/* Post Reel Link Copied Styling  */
+
+.post-bottom-link-copied {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    transition: all .2s ease-in-out;
+}
+.post-bottom-link-copied > div {
+    color: white;
+    transition: all .2s ease-in-out;
+    margin: 0;
+}
+.post-bottom-link-copied.active {
+    height: 100%;
+    padding: 0px;
+}
+.post-bottom-link-copied.active > div {
+    height: auto;
+    font-size: xx-large;
+}
+.post-bottom-link-copied.inactive, .post-bottom-link-copied.inactive > div {
+    height: 0%;
+    font-size: 0px;
+    padding: 0px;
+}
+
 /* Post Reel Buttons Styling */
 
-.single-post-component .post-buttons-left > *, .single-post-component .post-share-button-image {
+.post-buttons-left > *, .post-share-button-image {
     height: 25px;
     width: auto;
     cursor: pointer;
     padding-right: 10px;
 }
 
-.single-post-component .post-buttons-left {
+.post-buttons-left {
     display: flex;
     flex-direction: row;
 }
 
-.single-post-component .post-save-button {
+.post-save-button {
     height: 25px;
     width: auto;
     cursor: pointer;
 }
 
-.single-post-component .post-buttons {
+.post-buttons {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.single-post-component .post-share-button-pop-up {
+.post-share-button-pop-up {
     position: relative;
     top: 0;
 }

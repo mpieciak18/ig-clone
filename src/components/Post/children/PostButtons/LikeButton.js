@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react'
 const LikeButton = (props) => {
     const { user, postId, postOwnerId, redirect, setLikesNum, likesNum } = props
 
+    console.log(user)
+
     const [likeId, setLikeId] = useState(null)
 
     const [isUpdating, setIsUpdating] = useState(false)
@@ -15,12 +17,15 @@ const LikeButton = (props) => {
     useEffect(async () => {
         const id = await likeExists(postId, postOwnerId)
         setLikeId(id)
-        if (id != null) {
+    }, [user])
+
+    useEffect(() => {
+        if (likeId != null) {
             setImg(LikeSolid)
         } else {
             setImg(LikeHollow)
         }
-    }, [])
+    }, [likeId])
 
     // Called on by likeButtonFunction and runs lbfIsRunning is false
     const addRemoveLike = async () => {
