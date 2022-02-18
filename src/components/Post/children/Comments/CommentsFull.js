@@ -45,7 +45,7 @@ const CommentsFull = (props) => {
                 const commenterImage = await getUrl(commenter.data.image)
                 const commentDate = timeSinceTrunc(comment.data.date)
                 return (
-                    <div className='post-comment'>
+                    <div className='post-comment' key={comment.id}>
                         <div className='post-comment-left'>
                             <Link to={`/${commenterId}`} className='post-comment-icon'>
                                 <img src={commenterImage} />
@@ -93,7 +93,7 @@ const CommentsFull = (props) => {
     return (
         <div id="comments-grid" onScroll={loadMore}>
             <div className='post-comment'>
-                <div className='post-comment-left'>
+                <div className='post-comment-left' key={'first-comment'}>
                     <Link to={`/${postOwnerId}`} className='post-comment-icon'>
                         <img src={postOwnerImage} />
                     </Link>

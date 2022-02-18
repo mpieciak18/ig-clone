@@ -96,6 +96,7 @@ const Post = (props) => {
             <Navbar user={user} />
             <div id="single-post-page">
                 {likes}
+                <LinkCopied linkCopied={linkCopied} />
                 <div id="content-grid">
                     <img id="post-image" src={postImage} />
                 </div>

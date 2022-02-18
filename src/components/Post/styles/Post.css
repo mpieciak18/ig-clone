@@ -129,6 +129,7 @@
 
 #single-post-page {
     font-size: small;
+    position: relative;
 }
 
 #user-grid {
@@ -270,4 +271,37 @@
 .post-comment-bar-button.inactive {
     cursor: default;
     color: rgb(200, 200, 200);
+}
+
+/* Post Reel Link Copied Styling  */
+
+.post-bottom-link-copied {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    transition: all .2s ease-in-out;
+}
+.post-bottom-link-copied > div {
+    color: white;
+    transition: all .2s ease-in-out;
+    margin: 0;
+}
+.post-bottom-link-copied.active {
+    height: 100%;
+    padding: 0px;
+}
+.post-bottom-link-copied.active > div {
+    height: auto;
+    font-size: xx-large;
+}
+.post-bottom-link-copied.inactive, .post-bottom-link-copied.inactive > div {
+    height: 0%;
+    font-size: 0px;
+    padding: 0px;
 }

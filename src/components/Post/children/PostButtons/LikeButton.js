@@ -6,8 +6,6 @@ import { useEffect, useState } from 'react'
 const LikeButton = (props) => {
     const { user, postId, postOwnerId, redirect, setLikesNum, likesNum } = props
 
-    console.log(user)
-
     const [likeId, setLikeId] = useState(null)
 
     const [isUpdating, setIsUpdating] = useState(false)
