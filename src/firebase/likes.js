@@ -92,10 +92,13 @@ const getLikes = async (postId, postOwnerId, arrQuantity) => {
     const likesRef = getLikesRef(postOwnerId, postId)
     const likesQuery = query(likesRef, limit(arrQuantity))
     const likesDocs = await getDocs(likesQuery)
-    return likesDocs.map(async (like) => {
-        const user = await findUser(like.data.user)
-        return user
+    const likes = (likesDocs.docs).map((like) => {
+        return {
+            id: like.id,
+            data: like.data()
+        }
     })
+    return likes
 }
 
 export { addLike, removeLike, changeLikeCount, likeExists, getLikes }

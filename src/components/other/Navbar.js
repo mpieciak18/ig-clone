@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { NewPost } from './NewPost.js'
 import { useEffect } from 'react'
 import LogoSolid from '../../assets/images/ig-logo-4.png'
-import LogoHollow from '../../assets/images/ig-logo-hollow.png'
 import HomeHollow from '../../assets/images/home.png'
 import HomeSolid from '../../assets/images/home-solid.png'
 import SettingsHollow from '../../assets/images/profile.png'
@@ -26,7 +25,6 @@ const Navbar = (props) => {
 
     const [newPostOn, setNewPostOn] = useState(false)
 
-    const [logo, setLogo] = useState(LogoSolid)
     const [home, setHome] = useState(HomeHollow)
     const [messages, setMessages] = useState(MessagesHollow)
     const [post, setPost] = useState(PostHollow)
@@ -82,12 +80,8 @@ const Navbar = (props) => {
         <div id="navbar">
             {newPost}
             <img id="navbar-logo"
-                src={logo}
+                src={LogoSolid}
                 onClick={() => navigate('/')}
-                onMouseDown={() => setLogo(LogoHollow)}
-                onMouseUp={() => setLogo(LogoSolid)}
-                onMouseOver={() => setLogo(LogoHollow)}
-                onMouseOut={() => setLogo(LogoSolid)}
             />
             <input id="navbar-search" type='text' placeholder='Search' />
             <div id="navbar-buttons">

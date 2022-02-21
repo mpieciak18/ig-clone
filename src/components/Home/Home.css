@@ -20,13 +20,15 @@
 
 #home-container {
     display: flex;
-    margin: 20px auto;
+    margin: 80px auto 40px auto;
 }
 
 /* User Card Styling */
 
 #user-card {
+    position: relative;
     margin-bottom: 20px;
+    z-index: -1;
 }
 
 #user-card-icon {

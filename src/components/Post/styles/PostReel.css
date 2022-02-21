@@ -26,6 +26,7 @@
     border-radius: 10px;
     box-shadow: 0 0 20px 10px rgba(0,0,0,.1);
     font-size: small;
+    z-index: -1;
 }
 
 .post-user-link-avatar {
@@ -76,6 +77,11 @@
 
 .post-likes {
     font-weight: bold;
+    display: inline-block;
+}
+
+.post-likes:hover {
+    cursor: pointer;
 }
 
 .post-bottom > * {

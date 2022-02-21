@@ -62,6 +62,7 @@ const CommentsFull = (props) => {
                 )
             })
             const returnVal = await Promise.all(commentsObjs)
+            console.log(returnVal)
             setComments(returnVal)
         } else {
             setComments(null)

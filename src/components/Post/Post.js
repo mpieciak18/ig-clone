@@ -94,8 +94,8 @@ const Post = (props) => {
     return (
         <div id="post" className="page">
             <Navbar user={user} />
+            {likes}
             <div id="single-post-page">
-                {likes}
                 <LinkCopied linkCopied={linkCopied} />
                 <div id="content-grid">
                     <img id="post-image" src={postImage} />
@@ -131,7 +131,7 @@ const Post = (props) => {
                         setLinkCopied={setLinkCopied}
                     />
                     <div id="beneath-buttons">
-                        <div id="likes" clickLikes={() => clickLikes}>
+                        <div id="likes-count" onClick={clickLikes}>
                             {(() => {
                                 if (postLikes == 0) {
                                     return (`0 likes`)

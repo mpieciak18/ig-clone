@@ -7,6 +7,9 @@
 
 @media (min-width: 800px) {
     #navbar {
+        top: 0;
+        z-index: 2;
+        position: fixed;
         display: flex;
         flex-direction: row;
         padding: 10px 0;
@@ -19,6 +22,7 @@
     #navbar-logo {
         width: auto;
         height: 30px;
+        margin-right: 100px;
     }
     #navbar-logo:hover {
         cursor: pointer;
@@ -39,6 +43,9 @@
 
 @media (max-width: 800px) {
     #navbar {
+        z-index: 2;
+        top: 0;
+        position: fixed;
         display: flex;
         flex-direction: row;
         justify-content: space-around;

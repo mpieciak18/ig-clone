@@ -115,11 +115,11 @@ const checkForFollow = async (otherUserId) => {
     const userId = auth.currentUser.uid
     const followingsRef = getFollowingsRef(userId)
     const postRef = query(followingsRef, where("otherUser", "==", otherUserId))
-    const postDoc = await getDoc(postRef)
-    if (postDoc.exists()) {
-        return true
-    } else {
+    const postDocs = await getDocs(postRef)
+    if (postDocs.empty == true) {
         return false
+    } else {
+        return true
     }
 }
 
