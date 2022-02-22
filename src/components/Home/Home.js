@@ -8,6 +8,9 @@ import { useEffect, useState } from 'react'
 const Home = (props) => {
     const { user } = props
 
+    // Init likes component state
+    const [likes, setLikes] = useState(null)
+
     // Init postsNumber state
     const [postsNumber, setPostsNumber] = useState(10)
 
@@ -64,6 +67,7 @@ const Home = (props) => {
                             postLikes={post.data.likes}
                             postComments={post.data.comments}
                             user={user}
+                            setLikes={setLikes}
                         />
                     )
                 })}
@@ -74,6 +78,7 @@ const Home = (props) => {
 
     return (
         <div id='home' className='page'>
+            {likes}
             <Navbar user={user} />
             <div id='home-container'>
                 <UserCard user={user} />

@@ -12,7 +12,7 @@ import { LinkCopied } from './LinkCopied.js'
 
 const PostReel = (props) => {
     // Init props
-    const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user } = props
+    const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user, setLikes } = props
 
     // Init post owner name
     const [postOwnerName, setPostOwnerName] = useState(null)
@@ -49,35 +49,37 @@ const PostReel = (props) => {
     // Init linkCopied state for share button
     const [linkCopied, setLinkCopied] = useState(false)
 
-    // Init likes component state
-    const [likes, setLikes] = useState(null)
-
     // Init likesOn state
     const [likesOn, setLikesOn] = useState(false)
 
     // Set likesOn to true (or redirect to signup page) when likes are clicked
     const path = useLocation().pathname
+
     const navigate = useNavigate()
+
     const clickLikes = () => {
-        if (user.loggedIn == false) {
+        if (user == null) {
             navigate('/signup', {state: {path: path}})
         } else {
+            console.log('success')
             setLikesOn(true)
         }
     }
 
     // Render likes pop-up preview
     useEffect(() => {
+        const body = document.querySelector('body')
         if (likesOn == false) {
+            body.style.overflow = 'auto'
             setLikes(null)
         } else {
+            body.style.overflow = 'hidden'
             setLikes(<Likes setLikesOn={setLikesOn} postId={postId} postOwnerId={postOwnerId} />)
         }
     }, [likesOn])
 
     return (
         <div className="single-post-component">
-            {/* {likes} */}
             <div className="post-top">
                 <Link className="post-user-link" to={`/${postOwnerId}`}>
                     <img className="post-user-link-avatar" src={postOwnerImgSrc} />
@@ -106,7 +108,7 @@ const PostReel = (props) => {
                     setLikesNum={setLikesNum}
                     setLinkCopied={setLinkCopied}
                 />
-                <div className="post-likes" onClick={() => clickLikes}>
+                <div className="post-likes" onClick={clickLikes}>
                     {(() => {
                         if (likesNum == 0) {
                             return (`0 likes`)

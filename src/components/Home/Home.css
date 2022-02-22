@@ -20,7 +20,8 @@
 
 #home-container {
     display: flex;
-    margin: 80px auto 40px auto;
+    margin: 0 auto;
+    padding: 80px 0 40px 0;
 }
 
 /* User Card Styling */

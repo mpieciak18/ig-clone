@@ -75,7 +75,7 @@ const Post = (props) => {
     const path = useLocation().pathname
     const navigate = useNavigate()
     const clickLikes = () => {
-        if (user.loggedIn == false) {
+        if (user == null) {
             navigate('/signup', {state: {path: path}})
         } else {
             setLikesOn(true)
@@ -84,10 +84,13 @@ const Post = (props) => {
 
     // Render likes pop-up preview
     useEffect(() => {
+        const body = document.querySelector('body')
         if (likesOn == false) {
             setLikes(null)
+            body.style.overflow = 'auto'
         } else {
             setLikes(<Likes setLikesOn={setLikesOn} postId={postId} postOwnerId={postOwnerId} />)
+            body.style.overflow = 'hidden'
         }
     }, [likesOn])
 
