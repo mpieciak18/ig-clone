@@ -54,25 +54,25 @@ const Navbar = (props) => {
 
     const clickNotifications = () => {
         if (user == null) {
-            return navigate('/signup', {state: {path: path}})
+            navigate('/signup', {state: {path: path}})
         } else {
-            return navigate('/notifications', {state: {path: path}})
+            navigate('/notifications', {state: {path: path}})
         }
     }
 
     const clickMessages = () => {
         if (user == null) {
-            return navigate('/signup', {state: {path: path}})
+            navigate('/signup', {state: {path: path}})
         } else {
-            return navigate('/messages')
+            navigate('/messages')
         }
     }
 
     const clickSettings = () => {
         if (user == null) {
-            return navigate('/signup', {state: {path: path}})
+            navigate('/signup', {state: {path: path}})
         } else {
-            return navigate('/settings')
+            navigate('/settings')
         }
     }
 

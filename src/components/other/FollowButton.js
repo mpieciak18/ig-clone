@@ -1,10 +1,14 @@
 import { checkForFollow, addFollow, removeFollow } from '../../firebase/followers.js'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import './other.css'
-import { useEffect } from 'react/cjs/react.development'
 
 const FollowButton = (props) => {
-    const { otherUserId } = props
+    const { user, otherUserId } = props
+
+    const navigate = useNavigate()
+
+    const path = useLocation().path
 
     // Init states
 
@@ -14,18 +18,22 @@ const FollowButton = (props) => {
 
     const [followText, setFollowText] = useState('Follow')
 
-    const [followButtonClass, setFollowButtonClass] = useState('follow-button-not-loaded')
+    const [followButtonClass, setFollowButtonClass] = useState('inactive')
 
-    // Update isFollowing on render
+    // Update isFollowing on user prop change & on render
     useEffect(async () => {
-        const result = await checkForFollow(otherUserId)
-        setIsFollowing(result)
-    }, [])
+        if (user != null) {
+            const result = await checkForFollow(otherUserId)
+            setIsFollowing(result)
+        } else {
+            setIsFollowing(false)
+        }
+    }, [user])
 
     // Update isUpdating, followText, & followButtonClass when isFollowing changes
     useEffect(async () => {
         setIsUpdating(true)
-        setFollowButtonClass('follow-button-not-loaded')
+        setFollowButtonClass('inactive')
         if (isFollowing == true) {
             setFollowText('Unfollow')
         } else {
@@ -36,12 +44,14 @@ const FollowButton = (props) => {
     // Change followButtonClass back to loaded when followText changes
     useEffect(() => {
         setIsUpdating(false)
-        setFollowButtonClass('follow-button-loaded')
+        setFollowButtonClass('active')
     }, [followText])
 
     // User clicks on follow button & either follows or unfollows other user
     const clickFollow = async () => {
-        if (isUpdating == false && isFollowing == false) {
+        if (user == null) {
+            navigate('/signup', {state: {path: path}})
+        } else if (isUpdating == false && isFollowing == false) {
             await addFollow(otherUserId)
             setIsFollowing(true)
         } else if (isUpdating == false && isFollowing == true) {
@@ -51,7 +61,7 @@ const FollowButton = (props) => {
     }
 
     return (
-        <div className={followButtonClass} onClick={clickFollow}>
+        <div className={`follow-button ${followButtonClass}`} onClick={clickFollow}>
             {followText}
         </div>
     )

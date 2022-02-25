@@ -89,7 +89,7 @@ const Post = (props) => {
             setLikes(null)
             body.style.overflow = 'auto'
         } else {
-            setLikes(<Likes setLikesOn={setLikesOn} postId={postId} postOwnerId={postOwnerId} />)
+            setLikes(<Likes user={user} setLikesOn={setLikesOn} postId={postId} postOwnerId={postOwnerId} />)
             body.style.overflow = 'hidden'
         }
     }, [likesOn])

@@ -68,6 +68,10 @@
     text-decoration: none;
 }
 
+.post-middle:hover {
+    cursor: pointer;
+}
+
 .post-bottom {
     position: relative;
     display: flex;
@@ -82,6 +86,7 @@
 
 .post-likes:hover {
     cursor: pointer;
+    color: grey;
 }
 
 .post-bottom > * {
@@ -164,7 +169,7 @@
 
 /* Post Reel Link Copied Styling  */
 
-.post-bottom-link-copied {
+.single-post-component .post-bottom-link-copied {
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -173,26 +178,21 @@
     top: 0px;
     left: 0px;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.75);
-    transition: all .2s ease-in-out;
-}
-.post-bottom-link-copied > div {
-    color: white;
-    transition: all .2s ease-in-out;
-    margin: 0;
-}
-.post-bottom-link-copied.active {
     height: 100%;
-    padding: 0px;
+    background-color: rgba(255, 255, 255, 0.75);
+    transition: all .3s ease-in-out;
 }
-.post-bottom-link-copied.active > div {
-    height: auto;
+.single-post-component .post-bottom-link-copied > div {
     font-size: xx-large;
+    color: black;
 }
-.post-bottom-link-copied.inactive, .post-bottom-link-copied.inactive > div {
-    height: 0%;
-    font-size: 0px;
-    padding: 0px;
+.single-post-component .post-bottom-link-copied.active {
+    opacity: 1;
+    z-index: 1;
+}
+.single-post-component .post-bottom-link-copied.inactive {
+    opacity: 0;
+    z-index: -1;
 }
 
 /* Post Reel Buttons Styling */

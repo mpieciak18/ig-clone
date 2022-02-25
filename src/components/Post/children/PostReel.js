@@ -74,7 +74,7 @@ const PostReel = (props) => {
             setLikes(null)
         } else {
             body.style.overflow = 'hidden'
-            setLikes(<Likes setLikesOn={setLikesOn} postId={postId} postOwnerId={postOwnerId} />)
+            setLikes(<Likes user={user} setLikesOn={setLikesOn} postId={postId} postOwnerId={postOwnerId} />)
         }
     }, [likesOn])
 
@@ -94,9 +94,9 @@ const PostReel = (props) => {
                     </div>
                 </div>
             </div>
-            <div className="post-middle">
+            <Link className="post-middle" to={`/${postOwnerId}/${postId}`}>
                 <img className="post-image" src={postImgSrc} />
-            </div>
+            </Link>
             <div className="post-bottom">
                 <LinkCopied linkCopied={linkCopied} />
                 <PostButtons
