@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { findUser } from '../../../firebase/users.js'
 
 const ProfileCard = (props) => {
-    const { user, otherUserId, setWhichTab, setFollowsOn } = props
+    const { otherUserId, numFollowers, setNumFollowers, setWhichTab, setFollowsOn } = props
 
     // Init profile image state
     const [img, setImg] = useState(null)
@@ -14,12 +14,14 @@ const ProfileCard = (props) => {
     // Init profileCard component state
     const [profileCard, setProfileCard] = useState(null)
 
-    // Update img & otherUser states on render
+    // Update img, otherUser, & otherUserFollowers states on render
     useEffect(async () => {
         const newUser = await findUser(otherUserId)
         const imgSrc = await getUrl(newUser.data.image)
+        const followers = newUser.data.followers
         setImg(imgSrc)
         setOtherUser(newUser)
+        setNumFollowers(followers)
     }, [])
     
     useEffect(() => {
@@ -44,7 +46,7 @@ const ProfileCard = (props) => {
                                 <p className='profile-stats-child-type'>Following</p>
                             </div>
                             <div id='profile-card-followers' onClick={clickFollowers}>
-                                <p className='profile-stats-child-num'>{otherUser.data.followers}</p>
+                                <p className='profile-stats-child-num'>{numFollowers}</p>
                                 <p className='profile-stats-child-type'>Followers</p>
                             </div>
                         </div>
@@ -53,7 +55,7 @@ const ProfileCard = (props) => {
                 </div>
             )
         }
-    }, [otherUser])
+    }, [otherUser, numFollowers])
 
     // Open Follows pop-up (following)
     const clickFollowing = async () => {

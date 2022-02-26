@@ -61,7 +61,6 @@ const PostReel = (props) => {
         if (user == null) {
             navigate('/signup', {state: {path: path}})
         } else {
-            console.log('success')
             setLikesOn(true)
         }
     }

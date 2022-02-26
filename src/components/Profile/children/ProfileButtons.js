@@ -6,7 +6,7 @@ import MessageHollow from '../../../assets/images/dm.png'
 import MessageSolid from '../../../assets/images/dm-solid.png'
 
 const ProfileButtons = (props) => {
-    const { user, otherUserId } = props
+    const { user, otherUserId, numFollowers, setNumFollowers } = props
 
     const navigate = useNavigate()
 
@@ -52,7 +52,12 @@ const ProfileButtons = (props) => {
         } else if (user.uid != otherUserId) {
             setButtons(
                 <div id='profile-buttons-section'>
-                    <FollowButton otherUserId={otherUserId} />
+                    <FollowButton
+                        user={user}
+                        otherUserId={otherUserId}
+                        numFollowers={numFollowers}
+                        setNumFollowers={setNumFollowers}
+                    />
                     <div id='profile-direct-message-button-container'>
                         <img 
                             id='profile-direct-message-button' 

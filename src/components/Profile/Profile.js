@@ -15,7 +15,7 @@ const Profile = (props) => {
     const { otherUserId } = useParams()
 
     // Init postsNumber state
-    const [postsNumber, setPostsNumber] = useState(null)
+    const [postsNumber, setPostsNumber] = useState(12)
 
     // Init postsArr state
     const [postsArr, setPostsArr] = useState(null)
@@ -26,6 +26,9 @@ const Profile = (props) => {
     // Init all loaded state
     const [allLoaded, setAllLoaded] = useState(false)
 
+    // Init other user followers count state
+    const [numFollowers, setNumFollowers] = useState(null)
+
     // Init followsOn state
     const [followsOn, setFollowsOn] = useState(false)
 
@@ -34,11 +37,6 @@ const Profile = (props) => {
 
     // Init initial tab for follows pop-up state
     const [whichTab, setWhichTab] = useState(null)
-
-    // Update posts number state on render
-    useEffect(() => {
-        setPostsNumber(12)
-    }, [])
     
     // Update posts arr state when postsNumber state changes
     useEffect(async () => {
@@ -53,9 +51,8 @@ const Profile = (props) => {
         }
     }, [postsNumber])
 
-    // Update posts component state on rener & when postsArr state changes
+    // Update posts component state on render & when postsArr state changes
     useEffect(async () => {
-        console.log(postsArr)
         if (postsArr != null) {
             setPosts(
                 <div id='user-posts'>
@@ -118,14 +115,20 @@ const Profile = (props) => {
             <div id='profile-contents'>
                 <div id='profile-contents-left'>
                     <ProfileCard 
-                        user={user}
                         otherUserId={otherUserId}
+                        numFollowers={numFollowers}
+                        setNumFollowers={setNumFollowers}
                         setWhichTab={setWhichTab}
                         setFollows={setFollowsOn}
                     />
                 </div>
                 <div id='profile-contents-right'>
-                    <ProfileButtons user={user} otherUserId={otherUserId} />
+                    <ProfileButtons 
+                        user={user}
+                        otherUserId={otherUserId}
+                        numFollowers={numFollowers}
+                        setNumFollowers={setNumFollowers}
+                    />
                     {posts}
                 </div>
             </div>

@@ -45,6 +45,9 @@
         margin-top: 20px;
         text-align: center;
     }
+    #profile-card-icon {
+        margin-bottom: 10px;
+    }
     .follow-button {
         margin-right: 50px;
     }
@@ -79,6 +82,9 @@
         margin: 20px 5px 5px 0px;
         text-align: center;
     }
+    #profile-card-icon {
+        margin-right: 10px;
+    }
     #profile-contents-right {
         margin: 0 25px;
         width: 100vw;
@@ -104,7 +110,6 @@
     width: 80px;
     height: auto;
     border-radius: 50%;
-    margin-right: 10px;
 }
 
 #profile-card-name {

@@ -48,9 +48,7 @@ const findPostsFromUser = async (userId, arrQuantity) => {
     const usersRef = collection(db, 'users')
     const userRef = doc(usersRef, userId)
     const postsRef = collection(userRef, 'posts')
-    console.log(postsRef)
     const postsQuery = query(postsRef, orderBy("date", "desc"), limit(arrQuantity))
-    console.log(postsQuery)
     const postDocs = await getDocs(postsQuery)
     let posts = []
     postDocs.forEach((doc) => {

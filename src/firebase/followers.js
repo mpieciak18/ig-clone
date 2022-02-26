@@ -14,10 +14,10 @@ import {
  } from 'firebase/firestore'
 
 // Helper functions for adding / removing follows in database
-const getUsersRef = () => {return collection(db, 'users')}
-const getUserRef = (userId) => {return doc(getUsersRef(), userId)}
+const getUsersRef = () => collection(db, 'users')
+const getUserRef = (userId) => doc(getUsersRef(), userId)
 // Grabs user's follower subcollection
-const getFollowersRef = (userId) => {return collection(getUserRef(userId), 'followers')}
+const getFollowersRef = (userId) => collection(getUserRef(userId), 'followers')
 const getFollowerRef = (userId, followerId=null) => {
     if (followerId != null) {
         return doc(getFollowersRef(userId), followerId)
@@ -91,7 +91,7 @@ const changeOtherUserFollowerCount = async (otherUserId, increase) => {
         followerCount -= 1
     }
     // Third, assign new follower count to user doc
-    await updateDoc(otherUserDoc, {"followers": followerCount})
+    await updateDoc(otherUserRef, {"followers": followerCount})
 }
 
 // Change following count for self
@@ -117,9 +117,9 @@ const checkForFollow = async (otherUserId) => {
     const postRef = query(followingsRef, where("otherUser", "==", otherUserId))
     const postDocs = await getDocs(postRef)
     if (postDocs.empty == true) {
-        return false
+        return null
     } else {
-        return true
+        return postDocs.docs[0].id
     }
 }
 
