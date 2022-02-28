@@ -32,8 +32,6 @@ const FollowButton = (props) => {
 
     // Update isUpdating, followText, & followButtonClass when followingId changes
     useEffect(async () => {
-        setIsUpdating(true)
-        setFollowButtonClass('inactive')
         if (followingId != null) {
             setFollowText('Unfollow')
         } else {
@@ -52,11 +50,15 @@ const FollowButton = (props) => {
         if (user == null) {
             navigate('/signup', {state: {path: path}})
         } else if (isUpdating == false && followingId == null) {
+            setFollowButtonClass('inactive')
+            setIsUpdating(true)
             const newId = await addFollow(otherUserId)
             setFollowingId(newId)
             // const newNum = numFollowers + 1
             // await setNumFollowers(newNum)
         } else if (isUpdating == false && followingId != null) {
+            setFollowButtonClass('inactive')
+            setIsUpdating(true)
             await removeFollow(followingId, otherUserId)
             setFollowingId(null)
             // const newNum = numFollowers - 1

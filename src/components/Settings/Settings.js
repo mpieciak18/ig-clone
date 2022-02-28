@@ -1,23 +1,71 @@
 import './Settings.css'
-import { Link } from 'react-router-dom'
 import { updateUser } from '../../firebase/users.js'
-import { useLocation, Navigate } from 'react-router-dom'
+import { useLocation, useNavigate, Link } from 'react-router-dom'
 import { useState, useEffect, useRef } from 'react'
 import { NameFooter } from './children/NameFooter.js'
 import { ImageInput } from './children/ImageInput.js'
 import { uploadFile } from '../../firebase/storage'
+import { Navbar } from '../other/Navbar.js'
 
 const Settings = (props) => {
-    // Redirect to signup page if not signed in
     const { user } = props
-    const path = useLocation().pathname
-    const redirect = () => <Navigate to='/signup' state={{path: path}} />
-    if (user.loggedIn == false) {
-        redirect()
-    }
 
+    // Track initial mounting status
+    const isInitMount = useRef(true);
+
+    // Store pathname to variable
+    const path = useLocation().pathname
+    
+    // Store (potential) state from previous page to variable
+    const state = useLocation().state
+
+    // Init useNavigate function
+    const navigate = useNavigate()
+
+    // Redirect to signup page (if not signed in)
+    const redirectToSignUp = () => navigate('/signup', {state: {path: path}})
+
+    // Redirect to own profile page
+    const redirectToProfile = () => navigate(user.id)
+
+    // Init user loaded state
+    const [userLoaded, setUserLoaded] = useState(null)
+
+    // Init settings component state
+    const [settings, setSettings] = useState(null)
+
+    // Init file state 
     const [file, setFile] = useState(null)
+   
+    // Init ref for ImageInput component
     const inputRef = useRef()
+
+    // Init error message class state
+    const [errorClass, setErrorClass] = useState('inactive')
+
+    // Init new user registration message class state
+    const [welcomeClass, setWelcomeClass] = useState('inactive')
+
+    // Init name field value form validation state
+    const [namePasses, setNamePasses] = useState(true)
+
+    // Init name field value state
+    const [name, setName] = useState(null)
+
+    // Init bio field value state
+    const [bio, setBio] = useState(null)
+
+    // OnChange event handler for for name field on form
+    const updateName = (e) => setName(e.target.value)
+
+    // OnChange event handler for for bio field on form
+    const updateBio = (e) => setBio(e.target.value)
+
+    // Init form button type state
+    const [button, setButton] = useState("submit")
+
+    // Init form buttonc class state
+    const [buttonClass, setButtonClass] = useState('active')
 
     // Updates user's settings with form values
     const updateSettings = async (e) => {
@@ -39,94 +87,98 @@ const Settings = (props) => {
             )
             if (possibleError == null) {
                 // Redirect to own profile upon successful settings update
-                return <Navigate to={`/${user.id}`} />
+                navigate(user.id)
             } else {
-                setErrorClass('visible')
-                setTimeout(() => {setErrorClass('hidden')}, 2000)
+                setErrorClass('active')
+                setTimeout(() => {setErrorClass('inactive')}, 2000)
             }
         }
     }
-    
-    // Display error upon unsuccessful settings update
-    const [errorClass, setErrorClass] = useState('hidden')
 
-    const errorMessage = (
-        <div id='settings-error' className={errorClass}>
-            There was an error! Please try again.
-        </div>
-    )
+    // Wait 2 seconds & update userLoaded, name, & bio states upon render & user prop change
+    useEffect(() => {
+        setTimeout(async () => {
+            if (user != null) {
+                console.log('user!=null: start')
+                await setName(user.data.name)
+                await setBio(user.data.bio)
+                setUserLoaded(true)
+                console.log('user!=null: end')
+            } else {
+                console.log('user == null')
+                setUserLoaded(false)
+            }
+        }, 1000)
+    }, [user])
 
-    // Display pop-up upon new user registration
-    const [welcomeOn, setWelcomeOn] = useState(false)
-
-    const welcomeMessage = () => {
-        if (welcomeOn == true) {
-            return (
-                <div id='settings-welcome'>
-                    You've successfully registered! Please update your bio and image.
-                </div>
-            )
+    // Update settings component state (or trigger redirect) upon render & when user prop changes
+    useEffect(async () => {
+        if (isInitMount.current) {
+            isInitMount.current = false
         } else {
-            return null
+            if (userLoaded == true) {
+                setSettings(
+                    <div id='settings-parent'>
+                        <div id='settings-welcome' className={welcomeClass}>
+                            You've successfully registered! Please update your bio and image.
+                        </div>
+                        <form id='settings-form' onSubmit={updateSettings}>
+                            <div id='settings-error' className={errorClass}>
+                                There was an error! Please try again.
+                            </div>
+                            <div id='settings-header'>
+                                <div id='settings-title'>Settings</div>
+                            </div>
+                            <div id='settings-image-section'>
+                                <ImageInput user={user} setFile={setFile} setErrorClass={setErrorClass} inputRef={inputRef} />
+                                <div id='settings-image-footer'>File size limit: 5 mb</div>
+                            </div>
+                            <div id='settings-name-section'>
+                                <label id='settings-name-label' htmlFor='name'>Your Name:</label>
+                                <input id='settings-name-input' name='name' type='text' value={name} onChange={updateName}></input>
+                                <NameFooter setNamePasses={setNamePasses} name={name} />
+                            </div>
+                            <div id='settings-bio-section'>
+                                <label id='settings-bio-label' htmlFor='bio'>Your Bio:</label>
+                                <textarea id='settings-bio-input' name='bio' type='text' value={bio} maxLength='150' onChange={updateBio} />
+                            </div>
+                            <div id='settings-buttons-section'>
+                                <button id='settings-button-back' type='button' onClick={redirectToProfile}>Back to Profile</button>
+                                <button id='settings-button-submit' type={button} className={buttonClass}>Update Settings</button>
+                            </div>
+                        </form>
+                    </div>
+                )
+                if (state != undefined) {
+                    setWelcomeClass('active')
+                    setTimeout(() => {setWelcomeClass('inactive')}, 2500)
+                }
+            } else {
+                if (user == null) {
+                    redirectToSignUp()
+                } else {
+                    await setName(user.data.name)
+                    await setBio(user.data.bio)
+                    setUserLoaded(true)
+                }
+            }
         }
-    }
-
-    const state = useLocation().state
-    let newSignUp
-    if (state == null) {
-        newSignUp = false
-    } else {
-        newSignUp = state.newSignUp
-    }
-
-    if (newSignUp == true) {
-        setWelcomeOn(true)
-        setTimeout(() => {setWelcomeOn(false)}, 2000)
-    }
-
-    // Allow form to submit if name input is valid
-    const [namePasses, setNamePasses] = useState(true)
-    const [name, setName] = useState(user.name)
-    const updateName = (e) => setName(e.target.value)
-
-    const [formButton, setFormButton] = useState("submit")
+    }, [userLoaded])
 
     useEffect(() => {
         if (namePasses == true) {
-            setFormButton('submit')
+            setButton('submit')
+            setButtonClass('active')
         } else {
-            setFormButton('button')
+            setButton('button')
+            setButtonClass('inactive')
         }
     }, [namePasses])
 
-    const [bio, setBio] = useState(user.bio)
-    const updateBio = (e) => setBio(e.target.value)
-
     return (
         <div id='settings' className='page'>
-            {welcomeMessage()}
-            <div id='settings-parent'>
-                <form id='settings-form' onSubmit={updateSettings}>
-                    {errorMessage}
-                    <div id='settings-header'>
-                        <div id='settings-title'>Settings</div>
-                        <img id='settings-image'/>
-                    </div>
-                    <ImageInput user={user} setFile={setFile} inputRef={inputRef} />
-                    <div id='settings-image-footer'>File size limit: 5 mb</div>
-                    <label id='settings-name-label' htmlFor='name'>Your Name:</label>
-                    <input id='settings-name-input' name='name' type='text' value={name} onChange={updateName}></input>
-                    <NameFooter setNamePasses={setNamePasses} name={name} />
-                    <label id='settings-bio-label' htmlFor='bio'>Your Bio:</label>
-                    <textarea id='settings-bio-input' name='bio' type='text' value={bio} maxLength='150' onChange={updateBio} />
-                    <div id='settings-buttons'>
-                        <Link to={`/profile/${user.id}`}>
-                            <button id='settings-form-back' type='button'>Back to Profile</button>
-                        </Link>
-                        <button id='settings-form-submit' type={formButton} className={formButton}>Update Settings</button>
-                    </div>
-                </form>
-            </div>
+            <Navbar user={user} />
+            {settings}
         </div>
     )
 }

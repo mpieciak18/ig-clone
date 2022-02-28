@@ -2,7 +2,7 @@ import { useState } from "react"
 import { getUrl } from "../../../firebase/storage.js"
 
 const ImageInput = (props) => {
-    const { user, inputRef, setFile } = props
+    const { user, inputRef, setFile, setErrorClass } = props
 
     const [filePreview, setFilePreview] = useState(getUrl(user.data.image))
 
@@ -14,6 +14,8 @@ const ImageInput = (props) => {
             inputRef.current.value = ''
             setFile(null)
             setFilePreview(getUrl(user.data.image))
+            setErrorClass('active')
+            setTimeout(() => {setErrorClass('inactive')}, 2000)
         } else {
             setFile(inputRef.current.files[0])
             setFilePreview(URL.createObjectURL(inputRef.current.files[0]))
@@ -24,7 +26,7 @@ const ImageInput = (props) => {
         <input 
             // ref={inputRef} 
             // type="file" 
-            // id="settings-image" 
+            // id="settings-image-input" 
             // name="image" 
             // accept=".jpg, .jpeg, .png" 
             // onChange={validateImage}

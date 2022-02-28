@@ -154,7 +154,7 @@
     flex-direction: row;
 }
 
-#profile-buttons-section > * {
+#profile-direct-message-button-container {
     top: 0px;
     position: relative;
     border-color: rgba(0, 0, 0, 0.2);
@@ -166,14 +166,13 @@
     transition: .2s;
 }
 
-#profile-buttons-section > *:hover {
-    top: -5px;
-    box-shadow: 0 10px 10px 0 rgba(0,0,0,.2);
-    cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.05);
-}
-
 .follow-button {
+    top: 0px;
+    position: relative;
+    border-color: rgba(0, 0, 0, 0.2);
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 5px 10px 0 rgba(0,0,0,.2);
     font-size: large;
     border-radius: 30px;
     padding: 0 40px;
@@ -181,6 +180,32 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    height: 40px;
+    transition: .2s;
+}
+
+#profile-direct-message-button-container:hover, .follow-button.active:hover {
+    top: -5px;
+    box-shadow: 0 10px 10px 0 rgba(0,0,0,.2);
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.follow-button.inactive:hover {
+    top: -5px;
+    box-shadow: 0 10px 10px 0 rgba(0,0,0,.2);
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #777777;
+}
+
+.follow-button.active {
+    background-color: white;
+}
+
+.follow-button.inactive {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #777777;
 }
 
 #profile-direct-message-button-container {
