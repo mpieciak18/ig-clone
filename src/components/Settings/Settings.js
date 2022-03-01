@@ -26,7 +26,7 @@ const Settings = (props) => {
     const redirectToSignUp = () => navigate('/signup', {state: {path: path}})
 
     // Redirect to own profile page
-    const redirectToProfile = () => navigate(user.id)
+    const redirectToProfile = () => navigate(`/${user.id}`)
 
     // Init user loaded state
     const [userLoaded, setUserLoaded] = useState(null)
@@ -56,7 +56,9 @@ const Settings = (props) => {
     const [bio, setBio] = useState(null)
 
     // OnChange event handler for for name field on form
-    const updateName = (e) => setName(e.target.value)
+    const updateName = (e) => {
+        setName(e.target.value)
+    }
 
     // OnChange event handler for for bio field on form
     const updateBio = (e) => setBio(e.target.value)
@@ -72,12 +74,17 @@ const Settings = (props) => {
         e.preventDefault()
         // Check validation first
         if (namePasses == true) {
-            let image
+            let path
+            console.log(file)
             if (file == null) {
-                image = user.image
+                console.log(1)
+                path = user.data.image
+                console.log(path)
             } else {
-                image = file.name
-                const path = `/${user.id}/${image}`
+                console.log(2)
+                const image = file.name
+                path = `${user.id}/${image}`
+                console.log(image, path)
                 await uploadFile(file, path)
             }
             const possibleError = await updateUser(
@@ -87,7 +94,7 @@ const Settings = (props) => {
             )
             if (possibleError == null) {
                 // Redirect to own profile upon successful settings update
-                navigate(user.id)
+                navigate(`/${user.id}`)
             } else {
                 setErrorClass('active')
                 setTimeout(() => {setErrorClass('inactive')}, 2000)
@@ -99,16 +106,13 @@ const Settings = (props) => {
     useEffect(() => {
         setTimeout(async () => {
             if (user != null) {
-                console.log('user!=null: start')
                 await setName(user.data.name)
                 await setBio(user.data.bio)
                 setUserLoaded(true)
-                console.log('user!=null: end')
             } else {
-                console.log('user == null')
                 setUserLoaded(false)
             }
-        }, 1000)
+        }, 2000)
     }, [user])
 
     // Update settings component state (or trigger redirect) upon render & when user prop changes
@@ -120,18 +124,20 @@ const Settings = (props) => {
                 setSettings(
                     <div id='settings-parent'>
                         <div id='settings-welcome' className={welcomeClass}>
-                            You've successfully registered! Please update your bio and image.
+                            <p>You've successfully registered!</p>
+                            <p>Please update your bio and image.</p>
                         </div>
                         <form id='settings-form' onSubmit={updateSettings}>
                             <div id='settings-error' className={errorClass}>
-                                There was an error! Please try again.
+                                <p>There was an error!</p>
+                                <p>Please try again.</p>
                             </div>
                             <div id='settings-header'>
                                 <div id='settings-title'>Settings</div>
                             </div>
                             <div id='settings-image-section'>
-                                <ImageInput user={user} setFile={setFile} setErrorClass={setErrorClass} inputRef={inputRef} />
-                                <div id='settings-image-footer'>File size limit: 5 mb</div>
+                                <label id='settings-image-footer' htmlFor='image'>File size limit: 5 mb</label>
+                                <ImageInput user={user} setFile={setFile} setErrorClass={setErrorClass} inputRef={inputRef} name='image' />
                             </div>
                             <div id='settings-name-section'>
                                 <label id='settings-name-label' htmlFor='name'>Your Name:</label>
@@ -143,8 +149,8 @@ const Settings = (props) => {
                                 <textarea id='settings-bio-input' name='bio' type='text' value={bio} maxLength='150' onChange={updateBio} />
                             </div>
                             <div id='settings-buttons-section'>
-                                <button id='settings-button-back' type='button' onClick={redirectToProfile}>Back to Profile</button>
                                 <button id='settings-button-submit' type={button} className={buttonClass}>Update Settings</button>
+                                <button id='settings-button-back' type='button' onClick={redirectToProfile}>Back to Profile</button>
                             </div>
                         </form>
                     </div>
@@ -163,7 +169,7 @@ const Settings = (props) => {
                 }
             }
         }
-    }, [userLoaded])
+    }, [userLoaded, bio, name, button, buttonClass, file])
 
     useEffect(() => {
         if (namePasses == true) {

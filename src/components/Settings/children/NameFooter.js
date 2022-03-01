@@ -34,7 +34,7 @@ const NameFooter = (props) => {
         // Name passes
         else {
             setNamePasses(true)
-            setFooterText(' ')
+            setFooterText('Valid username! :-)')
             setFooterClass('grey')
         }
     }, [name]) 

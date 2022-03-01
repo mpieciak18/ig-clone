@@ -1,6 +1,5 @@
 import { storage } from "./firebase.js"
 import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage"
-import { auth } from "./firebase.js"
 
 // Upload file to storage & return file pathname for future retrieval
 const uploadFile = async (file, path) => {
