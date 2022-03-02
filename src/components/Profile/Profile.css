@@ -108,8 +108,9 @@
 
 #profile-card-icon {
     width: 80px;
-    height: auto;
+    height: 80px;
     border-radius: 50%;
+    object-fit: cover;
 }
 
 #profile-card-name {
