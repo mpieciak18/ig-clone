@@ -1,4 +1,4 @@
-/* Navigation Bar Styling - DONE */
+/* Navigation Bar Styling */
 
 @font-face {
     font-family: 'Billabong';
@@ -33,11 +33,21 @@
         border-radius: 10px;
         text-align: center;
     }
-    #navbar-buttons > * {
+    #navbar-buttons {
+        display: flex;
+    }
+    #navbar-buttons img {
         width: auto;
         height: 25px;
         margin: 0px 10px;
         cursor: pointer;
+    }
+    #settings-button-container {
+        display: flex;
+        flex-direction: column;
+    }
+    #settings-popup {
+        top: 55px;
     }
 }
 
@@ -80,9 +90,41 @@
         align-items: center; 
         box-shadow: 0 0 20px 10px rgba(0,0,0,.1);
     }
-    #navbar-buttons > * {
+    #navbar-buttons img {
         width: auto;
         height: 25px;
         cursor: pointer;
     }
+    #settings-button-container {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+    #settings-popup {
+        bottom: 55px;
+    }
+}
+
+#settings-popup {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    text-align: center;
+    position: absolute;
+    font-size: small;
+    width: auto;
+    right: 15px;
+    box-shadow: 0 0 20px 10px rgba(0,0,0,.1);
+    padding: 5px;
+    border-radius: 5px;
+}
+
+#settings-popup > * {
+    padding: 10px;
+    transition: all ease-in-out .25s;
+    border-radius: 5px;
+}
+
+#settings-popup > *:hover {
+    cursor: pointer;
+    background-color: rgb(200, 200, 200);
 }

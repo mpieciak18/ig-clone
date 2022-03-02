@@ -14,6 +14,7 @@ import NotificationsHollow from '../../assets/images/like.png'
 import NotificationsSolid from '../../assets/images/like-solid.png'
 import MessagesHollow from '../../assets/images/messages.png'
 import MessagesSolid from '../../assets/images/messages-solid.png'
+import { SettingsPopup } from './SettingsPopup.js'
 
 const Navbar = (props) => {
     // Init props, states, & other values
@@ -22,6 +23,8 @@ const Navbar = (props) => {
     const navigate = useNavigate()
 
     const path = useLocation().pathname
+
+    const [viewSettings, setViewSettings] = useState(false)
 
     const [newPostOn, setNewPostOn] = useState(false)
 
@@ -71,8 +74,10 @@ const Navbar = (props) => {
     const clickSettings = () => {
         if (user == null) {
             navigate('/signup', {state: {path: path}})
+        } else if (viewSettings == false) {
+            setViewSettings(true)
         } else {
-            navigate('/settings')
+            setViewSettings(false)
         }
     }
 
@@ -117,14 +122,17 @@ const Navbar = (props) => {
                     onMouseOver={() => setNotifications(NotificationsSolid)}
                     onMouseOut={() => setNotifications(NotificationsHollow)}
                 />
-                <img id="settings-button" 
-                    src={settings} 
-                    onClick={clickSettings}
-                    onMouseDown={() => setSettings(SettingsSolid)}
-                    onMouseUp={() => setSettings(SettingsHollow)}
-                    onMouseOver={() => setSettings(SettingsSolid)}
-                    onMouseOut={() => setSettings(SettingsHollow)}
-                />
+                <div id='settings-button-container'>
+                    <img id="settings-button" 
+                        src={settings} 
+                        onClick={clickSettings}
+                        onMouseDown={() => setSettings(SettingsSolid)}
+                        onMouseUp={() => setSettings(SettingsHollow)}
+                        onMouseOver={() => setSettings(SettingsSolid)}
+                        onMouseOut={() => setSettings(SettingsHollow)}
+                    />
+                    <SettingsPopup user={user} viewSettings={viewSettings} setViewSettings={setViewSettings} />
+                </div>
             </div>
             {newPost}
         </div>
