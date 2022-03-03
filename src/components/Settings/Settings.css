@@ -155,6 +155,7 @@ label {
 #settings-image-preview {
     position: absolute;
     z-index: 1;
+    border-radius: 10px;
 }
 
 #settings-image-overlay {
