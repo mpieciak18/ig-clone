@@ -13,7 +13,6 @@ const Likes = (props) => {
     const [likesNumber, setLikesNumber] = useState(10)
 
     // Init users state
-    // const [likesArr, setLikesArr] = useState(await getLikes(postId, postOwnerId, 20))
     const [likesArr, setLikesArr] = useState(null)
 
     // Init all likes loaded state

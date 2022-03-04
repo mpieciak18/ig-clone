@@ -42,13 +42,6 @@
         margin: 0px 10px;
         cursor: pointer;
     }
-    #settings-button-container {
-        display: flex;
-        flex-direction: column;
-    }
-    #settings-popup {
-        top: 55px;
-    }
 }
 
 @media (max-width: 800px) {
@@ -85,7 +78,7 @@
         bottom: 0px;
         background-color: white;
         width: 100%;
-        padding: 10px 10px;
+        height: 50px;
         justify-content: space-around;
         align-items: center; 
         box-shadow: 0 0 20px 10px rgba(0,0,0,.1);
@@ -95,6 +88,21 @@
         height: 25px;
         cursor: pointer;
     }
+}
+
+/* Settings Pop-Up Styling */
+
+@media (min-width: 800px) {
+    #settings-button-container {
+        display: flex;
+        flex-direction: column;
+    }
+    #settings-popup {
+        top: 55px;
+    }
+}
+
+@media (max-width: 800px) {
     #settings-button-container {
         display: flex;
         flex-direction: column-reverse;
@@ -127,4 +135,273 @@
 #settings-popup > *:hover {
     cursor: pointer;
     background-color: rgb(200, 200, 200);
+}
+
+/* New Post Pop-Up Styling */
+
+@media (max-width: 800px) {
+    #new-post {
+        height: calc(100vh - 100px);
+    }
+    #new-post-parent {
+        height: calc(100vh - 150px);
+    }
+    #new-post-form {
+        width: 90vw;
+        max-width: 500px;
+    }
+    #new-post-image-input {
+        height: 200px;
+        width: 200px;
+    }
+    #new-post-image-overlay {
+        height: 200px;
+        width: 200px;
+    }
+    #new-post-image-preview {
+        height: 200px;
+        width: 200px;
+        object-fit: cover;
+    }
+    #new-post-caption-input {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+@media (min-width: 800px) {
+    #new-post {
+        height: calc(100vh - 50px);
+    }
+    #new-post-parent {
+        height: calc(100vh - 100px);
+    }
+    #new-post-form {
+        width: 80vw;
+        max-width: 800px;
+    }
+    #new-post-image-input {
+        height: 300px;
+        width: 300px;
+    }
+    #new-post-image-overlay {
+        height: 300px;
+        width: 300px;
+    }
+    #new-post-image-preview {
+        height: 300px;
+        width: 300px;
+        object-fit: cover;
+    }
+    #new-post-caption-input {
+        width: 400px;
+    }
+}
+
+#new-post {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 50px;
+}
+
+#new-post-parent {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 10px;
+}
+
+#new-post-form {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    align-items: center;
+    justify-content: space-around;
+    height: calc(100vh - 160px);
+}
+
+label {
+    font-size: small;
+}
+
+#new-post-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 0px;
+    width: 100%;
+}
+
+#new-post-x-button {
+    font-size: small;
+    margin-left: 20px;
+    color: rgb(0, 0, 0, 0.75);
+}
+
+#new-post-x-button:hover {
+    cursor: pointer;
+    color: rgb(0, 0, 0, 0.25);
+}
+
+#new-post-x-button-hidden {
+    font-size: small;
+    margin-right: 20px;
+    opacity: 0;
+}
+
+#new-post-title {
+    font-weight: bold;
+    font-size: x-large;
+}
+
+#new-post-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.85);
+    height: 100%;
+    width: 100%;
+    font-size: x-large;
+    color: rgb(200, 0, 0);
+}
+
+#new-post-error.inactive {
+    z-index: -1;
+    opacity: 0;
+}
+
+#new-post-error.active {
+    z-index: 4;
+    opacity: 1;
+}
+
+#new-post-error, #new-post-error > * {
+    transition: all .3s ease-in-out;
+}
+
+#new-post-image-section {
+    flex-direction: column-reverse;
+}
+
+#new-post-image-input-parent {
+    display: flex;
+    flex-direction: column-reverse;
+    position: relative;
+}
+
+#new-post-image-input-parent:hover, #new-post-image-input:hover {
+    cursor: pointer;
+}
+
+#new-post-image-input {
+    opacity: 0;
+    z-index: 3;
+}
+
+#new-post-image-preview {
+    position: absolute;
+    z-index: 1;
+    border-radius: 10px;
+    top: 0px;
+}
+
+div#new-post-image-preview {
+    background-color: rgb(210, 210, 210);
+}
+
+#new-post-image-overlay {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 2;
+    top: 0px;
+}
+
+#new-post-image-overlay.active {
+    opacity: 1;
+}
+
+#new-post-image-overlay.inactive {
+    opacity: 0;
+}
+
+#new-post-image-footer {
+    text-align: center;
+}
+
+#new-post-caption-input {
+    font: inherit;
+    font-size: small;
+    outline: none;
+    resize: none;
+    border-radius: 15px;
+    border-color: rgba(0, 0, 0, 0.2);
+    border-width: 1px;
+    border-style: solid;
+    padding: 5px;
+}
+
+#new-post-caption-footer {
+    height: 12px;
+    font-size: 12px;
+    text-align: center;
+}
+
+#new-post-caption-footer.grey {
+    color:#777777
+}
+
+#new-post-caption-footer {
+    color:#dd0000
+}
+
+#new-post-button {
+    top: 0px;
+    position: relative;
+    border-color: rgba(0, 0, 0, 0.2);
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 5px 10px 0 rgba(0,0,0,.2);
+    font-size: large;
+    border-radius: 30px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 40px;
+    width: 200px;
+    transition: .2s;
+}
+
+#new-post-button:hover {
+    top: -5px;
+    box-shadow: 0 10px 10px 0 rgba(0,0,0,.2);
+    cursor: pointer;
+}
+
+#new-post-button.inactive:hover {
+    top: -5px;
+    box-shadow: 0 10px 10px 0 rgba(0,0,0,.2);
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #777777;
+}
+
+#new-post-button.active {
+    background-color: #333333;
+    color: white;
+}
+
+#new-post-button.inactive {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #777777;
 }

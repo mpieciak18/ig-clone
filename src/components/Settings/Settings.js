@@ -1,6 +1,6 @@
 import './Settings.css'
 import { updateUser } from '../../firebase/users.js'
-import { useLocation, useNavigate, Link } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect, useRef } from 'react'
 import { NameFooter } from './children/NameFooter.js'
 import { ImageInput } from './children/ImageInput.js'
@@ -75,16 +75,11 @@ const Settings = (props) => {
         // Check validation first
         if (namePasses == true) {
             let path
-            console.log(file)
             if (file == null) {
-                console.log(1)
                 path = user.data.image
-                console.log(path)
             } else {
-                console.log(2)
                 const image = file.name
                 path = `${user.id}/${image}`
-                console.log(image, path)
                 await uploadFile(file, path)
             }
             const possibleError = await updateUser(

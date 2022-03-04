@@ -17,17 +17,22 @@ import MessagesSolid from '../../assets/images/messages-solid.png'
 import { SettingsPopup } from './SettingsPopup.js'
 
 const Navbar = (props) => {
-    // Init props, states, & other values
     const { user } = props
 
     const navigate = useNavigate()
 
     const path = useLocation().pathname
 
+    // Init settings pop-up visibility state
     const [viewSettings, setViewSettings] = useState(false)
 
-    const [newPostOn, setNewPostOn] = useState(false)
+    // Init new-post pop-up visibility state
+    const [viewNewPost, setViewNewPost] = useState(false)
 
+    // Init notifications pop-up visibility state
+    const [viewNotif, setViewNotif] = useState(false)
+
+    // Init navbar buttons
     const [home, setHome] = useState(HomeHollow)
     const [messages, setMessages] = useState(MessagesHollow)
     const [post, setPost] = useState(PostHollow)
@@ -38,31 +43,25 @@ const Navbar = (props) => {
         //
     }
 
-    const clickAddPost = () => {
+    // Update viewNewPost (or redirect to sign-up page)
+    const clickNewPost = () => {
         if (user == null) {
             navigate('/signup', {state: {path: path}})
         } else {
-            setNewPostOn(true)
+            setViewNewPost(true)
         }
     }
 
-    let newPost = null
-    useEffect(() => {
-        if (newPostOn != true) {
-            newPost = null
-        } else {
-            newPost = <NewPost setNewPostOn={setNewPostOn} />
-        }
-    }, [newPostOn])
-
+    // Update viewNotif (or redirect to sign-up page)
     const clickNotifications = () => {
         if (user == null) {
             navigate('/signup', {state: {path: path}})
         } else {
-            navigate('/notifications', {state: {path: path}})
+            setViewNotif(true)
         }
     }
 
+    // Navigate to direct messages (or sign-up page)
     const clickMessages = () => {
         if (user == null) {
             navigate('/signup', {state: {path: path}})
@@ -71,6 +70,7 @@ const Navbar = (props) => {
         }
     }
 
+    // Update viewSettings (or redirect to sign-up page)
     const clickSettings = () => {
         if (user == null) {
             navigate('/signup', {state: {path: path}})
@@ -83,7 +83,7 @@ const Navbar = (props) => {
 
     return (
         <div id="navbar">
-            {newPost}
+            <NewPost user={user} viewNewPost={viewNewPost} setViewNewPost={setViewNewPost} />
             <img id="navbar-logo"
                 src={LogoSolid}
                 onClick={() => navigate('/')}
@@ -108,7 +108,7 @@ const Navbar = (props) => {
                 />
                 <img id="post-button" 
                     src={post} 
-                    onClick={clickAddPost} 
+                    onClick={clickNewPost} 
                     onMouseDown={() => setPost(PostSolid)}
                     onMouseUp={() => setPost(PostHollow)}
                     onMouseOver={() => setPost(PostSolid)}
@@ -134,7 +134,6 @@ const Navbar = (props) => {
                     <SettingsPopup user={user} viewSettings={viewSettings} setViewSettings={setViewSettings} />
                 </div>
             </div>
-            {newPost}
         </div>
     )
 }

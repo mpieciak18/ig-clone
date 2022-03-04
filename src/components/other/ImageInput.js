@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react"
-import { getUrl } from "../../../firebase/storage.js"
 
 const ImageInput = (props) => {
-    const { user, inputRef, setFile, setErrorClass } = props
+    const { inputRef, setFile, setErrorClass } = props
 
     const [filePreviewUrl, setFilePreviewUrl] = useState(null)
 
@@ -28,9 +27,10 @@ const ImageInput = (props) => {
     const validateImage = async () => {
         if (inputRef.current.files[0].size > maxFileSize || 
         isImage(inputRef.current.files[0]) == false) {
+            console.log(1)
             inputRef.current.value = ''
             setFile(null)
-            setFilePreviewUrl(getUrl(user.data.image))
+            setFilePreviewUrl(null)
             setErrorClass('active')
             setTimeout(() => {setErrorClass('inactive')}, 2000)
         } else {
@@ -39,19 +39,12 @@ const ImageInput = (props) => {
         }
     }
 
-    useEffect(async () => {
-        if (user != null) {
-            const img = await getUrl(user.data.image)
-            setFilePreviewUrl(img)
-        }
-    }, [user])
-
     useEffect(() => {
         setImageInput(
             <input 
                 ref={inputRef} 
                 type="file" 
-                id="settings-image-input" 
+                id="new-post-image-input" 
                 name="image" 
                 onChange={validateImage}
                 onMouseDown={() => setOverlayClass('active')}
@@ -63,22 +56,25 @@ const ImageInput = (props) => {
     }, [inputRef])
 
     useEffect(() => {
-        setFilePreview(
-            <img id='settings-image-preview' src={filePreviewUrl} />
-        )
+        if (filePreviewUrl != null) {
+            setFilePreview(<img id='new-post-image-preview' src={filePreviewUrl} />)
+        } else {
+            setFilePreview(<div id='new-post-image-preview' />)
+        }
     }, [filePreviewUrl])
 
     return (
         <div
-            id='settings-image-input-parent'
+            id='new-post-image-input-parent'
             onPointerDown={() => setOverlayClass('active')}
             onPointerUp={() => setOverlayClass('inactive')}
             onMouseOver={() => setOverlayClass('active')}
             onMouseOut={() => setOverlayClass('inactive')}
         >
+            <label id='new-post-image-footer' htmlFor='image'>File size limit: 5 mb</label>
             {imageInput}
             {filePreview}
-            <div id='settings-image-overlay' className={overlayClass} />
+            <div id='new-post-image-overlay' className={overlayClass} />
         </div>
     )
 }

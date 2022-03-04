@@ -72,9 +72,13 @@ const newPost = async (text, image) => {
         likes: 0,
         comments: 0
     }
-    const postId = await addPostToUserPostsCollection(postData)
-    await changePostCount(userId, true)
-    return postId
+    try {
+        const postId = await addPostToUserPostsCollection(postData)
+        await changePostCount(userId, true)
+        return postId
+    } catch(error) {
+        return null
+    }
 }
 
 // Add post to posts subcollection in user doc & return post ID

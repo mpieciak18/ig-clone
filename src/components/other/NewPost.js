@@ -1,103 +1,125 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { uploadFile } from '../../firebase/storage.js'
 import { newPost } from '../../firebase/posts.js'
-import './other.css'
+import { ImageInput } from './ImageInput.js'
+import { CaptionFooter } from './CaptionFooter.js'
 
 const NewPost = (props) => {
-    const { user, setNewPostOn } = props
+    
+    const { user, viewNewPost, setViewNewPost } = props
 
+    // Init useNavigate function
+    const navigate = useNavigate()
+
+    // Init new post pop-up component state
+    const [newPostPopup, setNewPostPopup] = useState(null)
+
+    // Init ref for ImageInput component
     const inputRef = useRef()
 
+    // Init file state 
     const [file, setFile] = useState(null)
 
-    const [isValid, setIsValid] = useState(false)
+    // Init caption field value form validation state
+    const [captionPasses, setCaptionPasses] = useState(false)
 
-    const [filePreview, setFilePreview] = useState(null)
+    // Init name field value state
+    const [caption, setCaption] = useState('')
 
-    const [formButton, setFormButton] = useState("button")
+    // OnChange event handler for for bio field on form
+    const updateCaption = (e) => setCaption(e.target.value)
 
-    const maxFileSize = 10 * 1024 * 1024 // 5 MB
+    // Init error message class state
+    const [errorClass, setErrorClass] = useState('inactive')
 
-    // Runs when user selects file to upload
-    const validateFile = (e) => {
-        if (e.target.files[0].size > maxFileSize) {
-            inputRef.current.value = ''
-            setFile(null)
-            setIsValid(false)
-            setFilePreview(null)
-            setFormButton("button")
-        } else {
-            setFile(e.target.files[0])
-            setIsValid(true)
-            setFilePreview(URL.createObjectURL(e.target.files[0]))
-            setFormButton("submit")
-        }
-    }
+    // Init form button type state
+    const [button, setButton] = useState("submit")
+
+    // Init form buttonc class state
+    const [buttonClass, setButtonClass] = useState('active')
 
     // Upload file to storage & add new post to firebase
     const addPost = async (e) => {
         e.preventDefault()
-        if (isValid == true) {
-            const caption = e.target.caption.value
+        // Check validation first
+        if (captionPasses == true && file != null) {
             const image = file.name
-            const path = `/${user.id}/${image}`
+            const path = `${user.id}/${image}`
             await uploadFile(file, path)
-            await newPost(caption, path)
-            await setNewPostOn(false)
+            // Check for possible error with adding post to DB
+            const postId = await newPost(caption, path)
+            if (postId != null) {
+                navigate(`/${user.id}/${postId}`)
+            } else {
+                setErrorClass('active')
+                setTimeout(() => {setErrorClass('inactive')}, 2000)
+            }
         } 
-    }
-
-    // Preview of uploaded file
-    const inputPreview = () => {
-        if (isValid == true) {
-            return (
-                <div id="new-post-image-preview">
-                    <img src={filePreview} />
-                </div>
-            )
-        } else {
-            return (
-                <div id="new-post-image-preview">
-                    <img src={`${process.env.PUBLIC_URL}/assets/upload.svg`} />
-                    <div>File size limit: 5 mb</div>
-                </div>
-            )
-        }
     }
 
     // Closes newPost
     const hideNewPost = (e) => {
         const id = e.target.id
         if (id == "new-post" || id == "new-post-x-button") {
-            setNewPostOn(false)
+            setViewNewPost(false)
         }
     }
+    
+    // Update button & button class
+    useEffect(() => {
+        if (file == null || captionPasses == false) {
+            setButton('button')
+            setButtonClass('inactive')
+        } else {
+            setButton('submit')
+            setButtonClass('active')
+        }
+    }, [file, captionPasses])
 
-    return (
-        <div id="new-post" onClick={hideNewPost}>
-            <div id="new-post-pop-up">
-                <div id="new-post-header">
-                    <div id="new-post-title">Create New Post</div>
-                    <div id="new-post-x-button">✕</div>
+    // Update newPost component state and change scroll on body
+    useEffect(() => {
+        const body = document.querySelector('body')
+        if (viewNewPost == true) {
+            // Update new post pop-up component state
+            setNewPostPopup(
+                <div id="new-post">
+                    <div id="new-post-parent">
+                        <div id='new-post-error' className={errorClass}>
+                            <p>There was an error!</p>
+                            <p>Please try again.</p>
+                        </div>
+                        <div id="new-post-header">
+                            <div id="new-post-x-button" onClick={hideNewPost}>✕ Cancel</div>
+                            <div id="new-post-title">New Post</div>
+                            <div id="new-post-x-button-hidden">✕ Cancel</div>
+                        </div>
+                        <div id="new-post-divider" />
+                        <form id="new-post-form" onSubmit={addPost}>
+                            <ImageInput inputRef={inputRef} setFile={setFile} setErrorClass={setErrorClass} />
+                            <div id='new-post-caption-parent'>
+                                <textarea 
+                                    id="new-post-caption-input" 
+                                    name="caption" 
+                                    placeholder='Enter a caption...' 
+                                    value={caption} 
+                                    onChange={updateCaption}
+                                />
+                                <CaptionFooter caption={caption} setCaptionPasses={setCaptionPasses} />
+                            </div>
+                            <button type={button} id="new-post-button" className={buttonClass}>Upload New Post</button>
+                        </form>
+                    </div>
                 </div>
-                <div id="new-post-divider" />
-                <form id="new-post-form" onSubmit={addPost}>
-                    <input 
-                        ref={inputRef} 
-                        type="file" 
-                        id="new-post-image" 
-                        name="image" 
-                        accept=".jpg, .jpeg, .png" 
-                        onChange={validateFile}
-                    >
-                        {inputPreview}
-                    </input>
-                    <input type="text" id="new-post-caption" name="caption">Enter a caption...</input>
-                    <button type={formButton} id="new-post-button"></button>
-                </form>
-            </div>
-        </div>
-    )
+            )
+            body.style.overflow = 'hidden'
+        } else {
+            setNewPostPopup(null)
+            body.style.overflow = 'auto'
+        }
+    }, [viewNewPost, caption, button, buttonClass, errorClass])
+
+    return newPostPopup
 }
 
 export { NewPost }
