@@ -1,10 +1,18 @@
 /* Post Reel Styling */
 
 @media (max-width: 800px) {
+    .single-post-component {
+        width: 100vw;
+        max-width: 500px;
+    }
     .post-image {
-        width: 300px;
-        height: 300px;
+        min-width: 250px;
+        min-height: 250px;
         object-fit: cover;
+        aspect-ratio: 1 / 1;
+        max-width: 500px;
+        max-height: 500px;
+        width: 100%;
     }
     .post-middle {
         height: 300px;
@@ -12,10 +20,16 @@
 }
 
 @media (min-width: 800px) {
+    .single-post-component {
+        width: 100vw;
+        max-width: 500px;
+    }
     .post-image {
-        width: 500px;
-        height: 500px;
         object-fit: cover;
+        aspect-ratio: 1 / 1;
+        max-width: 500px;
+        max-height: 500px;
+        width: 100%;
     }
     .post-middle {
         height: 500px;
@@ -27,6 +41,7 @@
     box-shadow: 0 0 20px 10px rgba(0,0,0,.1);
     font-size: small;
     z-index: -1;
+    margin: 40px 0px;
 }
 
 .post-user-link-avatar {
@@ -107,6 +122,7 @@
 .post-text-name {
     padding-right: 8px;
     font-weight: bold;
+    min-width: 50px;
 }
 
 .post-text-name:link, .post-text-name:visited, .post-text-name:active, .post-text-name:hover {
@@ -123,11 +139,18 @@
 .single-post-component .post-comment-name {
     padding-right: 8px;
     font-weight: bold;
+    min-width: 50px;
 }
 
 .single-post-component .post-comment-name:link, .single-post-component .post-comment-name:visited, .single-post-component .post-comment-name:active, .single-post-component .post-comment-name:hover {
     text-decoration: none;
     color: rgb(100, 100, 100);
+}
+
+.single-post-component .post-comment-text {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .single-post-component .post-comment-bar {
