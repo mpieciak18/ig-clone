@@ -12,7 +12,10 @@ import { LinkCopied } from './LinkCopied.js'
 
 const PostReel = (props) => {
     // Init props
-    const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user, setLikes } = props
+    const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user } = props
+
+    // Init post reel component
+    const [postLikesComponent, setPostLikesComponent] = useState(null)
 
     // Init post owner name
     const [postOwnerName, setPostOwnerName] = useState(null)
@@ -49,6 +52,9 @@ const PostReel = (props) => {
     // Init linkCopied state for share button
     const [linkCopied, setLinkCopied] = useState(false)
 
+    // Init likes component state
+    const [likes, setLikes] = useState(null)
+
     // Init likesOn state
     const [likesOn, setLikesOn] = useState(false)
 
@@ -59,13 +65,20 @@ const PostReel = (props) => {
 
     const clickLikes = () => {
         if (user == null) {
-            navigate('/signup', {state: {path: path}})
+            setTimeout(() => {
+                if (user == null) {
+                    navigate('/signup', {state: {path: path}})
+                }
+                else {
+                    setLikesOn(true)
+                }
+            }, 2000)
         } else {
             setLikesOn(true)
         }
     }
 
-    // Render likes pop-up preview
+    // Update likes component when likesOn changes
     useEffect(() => {
         const body = document.querySelector('body')
         if (likesOn == false) {
@@ -77,8 +90,9 @@ const PostReel = (props) => {
         }
     }, [likesOn])
 
-    return (
+    return(
         <div className="single-post-component">
+            {likes}
             <div className="post-top">
                 <Link className="post-user-link" to={`/${postOwnerId}`}>
                     <img className="post-user-link-avatar" src={postOwnerImgSrc} />

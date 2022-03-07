@@ -25,7 +25,6 @@
 
 #user-card {
     position: relative;
-    z-index: -1;
 }
 
 #user-card-icon {
@@ -52,10 +51,6 @@
     color: rgb(150, 150, 150);
 }
 
-#user-card-top:link, #user-card-top:visited, #user-card-top:active, #user-card-top:hover {
-    text-decoration: none;
-}
-
 #user-card-bottom {
     display: flex;
     flex-direction: row;
@@ -79,4 +74,8 @@
 
 .user-stats-child-type {
     font-size: small;
+}
+
+#user-card-top > *:hover, #user-card-bottom > *:hover {
+    cursor: pointer;
 }
