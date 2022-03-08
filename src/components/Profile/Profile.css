@@ -280,3 +280,14 @@
     justify-content: center;
     margin: 0px 2px;
 }
+
+#profile-card-top > *, #profile-card-stats > * {
+    position: relative;
+    top: 0;
+    transition: all ease-in-out 0.25s;
+}
+
+#profile-card-top > *:hover, #profile-card-stats > *:hover {
+    top: -5px;
+    cursor: pointer;
+}

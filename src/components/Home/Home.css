@@ -41,6 +41,16 @@
     justify-content: space-around;
 }
 
+#user-card-top > * {
+    position: relative;
+    top: 0;
+    transition: all ease-in-out 0.25s;
+}
+
+#user-card-top > *:hover {
+    top: -5px;
+}
+
 #user-card-name {
     font-size: larger;
     font-weight: bold;
@@ -61,6 +71,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+    top: 0;
+    transition: all ease-in-out 0.25s;
+}
+
+#user-card-bottom > *:hover {
+    top: -5px;
 }
 
 #user-card-bottom > * > * {
