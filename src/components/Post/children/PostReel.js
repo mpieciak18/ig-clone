@@ -90,7 +90,7 @@ const PostReel = (props) => {
         }
     }, [likesOn])
 
-    return(
+    return (
         <div className="single-post-component">
             {likes}
             <div className="post-top">

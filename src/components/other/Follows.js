@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { getUrl } from '../../firebase/storage.js'
 import { findUser } from '../../firebase/users.js'
 
-const Follows = async (props) => {
+const Follows = (props) => {
     const { user, otherUserId, setFollowsOn, initTab } = props
 
     const navigate = useNavigate()
@@ -51,30 +51,32 @@ const Follows = async (props) => {
     // Change usersArr state when usersCount changes
     useEffect(async () => {
         if (whichTab == 'following') {
-            const returnVal = await getFollowing(otherUserId, usersCount)
-            setUsers(returnVal)
+            const following = await getFollowing(otherUserId, usersCount)
+            const returnVal = await Promise.all(following)
+            setUsersArr(returnVal)
         } else {
-            const returnVal = await getFollowers(otherUserId, usersCount)
-            setUsers(returnVal)
+            const followers = await getFollowers(otherUserId, usersCount)
+            const returnVal = await Promise.all(followers)
+            setUsersArr(returnVal)
         }
     }, [usersCount])
 
     // Update users component state when usersArr changes
     useEffect(async () => {
-        const newUsers = (
-            <div id='follows-list' onScroll={loadMore}>
-                {usersArr.map(async (user) => {
+        if (usersArr != null) {
+            const newUsers = (
+                usersArr.map(async (user) => {
                     let userId
                     if (whichTab == 'following') {
-                        userId = user.otherUser
+                        userId = user.data.otherUser
                     } else {
-                        userId = user.self
+                        userId = user.data.self
                     }
                     const userInfo = await findUser(userId)
                     const redirect = () => navigate(`/${userId}`)
                     const image = await getUrl(userInfo.data.image)
                     return (
-                        <div className='follow-row' onClick={redirect}>
+                        <div className='follow-row' key={user.id} onClick={redirect}>
                             <div className='follow-row-left'>
                                 <img className='follow-image' src={image} />
                                 <div className='follow-text'>
@@ -83,15 +85,15 @@ const Follows = async (props) => {
                                 </div>
                             </div>
                             <div className='follow-row-right'>
-                                <FollowButton otherUserId={userId} />
+                                <FollowButton user={user} otherUserId={userId} />
                             </div>
                         </div>
                     )
-                })}
-            </div>
-        )
-        const returnVal = await Promise.all(newUsers)
-        setUsers(returnVal)
+                })
+            )
+            const returnVal = await Promise.all(newUsers)
+            setUsers(returnVal)
+        }
     }, [usersArr])
 
     // Load more follows/followers when user reaches bottom of pop-up
@@ -133,14 +135,17 @@ const Follows = async (props) => {
         <div id="follow">
             <div id="follows-pop-up">
                 <div id="follows-header">
-                    <div id="follows-header-left">
+                    <div id="follows-x-button" onClick={xButtonClick}>« Go Back</div>
+                    <div id="follows-header-menu">
                         <div id='following-button' className={buttonOne} onClick={followingClick}>Following</div>
                         <div id='followers-button' className={buttonTwo} onClick={followersClick}>Followers</div>
                     </div>
-                    <div id="follows-x-button" onClick={xButtonClick}>✕</div>
+                    <div id="follows-x-button-hidden">« Go Back</div>
                 </div>
                 <div id="follows-divider" />
-                {users}
+                <div id='follows-list' onScroll={loadMore}>
+                    {users}
+                </div>
             </div>
         </div>
     )

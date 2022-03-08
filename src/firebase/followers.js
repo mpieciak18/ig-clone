@@ -128,9 +128,13 @@ const getFollowing = async (userId, arrQuantity) => {
     const followingsRef = getFollowingsRef(userId, arrQuantity)
     const followingsQuery = query(followingsRef, limit(arrQuantity))
     const followingsDocs = await getDocs(followingsQuery)
-    return followingsDocs.map(async (following) => {
-        return await following.data().otherUser
+    const followings = (followingsDocs.docs).map(async (following) => {
+        return {
+            id: following.id,
+            data: following.data()
+        }
     })
+    return followings
 }
 
 // Return array of user id's that follow the given user
@@ -138,9 +142,13 @@ const getFollowers = async (userId, arrQuantity) => {
     const followersRef = getFollowersRef(userId, arrQuantity)
     const followersQuery = query(followersRef, limit(arrQuantity))
     const followersDocs = await getDocs(followersQuery)
-    return followersDocs.map(async (follower) => {
-        return await follower.data().otherUser
+    const followers = (followersDocs.docs).map(async (follower) => {
+        return {
+            id: follower.id,
+            data: follower.data()
+        }
     })
+    return followers
 }
 
 export { addFollow, removeFollow, checkForFollow, getFollowing, getFollowers }

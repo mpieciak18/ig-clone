@@ -92,9 +92,12 @@ const UserCard = (props) => {
 
     // Update follows state if followsOn state changes
     useEffect(() => {
+        const body = document.querySelector('body')
         if (followsOn == false) {
+            body.style.overflow = 'auto'
             setFollows(null)
         } else {
+            body.style.overflow = 'hidden'
             setFollows(
                 <Follows
                     user={user}

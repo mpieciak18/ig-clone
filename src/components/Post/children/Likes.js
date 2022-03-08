@@ -89,9 +89,9 @@ const Likes = (props) => {
         <div id="likes" onClick={hideLikes}>
             <div id="likes-pop-up">
                 <div id="likes-header">
-                    <div id="likes-x-button">❮❮❮ Go Back</div>
+                    <div id="likes-x-button">« Go Back</div>
                     <div id="likes-title">Likes</div>
-                    <div id='likes-x-button-hidden'>❮❮❮ Go Back</div>
+                    <div id='likes-x-button-hidden'>« Go Back</div>
                 </div>
                 <div id="likes-divider" />
                 <div id='likes-list' onScroll={loadMore}>

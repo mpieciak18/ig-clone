@@ -405,3 +405,177 @@ div#new-post-image-preview {
     background-color: rgba(0, 0, 0, 0.1);
     color: #777777;
 }
+
+/* Follows Pop-Up */
+
+#follow {
+    position: fixed;
+    z-index: 1;
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    left: 0;
+    top: 0;
+}
+
+#follows-pop-up {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    align-items: center;
+}
+
+@media (min-width: 800px) {
+    #follows-header-menu {
+        flex-direction: row;
+    }
+    #follows-header-menu > * {
+        margin: 0px 10px;
+    }
+}
+
+@media (max-width: 800px) {
+    #follows-header-menu {
+        flex-direction: row;
+        margin-right: 10px;
+    }
+    #following-button {
+        margin: 0 10px;
+    }
+    #followers-button {
+        margin: 0 10px;
+    }
+    #follows-x-button-hidden {
+        font-size: 0;
+        visibility: hidden;
+        margin: 0;
+        height: 0;
+        width: 0;
+        position: absolute;
+        z-index: -1;
+    }
+    #follows-list {
+        padding-bottom: 60px;
+    }
+}
+
+#follows-header {
+    display: flex;
+    flex-direction: row;
+    margin-top: 60px;
+    padding: 20px 0px;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+}
+
+#follows-header-menu {
+    display: flex;
+    font-size: large;
+    font-weight: bold;
+    /* margin-top: 60px;
+    padding: 20px 0px;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 800px; */
+}
+
+#follows-header-menu > * {
+    position: relative;
+    transition: ease-in-out all 0.25s;
+    top: 0px;
+}
+
+#follows-header-menu > *.active:hover, #follows-header-menu > *.inactive:hover {
+    cursor: pointer;
+    top: -5px;
+}
+
+#follows-header-menu > *.active {
+    border-bottom: 2px solid black;
+}
+
+#follows-header-menu > *.inactive {
+    border-bottom: 2px solid rgba(0, 0, 0, 0);
+    color: darkgray;
+}
+
+#follows-x-button {
+    font-size: small;
+    margin-left: 30px;
+    color: rgb(0, 0, 0, 0.75);
+}
+
+#follows-x-button:hover {
+    cursor: pointer;
+    color: rgb(0, 0, 0, 0.25);
+}
+
+#follows-x-button-hidden {
+    font-size: small;
+    visibility: hidden;
+    margin-right: 30px;
+}
+
+#follows-divider {
+    background-color: rgba(0, 0, 0, 0.25);
+    height: 1px;
+    width: 100%;
+    max-width: 740px;
+}
+
+#follows-list {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding-top: 10px;
+    padding-bottom: 60px;
+    max-width: 800px;
+    width: 100%;
+    overflow-y: auto;
+}
+
+.follow-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 5px 30px;
+}
+
+.follow-row-left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: small;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.follow-row-left:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.follow-row-left:link, .follow-row-left:visited, .follow-row-left:active, .follow-row-left:hover {
+    text-decoration: none;
+    color: black;
+}
+
+.follow-image {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.follow-text {
+    display: flex;
+    flex-direction: column;
+    padding: 0 5px 0 10px;
+}
+
+.follow-name {
+    font-weight: bold;
+}
