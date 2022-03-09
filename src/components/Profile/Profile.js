@@ -28,15 +28,6 @@ const Profile = (props) => {
 
     // Init other user followers count state
     const [numFollowers, setNumFollowers] = useState(null)
-
-    // Init followsOn state
-    const [followsOn, setFollowsOn] = useState(false)
-
-    // Init follows component state
-    const [follows, setFollows] = useState(null)
-
-    // Init initial tab for follows pop-up state
-    const [whichTab, setWhichTab] = useState(null)
     
     // Update posts arr state when postsNumber state changes
     useEffect(async () => {
@@ -92,43 +83,15 @@ const Profile = (props) => {
       }
     })
 
-    // Update follows component when followsOn changes
-    useEffect(async () => {
-        if (postsArr != null) {
-            setFollows(
-                <Follows
-                    user={user}
-                    otherUserId={otherUserId}
-                    setFollowsOn={setFollowsOn}
-                    initTab={whichTab}
-                />
-            )
-        } else {
-            setFollows(null)
-        }
-    }, [followsOn])
-
     return (
         <div id='profile'>
             <Navbar user={user} />
-            {follows}
             <div id='profile-contents'>
                 <div id='profile-contents-left'>
-                    <ProfileCard 
-                        otherUserId={otherUserId}
-                        numFollowers={numFollowers}
-                        setNumFollowers={setNumFollowers}
-                        setWhichTab={setWhichTab}
-                        setFollows={setFollowsOn}
-                    />
+                    <ProfileCard user={user} otherUserId={otherUserId} />
                 </div>
                 <div id='profile-contents-right'>
-                    <ProfileButtons 
-                        user={user}
-                        otherUserId={otherUserId}
-                        numFollowers={numFollowers}
-                        setNumFollowers={setNumFollowers}
-                    />
+                    <ProfileButtons user={user} otherUserId={otherUserId} />
                     {posts}
                 </div>
             </div>

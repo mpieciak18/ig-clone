@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import './other.css'
 
 const FollowButton = (props) => {
-    const { user, otherUserId, numFollowers, setNumFollowers } = props
+    const { user, otherUserId } = props
 
     const navigate = useNavigate()
 
@@ -54,15 +54,11 @@ const FollowButton = (props) => {
             setIsUpdating(true)
             const newId = await addFollow(otherUserId)
             setFollowingId(newId)
-            // const newNum = numFollowers + 1
-            // await setNumFollowers(newNum)
         } else if (isUpdating == false && followingId != null) {
             setFollowButtonClass('inactive')
             setIsUpdating(true)
             await removeFollow(followingId, otherUserId)
             setFollowingId(null)
-            // const newNum = numFollowers - 1
-            // await setNumFollowers(newNum)
         }
     }
 

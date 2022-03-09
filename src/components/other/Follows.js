@@ -76,8 +76,8 @@ const Follows = (props) => {
                     const redirect = () => navigate(`/${userId}`)
                     const image = await getUrl(userInfo.data.image)
                     return (
-                        <div className='follow-row' key={user.id} onClick={redirect}>
-                            <div className='follow-row-left'>
+                        <div className='follow-row' key={user.id}>
+                            <div className='follow-row-left' onClick={redirect}>
                                 <img className='follow-image' src={image} />
                                 <div className='follow-text'>
                                     <div className='follow-name'>{userInfo.data.name}</div>

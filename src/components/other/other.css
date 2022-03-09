@@ -556,6 +556,7 @@ div#new-post-image-preview {
 
 .follow-row-left:hover {
     background-color: rgba(0, 0, 0, 0.05);
+    cursor: pointer;
 }
 
 .follow-row-left:link, .follow-row-left:visited, .follow-row-left:active, .follow-row-left:hover {

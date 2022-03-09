@@ -6,7 +6,7 @@ import MessageHollow from '../../../assets/images/dm.png'
 import MessageSolid from '../../../assets/images/dm-solid.png'
 
 const ProfileButtons = (props) => {
-    const { user, otherUserId, numFollowers, setNumFollowers } = props
+    const { user, otherUserId } = props
 
     const navigate = useNavigate()
 
@@ -55,8 +55,6 @@ const ProfileButtons = (props) => {
                     <FollowButton
                         user={user}
                         otherUserId={otherUserId}
-                        numFollowers={numFollowers}
-                        setNumFollowers={setNumFollowers}
                     />
                     <div id='profile-direct-message-button-container'>
                         <img 

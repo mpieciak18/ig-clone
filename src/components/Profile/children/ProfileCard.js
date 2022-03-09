@@ -1,9 +1,10 @@
 import { getUrl } from '../../../firebase/storage.js'
 import { useState, useEffect } from 'react'
 import { findUser } from '../../../firebase/users.js'
+import { Follows } from '../../other/Follows.js'
 
 const ProfileCard = (props) => {
-    const { otherUserId, numFollowers, setNumFollowers, setWhichTab, setFollowsOn } = props
+    const { user, otherUserId } = props
 
     // Init profile image state
     const [img, setImg] = useState(null)
@@ -14,14 +15,33 @@ const ProfileCard = (props) => {
     // Init profileCard component state
     const [profileCard, setProfileCard] = useState(null)
 
+    // Init state for follows pop-up component
+    const [follows, setFollows] = useState(null)
+
+    // Init state to show/hide Follows pop-up
+    const [followsOn, setFollowsOn] = useState(false)
+
+    // Init state to determine if pop-up shows following or followers
+    const [followingVsFollower, setFollowingVsFollower] = useState('following')
+
+    // Open Follows pop-up (following)
+    const clickFollowing = () => {
+        setFollowingVsFollower('following')
+        setFollowsOn(true)
+    }
+
+    // Open Follows pop-up (followers)
+    const clickFollowers = () => {
+        setFollowingVsFollower('followers')
+        setFollowsOn(true)
+    }
+
     // Update img, otherUser, & otherUserFollowers states on render
     useEffect(async () => {
         const newUser = await findUser(otherUserId)
         const imgSrc = await getUrl(newUser.data.image)
-        const followers = newUser.data.followers
         setImg(imgSrc)
         setOtherUser(newUser)
-        setNumFollowers(followers)
     }, [])
     
     useEffect(() => {
@@ -46,28 +66,36 @@ const ProfileCard = (props) => {
                                 <p className='profile-stats-child-type'>Following</p>
                             </div>
                             <div id='profile-card-followers' onClick={clickFollowers}>
-                                <p className='profile-stats-child-num'>{numFollowers}</p>
+                                <p className='profile-stats-child-num'>{otherUser.data.followers}</p>
                                 <p className='profile-stats-child-type'>Followers</p>
                             </div>
                         </div>
                         <div id='profile-card-bio'>{otherUser.data.bio}</div> 
                     </div>
+                    {follows}
                 </div>
             )
         }
-    }, [otherUser, numFollowers])
+    }, [otherUser, follows])
 
-    // Open Follows pop-up (following)
-    const clickFollowing = async () => {
-        await setWhichTab('following')
-        setFollowsOn(true)
-    }
-
-    // Open Follows pop-up (followers)
-    const clickFollowers = async () => {
-        await setWhichTab('followers')
-        setFollowsOn(true)
-    }
+    // Update follows state if followsOn state changes
+    useEffect(() => {
+        const body = document.querySelector('body')
+        if (followsOn == false) {
+            body.style.overflow = 'auto'
+            setFollows(null)
+        } else {
+            body.style.overflow = 'hidden'
+            setFollows(
+                <Follows
+                    user={user}
+                    otherUserId={user.id}
+                    setFollowsOn={setFollowsOn}
+                    initTab={followingVsFollower}
+                />
+            )
+        }
+    }, [followsOn])
 
     return profileCard
 }
