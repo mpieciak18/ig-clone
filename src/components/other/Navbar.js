@@ -1,8 +1,9 @@
 import './other.css'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { NewPost } from './NewPost.js'
-import { useEffect } from 'react'
+import { SettingsPopup } from './SettingsPopup.js'
+import { Notifications } from './Notifications.js'
 import LogoSolid from '../../assets/images/ig-logo-4.png'
 import HomeHollow from '../../assets/images/home.png'
 import HomeSolid from '../../assets/images/home-solid.png'
@@ -14,7 +15,6 @@ import NotificationsHollow from '../../assets/images/like.png'
 import NotificationsSolid from '../../assets/images/like-solid.png'
 import MessagesHollow from '../../assets/images/messages.png'
 import MessagesSolid from '../../assets/images/messages-solid.png'
-import { SettingsPopup } from './SettingsPopup.js'
 
 const Navbar = (props) => {
     const { user } = props
@@ -30,14 +30,14 @@ const Navbar = (props) => {
     const [viewNewPost, setViewNewPost] = useState(false)
 
     // Init notifications pop-up visibility state
-    const [viewNotif, setViewNotif] = useState(false)
+    const [viewNotifs, setViewNotifs] = useState(false)
 
     // Init navbar buttons
-    const [home, setHome] = useState(HomeHollow)
-    const [messages, setMessages] = useState(MessagesHollow)
-    const [post, setPost] = useState(PostHollow)
-    const [notifications, setNotifications] = useState(NotificationsHollow)
-    const [settings, setSettings] = useState(SettingsHollow)
+    const [homeImg, setHomeImg] = useState(HomeHollow)
+    const [messageImg, setMessageImg] = useState(MessagesHollow)
+    const [postImg, setPostImg] = useState(PostHollow)
+    const [notifImg, setNotifImg] = useState(NotificationsHollow)
+    const [settingsImg, setSettingsImg] = useState(SettingsHollow)
 
     const performSearch = (e) => {
         //
@@ -56,8 +56,10 @@ const Navbar = (props) => {
     const clickNotifications = () => {
         if (user == null) {
             navigate('/signup', {state: {path: path}})
+        } else if (viewNotifs == false) {
+            setViewNotifs(true)
         } else {
-            setViewNotif(true)
+            setViewNotifs(false)
         }
     }
 
@@ -81,9 +83,25 @@ const Navbar = (props) => {
         }
     }
 
+    // Init notifications component state
+    const [notifications, setNotifications] = useState(null)
+
+    // Update notifications state when viewNotifs changes
+    useEffect(async () => {
+        const body = document.querySelector('body')
+        if (viewNotifs == true) {
+            setNotifications(<Notifications user={user} setViewNotifs={setViewNotifs} />)
+            body.style.overflow = 'hidden'
+        } else {
+            setNotifications(null)
+            body.style.overflow = 'auto'
+        }
+    }, [viewNotifs])
+
     return (
         <div id="navbar">
             <NewPost user={user} viewNewPost={viewNewPost} setViewNewPost={setViewNewPost} />
+            {notifications}
             <img id="navbar-logo"
                 src={LogoSolid}
                 onClick={() => navigate('/')}
@@ -91,48 +109,48 @@ const Navbar = (props) => {
             <input id="navbar-search" type='text' placeholder='Search' />
             <div id="navbar-buttons">
                 <img id="home-button" 
-                    src={home}
+                    src={homeImg}
                     onClick={() => navigate('/')}
-                    onMouseDown={() => setHome(HomeSolid)}
-                    onMouseUp={() => setHome(HomeHollow)}
-                    onMouseOver={() => setHome(HomeSolid)}
-                    onMouseOut={() => setHome(HomeHollow)}
+                    onMouseDown={() => setHomeImg(HomeSolid)}
+                    onMouseUp={() => setHomeImg(HomeHollow)}
+                    onMouseOver={() => setHomeImg(HomeSolid)}
+                    onMouseOut={() => setHomeImg(HomeHollow)}
                 />
                 <img id="messages-button" 
-                    src={messages}
+                    src={messageImg}
                     onClick={clickMessages}
-                    onMouseDown={() => setMessages(MessagesSolid)}
-                    onMouseUp={() => setMessages(MessagesHollow)}
-                    onMouseOver={() => setMessages(MessagesSolid)}
-                    onMouseOut={() => setMessages(MessagesHollow)}
+                    onMouseDown={() => setMessageImg(MessagesSolid)}
+                    onMouseUp={() => setMessageImg(MessagesHollow)}
+                    onMouseOver={() => setMessageImg(MessagesSolid)}
+                    onMouseOut={() => setMessageImg(MessagesHollow)}
                 />
                 <img id="post-button" 
-                    src={post} 
+                    src={postImg} 
                     onClick={clickNewPost} 
-                    onMouseDown={() => setPost(PostSolid)}
-                    onMouseUp={() => setPost(PostHollow)}
-                    onMouseOver={() => setPost(PostSolid)}
-                    onMouseOut={() => setPost(PostHollow)}
+                    onMouseDown={() => setPostImg(PostSolid)}
+                    onMouseUp={() => setPostImg(PostHollow)}
+                    onMouseOver={() => setPostImg(PostSolid)}
+                    onMouseOut={() => setPostImg(PostHollow)}
                 />
-                <img id="notifications-button"
-                    src={notifications}
-                    onClick={clickNotifications}
-                    onMouseDown={() => setNotifications(NotificationsSolid)}
-                    onMouseUp={() => setNotifications(NotificationsHollow)}
-                    onMouseOver={() => setNotifications(NotificationsSolid)}
-                    onMouseOut={() => setNotifications(NotificationsHollow)}
-                />
-                <div id='settings-button-container'>
-                    <img id="settings-button" 
-                        src={settings} 
-                        onClick={clickSettings}
-                        onMouseDown={() => setSettings(SettingsSolid)}
-                        onMouseUp={() => setSettings(SettingsHollow)}
-                        onMouseOver={() => setSettings(SettingsSolid)}
-                        onMouseOut={() => setSettings(SettingsHollow)}
+                <div id='notifications-button-container'>
+                    <img id="notifications-button"
+                        src={notifImg}
+                        onClick={clickNotifications}
+                        onMouseDown={() => setNotifImg(NotificationsSolid)}
+                        onMouseUp={() => setNotifImg(NotificationsHollow)}
+                        onMouseOver={() => setNotifImg(NotificationsSolid)}
+                        onMouseOut={() => setNotifImg(NotificationsHollow)}
                     />
                     <SettingsPopup user={user} viewSettings={viewSettings} setViewSettings={setViewSettings} />
                 </div>
+                <img id="settings-button" 
+                    src={settingsImg} 
+                    onClick={clickSettings}
+                    onMouseDown={() => setSettingsImg(SettingsSolid)}
+                    onMouseUp={() => setSettingsImg(SettingsHollow)}
+                    onMouseOver={() => setSettingsImg(SettingsSolid)}
+                    onMouseOut={() => setSettingsImg(SettingsHollow)}
+                />
             </div>
         </div>
     )

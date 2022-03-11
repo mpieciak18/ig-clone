@@ -45,7 +45,7 @@ const addLike = async (postId, postOwnerId) => {
     const likeRef = getLikeRef(postOwnerId, postId)
     await setDoc(likeRef, data)
     // Fifth, add notification to recipient's subcollection
-    await addNotification('like', postOwnerId)
+    await addNotification('like', postOwnerId, postId)
     // Sixth, return like id
     return likeRef.id
 }

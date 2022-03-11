@@ -91,7 +91,7 @@ const PostReel = (props) => {
     }, [likesOn])
 
     return (
-        <div className="single-post-component">
+        <div className="single-post-component" key={postId}>
             {likes}
             <div className="post-top">
                 <Link className="post-user-link" to={`/${postOwnerId}`}>

@@ -41,7 +41,7 @@ const newComment = async (postOwnerId, postId, text) => {
     // Second, add comment to post's subcollection & assing new comment id to variable
     const commentId = await addCommentToUserPost(postOwnerId, postId, commentData)
     // Third, add notification to post owner's subcollection
-    await addNotification('comment', postOwnerId)
+    await addNotification('comment', postOwnerId, postId)
     // Fourth, change post's comment count
     await changeCommentCount(postOwnerId, postId, true)
     // Fifth, return comment id

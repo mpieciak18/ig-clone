@@ -45,7 +45,6 @@ const Likes = (props) => {
                 const likerName = liker.data.name
                 const likerUsername = liker.data.username
                 const likerImage = await getUrl(liker.data.image)
-                console.log(likerId)
                 return (
                     <div className='like-row' key={like.id}>
                         <Link className='like-row-left' to={`/${likerId}`}>

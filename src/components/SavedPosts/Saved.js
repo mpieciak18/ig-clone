@@ -1,4 +1,4 @@
-import './SavedPosts.css'
+import './Saved.css'
 import { findSaves } from '../../firebase/saves.js'
 import { PostPreview } from '../Post/children/PostPreview.js'
 import { useLocation, Navigate } from 'react-router-dom'
@@ -7,7 +7,7 @@ import { Navbar } from '../other/Navbar.js'
 import { ProfileCard } from '../Profile/children/ProfileCard.js'
 import { findPostsFromUser } from '../../firebase/posts.js'
 
-const SavedPosts = (props) => {
+const Saved = (props) => {
     // Redirect to signup page if not signed in
     const { user } = props
     const path = useLocation().pathname
@@ -78,4 +78,4 @@ const SavedPosts = (props) => {
     )
 }
 
-export { SavedPosts }
+export { Saved }

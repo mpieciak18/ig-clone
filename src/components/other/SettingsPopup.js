@@ -24,7 +24,7 @@ const SettingsPopup = (props) => {
     // Store closeSettings in a variable
     const eHandler = closeSettings()
     
-    // Update useEffect upon render & when displaySettings prop changes
+    // Update popup when viewSettings changes
     useEffect(() => {
         if (viewSettings == true) {
             document.querySelector('body').addEventListener('click', eHandler)
@@ -36,7 +36,7 @@ const SettingsPopup = (props) => {
                     <div id='settings-settings' className='settings-popup-button' onClick={() => navigate('/settings')}>
                         Change Settings
                     </div>
-                    <div id='settings-posts' className='settings-popup-button' onClick={() => navigate('/savedposts')}>
+                    <div id='settings-posts' className='settings-popup-button' onClick={() => navigate('/saved')}>
                         View Saved Posts
                     </div>
                     <div id='settings-logout' className='settings-popup-button' onClick={() => navigate('/logout')}>

@@ -5,10 +5,9 @@ import {Messages} from "./components/Messages/Messages.js"
 import {Post} from "./components/Post/Post.js"
 import {Profile} from "./components/Profile/Profile.js"
 import {Settings} from "./components/Settings/Settings.js"
-import {SavedPosts} from "./components/SavedPosts/SavedPosts.js"
+import {Saved} from "./components/SavedPosts/Saved.js"
 import {SignUp} from "./components/SignUp/SignUp.js"
 import {Login} from "./components/Login/Login.js"
-import {Notifications} from "./components/Notifications/Notifications.js"
 import {Conversation} from './components/Conversation/Conversation.js'
 import { auth } from "./firebase/firebase.js"
 import { findUser } from './firebase/users.js'
@@ -38,9 +37,8 @@ const App = () => {
                 <Route exact path='/:postOwnerId/:postId' element={<Post user={user} />} />
                 <Route exact path='/:otherUserId' element={<Profile user={user}/>} />
                 <Route exact path='/messages/:otherUserId' element={<Conversation user={user}/>} />
-                <Route exact path='/savedposts' element={<SavedPosts user={user} />} />
+                <Route exact path='/saved' element={<Saved user={user} />} />
                 <Route exact path='/settings' element={<Settings user={user}/>} />
-                <Route exact path='/notifications' element={<Notifications user={user}/>} />
                 <Route exact path='/signup' element={<SignUp user={user} />} />
                 <Route exact path='/login' element={<Login user={user} />} />
             </Routes>
