@@ -128,7 +128,7 @@ const getFollowing = async (userId, arrQuantity) => {
     const followingsRef = getFollowingsRef(userId, arrQuantity)
     const followingsQuery = query(followingsRef, limit(arrQuantity))
     const followingsDocs = await getDocs(followingsQuery)
-    const followings = (followingsDocs.docs).map(async (following) => {
+    const followings = (followingsDocs.docs).map((following) => {
         return {
             id: following.id,
             data: following.data()
@@ -142,7 +142,7 @@ const getFollowers = async (userId, arrQuantity) => {
     const followersRef = getFollowersRef(userId, arrQuantity)
     const followersQuery = query(followersRef, limit(arrQuantity))
     const followersDocs = await getDocs(followersQuery)
-    const followers = (followersDocs.docs).map(async (follower) => {
+    const followers = (followersDocs.docs).map((follower) => {
         return {
             id: follower.id,
             data: follower.data()

@@ -12,7 +12,7 @@ const Follows = (props) => {
     const navigate = useNavigate()
 
     // Init following/follower users count
-    const [usersCount, setUsersCount] = useState(20)
+    const [usersCount, setUsersCount] = useState(null)
 
     // Init following/follower users arr state
     const [usersArr, setUsersArr] = useState(null)
@@ -22,6 +22,9 @@ const Follows = (props) => {
 
     // Init all loaded state
     const [allLoaded, setAllLoaded] = useState(false)
+
+    // Init loading state
+    const [loadingMore, setLoadingMore] = useState(false)
 
     // Init whichTab state
     const [whichTab, setWhichTab] = useState(null)
@@ -36,9 +39,9 @@ const Follows = (props) => {
     }, [initTab])
 
     // Change usersCount, allLoaded, and button states when whichTab changes
-    useEffect(() => {
-        setUsersCount(20)
-        setAllLoaded(false)
+    useEffect(async () => {
+        await setUsersCount(0)
+        await setAllLoaded(false)
         if (whichTab == 'following') {
             setButtonOne('active')
             setButtonTwo('inactive')
@@ -46,18 +49,17 @@ const Follows = (props) => {
             setButtonOne('inactive')
             setButtonTwo('active')
         }
+        await setUsersCount(20)
     }, [whichTab])
 
     // Change usersArr state when usersCount changes
     useEffect(async () => {
-        if (whichTab == 'following') {
+        if (usersCount > 0 && whichTab == 'following') {
             const following = await getFollowing(otherUserId, usersCount)
-            const returnVal = await Promise.all(following)
-            setUsersArr(returnVal)
-        } else {
+            setUsersArr(following)
+        } else if (usersCount > 0 && whichTab == 'followers') {
             const followers = await getFollowers(otherUserId, usersCount)
-            const returnVal = await Promise.all(followers)
-            setUsersArr(returnVal)
+            setUsersArr(followers)
         }
     }, [usersCount])
 
@@ -98,38 +100,38 @@ const Follows = (props) => {
 
     // Load more follows/followers when user reaches bottom of pop-up
     const loadMore = async (e) => {
-        if (allLoaded == false) {
+        console.log('running')
+        if (allLoaded == false && loadingMore == false) {
+            console.log('states pass')
             const elem = e.target
             if ((Math.ceil(elem.scrollHeight - elem.scrollTop) == elem.clientHeight)) {
+                console.log('elem passes')
+                await setLoadingMore(true)
                 const newCount = usersCount + 20
-                setUsersCount(newCount)
-                let newUsers
+                await setUsersCount(newCount)
+                let newUsersArr
                 if (whichTab == 'following') {
-                    newUsers = await getFollowing(otherUserId, newCount)
-                    setUsers(newUsers)
+                    newUsersArr = await getFollowing(otherUserId, newCount)
+                    console.log(newUsersArr)
+                    await setUsersArr(newUsersArr)
                 } else {
-                    newUsers = await getFollowers(otherUserId, newCount)
-                    setUsers(newUsers)
+                    newUsersArr = await getFollowers(otherUserId, newCount)
+                    await setUsersArr(newUsersArr)
                 }
-                if (newUsers.length < newCount) {
-                    setAllLoaded(true)
+                if (newUsersArr.length < newCount) {
+                    await setAllLoaded(true)
                 }
+                await setLoadingMore(false)
             }
         }
     }
 
     // Event handlers for buttons
-    const followingClick = () => {
-        setWhichTab('following')
-    }
+    const followingClick = () => setWhichTab('following')
 
-    const followersClick = () => {
-        setWhichTab('followers')
-    }
+    const followersClick = () => setWhichTab('followers')
 
-    const xButtonClick = () => {
-        setFollowsOn(false)
-    }
+    const xButtonClick = () => setFollowsOn(false)
 
     return (
         <div id="follow">
