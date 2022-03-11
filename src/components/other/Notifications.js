@@ -116,9 +116,9 @@ const Notifications = (props) => {
                         <div className='notif-row' key={notif.id}>
                             <div className='notif-row-left'>
                                 <img className='notif-image' onClick={redirect} src={image} />
-                                <div className='notif-text'>
-                                    <div className='notif-name' onClick={redirect}>{otherUser.data.name}</div>
-                                    <div className='notif-action' onClick={() => navigate(path)}>{text}</div>
+                                <div className='notif-text' onClick={() => navigate(path)}>
+                                    <div className='notif-name'>{otherUser.data.name}</div>
+                                    <div className='notif-action'>{text}</div>
                                 </div>
                             </div>
                             <div className="notif-row-right">

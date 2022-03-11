@@ -743,7 +743,7 @@ div#new-post-image-preview {
     border-radius: 5px;
 }
 
-.notif-text:hover {
+.notif-text:hover, .notif-image:hover {
     background-color: rgba(0, 0, 0, 0.05);
     cursor: pointer;
 }

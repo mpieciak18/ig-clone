@@ -27,7 +27,6 @@ const ImageInput = (props) => {
     const validateImage = async () => {
         if (inputRef.current.files[0].size > maxFileSize || 
         isImage(inputRef.current.files[0]) == false) {
-            console.log(1)
             inputRef.current.value = ''
             setFile(null)
             setFilePreviewUrl(null)

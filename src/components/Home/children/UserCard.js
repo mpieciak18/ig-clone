@@ -62,32 +62,34 @@ const UserCard = (props) => {
 
     // Update user card state when user image state or follows state change
     useEffect(async() => {
-        setUserCard(
-            <div id="user-card">
-                <div id="user-card-top" onClick={redirectToProfile}>
-                    <img id='user-card-icon' src={userImage} />
-                    <div id="user-card-names">
-                        <div id='user-card-name'>{user.data.name}</div>
-                        <div id='user-card-username'>{`@${user.data.username}`}</div>
+        if (user != null) {
+            setUserCard(
+                <div id="user-card">
+                    <div id="user-card-top" onClick={redirectToProfile}>
+                        <img id='user-card-icon' src={userImage} />
+                        <div id="user-card-names">
+                            <div id='user-card-name'>{user.data.name}</div>
+                            <div id='user-card-username'>{`@${user.data.username}`}</div>
+                        </div>
                     </div>
+                    <div id='user-card-bottom'>
+                        <div id='user-card-posts' onClick={redirectToProfile}>
+                            <p className='user-stats-child-num'>{user.data.posts}</p>
+                            <p className='user-stats-child-type'>Posts</p>
+                        </div>
+                        <div id='user-card-following' onClick={clickFollowing}>
+                            <p className='user-stats-child-num'>{user.data.following}</p>
+                            <p className='user-stats-child-type'>Following</p>
+                        </div>
+                        <div id='user-card-followers' onClick={clickFollowers}>
+                            <p className='user-stats-child-num'>{user.data.followers}</p>
+                            <p className='user-stats-child-type'>Followers</p>
+                        </div>
+                    </div>
+                    {follows}
                 </div>
-                <div id='user-card-bottom'>
-                    <div id='user-card-posts' onClick={redirectToProfile}>
-                        <p className='user-stats-child-num'>{user.data.posts}</p>
-                        <p className='user-stats-child-type'>Posts</p>
-                    </div>
-                    <div id='user-card-following' onClick={clickFollowing}>
-                        <p className='user-stats-child-num'>{user.data.following}</p>
-                        <p className='user-stats-child-type'>Following</p>
-                    </div>
-                    <div id='user-card-followers' onClick={clickFollowers}>
-                        <p className='user-stats-child-num'>{user.data.followers}</p>
-                        <p className='user-stats-child-type'>Followers</p>
-                    </div>
-                </div>
-                {follows}
-            </div>
-        )
+            )
+        }
     }, [userImage, follows])
 
     // Update follows state if followsOn state changes

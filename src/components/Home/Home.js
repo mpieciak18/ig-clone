@@ -9,7 +9,7 @@ const Home = (props) => {
     const { user } = props
 
     // Init postsNumber state
-    const [postsNumber, setPostsNumber] = useState(10)
+    const [postsNumber, setPostsNumber] = useState(5)
 
     // Init posts array state
     const [postsArr, setPostsArr] = useState(
@@ -28,7 +28,7 @@ const Home = (props) => {
     // Load-more function that updates the posts reel
     const loadMore = () => {
         if (allLoaded == false) {
-            const newPostsNumber = postsNumber + 10
+            const newPostsNumber = postsNumber + 5
             setPostsNumber(newPostsNumber)
         }
     }
@@ -51,25 +51,27 @@ const Home = (props) => {
 
     // Update posts component state when postArr state changes
     useEffect(async () => {
-        const newPosts = (
-            <div id='home-posts'>
-                {postsArr.map((post) => {
-                    return (
-                        <PostReel
-                            postId={post.id}
-                            postText={post.data.text}
-                            postImage={post.data.image}
-                            postDate={post.data.date}
-                            postOwnerId={post.data.user}
-                            postLikes={post.data.likes}
-                            postComments={post.data.comments}
-                            user={user}
-                        />
-                    )
-                })}
-            </div>
-        )
-        setPosts(newPosts)
+        if (postsArr != null) {
+            const newPosts = (
+                <div id='home-posts'>
+                    {postsArr.map((post) => {
+                        return (
+                            <PostReel
+                                postId={post.id}
+                                postText={post.data.text}
+                                postImage={post.data.image}
+                                postDate={post.data.date}
+                                postOwnerId={post.data.user}
+                                postLikes={post.data.likes}
+                                postComments={post.data.comments}
+                                user={user}
+                            />
+                        )
+                    })}
+                </div>
+            )
+            setPosts(newPosts)
+        }
     }, [postsArr, user])
 
     return (
