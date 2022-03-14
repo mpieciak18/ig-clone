@@ -1,21 +1,17 @@
 import '../styles/PostReel.css'
 import { useRef, useState, useEffect } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { CommentsBar } from './Comments/CommentsBar.js'
 import { CommentsPreview } from './Comments/CommentsPreview.js'
 import { PostButtons } from './PostButtons.js'
 import { findUser } from '../../../firebase/users.js'
 import { getUrl } from '../../../firebase/storage.js'
 import { timeSince } from '../../../other/timeSince.js'
-import { Likes } from './Likes.js'
 import { LinkCopied } from './LinkCopied.js'
 
 const PostReel = (props) => {
     // Init props
     const { postId, postText, postImage, postDate, postOwnerId, postLikes, postComments, user } = props
-
-    // Init post reel component
-    const [postLikesComponent, setPostLikesComponent] = useState(null)
 
     // Init post owner name
     const [postOwnerName, setPostOwnerName] = useState(null)
@@ -52,47 +48,8 @@ const PostReel = (props) => {
     // Init linkCopied state for share button
     const [linkCopied, setLinkCopied] = useState(false)
 
-    // Init likes component state
-    const [likes, setLikes] = useState(null)
-
-    // Init likesOn state
-    const [likesOn, setLikesOn] = useState(false)
-
-    // Set likesOn to true (or redirect to signup page) when likes are clicked
-    const path = useLocation().pathname
-
-    const navigate = useNavigate()
-
-    const clickLikes = () => {
-        if (user == null) {
-            setTimeout(() => {
-                if (user == null) {
-                    navigate('/signup', {state: {path: path}})
-                }
-                else {
-                    setLikesOn(true)
-                }
-            }, 2000)
-        } else {
-            setLikesOn(true)
-        }
-    }
-
-    // Update likes component when likesOn changes
-    useEffect(() => {
-        const body = document.querySelector('body')
-        if (likesOn == false) {
-            body.style.overflow = 'auto'
-            setLikes(null)
-        } else {
-            body.style.overflow = 'hidden'
-            setLikes(<Likes user={user} setLikesOn={setLikesOn} postId={postId} postOwnerId={postOwnerId} />)
-        }
-    }, [likesOn])
-
     return (
         <div className="single-post-component" key={postId}>
-            {likes}
             <div className="post-top">
                 <Link className="post-user-link" to={`/${postOwnerId}`}>
                     <img className="post-user-link-avatar" src={postOwnerImgSrc} />
@@ -121,7 +78,7 @@ const PostReel = (props) => {
                     setLikesNum={setLikesNum}
                     setLinkCopied={setLinkCopied}
                 />
-                <div className="post-likes" onClick={clickLikes}>
+                <Link className="post-likes" to={`/${postOwnerId}/${postId}`}>
                     {(() => {
                         if (likesNum == 0) {
                             return (`0 likes`)
@@ -131,7 +88,7 @@ const PostReel = (props) => {
                             return (`${likesNum} likes`)
                         }
                     })()}
-                </div>
+                </Link>
                 <div className="post-text-parent">
                     <Link className="post-text-name" to={`/${postOwnerId}`}>{postOwnerName}</Link>
                     <div className="post-text">{postText}</div>

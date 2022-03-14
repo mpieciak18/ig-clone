@@ -6,7 +6,7 @@ import { UserCard } from '../Home/children/UserCard.js'
 import { useEffect, useState } from 'react'
 
 const Home = (props) => {
-    const { user } = props
+    const { user, popUpState, updatePopUp } = props
 
     // Init postsNumber state
     const [postsNumber, setPostsNumber] = useState(5)
@@ -64,7 +64,9 @@ const Home = (props) => {
                                 postOwnerId={post.data.user}
                                 postLikes={post.data.likes}
                                 postComments={post.data.comments}
-                                user={user}
+                                user={user} 
+                                popUpState={popUpState} 
+                                updatePopUp={updatePopUp}
                             />
                         )
                     })}
@@ -76,9 +78,9 @@ const Home = (props) => {
 
     return (
         <div id='home' className='page'>
-            <Navbar user={user} />
+            <Navbar user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
             <div id='home-container'>
-                <UserCard user={user} />
+                <UserCard user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
                 {posts}
             </div>
         </div>

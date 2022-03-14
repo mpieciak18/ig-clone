@@ -17,7 +17,7 @@ import MessagesHollow from '../../assets/images/messages.png'
 import MessagesSolid from '../../assets/images/messages-solid.png'
 
 const Navbar = (props) => {
-    const { user } = props
+    const { user, popUpState, updatePopUp } = props
 
     const navigate = useNavigate()
 
@@ -25,12 +25,6 @@ const Navbar = (props) => {
 
     // Init settings pop-up visibility state
     const [viewSettings, setViewSettings] = useState(false)
-
-    // Init new-post pop-up visibility state
-    const [viewNewPost, setViewNewPost] = useState(false)
-
-    // Init notifications pop-up visibility state
-    const [viewNotifs, setViewNotifs] = useState(false)
 
     // Init navbar buttons
     const [homeImg, setHomeImg] = useState(HomeHollow)
@@ -43,31 +37,40 @@ const Navbar = (props) => {
         //
     }
 
-    // Update viewNewPost (or redirect to sign-up page)
+    // Redirect to home & update popUpState
+    const clickHome = () => {
+        updatePopUp()
+        navigate('/')
+    }
+
+    // Update popUpState.newPostOn (or redirect to sign-up page)
     const clickNewPost = () => {
         if (user == null) {
             navigate('/signup', {state: {path: path}})
+        } else if (popUpState.newPostOn == false) {
+            updatePopUp('newPostOn')
         } else {
-            setViewNewPost(true)
+            updatePopUp()
         }
     }
 
-    // Update viewNotif (or redirect to sign-up page)
+    // Update popUpState.notifsOn (or redirect to sign-up page)
     const clickNotifications = () => {
         if (user == null) {
             navigate('/signup', {state: {path: path}})
-        } else if (viewNotifs == false) {
-            setViewNotifs(true)
+        } else if (popUpState.notifsOn == false) {
+            updatePopUp('notifsOn')
         } else {
-            setViewNotifs(false)
+            updatePopUp()
         }
     }
 
-    // Navigate to direct messages (or sign-up page)
+    // Navigate to direct messages & update popUpState (or redirect to sign-up page)
     const clickMessages = () => {
         if (user == null) {
             navigate('/signup', {state: {path: path}})
         } else {
+            updatePopUp()
             navigate('/messages')
         }
     }
@@ -86,31 +89,31 @@ const Navbar = (props) => {
     // Init notifications component state
     const [notifications, setNotifications] = useState(null)
 
-    // Update notifications state when viewNotifs changes
+    // Update notifications state when popUpState.notifsOn changes
     useEffect(async () => {
         const body = document.querySelector('body')
-        if (viewNotifs == true) {
-            setNotifications(<Notifications user={user} setViewNotifs={setViewNotifs} />)
+        if (popUpState.notifsOn == true) {
+            setNotifications(<Notifications user={user} updatePopUp={updatePopUp} />)
             body.style.overflow = 'hidden'
         } else {
             setNotifications(null)
             body.style.overflow = 'auto'
         }
-    }, [viewNotifs])
+    }, [popUpState])
 
     return (
         <div id="navbar">
-            <NewPost user={user} viewNewPost={viewNewPost} setViewNewPost={setViewNewPost} />
+            <NewPost user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
             {notifications}
             <img id="navbar-logo"
                 src={LogoSolid}
-                onClick={() => navigate('/')}
+                onClick={clickHome}
             />
             <input id="navbar-search" type='text' placeholder='Search' />
             <div id="navbar-buttons">
                 <img id="home-button" 
                     src={homeImg}
-                    onClick={() => navigate('/')}
+                    onClick={clickHome}
                     onMouseDown={() => setHomeImg(HomeSolid)}
                     onMouseUp={() => setHomeImg(HomeHollow)}
                     onMouseOver={() => setHomeImg(HomeSolid)}

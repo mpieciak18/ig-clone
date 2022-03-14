@@ -7,7 +7,7 @@ import { getUrl } from '../../firebase/storage.js'
 import { findUser } from '../../firebase/users.js'
 
 const Follows = (props) => {
-    const { user, otherUserId, setFollowsOn, initTab } = props
+    const { user, otherUserId, updatePopUp, initTab } = props
 
     const navigate = useNavigate()
 
@@ -100,19 +100,15 @@ const Follows = (props) => {
 
     // Load more follows/followers when user reaches bottom of pop-up
     const loadMore = async (e) => {
-        console.log('running')
         if (allLoaded == false && loadingMore == false) {
-            console.log('states pass')
             const elem = e.target
             if ((Math.ceil(elem.scrollHeight - elem.scrollTop) == elem.clientHeight)) {
-                console.log('elem passes')
                 await setLoadingMore(true)
                 const newCount = usersCount + 20
                 await setUsersCount(newCount)
                 let newUsersArr
                 if (whichTab == 'following') {
                     newUsersArr = await getFollowing(otherUserId, newCount)
-                    console.log(newUsersArr)
                     await setUsersArr(newUsersArr)
                 } else {
                     newUsersArr = await getFollowers(otherUserId, newCount)
@@ -131,7 +127,7 @@ const Follows = (props) => {
 
     const followersClick = () => setWhichTab('followers')
 
-    const xButtonClick = () => setFollowsOn(false)
+    const xButtonClick = () => updatePopUp()
 
     return (
         <div id="follow">

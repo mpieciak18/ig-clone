@@ -9,7 +9,7 @@ import { findPostsFromUser } from '../../firebase/posts.js'
 
 const Saved = (props) => {
     // Redirect to signup page if not signed in
-    const { user } = props
+    const { user, popUpState, updatePopUp } = props
     const path = useLocation().pathname
     const redirect = () => <Navigate to='/signup' state={{path: path}} />
     if (user.loggedIn == false) {
@@ -71,8 +71,7 @@ const Saved = (props) => {
 
     return (
         <div id='saved' className='page'>
-            <Navbar user={user} />
-            <ProfileCard user={user} />
+            <Navbar user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
             {posts}
         </div>
     )

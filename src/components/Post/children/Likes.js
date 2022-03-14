@@ -7,7 +7,7 @@ import { findUser } from '../../../firebase/users.js'
 import '../styles/Likes.css'
 
 const Likes = (props) => {
-    const { user, setLikesOn, postId, postOwnerId } = props
+    const { user, updatePopUp, postId, postOwnerId } = props
 
     // Init likesNumber state
     const [likesNumber, setLikesNumber] = useState(10)
@@ -81,7 +81,7 @@ const Likes = (props) => {
     const hideLikes = (e) => {
         const id = e.target.id
         if (id == "likes" || id == "likes-x-button") {
-            setLikesOn(false)
+            updatePopUp()
         }
     }
 

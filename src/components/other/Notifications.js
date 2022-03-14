@@ -10,7 +10,7 @@ import { findUser } from "../../firebase/users"
 import { timeSince } from "../../other/timeSince"
 
 const Notifications = (props) => {
-    const { user, setViewNotifs } = props
+    const { user, updatePopUp } = props
 
     const navigate = useNavigate()
 
@@ -177,7 +177,7 @@ const Notifications = (props) => {
 
     const oldClick = () => setWhichTab('old')
 
-    const xButtonClick = () => setViewNotifs(false)
+    const xButtonClick = () => updatePopUp()
 
     const clearNotifs = () => {
         readNotifications()

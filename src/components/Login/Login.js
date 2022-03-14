@@ -6,7 +6,7 @@ import { useState } from 'react'
 
 const Login = (props) => {
     // Redirect to home if already logged in
-    const { user } = props
+    const { user, popUpState, updatePopUp } = props
 
     const navigate = useNavigate()
 
@@ -38,7 +38,7 @@ const Login = (props) => {
 
     return (
         <div id="login" className="page">
-            <Navbar user={user} />
+            <Navbar user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
             <div id='login-parent'>
                 <form id='login-form' onSubmit={newLogin}>
                     {errorMessage}

@@ -4,7 +4,7 @@ import { Follows } from "../../other/Follows.js"
 import { useState, useEffect } from "react"
 
 const UserCard = (props) => {
-    const { user } = props
+    const { user, popUpState, updatePopUp } = props
 
     const navigate = useNavigate()
 
@@ -17,22 +17,19 @@ const UserCard = (props) => {
     // Init state for follows pop-up component
     const [follows, setFollows] = useState(null)
 
-    // Init state to show/hide Follows pop-up
-    const [followsOn, setFollowsOn] = useState(false)
-
     // Init state to determine if pop-up shows following or followers
     const [followingVsFollower, setFollowingVsFollower] = useState('following')
 
     // Open Follows pop-up (following)
     const clickFollowing = () => {
         setFollowingVsFollower('following')
-        setFollowsOn(true)
+        updatePopUp('followsOn')
     }
 
     // Open Follows pop-up (followers)
     const clickFollowers = () => {
         setFollowingVsFollower('followers')
-        setFollowsOn(true)
+        updatePopUp('followsOn')
     }
 
     // Redirect to user's profile
@@ -95,7 +92,7 @@ const UserCard = (props) => {
     // Update follows state if followsOn state changes
     useEffect(() => {
         const body = document.querySelector('body')
-        if (followsOn == false) {
+        if (popUpState.followsOn == false) {
             body.style.overflow = 'auto'
             setFollows(null)
         } else {
@@ -104,12 +101,12 @@ const UserCard = (props) => {
                 <Follows
                     user={user}
                     otherUserId={user.id}
-                    setFollowsOn={setFollowsOn}
+                    updatePopUp={updatePopUp}
                     initTab={followingVsFollower}
                 />
             )
         }
-    }, [followsOn])
+    }, [popUpState.followsOn])
 
     return userCard
 }

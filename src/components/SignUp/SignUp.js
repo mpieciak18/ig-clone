@@ -10,7 +10,7 @@ import { useState } from 'react'
 
 const SignUp = (props) => {
     // Redirect to settings if already signed in
-    const { user } = props
+    const { user, popUpState, updatePopUp } = props
     const navigate = useNavigate()
     if (user.loggedIn == true) {
         navigate('/settings')
@@ -88,7 +88,7 @@ const SignUp = (props) => {
 
     return (
         <div id="sign-up" className="page">
-            <Navbar user={user} />
+            <Navbar user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
             <div id='sign-up-parent'>
                 {errorMessage}
                 <form id='sign-up-form' onSubmit={newSignUp}>

@@ -8,7 +8,7 @@ import { useLocation, Navigate } from 'react-router-dom'
 
 const Messages = (props) => {
     // Redirect to signup page if not signed in
-    const { user } = props
+    const { user, popUpState, updatePopUp } = props
     const path = useLocation().pathname
 
     const redirect = () => <Navigate to='/signup' state={{path: path}} />
@@ -23,7 +23,7 @@ const Messages = (props) => {
 
     return (
         <div id='messages' className='page'>
-            <Navbar user={user} />
+            <Navbar user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
             <ConvosList
                 user={user}
                 convosArr={convosArr}

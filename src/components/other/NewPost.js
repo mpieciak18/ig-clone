@@ -7,7 +7,7 @@ import { CaptionFooter } from './CaptionFooter.js'
 
 const NewPost = (props) => {
     
-    const { user, viewNewPost, setViewNewPost } = props
+    const { user, popUpState, updatePopUp } = props
 
     // Init useNavigate function
     const navigate = useNavigate()
@@ -62,7 +62,7 @@ const NewPost = (props) => {
     const hideNewPost = (e) => {
         const id = e.target.id
         if (id == "new-post" || id == "new-post-x-button") {
-            setViewNewPost(false)
+            updatePopUp()
         }
     }
     
@@ -80,7 +80,7 @@ const NewPost = (props) => {
     // Update newPost component state and change scroll on body
     useEffect(() => {
         const body = document.querySelector('body')
-        if (viewNewPost == true) {
+        if (popUpState.newPostOn == true) {
             // Update new post pop-up component state
             setNewPostPopup(
                 <div id="new-post">
@@ -117,7 +117,7 @@ const NewPost = (props) => {
             setNewPostPopup(null)
             body.style.overflow = 'auto'
         }
-    }, [viewNewPost, caption, button, buttonClass, errorClass])
+    }, [popUpState.newPostOn, caption, button, buttonClass, errorClass])
 
     return newPostPopup
 }

@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react'
 import { Follows } from '../other/Follows.js'
 
 const Profile = (props) => {
-    const { user } = props
+    const { user, popUpState, updatePopUp } = props
 
     // Get other user id from url parameters
     const { otherUserId } = useParams()
@@ -25,9 +25,6 @@ const Profile = (props) => {
 
     // Init all loaded state
     const [allLoaded, setAllLoaded] = useState(false)
-
-    // Init other user followers count state
-    const [numFollowers, setNumFollowers] = useState(null)
     
     // Update posts arr state when postsNumber state changes
     useEffect(async () => {
@@ -85,13 +82,13 @@ const Profile = (props) => {
 
     return (
         <div id='profile'>
-            <Navbar user={user} />
+            <Navbar user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
             <div id='profile-contents'>
                 <div id='profile-contents-left'>
                     <ProfileCard user={user} otherUserId={otherUserId} />
                 </div>
                 <div id='profile-contents-right'>
-                    <ProfileButtons user={user} otherUserId={otherUserId} />
+                    <ProfileButtons user={user} otherUserId={otherUserId} popUpState={popUpState} updatePopUp={updatePopUp} />
                     {posts}
                 </div>
             </div>

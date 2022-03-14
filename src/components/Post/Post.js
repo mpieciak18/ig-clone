@@ -13,7 +13,7 @@ import { CommentsFull } from './children/Comments/CommentsFull'
 import { LinkCopied } from './children/LinkCopied'
 
 const Post = (props) => {
-    const { user } = props
+    const { user, popUpState, updatePopUp } = props
 
     const { postOwnerId, postId } = useParams()
 
@@ -68,9 +68,6 @@ const Post = (props) => {
     // Init likes component state
     const [likes, setLikes] = useState(null)
 
-    // Init likesOn state
-    const [likesOn, setLikesOn] = useState(false)
-
     // Set likesOn to true (or redirect to signup page) when likes are clicked
     const path = useLocation().pathname
     const navigate = useNavigate()
@@ -78,25 +75,25 @@ const Post = (props) => {
         if (user == null) {
             navigate('/signup', {state: {path: path}})
         } else {
-            setLikesOn(true)
+            updatePopUp('likesOn')
         }
     }
 
-    // Render likes pop-up preview
+    // Update likes state & body scroll when popUpState.likesOn changes
     useEffect(() => {
         const body = document.querySelector('body')
-        if (likesOn == false) {
+        if (popUpState.likesOn == false) {
             setLikes(null)
             body.style.overflow = 'auto'
         } else {
-            setLikes(<Likes user={user} setLikesOn={setLikesOn} postId={postId} postOwnerId={postOwnerId} />)
+            setLikes(<Likes user={user} updatePopUp={updatePopUp} postId={postId} postOwnerId={postOwnerId} />)
             body.style.overflow = 'hidden'
         }
-    }, [likesOn])
+    }, [popUpState.likesOn])
 
     return (
         <div id="post" className="page">
-            <Navbar user={user} />
+            <Navbar user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
             {likes}
             <div id="single-post-page">
                 <LinkCopied linkCopied={linkCopied} />

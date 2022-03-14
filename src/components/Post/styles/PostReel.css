@@ -98,11 +98,18 @@
 .post-likes {
     font-weight: bold;
     display: inline-block;
+    color: inherit;
+    width: fit-content;
 }
 
 .post-likes:hover {
     cursor: pointer;
     color: grey;
+    text-decoration: none;
+}
+
+.post-likes:link, .post-likes:visited, .post-likes:active {
+    text-decoration: none;
 }
 
 .post-bottom > * {

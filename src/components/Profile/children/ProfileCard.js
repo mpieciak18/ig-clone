@@ -4,7 +4,7 @@ import { findUser } from '../../../firebase/users.js'
 import { Follows } from '../../other/Follows.js'
 
 const ProfileCard = (props) => {
-    const { user, otherUserId } = props
+    const { user, otherUserId, popUpState, updatePopUp } = props
 
     // Init profile image state
     const [img, setImg] = useState(null)
@@ -18,22 +18,19 @@ const ProfileCard = (props) => {
     // Init state for follows pop-up component
     const [follows, setFollows] = useState(null)
 
-    // Init state to show/hide Follows pop-up
-    const [followsOn, setFollowsOn] = useState(false)
-
     // Init state to determine if pop-up shows following or followers
     const [followingVsFollower, setFollowingVsFollower] = useState('following')
 
     // Open Follows pop-up (following)
     const clickFollowing = () => {
         setFollowingVsFollower('following')
-        setFollowsOn(true)
+        updatePopUp('followsOn')
     }
 
     // Open Follows pop-up (followers)
     const clickFollowers = () => {
         setFollowingVsFollower('followers')
-        setFollowsOn(true)
+        updatePopUp('followsOn')
     }
 
     // Update img, otherUser, & otherUserFollowers states on render
@@ -45,7 +42,7 @@ const ProfileCard = (props) => {
     }, [])
     
     useEffect(() => {
-        if (otherUser != null) {
+        if (otherUser != null && popUpState != null) {
             setProfileCard(
                 <div id='profile-card'>
                     <div id='profile-card-top'>
@@ -76,26 +73,28 @@ const ProfileCard = (props) => {
                 </div>
             )
         }
-    }, [otherUser, follows])
+    }, [otherUser, follows, popUpState])
 
     // Update follows state if followsOn state changes
     useEffect(() => {
-        const body = document.querySelector('body')
-        if (followsOn == false) {
-            body.style.overflow = 'auto'
-            setFollows(null)
-        } else {
-            body.style.overflow = 'hidden'
-            setFollows(
-                <Follows
-                    user={user}
-                    otherUserId={user.id}
-                    setFollowsOn={setFollowsOn}
-                    initTab={followingVsFollower}
-                />
-            )
+        if (popUpState != null) {
+            const body = document.querySelector('body')
+            if (popUpState.followsOn == false) {
+                body.style.overflow = 'auto'
+                setFollows(null)
+            } else {
+                body.style.overflow = 'hidden'
+                setFollows(
+                    <Follows
+                        user={user}
+                        otherUserId={user.id}
+                        updatePopUp={updatePopUp}
+                        initTab={followingVsFollower}
+                    />
+                )
+            }
         }
-    }, [followsOn])
+    }, [popUpState])
 
     return profileCard
 }

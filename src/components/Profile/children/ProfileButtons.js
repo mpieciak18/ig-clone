@@ -49,7 +49,7 @@ const ProfileButtons = (props) => {
                     </div>
                 </div>
             )
-        } else if (user.uid != otherUserId) {
+        } else if (user.id != otherUserId) {
             setButtons(
                 <div id='profile-buttons-section'>
                     <FollowButton
