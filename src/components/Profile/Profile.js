@@ -85,10 +85,10 @@ const Profile = (props) => {
             <Navbar user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
             <div id='profile-contents'>
                 <div id='profile-contents-left'>
-                    <ProfileCard user={user} otherUserId={otherUserId} />
+                    <ProfileCard user={user} otherUserId={otherUserId} popUpState={popUpState} updatePopUp={updatePopUp} />
                 </div>
                 <div id='profile-contents-right'>
-                    <ProfileButtons user={user} otherUserId={otherUserId} popUpState={popUpState} updatePopUp={updatePopUp} />
+                    <ProfileButtons user={user} otherUserId={otherUserId} />
                     {posts}
                 </div>
             </div>

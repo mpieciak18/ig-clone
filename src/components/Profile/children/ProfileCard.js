@@ -42,7 +42,8 @@ const ProfileCard = (props) => {
     }, [])
     
     useEffect(() => {
-        if (otherUser != null && popUpState != null) {
+        // if (otherUser != null && popUpState != null) {
+        if (otherUser != null) {
             setProfileCard(
                 <div id='profile-card'>
                     <div id='profile-card-top'>
@@ -73,7 +74,7 @@ const ProfileCard = (props) => {
                 </div>
             )
         }
-    }, [otherUser, follows, popUpState])
+    }, [otherUser, follows])
 
     // Update follows state if followsOn state changes
     useEffect(() => {

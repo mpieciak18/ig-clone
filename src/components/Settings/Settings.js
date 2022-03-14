@@ -8,7 +8,7 @@ import { uploadFile } from '../../firebase/storage'
 import { Navbar } from '../other/Navbar.js'
 
 const Settings = (props) => {
-    const { user } = props
+    const { user, popUpState, updatePopUp } = props
 
     // Track initial mounting status
     const isInitMount = useRef(true);
@@ -178,7 +178,7 @@ const Settings = (props) => {
 
     return (
         <div id='settings' className='page'>
-            <Navbar user={user} />
+            <Navbar user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
             {settings}
         </div>
     )
