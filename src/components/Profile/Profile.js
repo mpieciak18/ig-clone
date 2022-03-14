@@ -6,7 +6,6 @@ import { ProfileButtons } from './children/ProfileButtons.js'
 import { findPostsFromUser } from '../../firebase/posts.js'
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { Follows } from '../other/Follows.js'
 
 const Profile = (props) => {
     const { user, popUpState, updatePopUp } = props
@@ -15,7 +14,7 @@ const Profile = (props) => {
     const { otherUserId } = useParams()
 
     // Init postsNumber state
-    const [postsNumber, setPostsNumber] = useState(12)
+    const [postsNumber, setPostsNumber] = useState(21)
 
     // Init postsArr state
     const [postsArr, setPostsArr] = useState(null)
@@ -68,7 +67,7 @@ const Profile = (props) => {
     // Load-more function that updates the posts reel
     const loadMore = () => {
         if (allLoaded == false) {
-            const newPostsNumber = postsNumber + 18
+            const newPostsNumber = postsNumber + 9
             setPostsNumber(newPostsNumber)
         }
     }

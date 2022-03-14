@@ -48,11 +48,11 @@
     #profile-card-icon {
         margin-bottom: 10px;
     }
-    .follow-button {
+    .follow-button, #profile-settings-button {
         margin-right: 50px;
     }
-    #profile-direct-message-button-container {
-        margin-right: 50px;
+    #profile-direct-message-button-container, #profile-logout-button {
+        margin-right: 80px;
     }
 }
 
