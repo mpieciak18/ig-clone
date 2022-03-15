@@ -3,9 +3,7 @@ import { emailExists } from '../../../firebase/users.js'
 
 const EmailFooter = (props) => {
     const { setEmailPasses, email } = props
-    const [footerText, setFooterText] = useState(
-        'Email address must be valid.'
-    )
+    const [footerText, setFooterText] = useState('Email address must be valid.')
     const [footerClass, setFooterClass] = useState('grey')
 
     // Regex variable for RFC 5322 standard for valid email addresses
@@ -16,15 +14,15 @@ const EmailFooter = (props) => {
         // Checks if no email is entered
         if (email.length == 0) {
             setEmailPasses(false)
-            setFooterText('Must contain >8 characters, 1+ uppercase letter, 1+ lowercase letter, and 1+ number.')
+            setFooterText('Email address must be valid.')
             setFooterClass('grey')
         // Checks for invalid email
         } else if (email.match(reg) == null) {
             setEmailPasses(false)
-            setFooterText('Email is too short!')
+            setFooterText('Email is not valid!')
             setFooterClass('red')
         // Checks if email already exists
-        } else if (emailExists(email)) {
+        } else if (await emailExists(email)) {
             setEmailPasses(false)
             setFooterText('Email is already taken!')
             setFooterClass('red')
@@ -32,12 +30,12 @@ const EmailFooter = (props) => {
         } else {
             setEmailPasses(true)
             setFooterText('Email is good.')
-            setFooterClass('grey')
+            setFooterClass('')
         }
     }, [email]) 
 
     return (
-        <div id='sign-up-email-footer' className={footerClass}>
+        <div id='sign-up-email-footer' className={`${footerClass} sign-up-input-footer`}>
             {footerText}
         </div>
     )

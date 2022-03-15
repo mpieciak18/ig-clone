@@ -4,6 +4,7 @@ import {
     doc,
     collection,
     setDoc,
+    getDocs,
     getDoc,
     updateDoc,
     query,
@@ -19,10 +20,16 @@ import {
 const newUser = async (username, name, email, password) => {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+        console.log('user credential:')
+        console.log(userCredential)
         const user = userCredential.user
-        await addUser(user.email, user.uid, username, name)
+        console.log('user:')
+        console.log(user)
+        await addUser(username, name, user.email, user.uid)
+        console.log(null)
         return null
     } catch(error) {
+        console.log(error)
         return error
     }
 }
@@ -30,7 +37,11 @@ const newUser = async (username, name, email, password) => {
 // Add user to users collection
 const addUser = async (username, name, email, id) => {
     const usersRef = collection(db, 'users')
+    console.log('usersRef:')
+    console.log(usersRef)
     const newUserRef = doc(usersRef, id)
+    console.log('newUserRef:')
+    console.log(newUserRef)
     const newUserData = {
         email: email, 
         username: username, 
@@ -41,7 +52,9 @@ const addUser = async (username, name, email, id) => {
         following: 0, 
         posts: 0
     }
-    await setDoc(newUserRef, newUserData)
+    console.log(newUserData)
+    const res = await setDoc(newUserRef, newUserData)
+    console.log(res)
 }
 
 // Sign in user
@@ -86,9 +99,9 @@ const updateUser = async (image, name, bio) => {
 // Query for username & return true if it exists in db
 const usernameExists = async (username) => {
     const usersRef = collection(db, 'users')
-    const userRef = query(usersRef, where('username', '==', username))
-    const userDoc = await getDoc(userRef)
-    if (userDoc.exists()) {
+    const userQuery = query(usersRef, where('username', '==', username))
+    const userDoc = await getDocs(userQuery)
+    if (userDoc.empty != true) {
         return true
     } else {
         return false
@@ -98,9 +111,9 @@ const usernameExists = async (username) => {
 // Query for email & return true if it exists in db
 const emailExists = async (email) => {
     const usersRef = collection(db, 'users')
-    const userRef = query(usersRef, where('email', '==', email))
-    const userDoc = await getDoc(userRef)
-    if (userDoc.exists()) {
+    const userQuery = query(usersRef, where('email', '==', email))
+    const userDoc = await getDocs(userQuery)
+    if (userDoc.empty != true) {
         return true
     } else {
         return false

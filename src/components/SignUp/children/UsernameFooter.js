@@ -47,13 +47,13 @@ const UsernameFooter = (props) => {
         // Username passes
         else {
             setUsernamePasses(true)
-            setFooterText('Username can be used!')
-            setFooterClass('green')
+            setFooterText('Username is good.')
+            setFooterClass('')
         }
     }, [username]) 
 
     return (
-        <div id='sign-up-username-footer' className={footerClass}>
+        <div id='sign-up-username-footer' className={`${footerClass} sign-up-input-footer`}>
             {footerText}
         </div>
     )

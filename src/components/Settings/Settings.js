@@ -10,14 +10,16 @@ import { Navbar } from '../other/Navbar.js'
 const Settings = (props) => {
     const { user, popUpState, updatePopUp } = props
 
+    const location = useLocation()
+
     // Track initial mounting status
     const isInitMount = useRef(true);
 
     // Store pathname to variable
-    const path = useLocation().pathname
+    const path = location.pathname
     
     // Store (potential) state from previous page to variable
-    const state = useLocation().state
+    const [prevState, setPrevState] = useState(null)
 
     // Init useNavigate function
     const navigate = useNavigate()
@@ -110,6 +112,19 @@ const Settings = (props) => {
         }, 2000)
     }, [user])
 
+    // Update prev state upon render
+    useEffect(() => {
+        setPrevState(location.state)
+    }, [])
+
+    // Update welcomeClass state when prev state change
+    useEffect(() => {
+        if (prevState != null) {
+            setWelcomeClass('active')
+            setTimeout(() => {setWelcomeClass('inactive')}, 2500)
+        }
+    }, [prevState])
+
     // Update settings component state (or trigger redirect) upon render & when user prop changes
     useEffect(async () => {
         if (isInitMount.current) {
@@ -150,10 +165,6 @@ const Settings = (props) => {
                         </form>
                     </div>
                 )
-                if (state != undefined) {
-                    setWelcomeClass('active')
-                    setTimeout(() => {setWelcomeClass('inactive')}, 2500)
-                }
             } else {
                 if (user == null) {
                     redirectToSignUp()
@@ -164,7 +175,7 @@ const Settings = (props) => {
                 }
             }
         }
-    }, [userLoaded, bio, name, button, buttonClass, file])
+    }, [userLoaded, bio, name, button, buttonClass, file, welcomeClass])
 
     useEffect(() => {
         if (namePasses == true) {

@@ -5,16 +5,14 @@ import { PasswordFooter } from './children/PasswordFooter.js'
 import { NameFooter } from './children/NameFooter.js'
 import { EmailFooter } from './children/EmailFooter.js'
 import { newUser } from '../../firebase/users.js'
-import { Navigate, useLocation, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { Navigate, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 
 const SignUp = (props) => {
     // Redirect to settings if already signed in
     const { user, popUpState, updatePopUp } = props
+
     const navigate = useNavigate()
-    if (user.loggedIn == true) {
-        navigate('/settings')
-    }
 
     // Init criteria for form validation
     const [username, setUsername] = useState('')
@@ -33,90 +31,86 @@ const SignUp = (props) => {
     const [passwordPasses, setPasswordPasses] = useState(false)
     const updatePassword = (e) => setPassword(e.target.value)
 
-    const allPass = () => {
-        return (
-            usernamePasses == true && 
-            namePasses == true &&
-            passwordPasses == true && 
-            emailPasses == true
-        )
-    }
+    const [allPass, setAllPass] = useState(false)
 
-    const newSignUp = async () => {
+    const [signUpButtonType, setSignUpButtonType] = useState('button')
+
+    const [signUpButtonClass, setSignUpButtonClass] = useState('inactive')
+
+    const [errorClass, setErrorClass] = useState('inactive')
+
+    // Update allPass when any of the input pass states change
+    useEffect(() => {
+        setAllPass(
+            usernamePasses && namePasses && passwordPasses && emailPasses
+        )
+    }, [usernamePasses, namePasses, passwordPasses, emailPasses])
+
+    // Update sign-up button type & class when allPass changes
+    useEffect(() => {
+        if (allPass == true) {
+            setSignUpButtonType('submit')
+            setSignUpButtonClass('active')
+        } else {
+            setSignUpButtonType('button')
+            setSignUpButtonClass('inactive')
+        }
+    }, [allPass])
+
+    const newSignUp = async (e) => {
+        e.preventDefault()
         // Add new user to firebase/auth & return any errors
         const possibleError = await newUser(username, name, email, password)
         if (possibleError == null) {
             // Redirect to /settings with state to signify 
             // redirect from successful registration
-            return <Navigate to='/settings' state={{newSignUp: true}} />
+            navigate('/settings', {state: {newSignUp: true}})
         } else {
-            setErrorClass('visible')
-            setTimeout(() => {setErrorClass('hidden')}, 2000)
+            setErrorClass('active')
+            setTimeout(() => {setErrorClass('inactive')}, 2000)
         }
     }
-
-    const [errorClass, setErrorClass] = useState('hidden')
-
-    const errorMessage = (
-        <div id='sign-up-error' className={errorClass}>
-            There was an error! Please try again.
-        </div>
-    )
-
-    const signUpButton = () => {
-        if (allPass() == true) {
-            return (
-                <button type='submit' id='sign-up-form-button' className='active'>
-                    Sign Up
-                </button>
-            )
-        } else {
-            return (
-                <button type='button' id='sign-up-form-button' className='inactive'>
-                    Sign Up
-                </button>
-            )
-        }
-    }
-
-    const login = (
-        <div id='sign-up-login'>
-            <div id='sign-up-login-message'>Already Sign Up?</div>
-            <button id='sign-up-login-button' onClick={() => navigate('/login')}>Login</button>
-        </div>
-    )
 
     return (
         <div id="sign-up" className="page">
             <Navbar user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
             <div id='sign-up-parent'>
-                {errorMessage}
+                <div id='sign-up-error' className={errorClass}>
+                    There was an error! Please try again.
+                </div>
                 <form id='sign-up-form' onSubmit={newSignUp}>
                     <div id='sign-up-header'>
                         <img id='sign-up-logo' />
                         <div id='sign-up-title'>Sign Up</div>
                     </div>
-                    <div id='sign-up-username-parent'>
-                        <div id='sign-up-username-symbol'>@</div>
-                        <div id='sign-up-username-divider' />
-                        <input id='sign-up-username-input' value={username} placeholder='username' onChange={updateUsername} />
+                    <div id='sign-up-username-section'>
+                        <div id='sign-up-username-input-parent'>
+                            <div id='sign-up-username-symbol'>@</div>
+                            <input id='sign-up-username-input' value={username} placeholder='username' onChange={updateUsername} />
+                            <div id='sign-up-username-symbol-hidden'>@</div>
+                        </div>
+                        <UsernameFooter setUsernamePasses={setUsernamePasses} username={username} />
                     </div>
-                    <UsernameFooter setUsernamePasses={setUsernamePasses} username={username} />
-                    <div id='sign-up-name-parent'>
+                    <div id='sign-up-name-section'>
                         <input id='sign-up-name-input' value={name} placeholder='your real name' onChange={updateName} />
+                        <NameFooter setNamePasses={setNamePasses} name={name}  />
                     </div>
-                    <NameFooter setNamePasses={setNamePasses} name={name}  />
-                    <div id='sign-up-email-parent'>
+                    <div id='sign-up-email-section'>
                         <input id='sign-up-email-input' value={email} placeholder='email' onChange={updateEmail} />
+                        <EmailFooter setEmailPasses={setEmailPasses} email={email}  />
                     </div>
-                    <EmailFooter setEmailPasses={setEmailPasses} email={email}  />
-                    <div id='sign-up-password-parent'>
-                        <input id='sign-up-password-input' value={password} placeholder='password' onChange={updatePassword} />
+                    <div id='sign-up-password-section'>
+                        <input id='sign-up-password-input' value={password} placeholder='password' type='password' onChange={updatePassword} />
+                        <PasswordFooter setPasswordPasses={setPasswordPasses} password={password}  />
                     </div>
-                    <PasswordFooter setPasswordPasses={setPasswordPasses} password={password}  />
-                    {signUpButton()}
+                    <button type={signUpButtonType} id='sign-up-button-submit' className={signUpButtonClass}>
+                        Sign Up
+                    </button>
+                    <div id='sign-up-login-section'>
+                        <div id='sign-up-login-message'>Already Signed Up?</div>
+                        <button id='sign-up-button-login' onClick={() => navigate('/login')}>Login</button>
+                    </div>
                 </form>
-                {login}
             </div>
         </div>
     )

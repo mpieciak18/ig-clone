@@ -20,7 +20,7 @@ const NameFooter = (props) => {
             setFooterClass('red')
         }
         // Check if name is greater than 30 characters
-        else if (name.match(/^.{31,}$/) == null) {
+        else if (name.match(/^.{31,}$/) != null) {
             setNamePasses(false)
             setFooterText('Name is too long!')
             setFooterClass('red')
@@ -34,13 +34,13 @@ const NameFooter = (props) => {
         // Username passes
         else {
             setNamePasses(true)
-            setFooterText(' ')
-            setFooterClass('grey')
+            setFooterText('Name is good.')
+            setFooterClass('')
         }
     }, [name]) 
 
     return (
-        <div id='sign-up-name-footer' className={footerClass}>
+        <div id='sign-up-name-footer' className={`${footerClass} sign-up-input-footer`}>
             {footerText}
         </div>
     )

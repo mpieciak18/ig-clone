@@ -37,12 +37,12 @@ const PasswordFooter = (props) => {
         } else {
             setPasswordPasses(true)
             setFooterText('Password is good.')
-            setFooterClass('grey')
+            setFooterClass('')
         }
     }, [password]) 
 
     return (
-        <div id='sign-up-password-footer' className={footerClass}>
+        <div id='sign-up-password-footer' className={`${footerClass} sign-up-input-footer`}>
             {footerText}
         </div>
     )

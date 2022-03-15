@@ -66,6 +66,7 @@
     position: fixed;
     background-color: rgba(255, 255, 255, 0.85);
     height: 100%;
+    width: 100%;
     font-size: x-large;
 }
 
@@ -75,7 +76,7 @@
 }
 
 #settings-welcome.active {
-    z-index: 1;
+    z-index: 2;
     opacity: 1;
 }
 
@@ -251,4 +252,8 @@ label {
 #settings-button-submit.inactive {
     background-color: rgba(0, 0, 0, 0.1);
     color: #777777;
+}
+
+#settings-header, #settings-image-section, #settings-name-section, #settings-bio-section {
+    padding-bottom: 20px;
 }

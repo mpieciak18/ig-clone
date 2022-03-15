@@ -74,6 +74,7 @@ const Home = (props) => {
             )
             setPosts(newPosts)
         }
+        console.log(user)
     }, [postsArr, user])
 
     return (
