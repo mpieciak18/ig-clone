@@ -435,6 +435,14 @@ div#new-post-image-preview {
     #follows-list {
         margin-bottom: 20px;
     }
+    .follow-row-left {
+        font-size: medium;
+    }
+    #follow .follow-button {
+        margin-right: 50px;
+        font-size: large;
+        width: 200px;
+    }
 }
 
 @media (max-width: 800px) {
@@ -460,6 +468,53 @@ div#new-post-image-preview {
     #follows-list {
         margin-bottom: 60px;
     }
+    .follow-row-left {
+        font-size: small;
+    }
+    #follow .follow-button {
+        font-size: medium;
+        width: 150px;
+    }
+}
+
+#follow .follow-button {
+    top: 0px;
+    position: relative;
+    border-color: rgba(0, 0, 0, 0.2);
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 5px 10px 0 rgba(0,0,0,.2);
+    border-radius: 30px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 40px;
+    transition: .2s;
+}
+
+#follow .follow-button.active:hover {
+    top: -5px;
+    box-shadow: 0 10px 10px 0 rgba(0,0,0,.2);
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+#follow .follow-button.inactive:hover {
+    top: -5px;
+    box-shadow: 0 10px 10px 0 rgba(0,0,0,.2);
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #777777;
+}
+
+#follow .follow-button.active {
+    background-color: white;
+}
+
+#follow .follow-button.inactive {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #777777;
 }
 
 #follows-header {
@@ -477,12 +532,6 @@ div#new-post-image-preview {
     display: flex;
     font-size: large;
     font-weight: bold;
-    /* margin-top: 60px;
-    padding: 20px 0px;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    max-width: 800px; */
 }
 
 #follows-header-menu > * {
@@ -550,7 +599,6 @@ div#new-post-image-preview {
     display: flex;
     flex-direction: row;
     align-items: center;
-    font-size: small;
     padding: 5px;
     border-radius: 5px;
 }

@@ -1,3 +1,27 @@
+@media (min-width: 800px) {
+    .like-row-left {
+        font-size: medium;
+    }
+    #likes .follow-button {
+        margin-right: 50px;
+        font-size: large;
+        width: 200px;
+    }
+}
+
+@media (max-width: 800px) {
+    #likes-list {
+        padding-bottom: 60px;
+    }
+    .like-row-left {
+        font-size: small;
+    }
+    #likes .follow-button {
+        font-size: medium;
+        width: 150px;
+    }
+}
+
 #likes {
     position: fixed;
     z-index: 1;
@@ -78,7 +102,6 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    font-size: small;
     padding: 5px;
     border-radius: 5px;
 }
@@ -109,8 +132,42 @@
     font-weight: bold;
 }
 
-@media (max-width: 800px) {
-    #likes-list {
-        padding-bottom: 60px;
-    }
+#likes .follow-button {
+    top: 0px;
+    position: relative;
+    border-color: rgba(0, 0, 0, 0.2);
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 5px 10px 0 rgba(0,0,0,.2);
+    border-radius: 30px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 40px;
+    transition: .2s;
+}
+
+#likes .follow-button.active:hover {
+    top: -5px;
+    box-shadow: 0 10px 10px 0 rgba(0,0,0,.2);
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+#likes .follow-button.inactive:hover {
+    top: -5px;
+    box-shadow: 0 10px 10px 0 rgba(0,0,0,.2);
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #777777;
+}
+
+#likes .follow-button.active {
+    background-color: white;
+}
+
+#likes .follow-button.inactive {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #777777;
 }

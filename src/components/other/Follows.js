@@ -40,8 +40,8 @@ const Follows = (props) => {
 
     // Change usersCount, allLoaded, and button states when whichTab changes
     useEffect(async () => {
-        await setUsersCount(0)
-        await setAllLoaded(false)
+        setUsersCount(0)
+        setAllLoaded(false)
         if (whichTab == 'following') {
             setButtonOne('active')
             setButtonTwo('inactive')
@@ -49,7 +49,7 @@ const Follows = (props) => {
             setButtonOne('inactive')
             setButtonTwo('active')
         }
-        await setUsersCount(20)
+        setUsersCount(20)
     }, [whichTab])
 
     // Change usersArr state when usersCount changes
@@ -67,18 +67,18 @@ const Follows = (props) => {
     useEffect(async () => {
         if (usersArr != null) {
             const newUsers = (
-                usersArr.map(async (user) => {
+                usersArr.map(async (otherUser) => {
                     let userId
                     if (whichTab == 'following') {
-                        userId = user.data.otherUser
+                        userId = otherUser.data.otherUser
                     } else {
-                        userId = user.data.self
+                        userId = otherUser.data.self
                     }
                     const userInfo = await findUser(userId)
                     const redirect = () => navigate(`/${userId}`)
                     const image = await getUrl(userInfo.data.image)
                     return (
-                        <div className='follow-row' key={user.id}>
+                        <div className='follow-row' key={userId}>
                             <div className='follow-row-left' onClick={redirect}>
                                 <img className='follow-image' src={image} />
                                 <div className='follow-text'>

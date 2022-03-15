@@ -48,7 +48,7 @@
     #profile-card-icon {
         margin-bottom: 10px;
     }
-    .follow-button, #profile-settings-button {
+    #profile-contents .follow-button, #profile-settings-button {
         margin-right: 50px;
     }
     #profile-direct-message-button-container, #profile-logout-button {
@@ -167,7 +167,7 @@
     transition: .2s;
 }
 
-.follow-button, #profile-settings-button, #profile-logout-button {
+#profile-contents .follow-button, #profile-settings-button, #profile-logout-button {
     top: 0px;
     position: relative;
     border-color: rgba(0, 0, 0, 0.2);
@@ -185,14 +185,14 @@
     transition: .2s;
 }
 
-#profile-direct-message-button-container:hover, .follow-button.active:hover, #profile-settings-button:hover, #profile-logout-button:hover {
+#profile-direct-message-button-container:hover, #profile-contents .follow-button.active:hover, #profile-settings-button:hover, #profile-logout-button:hover {
     top: -5px;
     box-shadow: 0 10px 10px 0 rgba(0,0,0,.2);
     cursor: pointer;
     background-color: rgba(0, 0, 0, 0.05);
 }
 
-.follow-button.inactive:hover {
+#profile-contents .follow-button.inactive:hover {
     top: -5px;
     box-shadow: 0 10px 10px 0 rgba(0,0,0,.2);
     cursor: pointer;
@@ -200,11 +200,11 @@
     color: #777777;
 }
 
-.follow-button.active, #profile-settings-button, #profile-logout-button {
+#profile-contents .follow-button.active, #profile-settings-button, #profile-logout-button {
     background-color: white;
 }
 
-.follow-button.inactive {
+#profile-contents .follow-button.inactive {
     background-color: rgba(0, 0, 0, 0.1);
     color: #777777;
 }
