@@ -55,15 +55,15 @@ const App = () => {
     return (
         <BrowserRouter basename={process.env.PUBLIC_URL}>
             <Routes>
-                <Route exact path='/' element={<Home user={user} popUpState={popUpState} updatePopUp={updatePopUp} />} />
-                <Route exact path='/messages' element={<Messages user={user} popUpState={popUpState} updatePopUp={updatePopUp} />} />
-                <Route exact path='/:postOwnerId/:postId' element={<Post user={user} popUpState={popUpState} updatePopUp={updatePopUp} />} />
-                <Route exact path='/:otherUserId' element={<Profile user={user} popUpState={popUpState} updatePopUp={updatePopUp} />} />
-                <Route exact path='/messages/:otherUserId' element={<Conversation user={user} popUpState={popUpState} updatePopUp={updatePopUp} />} />
-                <Route exact path='/saved' element={<Saved user={user} popUpState={popUpState} updatePopUp={updatePopUp} />} />
-                <Route exact path='/settings' element={<Settings user={user} popUpState={popUpState} updatePopUp={updatePopUp} />} />
-                <Route exact path='/signup' element={<SignUp user={user} popUpState={popUpState} updatePopUp={updatePopUp} />} />
-                <Route exact path='/login' element={<Login user={user} popUpState={popUpState} updatePopUp={updatePopUp} />} />
+                <Route exact path='/' element={<Home user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />} />
+                <Route exact path='/messages' element={<Messages user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />} />
+                <Route exact path='/:postOwnerId/:postId' element={<Post user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />} />
+                <Route exact path='/:otherUserId' element={<Profile user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />} />
+                <Route exact path='/messages/:otherUserId' element={<Conversation user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />} />
+                <Route exact path='/saved' element={<Saved user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />} />
+                <Route exact path='/settings' element={<Settings user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />} />
+                <Route exact path='/signup' element={<SignUp user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />} />
+                <Route exact path='/login' element={<Login user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />} />
             </Routes>
         </BrowserRouter>
     )

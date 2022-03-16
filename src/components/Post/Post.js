@@ -13,7 +13,7 @@ import { CommentsFull } from './children/Comments/CommentsFull'
 import { LinkCopied } from './children/LinkCopied'
 
 const Post = (props) => {
-    const { user, popUpState, updatePopUp } = props
+    const { user, setUser, popUpState, updatePopUp } = props
 
     const { postOwnerId, postId } = useParams()
 
@@ -86,14 +86,14 @@ const Post = (props) => {
             setLikes(null)
             body.style.overflow = 'auto'
         } else {
-            setLikes(<Likes user={user} updatePopUp={updatePopUp} postId={postId} postOwnerId={postOwnerId} />)
+            setLikes(<Likes user={user} setUser={setUser} updatePopUp={updatePopUp} postId={postId} postOwnerId={postOwnerId} />)
             body.style.overflow = 'hidden'
         }
     }, [popUpState.likesOn])
 
     return (
         <div id="post" className="page">
-            <Navbar user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
+            <Navbar user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
             {likes}
             <div id="single-post-page">
                 <LinkCopied linkCopied={linkCopied} />

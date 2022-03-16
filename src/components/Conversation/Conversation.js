@@ -4,7 +4,7 @@ import { sendMessage, retrieveSingleConvo } from '../../firebase/messages.js'
 import {MessageBlock} from './children/MessageBlock.js'
 
 const Conversation = (props) => {
-    const { user } = props
+    const { user, setUser } = props
 
     // Grab other user's id from url parameters
     const { userId } = useParams()

@@ -6,9 +6,10 @@ import { NameFooter } from './children/NameFooter.js'
 import { ImageInput } from './children/ImageInput.js'
 import { uploadFile } from '../../firebase/storage'
 import { Navbar } from '../other/Navbar.js'
+import { findUser } from '../../firebase/users.js'
 
 const Settings = (props) => {
-    const { user, popUpState, updatePopUp } = props
+    const { user, setUser, popUpState, updatePopUp } = props
 
     const location = useLocation()
 
@@ -91,6 +92,8 @@ const Settings = (props) => {
             )
             if (possibleError == null) {
                 // Redirect to own profile upon successful settings update
+                const updatedUser = await findUser(user.id)
+                await setUser(updatedUser)
                 navigate(`/${user.id}`)
             } else {
                 setErrorClass('active')
@@ -121,7 +124,7 @@ const Settings = (props) => {
     useEffect(() => {
         if (prevState != null) {
             setWelcomeClass('active')
-            setTimeout(() => {setWelcomeClass('inactive')}, 2500)
+            setTimeout(() => {setWelcomeClass('inactive')}, 3500)
         }
     }, [prevState])
 
@@ -189,7 +192,7 @@ const Settings = (props) => {
 
     return (
         <div id='settings' className='page'>
-            <Navbar user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
+            <Navbar user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
             {settings}
         </div>
     )

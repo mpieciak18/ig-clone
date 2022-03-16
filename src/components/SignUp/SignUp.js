@@ -4,13 +4,13 @@ import { UsernameFooter } from './children/UsernameFooter.js'
 import { PasswordFooter } from './children/PasswordFooter.js'
 import { NameFooter } from './children/NameFooter.js'
 import { EmailFooter } from './children/EmailFooter.js'
-import { newUser } from '../../firebase/users.js'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { newUser, findUser } from '../../firebase/users.js'
+import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 
 const SignUp = (props) => {
     // Redirect to settings if already signed in
-    const { user, popUpState, updatePopUp } = props
+    const { user, setUser, popUpState, updatePopUp } = props
 
     const navigate = useNavigate()
 
@@ -60,20 +60,20 @@ const SignUp = (props) => {
     const newSignUp = async (e) => {
         e.preventDefault()
         // Add new user to firebase/auth & return any errors
-        const possibleError = await newUser(username, name, email, password)
-        if (possibleError == null) {
-            // Redirect to /settings with state to signify 
-            // redirect from successful registration
+        const newUserId = await newUser(username, name, email, password)
+        if (newUserId != null) {
+            const newUser = await findUser(newUserId)
+            await setUser(newUser)
             navigate('/settings', {state: {newSignUp: true}})
         } else {
             setErrorClass('active')
-            setTimeout(() => {setErrorClass('inactive')}, 2000)
+            setTimeout(() => {setErrorClass('inactive')}, 3000)
         }
     }
 
     return (
         <div id="sign-up" className="page">
-            <Navbar user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
+            <Navbar user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
             <div id='sign-up-parent'>
                 <div id='sign-up-error' className={errorClass}>
                     There was an error! Please try again.

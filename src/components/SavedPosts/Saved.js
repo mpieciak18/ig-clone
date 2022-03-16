@@ -7,7 +7,7 @@ import { Navbar } from '../other/Navbar.js'
 
 const Saved = (props) => {
     // Redirect to signup page if not signed in
-    const { user, popUpState, updatePopUp } = props
+    const { user, setUser, popUpState, updatePopUp } = props
 
     // Init postsNumber state
     const [postsNumber, setPostsNumber] = useState(21)
@@ -90,7 +90,7 @@ const Saved = (props) => {
 
     return (
         <div id='saved' className='page'>
-            <Navbar user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
+            <Navbar user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
             {posts}
         </div>
     )

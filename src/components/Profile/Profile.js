@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 
 const Profile = (props) => {
-    const { user, popUpState, updatePopUp } = props
+    const { user, setUser, popUpState, updatePopUp } = props
 
     // Get other user id from url parameters
     const { otherUserId } = useParams()
@@ -81,13 +81,13 @@ const Profile = (props) => {
 
     return (
         <div id='profile'>
-            <Navbar user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
+            <Navbar user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
             <div id='profile-contents'>
                 <div id='profile-contents-left'>
-                    <ProfileCard user={user} otherUserId={otherUserId} popUpState={popUpState} updatePopUp={updatePopUp} />
+                    <ProfileCard user={user} setUser={setUser} otherUserId={otherUserId} popUpState={popUpState} updatePopUp={updatePopUp} />
                 </div>
                 <div id='profile-contents-right'>
-                    <ProfileButtons user={user} otherUserId={otherUserId} />
+                    <ProfileButtons user={user} setUser={setUser} otherUserId={otherUserId} />
                     {posts}
                 </div>
             </div>

@@ -20,16 +20,10 @@ import {
 const newUser = async (username, name, email, password) => {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-        console.log('user credential:')
-        console.log(userCredential)
         const user = userCredential.user
-        console.log('user:')
-        console.log(user)
         await addUser(username, name, user.email, user.uid)
-        console.log(null)
-        return null
+        return user.uid
     } catch(error) {
-        console.log(error)
         return error
     }
 }
@@ -37,11 +31,7 @@ const newUser = async (username, name, email, password) => {
 // Add user to users collection
 const addUser = async (username, name, email, id) => {
     const usersRef = collection(db, 'users')
-    console.log('usersRef:')
-    console.log(usersRef)
     const newUserRef = doc(usersRef, id)
-    console.log('newUserRef:')
-    console.log(newUserRef)
     const newUserData = {
         email: email, 
         username: username, 
@@ -52,9 +42,7 @@ const addUser = async (username, name, email, id) => {
         following: 0, 
         posts: 0
     }
-    console.log(newUserData)
-    const res = await setDoc(newUserRef, newUserData)
-    console.log(res)
+    await setDoc(newUserRef, newUserData)
 }
 
 // Sign in user

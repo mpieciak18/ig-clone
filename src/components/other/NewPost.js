@@ -4,10 +4,11 @@ import { uploadFile } from '../../firebase/storage.js'
 import { newPost } from '../../firebase/posts.js'
 import { ImageInput } from './ImageInput.js'
 import { CaptionFooter } from './CaptionFooter.js'
+import { findUser } from '../../firebase/users.js'
 
 const NewPost = (props) => {
     
-    const { user, popUpState, updatePopUp } = props
+    const { user, setUser, popUpState, updatePopUp } = props
 
     // Init useNavigate function
     const navigate = useNavigate()
@@ -50,6 +51,8 @@ const NewPost = (props) => {
             // Check for possible error with adding post to DB
             const postId = await newPost(caption, path)
             if (postId != null) {
+                const updatedUser = await findUser(user.id)
+                await setUser(updatedUser)
                 navigate(`/${user.id}/${postId}`)
             } else {
                 setErrorClass('active')

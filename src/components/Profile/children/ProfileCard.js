@@ -4,7 +4,7 @@ import { findUser } from '../../../firebase/users.js'
 import { Follows } from '../../other/Follows.js'
 
 const ProfileCard = (props) => {
-    const { user, otherUserId, popUpState, updatePopUp } = props
+    const { user, setUser, otherUserId, popUpState, updatePopUp } = props
 
     // Init profile image state
     const [img, setImg] = useState(null)
@@ -88,6 +88,7 @@ const ProfileCard = (props) => {
                 setFollows(
                     <Follows
                         user={user}
+                        setUser={setUser}
                         otherUserId={user.id}
                         updatePopUp={updatePopUp}
                         initTab={followingVsFollower}

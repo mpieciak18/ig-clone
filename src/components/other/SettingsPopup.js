@@ -1,6 +1,6 @@
-import { getByDisplayValue } from "@testing-library/react"
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { signOutUser } from "../../firebase/users.js"
 
 const SettingsPopup = (props) => {
     const { user, viewSettings, setViewSettings } = props
@@ -23,6 +23,12 @@ const SettingsPopup = (props) => {
 
     // Store closeSettings in a variable
     const eHandler = closeSettings()
+
+    // Logout user
+    const logout = async () => {
+        await signOutUser()
+        navigate('/')
+    }
     
     // Update popup when viewSettings changes
     useEffect(() => {
@@ -39,7 +45,7 @@ const SettingsPopup = (props) => {
                     <div id='settings-posts' className='settings-popup-button' onClick={() => navigate('/saved')}>
                         View Saved Posts
                     </div>
-                    <div id='settings-logout' className='settings-popup-button' onClick={() => navigate('/logout')}>
+                    <div id='settings-logout' className='settings-popup-button' onClick={logout}>
                         Sign Out
                     </div>
                 </div>

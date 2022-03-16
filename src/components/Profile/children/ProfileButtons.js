@@ -6,7 +6,7 @@ import MessageHollow from '../../../assets/images/dm.png'
 import MessageSolid from '../../../assets/images/dm-solid.png'
 
 const ProfileButtons = (props) => {
-    const { user, otherUserId } = props
+    const { user, setUser, otherUserId } = props
 
     const navigate = useNavigate()
 
@@ -31,7 +31,7 @@ const ProfileButtons = (props) => {
         if (user != null) {
             navigate('/messages', {state: {recipient: otherUserId}})
         } else {
-            navigate('/signup', {state: {path: path}})
+            navigate('/signup')
         }
     }
 
@@ -43,9 +43,16 @@ const ProfileButtons = (props) => {
         if (user == null) {
             setButtons(
                 <div id='profile-buttons-section'>
-                    <FollowButton otherUserId={otherUserId} />
+                    <div className='follow-button active' onClick={() => navigate('/signup')}>Follow</div>
                     <div id='profile-direct-message-button-container'>
-                        <img id='profile-direct-message-button' onClick={clickMessages} />
+                        <img 
+                            id='profile-direct-message-button' 
+                            onClick={clickMessages}
+                            onMouseDown={() => setImg(MessageSolid)}
+                            onMouseUp={() => setImg(MessageHollow)}
+                            onMouseOver={() => setImg(MessageSolid)}
+                            onMouseOut={() => setImg(MessageHollow)} 
+                        />
                     </div>
                 </div>
             )
@@ -54,6 +61,7 @@ const ProfileButtons = (props) => {
                 <div id='profile-buttons-section'>
                     <FollowButton
                         user={user}
+                        setUser={setUser}
                         otherUserId={otherUserId}
                     />
                     <div id='profile-direct-message-button-container'>

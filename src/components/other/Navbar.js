@@ -17,7 +17,7 @@ import MessagesHollow from '../../assets/images/messages.png'
 import MessagesSolid from '../../assets/images/messages-solid.png'
 
 const Navbar = (props) => {
-    const { user, popUpState, updatePopUp } = props
+    const { user, setUser, popUpState, updatePopUp } = props
 
     const navigate = useNavigate()
 
@@ -103,7 +103,7 @@ const Navbar = (props) => {
 
     return (
         <div id="navbar">
-            <NewPost user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
+            <NewPost user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
             {notifications}
             <img id="navbar-logo"
                 src={LogoSolid}
