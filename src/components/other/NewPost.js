@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { uploadFile } from '../../firebase/storage.js'
 import { newPost } from '../../firebase/posts.js'
 import { ImageInput } from './ImageInput.js'
@@ -12,6 +12,9 @@ const NewPost = (props) => {
 
     // Init useNavigate function
     const navigate = useNavigate()
+
+    // Init useParams
+    const location = useParams()
 
     // Init new post pop-up component state
     const [newPostPopup, setNewPostPopup] = useState(null)
@@ -53,7 +56,13 @@ const NewPost = (props) => {
             if (postId != null) {
                 const updatedUser = await findUser(user.id)
                 await setUser(updatedUser)
-                navigate(`/${user.id}/${postId}`)
+                updatePopUp()
+                if (location.postOwnerId == null) {
+                    navigate(`/${user.id}/${postId}`)
+                } else {
+                    navigate(`/${user.id}/${postId}`)
+                    window.location.reload()
+                }
             } else {
                 setErrorClass('active')
                 setTimeout(() => {setErrorClass('inactive')}, 2000)

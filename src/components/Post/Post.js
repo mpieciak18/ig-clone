@@ -16,6 +16,7 @@ const Post = (props) => {
     const { user, setUser, popUpState, updatePopUp } = props
 
     const { postOwnerId, postId } = useParams()
+    console.log(useParams())
 
     // Init post owner name
     const [postOwnerName, setPostOwnerName] = useState(null)

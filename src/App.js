@@ -53,7 +53,7 @@ const App = () => {
     }
 
     return (
-        <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <BrowserRouter basename={process.env.PUBLIC_URL} forceRefresh={true}>
             <Routes>
                 <Route exact path='/' element={<Home user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />} />
                 <Route exact path='/messages' element={<Messages user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />} />
