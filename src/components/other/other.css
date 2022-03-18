@@ -5,6 +5,20 @@
     src: url('../../assets/fonts/Billabong.ttf');
 }
 
+#navbar-search {
+    border: 0.5px solid rgb(200, 200, 200);
+    padding: 5px;
+    border-radius: 10px;
+    text-align: center;
+}
+#navbar-search:focus::placeholder {
+    color: transparent;
+}
+
+#navbar-search:focus {
+    text-align: left;
+}
+
 @media (min-width: 800px) {
     #navbar {
         top: 0;
@@ -26,12 +40,6 @@
     }
     #navbar-logo:hover {
         cursor: pointer;
-    }
-    #navbar-search {
-        border: 0.5px solid rgb(200, 200, 200);
-        padding: 5px;
-        border-radius: 10px;
-        text-align: center;
     }
     #navbar-buttons {
         display: flex;
@@ -64,12 +72,6 @@
     }
     #navbar-logo:hover {
         cursor: pointer;
-    }
-    #navbar-search {
-        border: 0.5px solid rgb(199, 199, 199);
-        padding: 5px;
-        border-radius: 10px;
-        text-align: center;
     }
     #navbar-buttons {
         display: flex;
