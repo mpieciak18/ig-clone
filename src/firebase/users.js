@@ -48,10 +48,10 @@ const addUser = async (username, name, email, id) => {
 // Sign in user
 const signInUser = async (email, password) => {
     try {
-        await signInWithEmailAndPassword(auth, email, password)
+        const signInObj = await signInWithEmailAndPassword(auth, email, password)
+        return signInObj.user.uid
+    } catch (error) {
         return null
-    } catch(error) {
-        return error
     }
 }
 
