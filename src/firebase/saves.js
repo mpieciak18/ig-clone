@@ -60,7 +60,7 @@ const findSaves = async (arrQuantity) => {
             id: doc.id,
             data: doc.data()
         }
-        saves = [...saves, save]
+        saves = [save, ...saves]
     })
     return saves
 }

@@ -28,7 +28,6 @@ const Saved = (props) => {
             if (savedArr != null) {
                 let newPostsArr = []
                 for (const save of savedArr) {
-                    console.log(save)
                     const result = await findSinglePost(save.data.postId, save.data.postOwner)
                     newPostsArr = [...newPostsArr, result]
                 }
