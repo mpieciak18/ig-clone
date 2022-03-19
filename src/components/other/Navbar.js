@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { NewPost } from './NewPost.js'
 import { SettingsPopup } from './SettingsPopup.js'
 import { Notifications } from './Notifications.js'
+import { SearchPopup } from './SearchPopup.js'
 import LogoSolid from '../../assets/images/ig-logo-4.png'
 import HomeHollow from '../../assets/images/home.png'
 import HomeSolid from '../../assets/images/home-solid.png'
@@ -33,9 +34,13 @@ const Navbar = (props) => {
     const [notifImg, setNotifImg] = useState(NotificationsHollow)
     const [settingsImg, setSettingsImg] = useState(SettingsHollow)
 
-    const performSearch = (e) => {
-        //
-    }
+    // Init search bar value
+    const [searchVal, setSearchVal] = useState('')
+
+    const updateSearchVal = (e) => setSearchVal(e.target.value)
+
+    // Update popUpState.searchOn
+    const clickSearch = () => updatePopUp('searchOn')
 
     // Redirect to home & update popUpState
     const clickHome = () => {
@@ -109,7 +114,8 @@ const Navbar = (props) => {
                 src={LogoSolid}
                 onClick={clickHome}
             />
-            <input id="navbar-search" type='text' placeholder='Search' />
+            <input id="navbar-search" type='text' placeholder='Search' onChange={updateSearchVal} onFocus={clickSearch} />
+            <SearchPopup user={user} popUpState={popUpState} updatePopUp={updatePopUp} value={searchVal} />
             <div id="navbar-buttons">
                 <img id="home-button" 
                     src={homeImg}

@@ -5,6 +5,10 @@
     src: url('../../assets/fonts/Billabong.ttf');
 }
 
+#navbar > * {
+    margin: 0px 10px;
+}
+
 #navbar-search {
     border: 0.5px solid rgb(200, 200, 200);
     padding: 5px;
@@ -861,4 +865,111 @@ div#new-post-image-preview {
     justify-content: center;
     height: 40px;
     margin: 10px 0px;
+}
+
+/* Search Pop-Up Styling */
+
+@media (min-width: 800px) {
+    #search-popup {
+        width: 100vw;
+        height: calc(100vh - 50px);
+    }
+    #search-popup-parent {
+        height: calc(100vh - 150px);
+        width: 100%;
+        max-width: 500px;
+    }
+}
+
+@media (max-width: 800px) {
+    #search-popup {
+        width: 100%;
+        height: calc(100vh - 100px);
+    }
+    #search-popup-parent {
+        height: calc(100vh - 150px);
+        width: 90vw;
+        max-width: 500px;
+    }
+}
+
+#search-popup {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 50px;
+}
+
+#search-popup-parent {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 10px;
+}
+
+#search-popup-top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 0px;
+    width: 100%;
+}
+
+#search-popup-x-button {
+    font-size: small;
+    margin-left: 20px;
+    color: rgb(0, 0, 0, 0.75);
+}
+
+#search-popup-x-button:hover {
+    cursor: pointer;
+    color: rgb(0, 0, 0, 0.25);
+}
+
+#search-popup-x-button-hidden {
+    font-size: small;
+    margin-right: 20px;
+    opacity: 0;
+}
+
+#search-popup-title {
+    font-weight: bold;
+    font-size: x-large;
+}
+
+#search-popup-bottom {
+    height: 100%;
+    width: 100%;
+}
+
+.search-result {
+    display: flex;
+    align-items: center;
+    transition: all ease-in-out .25s;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.search-result:hover {
+    cursor: pointer;
+    background-color: rgb(200, 200, 200);
+}
+
+.search-result-image {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    padding: 10px 20px;
+}
+
+.search-result-name {
+    font-size: large;
+    padding: 10px 20px 10px 0px;
 }

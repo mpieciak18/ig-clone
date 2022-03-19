@@ -72,6 +72,21 @@ const findUser = async (userId) => {
     return user
 }
 
+// Retrieve all user
+const findAllUsers = async () => {
+    const usersRef = collection(db, 'users')
+    const usersDocs = await getDocs(usersRef)
+    let users = []
+    usersDocs.docs.forEach((doc) => {
+        const user = {
+            id: doc.id,
+            data: doc.data()
+        }
+        users = [...users, user]
+    })
+    return users
+}
+
 // Update user
 const updateUser = async (image, name, bio) => {
     const userId = auth.currentUser.uid
@@ -108,4 +123,4 @@ const emailExists = async (email) => {
     }
 }
 
-export { newUser, signInUser, signOutUser, findUser, updateUser, usernameExists, emailExists }
+export { newUser, signInUser, signOutUser, findUser, findAllUsers, updateUser, usernameExists, emailExists }
