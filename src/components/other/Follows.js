@@ -12,7 +12,7 @@ const Follows = (props) => {
     const navigate = useNavigate()
 
     // Init following/follower users count
-    const [usersCount, setUsersCount] = useState(null)
+    const [usersCount, setUsersCount] = useState(20)
 
     // Init following/follower users arr state
     const [usersArr, setUsersArr] = useState(null)
@@ -24,10 +24,13 @@ const Follows = (props) => {
     const [allLoaded, setAllLoaded] = useState(false)
 
     // Init loading state
-    const [loadingMore, setLoadingMore] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     // Init whichTab state
     const [whichTab, setWhichTab] = useState(null)
+
+    // Init isChanging state
+    const [isChanging, setIsChanging] = useState(false)
 
     // Init followers & following buttons classes
     const [buttonOne, setButtonOne] = useState(null)
@@ -40,7 +43,6 @@ const Follows = (props) => {
 
     // Change usersCount, allLoaded, and button states when whichTab changes
     useEffect(async () => {
-        setUsersCount(0)
         setAllLoaded(false)
         if (whichTab == 'following') {
             setButtonOne('active')
@@ -49,31 +51,30 @@ const Follows = (props) => {
             setButtonOne('inactive')
             setButtonTwo('active')
         }
-        setUsersCount(20)
+        setIsChanging(true)
     }, [whichTab])
 
-    // Change usersArr state when usersCount changes
+    // Change usersArr state when changing tabs
     useEffect(async () => {
-        if (usersCount > 0 && whichTab == 'following') {
+        if (isChanging && whichTab == 'following') {
             const following = await getFollowing(otherUserId, usersCount)
             setUsersArr(following)
-        } else if (usersCount > 0 && whichTab == 'followers') {
+            setIsChanging(false)
+            console.log(following)
+        } else if (isChanging && whichTab == 'followers') {
             const followers = await getFollowers(otherUserId, usersCount)
             setUsersArr(followers)
+            setIsChanging(false)
+            console.log(followers)
         }
-    }, [usersCount])
+    }, [isChanging])
 
     // Update users component state when usersArr changes
     useEffect(async () => {
         if (usersArr != null) {
             const newUsers = (
                 usersArr.map(async (otherUser) => {
-                    let userId
-                    if (whichTab == 'following') {
-                        userId = otherUser.data.otherUser
-                    } else {
-                        userId = otherUser.data.self
-                    }
+                    const userId = otherUser.data.otherUser
                     const userInfo = await findUser(userId)
                     const redirect = () => navigate(`/${userId}`)
                     const image = await getUrl(userInfo.data.image)
@@ -100,10 +101,10 @@ const Follows = (props) => {
 
     // Load more follows/followers when user reaches bottom of pop-up
     const loadMore = async (e) => {
-        if (allLoaded == false && loadingMore == false) {
+        if (allLoaded == false && isLoading == false) {
             const elem = e.target
             if ((Math.ceil(elem.scrollHeight - elem.scrollTop) == elem.clientHeight)) {
-                await setLoadingMore(true)
+                setIsLoading(true)
                 const newCount = usersCount + 20
                 await setUsersCount(newCount)
                 let newUsersArr
@@ -117,7 +118,7 @@ const Follows = (props) => {
                 if (newUsersArr.length < newCount) {
                     await setAllLoaded(true)
                 }
-                await setLoadingMore(false)
+                await setIsLoading(false)
             }
         }
     }

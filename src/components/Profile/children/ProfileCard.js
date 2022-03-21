@@ -89,7 +89,7 @@ const ProfileCard = (props) => {
                     <Follows
                         user={user}
                         setUser={setUser}
-                        otherUserId={user.id}
+                        otherUserId={otherUserId}
                         updatePopUp={updatePopUp}
                         initTab={followingVsFollower}
                     />
