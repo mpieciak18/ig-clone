@@ -47,6 +47,7 @@ const ProfileButtons = (props) => {
                     <div id='profile-direct-message-button-container'>
                         <img 
                             id='profile-direct-message-button' 
+                            src={img}
                             onClick={clickMessages}
                             onMouseDown={() => setImg(MessageSolid)}
                             onMouseUp={() => setImg(MessageHollow)}

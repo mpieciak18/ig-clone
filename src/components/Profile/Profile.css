@@ -26,11 +26,6 @@
         flex-direction: column;
         align-items: center;
     }
-    #profile-buttons-section {
-        width: 100%;
-        align-items: center;
-        justify-content: flex-end;
-    }
     .single-post-box-image {
         width: 300px;
         height: 300px;
@@ -48,11 +43,8 @@
     #profile-card-icon {
         margin-bottom: 10px;
     }
-    #profile-contents .follow-button, #profile-settings-button {
-        margin-right: 50px;
-    }
-    #profile-direct-message-button-container, #profile-logout-button {
-        margin-right: 80px;
+    #profile-buttons-section > * {
+        margin: 0 50px;
     }
 }
 
@@ -92,10 +84,8 @@
         flex-direction: column;
         align-items: center;
     }
-    #profile-buttons-section {
-        width: 100%;
-        align-items: center;
-        justify-content: space-evenly;
+    #profile-buttons-section > * {
+        margin: 0 10px;
     }
 }
 
@@ -129,6 +119,8 @@
 #profile-card-stats {
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
     padding-top: 10px;
 }
 
@@ -136,6 +128,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 75px;
 }
 
 #profile-card-stats > * > * {
@@ -153,6 +146,9 @@
 #profile-buttons-section {
     display: flex;
     flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
 }
 
 #profile-direct-message-button-container {
@@ -221,6 +217,15 @@
 #profile-direct-message-button {
     width: 25px;
     height: auto;
+}
+
+#user-posts-empty {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: larger;
 }
 
 #user-posts {

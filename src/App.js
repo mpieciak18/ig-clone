@@ -68,7 +68,6 @@ const App = () => {
     // Define private route handler
     const PrivateRoute = ({ children }) => {
         if (user != null) {
-            console.log(children)
             return children
         } else {
             return <Navigate to='/login' />
