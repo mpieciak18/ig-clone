@@ -16,7 +16,6 @@ const Post = (props) => {
     const { user, setUser, popUpState, updatePopUp } = props
 
     const { postOwnerId, postId } = useParams()
-    console.log(useParams())
 
     // Init post owner name
     const [postOwnerName, setPostOwnerName] = useState(null)
@@ -83,14 +82,15 @@ const Post = (props) => {
     // Update likes state & body scroll when popUpState.likesOn changes
     useEffect(() => {
         const body = document.querySelector('body')
-        if (popUpState.likesOn == false) {
-            setLikes(null)
-            body.style.overflow = 'auto'
-        } else {
+        if (popUpState.likesOn == true && user != null) {
             setLikes(<Likes user={user} setUser={setUser} updatePopUp={updatePopUp} postId={postId} postOwnerId={postOwnerId} />)
             body.style.overflow = 'hidden'
+            
+        } else {
+            setLikes(null)
+            body.style.overflow = 'auto'
         }
-    }, [popUpState.likesOn])
+    }, [popUpState.likesOn, user])
 
     return (
         <div id="post" className="page">

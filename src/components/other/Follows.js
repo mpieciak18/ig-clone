@@ -60,12 +60,10 @@ const Follows = (props) => {
             const following = await getFollowing(otherUserId, usersCount)
             setUsersArr(following)
             setIsChanging(false)
-            console.log(following)
         } else if (isChanging && whichTab == 'followers') {
             const followers = await getFollowers(otherUserId, usersCount)
             setUsersArr(followers)
             setIsChanging(false)
-            console.log(followers)
         }
     }, [isChanging])
 

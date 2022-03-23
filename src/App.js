@@ -1,5 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { useState, useEffect } from "react"
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
+import { useState, useEffect, useRef } from "react"
 import {Home} from "./components/Home/Home.js"
 import {Messages} from "./components/Messages/Messages.js"
 import {Post} from "./components/Post/Post.js"
@@ -15,10 +15,21 @@ import { onAuthStateChanged } from "firebase/auth"
 
 const App = () => {
 
+    // Init ref for checking if page is already rendered
+    const isInitialMount = useRef(true);
+
     // Initialize user state
     const [user, setUser] = useState(null)
 
+    // Init (current user) pending state
+    const [pending, setPending] = useState(true)
+
+    // Init browser routes state
+    const [routes, setRoutes] = useState(null)
+
+    // Update user state when authUser changes
     useEffect(() => {
+        setPending(true)
         onAuthStateChanged(auth, async (authUser) => {
             if (authUser != null) {
                 const newUser = await findUser(authUser.uid)
@@ -27,6 +38,7 @@ const App = () => {
                 setUser(null)
             }
         })
+        setPending(false)
     }, [])
 
     // Initialize pop-ups state
@@ -53,21 +65,93 @@ const App = () => {
         setPopUpState(newState)
     }
 
-    return (
-        <BrowserRouter basename={process.env.PUBLIC_URL} forceRefresh={true}>
-            <Routes>
-                <Route exact path='/' element={<Home user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />} />
-                <Route exact path='/messages' element={<Messages user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />} />
-                <Route exact path='/:postOwnerId/:postId' element={<Post user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />} />
-                <Route exact path='/:otherUserId' element={<Profile user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />} />
-                <Route exact path='/messages/:otherUserId' element={<Conversation user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />} />
-                <Route exact path='/saved' element={<Saved user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />} />
-                <Route exact path='/settings' element={<Settings user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />} />
-                <Route exact path='/signup' element={<SignUp user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />} />
-                <Route exact path='/login' element={<Login user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />} />
-            </Routes>
-        </BrowserRouter>
-    )
+    // Define private route handler
+    const PrivateRoute = ({ children }) => {
+        if (user != null) {
+            console.log(children)
+            return children
+        } else {
+            return <Navigate to='/login' />
+        }
+    }
+
+    // Update pending when user changes
+    useEffect(() => {
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+        } else {
+            setPending(false)
+        }
+    }, [user])
+
+    // Update browser rates when pending, user, & popUpState change
+    useEffect(() => {
+        if (pending != true) {
+            setRoutes(
+                <BrowserRouter basename={process.env.PUBLIC_URL} forceRefresh={true}>
+                    <Routes>
+                        <Route exact path='/' 
+                            element={
+                                <Home user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
+                            }
+                        />
+                        <Route exact path='/messages' 
+                            element={
+                                <PrivateRoute>
+                                    <Messages user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
+                                </PrivateRoute>
+                            } 
+                        />
+                        <Route exact path='/:postOwnerId/:postId' 
+                            element={
+                                <Post user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
+                            }
+                        />
+                        <Route exact path='/:otherUserId' 
+                            element={
+                                <Profile user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
+                            }
+                        />
+                        <Route exact path='/messages/:otherUserId'
+                            element={
+                                <PrivateRoute>
+                                    <Conversation user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route exact path='/saved'
+                            element={
+                                <PrivateRoute>
+                                    <Saved user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route exact path='/settings'
+                            element={
+                                <PrivateRoute>
+                                    <Settings user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route exact path='/signup'
+                            element={
+                                <SignUp user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
+                            }
+                        />
+                        <Route exact path='/login'
+                            element={
+                                <Login user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
+                            }
+                        />
+                    </Routes>
+                </BrowserRouter>
+            )
+        } else {
+            setRoutes(null)
+        }
+    }, [pending, user, popUpState])
+
+    return routes
 }
 
 export { App }

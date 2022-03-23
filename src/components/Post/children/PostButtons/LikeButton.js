@@ -13,8 +13,10 @@ const LikeButton = (props) => {
     const [img, setImg] = useState(LikeHollow)
 
     useEffect(async () => {
-        const id = await likeExists(postId, postOwnerId)
-        setLikeId(id)
+        if (user != null) {
+            const id = await likeExists(postId, postOwnerId)
+            setLikeId(id)
+        }
     }, [user])
 
     useEffect(() => {

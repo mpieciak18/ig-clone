@@ -40,8 +40,10 @@ const SaveButton = (props) => {
     }
 
     useEffect(async () => {
-        const id = await saveExists(postId)
-        setSaveId(id)
+        if (user != null) {   
+            const id = await saveExists(postId)
+            setSaveId(id)
+        }
     }, [user])
 
     useEffect(() => {

@@ -60,11 +60,11 @@ const Navbar = (props) => {
     }
 
     // Update popUpState.notifsOn (or redirect to sign-up page)
-    const clickNotifications = () => {
+    const clickNotifications = async () => {
         if (user == null) {
             navigate('/signup', {state: {path: path}})
         } else if (popUpState.notifsOn == false) {
-            updatePopUp('notifsOn')
+            await updatePopUp('notifsOn')
         } else {
             updatePopUp()
         }

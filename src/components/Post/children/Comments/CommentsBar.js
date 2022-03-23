@@ -13,9 +13,7 @@ const CommentsBar = (props) => {
 
     const navigate = useNavigate()
 
-    const redirect = () => {
-        navigate('/signup', {state: {path: path}})
-    }
+    const redirect = () => navigate('/signup')
 
     // Set initial comment input value & reset it on submission
     const [commentValue, setCommentValue] = useState('')
@@ -67,7 +65,21 @@ const CommentsBar = (props) => {
     }, [user])
 
     useEffect(() => {
-        if (commentValue.length > 0) {
+        if (user == null) {
+            setForm(
+                <form className="post-comment-bar" onClick={redirect}>
+                    <input 
+                        type="text"
+                        className="post-comment-bar-input"
+                        placeholder="Add a comment..."
+                        ref={inputRef}
+                    />
+                    <button type="button" className="post-comment-bar-button active">
+                        Post
+                    </button>
+                </form>
+            )
+        } else if (commentValue.length > 0) {
             setForm(
                 <form className="post-comment-bar" onSubmit={addNewComment}>
                     <input 
@@ -100,7 +112,7 @@ const CommentsBar = (props) => {
                 </form>
             )
         }
-    }, [commentValue])
+    }, [commentValue, user])
 
     return(form)
 }
