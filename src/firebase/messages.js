@@ -8,7 +8,8 @@ import {
     getDocs,
     query,
     limit,
-    orderBy
+    orderBy,
+    updateDoc
 } from 'firebase/firestore'
 
 // Helper functions that return doc/collection references from db
@@ -24,12 +25,8 @@ const getConvosRef = (userId) => {
 const getConvoRef = (userId, otherUserId) => {
     return doc(getConvosRef(userId), otherUserId)
 }
-const getMessagesRef = (userId, otherUserId, limitOne=false) => {
-    if (limitOne == false) {
-        return collection(getConvoRef(userId, otherUserId), 'messages')
-    } else {
-        return query((getConvoRef(userId, otherUserId), 'messages'), limit(1))
-    }
+const getMessagesRef = (userId, otherUserId) => {
+    return collection(getConvoRef(userId, otherUserId), 'messages')
 }
 const getMessageRef = (userId, otherUserId, messageId=null) => {
     if (messageId == null) {
@@ -47,7 +44,7 @@ const sendMessage = async (message, otherUserId) => {
     let senderChange
     const lastMessage = await retrieveLatestMessage(otherUserId)
     if (lastMessage == null) {
-        senderChange = false
+        senderChange = true
     } else {
         senderChange = (lastMessage.data.sender != userId)
     }
@@ -61,14 +58,24 @@ const sendMessage = async (message, otherUserId) => {
         senderChange: senderChange
     }
     await setDoc(senderMessageRef, messageData)
-    // Second, add message to recipient's subcollection
+    // Third, add message to recipient's subcollection
     const messageId = senderMessageRef.id
     const recipMessageRef = getMessageRef(otherUserId, userId, messageId)
     await setDoc(recipMessageRef, messageData)
-    // Third, add notification to recipient's subcollection
+    // Fourth, add notification to recipient's subcollection
     await addNotification('message', otherUserId)
-    // Fourth, return message id
+    // Sixth, update convo date fields
+    await updateConvoDate(userId, otherUserId, messageData.date)
+    // Seventh, return message id
     return messageId
+}
+
+// Update both users' convo date field
+const updateConvoDate = async (userId, otherUserId, date) => {
+    const ownConvoRef = getConvoRef(userId, otherUserId)
+    const otherConvoRef = getConvoRef(otherUserId, userId)
+    await updateDoc(ownConvoRef, {"date": date})
+    await updateDoc(otherConvoRef, {"date": date})
 }
 
 // Retrieve single conversation & return array of message objects
@@ -91,10 +98,10 @@ const retrieveSingleConvo = async (otherUserId) => {
 // Retrieve latest message from a conversation
 // NOTE: user A's ID is the convo ID for user B & vice-versa
 const retrieveLatestMessage = async (otherUserId) => {
-    const userId = auth.currentUser.id
-    const messagesRef = getMessagesRef(userId, otherUserId, true)
+    const userId = auth.currentUser.uid
+    const messagesRef = getMessagesRef(userId, otherUserId)
     const singleMessageRef = query(messagesRef, orderBy("date", "desc"), limit(1))
-    const messageDoc = await getDoc(singleMessageRef)
+    const messageDoc = (await getDocs(singleMessageRef)).docs[0]
     const message = {
         id: messageDoc.id,
         data: messageDoc.data()
@@ -103,20 +110,20 @@ const retrieveLatestMessage = async (otherUserId) => {
 }
 
 // Retrieve all conversations
-const retrieveAllConvos = async () => {
-    const userId = auth.currentUser.id
+const retrieveConvos = async (quantity) => {
+    const userId = auth.currentUser.uid
     const convosRef = getConvosRef(userId)
-    const convosQuery = query(convosRef, orderBy("date", "desc"))
+    const convosQuery = query(convosRef, orderBy("date", "desc"), limit(quantity))
     const convoDocs = await getDocs(convosQuery)
-    let convos = []
-    convoDocs.forEach(async (doc) => {
+    const convos = (convoDocs.docs).map(async (doc) => {
         const convo = {
             id: doc.id,
             lastMessage: await retrieveLatestMessage(doc.id)
         }
-        convos = [...convos, convo]
+        return convo
     })
-    return convos
+    const result = await Promise.all(convos)
+    return result
 }
 
-export { sendMessage, retrieveAllConvos, retrieveSingleConvo, retrieveLatestMessage }
+export { sendMessage, retrieveConvos, retrieveSingleConvo, retrieveLatestMessage }

@@ -12,12 +12,7 @@ const Home = (props) => {
     const [postsNumber, setPostsNumber] = useState(5)
 
     // Init posts array state
-    const [postsArr, setPostsArr] = useState(
-        async () => {
-            const value = await findPosts(postsNumber)
-            return value
-        }
-    )
+    const [postsArr, setPostsArr] = useState(null)
 
     // Init posts component state
     const [posts, setPosts] = useState(null)

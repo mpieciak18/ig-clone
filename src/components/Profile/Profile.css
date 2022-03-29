@@ -160,7 +160,12 @@
     background-color: white;
     box-shadow: 0 5px 10px 0 rgba(0,0,0,.2);
     height: 40px;
+    width: 40px;
     transition: .2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 #profile-contents .follow-button, #profile-settings-button, #profile-logout-button {
@@ -203,15 +208,6 @@
 #profile-contents .follow-button.inactive {
     background-color: rgba(0, 0, 0, 0.1);
     color: #777777;
-}
-
-#profile-direct-message-button-container {
-    border-radius: 50%;
-    width: 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
 #profile-direct-message-button {
