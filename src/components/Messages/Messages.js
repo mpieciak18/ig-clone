@@ -69,10 +69,10 @@ const Messages = (props) => {
                 const username = otherUser.data.username
                 const image = await getUrl(otherUser.data.image)
                 // Last message variables
-                const message = convo.lastMessage.message
-                const time = timeSinceTrunc(convo.lastMessage.date)
+                const message = convo.lastMessage.data.message
+                const time = timeSinceTrunc(convo.lastMessage.data.date)
                 let sender
-                if (convo.lastMessage.sender == user.id) {
+                if (convo.lastMessage.data.sender == user.id) {
                     sender = "You"
                 } else {
                     sender = "Them"
@@ -86,8 +86,10 @@ const Messages = (props) => {
                                 <div className='convo-username'>@{username}</div>
                             </div>
                         </div>
-                        <div className='convo-row-middle'>{sender}: {message}</div>
-                        <div className='convo-row-right'>{time}</div>
+                        <div className='convo-row-right'>
+                            <div className='convo-row-message'>{sender}: "{message}"</div>
+                            <div className='convo-row-time'>{time}</div>
+                        </div>
                     </Link>
                 )
             })
@@ -113,7 +115,9 @@ const Messages = (props) => {
                         </div>
                     </div>
                     <div id='convos-divider'></div>
-                    {convosList}
+                    <div id='convos-bottom'>
+                        {convosList}
+                    </div>
                 </div>
             )
         } else {

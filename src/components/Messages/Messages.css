@@ -1,11 +1,15 @@
 @media (min-width: 800px) {
-    .convo-row-left {
+    .convo-row {
         font-size: medium;
+    }
+    .convo-row-right {
+        margin-left: 10px;
+        width: 100%;
     }
 }
 
 @media (max-width: 800px) {
-    .convo-row-left {
+    .convo-row {
         font-size: small;
     }
 }
@@ -100,10 +104,11 @@
 
 .convo-row {
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
     justify-content: space-between;
     margin: 5px 30px;
+    max-width: 740px;
+    border-radius: 5px;
 }
 
 .convo-row-left {
@@ -112,15 +117,31 @@
     align-items: center;
     padding: 5px;
     border-radius: 5px;
+    white-space: nowrap;
 }
 
-.convo-row > *:hover {
+.convo-name {
+    font-weight: bold;
+}
+
+.convo-row-right {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    border-radius: 5px;
+    font-style: italic;
+    color: grey;
+}
+
+.convo-row:hover {
     background-color: rgba(0, 0, 0, 0.05);
 }
 
-.convo-row > *:link, .convo-row > *:visited, .convo-row > *:active, .convo-row > *:hover {
+.convo-row:link, .convo-row:visited, .convo-row:active, .convo-row:hover {
     text-decoration: none;
-    color: black;
+    color: inherit;
 }
 
 .convo-image {
