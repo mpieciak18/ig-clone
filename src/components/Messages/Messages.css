@@ -157,6 +157,8 @@
     padding: 0 5px 0 10px;
 }
 
-.like-name {
-    font-weight: bold;
+.convo-row-message {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
