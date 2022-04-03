@@ -7,6 +7,7 @@ import { findUser } from '../../firebase/users'
 import { getUrl } from '../../firebase/storage'
 import { timeSinceTrunc } from '../../other/timeSinceTrunc.js'
 import MessageSolid from '../../assets/images/dm.png'
+import { ConvoPopup } from '../other/ConvoPopup.js'
 
 const Messages = (props) => {
     // Redirect to signup page if not signed in
@@ -29,6 +30,11 @@ const Messages = (props) => {
 
     // Init convos component state
     const [convos, setConvos] = useState(null)
+    
+    // Open search pop-up on click
+    const openPopup = () => {
+        updatePopUp('convosOn')
+    }
 
     // Update userImage state when user changes
     useEffect(async () => {
@@ -44,7 +50,6 @@ const Messages = (props) => {
     useEffect(async () => {
         if (user != null) {
             const newConvosArr = await retrieveConvos(convosCount)
-            console.log(newConvosArr)
             if (newConvosArr != null) {
                 setConvosArr(newConvosArr)
                 if (newConvosArr.length < convosCount) {
@@ -105,13 +110,14 @@ const Messages = (props) => {
         if (user != null) {
             setConvos(
                 <div id="convos">
+                    <ConvoPopup user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
                     <div id='convos-top'>
                         <img id='convos-user-icon' src={userImage} />
                         <div id='convos-title'>
                             Messages
                         </div>
                         <div id='convos-message-icon-container'>
-                            <img id='convos-message-icon' src={MessageSolid} />
+                            <img id='convos-message-icon' src={MessageSolid} onClick={openPopup} />
                         </div>
                     </div>
                     <div id='convos-divider'></div>

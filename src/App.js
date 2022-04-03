@@ -48,7 +48,8 @@ const App = () => {
             followsOn: false,
             notifsOn: false,
             likesOn: false,
-            searchOn: false
+            searchOn: false,
+            convosOn: false
         }
     )
     

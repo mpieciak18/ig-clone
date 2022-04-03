@@ -967,9 +967,122 @@ div#new-post-image-preview {
     width: 30px;
     border-radius: 50%;
     padding: 10px 20px;
+    object-fit: cover;
 }
 
 .search-result-name {
     font-size: large;
+    padding: 10px 20px 10px 0px;
+}
+
+/* Convo Pop-Up Styling */
+
+@media (min-width: 800px) {
+    #convo-popup {
+        width: 100vw;
+        height: calc(100vh - 50px);
+    }
+    #convo-popup-parent {
+        height: calc(100vh - 150px);
+        width: 100%;
+        max-width: 500px;
+    }
+}
+
+@media (max-width: 800px) {
+    #convo-popup {
+        width: 100%;
+        height: calc(100vh - 100px);
+    }
+    #convo-popup-parent {
+        height: calc(100vh - 150px);
+        width: 90vw;
+        max-width: 500px;
+    }
+}
+
+#convo-popup {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 50px;
+    z-index: 2;
+}
+
+#convo-popup-parent {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 10px;
+}
+
+#convo-popup-top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 0px;
+    width: 100%;
+}
+
+#convo-popup-x-button {
+    font-size: small;
+    margin-left: 20px;
+    color: rgb(0, 0, 0, 0.75);
+}
+
+#convo-popup-x-button:hover {
+    cursor: pointer;
+    color: rgb(0, 0, 0, 0.25);
+}
+
+#convo-popup-x-button-hidden {
+    font-size: small;
+    margin-right: 20px;
+    opacity: 0;
+}
+
+#convo-popup-title {
+    font-weight: bold;
+    font-size: x-large;
+}
+
+#convo-popup-middle {
+    margin-bottom: 20px;
+}
+
+#convo-popup-bottom {
+    height: 100%;
+    width: 100%;
+}
+
+.convo-result {
+    display: flex;
+    align-items: center;
+    transition: all ease-in-out .25s;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.convo-result:hover {
+    cursor: pointer;
+    background-color: rgb(200, 200, 200);
+}
+
+.convo-result-image {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    padding: 10px 20px;
+    object-fit: cover;
+}
+
+.convo-result-name {
     padding: 10px 20px 10px 0px;
 }
