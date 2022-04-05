@@ -166,6 +166,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    border-radius: 50%;
 }
 
 #profile-contents .follow-button, #profile-settings-button, #profile-logout-button {
