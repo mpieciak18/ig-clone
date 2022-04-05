@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app"
 import { getFirestore } from "firebase/firestore"
 import { getAuth, onAuthStateChanged } from "firebase/auth"
 import { getStorage } from "firebase/storage"
-import { useEffect } from "react"
+import reactEventObserver from "react-event-observer"
 
 // Firebase configuration settings
 const firebaseConfig = {
@@ -28,34 +28,15 @@ const auth = getAuth(app)
 // Storage initialization
 const storage = getStorage(app)
 
-// // Custom hook
-// const useFirebaseAuthentication = (firebase) => {
-//     const [user, setUser] = useState({
-//         loggedIn: false,
-//         id: '',
-//         name: '',
-//         username: '',
-//         email: '', 
-//         image: '',
-//         followers: ''
-//     })
+// Init firebase observer
+const firebaseObserver = reactEventObserver()
 
-//     useEffect(() =>{
-//        const unlisten = onAuthStateChanged(
-//           authUser => {
-//             authUser
-//               ? setAuthUser(authUser)
-//               : setAuthUser(null);
-//           },
-//        );
-//        return () => {
-//            unlisten();
-//        }
-//     }, []);
+onAuthStateChanged(auth, (authUser) => {
+    firebaseObserver.publish("authStateChanged", loggedIn())
+})
 
-//     return authUser
-// }
+const loggedIn = () => {
+    return (auth.currentUser != null)
+}
 
-// export default useFirebaseAuthentication;
-
-export { db, auth, storage }
+export { db, auth, storage, loggedIn, firebaseObserver }

@@ -129,7 +129,7 @@ const Messages = (props) => {
         } else {
             setConvos(null)
         }
-    }, [convosList, userImage, user])
+    }, [convosList, userImage, user, popUpState])
 
     // Load-more function that updates the convos component
     const loadMore = () => {
