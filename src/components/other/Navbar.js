@@ -150,7 +150,6 @@ const Navbar = (props) => {
                         onMouseOver={() => setNotifImg(NotificationsSolid)}
                         onMouseOut={() => setNotifImg(NotificationsHollow)}
                     />
-                    <SettingsPopup user={user} viewSettings={viewSettings} setViewSettings={setViewSettings} />
                 </div>
                 <img id="settings-button" 
                     src={settingsImg} 
@@ -160,6 +159,7 @@ const Navbar = (props) => {
                     onMouseOver={() => setSettingsImg(SettingsSolid)}
                     onMouseOut={() => setSettingsImg(SettingsHollow)}
                 />
+                <SettingsPopup user={user} viewSettings={viewSettings} setViewSettings={setViewSettings} />
             </div>
         </div>
     )
