@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import './Conversation.css'
 import { sendMessage, retrieveSingleConvo } from '../../firebase/messages.js'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { ConvoMessages } from './children/ConvoMessages'
 import { ConvoForm } from './children/ConvoForm'
 import { Navbar } from '../other/Navbar'
@@ -61,8 +61,7 @@ const Conversation = (props) => {
     // Load more messages when user reaches bottom of messages component
     const loadMore = (e) => {
         const elem = e.target
-        if ((Math.ceil(elem.scrollHeight - elem.scrollTop) == elem.clientHeight) &&
-        (allLoaded == false)) {
+        if (elem.scrollTop == 0) {
             const newMessagesNumber = messagesNumber + 20
             setMessagesNumber(newMessagesNumber)
         }
@@ -90,8 +89,11 @@ const Conversation = (props) => {
     const sendNewMessage = async (e) => {
         e.preventDefault()
         if (messageValue.length > 0) {
-            await sendMessage(messageValue, otherUserId)
+            const message = messageValue
             setMessageValue('')
+            await sendMessage(messageValue, otherUserId)
+            const elem = document.getElementById('convo-messages')
+            elem.scrollTop = elem.scrollHeight
         }
     }
 

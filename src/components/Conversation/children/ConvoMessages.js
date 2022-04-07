@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { getUrl } from "../../../firebase/storage.js"
 import { timeSince } from '../../../other/timeSince.js'
 
@@ -10,6 +10,12 @@ const ConvoMessages = (props) => {
 
     const [otherUserName, setOtherUserName] = useState(null)
 
+    const [messages, setMessages] = useState(null)
+
+    const [isInit, setIsInit] = useState(false)
+
+    const ref = useRef()
+
     // Update image source on render
     useEffect(async () => {
         if (otherUser != null) {
@@ -19,8 +25,6 @@ const ConvoMessages = (props) => {
             setOtherUserName(name)
         }
     }, [otherUser])
-
-    const [messages, setMessages] = useState()
 
     // Update messages state when messagesArr changes
     useEffect(() => {
@@ -66,8 +70,17 @@ const ConvoMessages = (props) => {
         }
     }, [messagesArr, otherUserImg, otherUserName])
 
+    // Scroll down when messages changes
+    useEffect(() => {
+        if (isInit == false && messages != null) {
+            const elem = document.getElementById('convo-messages')
+            elem.scrollTop = elem.scrollHeight
+            setIsInit(true)
+        }
+    }, [messages])
+
     return (
-        <div id='convo-messages' onScroll={loadMore}>
+        <div id='convo-messages' onScroll={loadMore} ref={ref}>
             {messages}
         </div>
     )

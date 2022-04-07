@@ -159,16 +159,15 @@ const retrieveConvos = async (quantity) => {
     const userId = auth.currentUser.uid
     const convosRef = getConvosRef(userId)
     const convosQuery = query(convosRef, orderBy("date", "desc"), limit(quantity))
-    const convoDocs = await getDocs(convosQuery)
-    let convos = []
-    convoDocs.docs.forEach(async (doc) => {
-        const convo = {
+    const convosDocs = await getDocs(convosQuery)
+    const convos = (convosDocs.docs).map(async (doc) => {
+        return {
             id: doc.id,
             lastMessage: await retrieveLatestMessage(doc.id)
         }
-        convos = [...convos, convo]
     })
-    return convos
+    const results = await Promise.all(convos)
+    return results
 }
 
 // Add snapshot to all conversation
@@ -178,15 +177,14 @@ const convosSnapshot = async (updateState, quantity) => {
     onSnapshot(convosRef, async () => {
         const convosQuery = query(convosRef, orderBy("date", "desc"), limit(quantity))
         const convosDocs = await getDocs(convosQuery)
-        let convos = []
-        convosDocs.forEach(async (doc) => {
-            const convo = {
+        const convos = (convosDocs.docs).map(async (doc) => {
+            return {
                 id: doc.id,
                 lastMessage: await retrieveLatestMessage(doc.id)
             }
-            convos = [...convos, convo]
         })
-        await updateState(convos)
+        const results = await Promise.all(convos)
+        await updateState(results)
     })
 }
 
