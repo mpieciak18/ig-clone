@@ -1,5 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
-import { useState, useEffect, useRef } from "react"
+import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom"
+import { useState, useEffect } from "react"
 import {Home} from "./components/Home/Home.js"
 import {Messages} from "./components/Messages/Messages.js"
 import {Post} from "./components/Post/Post.js"
@@ -74,7 +74,8 @@ const App = () => {
     useEffect(() => {
         if (isLoading == false && isLoggedIn == true) {
             setRoutes(
-                <BrowserRouter basename={process.env.PUBLIC_URL}>
+                // <BrowserRouter basename={process.env.PUBLIC_URL}>
+                <HashRouter>
                     <Routes>
                         <Route exact path='/' element={
                             <Home user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
@@ -100,15 +101,17 @@ const App = () => {
                         <Route exact path='/signup' element={
                             <SignUp user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
                         } />
-                        <Route exact path='/login' element={
+                        <Route exact path={process.env.PUBLIC_URL + '/login'} element={
                             <Login user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
                         } />
                     </Routes>
-                </BrowserRouter>
-            )
+                {/* </BrowserRouter> */}
+                </HashRouter>
+                )
         } else if (isLoading == false && isLoggedIn == false) {
             setRoutes(
-                <BrowserRouter basename={process.env.PUBLIC_URL}>
+                // <BrowserRouter basename={process.env.PUBLIC_URL}>
+                <HashRouter>
                     <Routes>
                         <Route exact path='/' element={
                             <Home user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
@@ -138,8 +141,9 @@ const App = () => {
                             <Login user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
                         } />
                     </Routes>
-                </BrowserRouter>
-            )
+                {/* </BrowserRouter> */}
+                </HashRouter>
+                )
         } else {
             setRoutes(null)
         }
