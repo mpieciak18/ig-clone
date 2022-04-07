@@ -1,5 +1,5 @@
 import { FollowButton } from '../../other/FollowButton.js'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { signOutUser } from '../../../firebase/users.js'
 import { useState, useEffect } from 'react'
 import MessageHollow from '../../../assets/images/dm.png'
@@ -9,8 +9,6 @@ const ProfileButtons = (props) => {
     const { user, setUser, otherUserId } = props
 
     const navigate = useNavigate()
-
-    const path = useLocation()
 
     // Init img state
     const [img, setImg] = useState(MessageHollow)
@@ -29,7 +27,7 @@ const ProfileButtons = (props) => {
     // Sends user to messages
     const clickMessages = () => {
         if (user != null) {
-            navigate('/messages', {state: {recipient: otherUserId}})
+            navigate(`/messages/${otherUserId}`)
         } else {
             navigate('/signup')
         }
