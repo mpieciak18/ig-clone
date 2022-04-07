@@ -4,10 +4,11 @@ import { getFirestore } from "firebase/firestore"
 import { getAuth, onAuthStateChanged } from "firebase/auth"
 import { getStorage } from "firebase/storage"
 import reactEventObserver from "react-event-observer"
+import { firebaseKey } from "./api.js"
 
 // Firebase configuration settings
 const firebaseConfig = {
-    apiKey: "AIzaSyAJdE_RLKn6Y9YImHw5ZiOF-rdvQt5GIZk",
+    apiKey: firebaseKey,
     authDomain: "ig-clone-5b7ab.firebaseapp.com",
     projectId: "ig-clone-5b7ab",
     storageBucket: "ig-clone-5b7ab.appspot.com",
