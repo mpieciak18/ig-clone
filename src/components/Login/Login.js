@@ -2,8 +2,7 @@ import './Login.css'
 import { Navbar } from '../other/Navbar.js'
 import { signInUser } from '../../firebase/users.js'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
-import { useEffect } from 'react/cjs/react.development'
+import { useState, useEffect } from 'react'
 
 const Login = (props) => {
     // Redirect to home if already logged in
