@@ -42,7 +42,7 @@ const SearchPopup = (props) => {
                 const userHandle = result.item.data.username
                 const redirect = () => {
                     navigate(`/${result.item.id}`)
-                    window.location.reload()
+                    updatePopUp()
                 }
                 return (
                     <div className="search-result" onClick={redirect} key={result.item.id}>

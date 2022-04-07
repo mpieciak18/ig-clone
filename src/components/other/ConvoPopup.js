@@ -52,7 +52,7 @@ const ConvoPopup = (props) => {
                     const userHandle = result.item.data.username
                     const redirect = () => {
                         navigate(`/messages/${result.item.id}`)
-                        window.location.reload()
+                        updatePopUp()
                     }
                     return (
                         <div className="convo-result" onClick={redirect} key={result.item.id}>
