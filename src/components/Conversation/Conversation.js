@@ -67,8 +67,6 @@ const Conversation = (props) => {
         if (messageValue.length > 0) {
             await sendMessage(messageValue, otherUserId)
             setMessageValue('')
-            // const newMessagesArr = await retrieveSingleConvo(otherUserId)
-            // setMessagesArr(newMessagesArr)
         }
     }
 
@@ -87,7 +85,7 @@ const Conversation = (props) => {
                     {convoTitle}
                     <div id='convo-back-arrow-hidden'>« Go Back</div>
                 </div>
-                <ConvoMessages user={user} otherUserId={otherUserId} messagesArr={messagesArr} />
+                <ConvoMessages user={user} otherUser={otherUser} messagesArr={messagesArr} />
                 <ConvoForm messageValue={messageValue} updateMessage={updateMessage} sendNewMessage={sendNewMessage} />
             </div>
         </div>

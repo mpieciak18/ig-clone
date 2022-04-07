@@ -81,10 +81,7 @@
 
 #convo-messages {
     height: 100%;
-    overflow: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    overflow-y: scroll;
 }
 
 .message-block-container {
@@ -92,6 +89,14 @@
     flex-direction: column;
     align-items: flex-end;
     padding: 0px 20px;
+}
+
+.message-block-container.self {
+    align-items: flex-end;
+}
+
+.message-block-container.other {
+    align-items: flex-start;
 }
 
 .message-name {
@@ -107,17 +112,16 @@
     padding: 2.5px 0px;
 }
 
-.message-block.self {
+.self .message-block {
     flex-direction: row-reverse;
 }
 
-.message-block.other {
+.other .message-block {
     flex-direction: row;
     justify-content: flex-start;
 }
 
 .message-block-bubble {
-    color: white;
     padding: 10px;
     border-radius: 25px;
     min-height: 20px;
@@ -126,18 +130,19 @@
 
 .self .message-block-bubble {
     background-color: rgb(0, 153, 255);
+    color: white;
 }
 
 .other .message-block-bubble {
-    background-color: rgb(0, 153, 255);
+    background-color: lightgrey;
+    color: inherit;
 }
 
 .other .message-block-icon-container {
     display: flex;
     justify-content: center;
-    height: 60px;
+    height: 40px;
     width: 60px;
-    min-width: 60px;
 }
 
 .other .message-block-icon {

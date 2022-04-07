@@ -50,9 +50,9 @@ const ConvoMessages = (props) => {
 
 
                 return (
-                    <div className='message-block-container' key={message.id}>
+                    <div className={`message-block-container ${sender}`} key={message.id}>
                         {name}
-                        <div className={`message-block ${sender}`}>
+                        <div className='message-block'>
                             <div className='message-block-icon-container'>{icon}</div>
                             <div className='message-block-bubble'>
                                 <div className='message-block-message'>{message.data.message}</div>
