@@ -40,6 +40,8 @@ const getMessageRef = (userId, otherUserId, messageId=null) => {
 // NOTE: user A's ID is the convo ID for user B & vice-versa
 const sendMessage = async (message, otherUserId) => {
     const userId = auth.currentUser.uid
+    // First, add convo docs to avoid "empty doc" error for new conversations
+    await addConvos(userId, otherUserId)
     // First, determine if last message in convo was also sent by user
     let senderChange
     const lastMessage = await retrieveLatestMessage(otherUserId)
@@ -60,14 +62,33 @@ const sendMessage = async (message, otherUserId) => {
     await setDoc(senderMessageRef, messageData)
     // Third, add message to recipient's subcollection
     const messageId = senderMessageRef.id
-    const recipMessageRef = getMessageRef(otherUserId, userId, messageId)
+    const recipMessageRef = getMessageRef(otherUserId, userId)
     await setDoc(recipMessageRef, messageData)
     // Fourth, add notification to recipient's subcollection
     await addNotification('message', otherUserId)
     // Sixth, update convo date fields
     await updateConvoDate(userId, otherUserId, messageData.date)
-    // Seventh, return message id
-    return messageId
+    // Seventh, return message object
+    return {
+        id: messageId,
+        data: messageData
+    }
+}
+
+// Add convo docs to both users
+const addConvos = async (userId, otherUserId) => {
+    const dummyDate = {date: ""}
+    const ownConvoRef = getConvoRef(userId, otherUserId)
+    const otherConvoRef = getConvoRef(otherUserId, userId)
+    const ownConvoDoc = await getDoc(ownConvoRef)
+    const otherConvoDoc = await getDoc(otherConvoRef)
+    if (ownConvoDoc.exists() != true) {
+        setDoc(ownConvoRef, dummyDate)
+    }
+    if (otherConvoDoc.exists() != true) {
+        setDoc(otherConvoRef, dummyDate)
+    }
+
 }
 
 // Update both users' convo date field
@@ -82,7 +103,7 @@ const updateConvoDate = async (userId, otherUserId, date) => {
 const retrieveSingleConvo = async (otherUserId) => {
     const userId = auth.currentUser.uid
     const messagesRef = getMessagesRef(userId, otherUserId)
-    const messagesQuery = query(messagesRef, orderBy("date", "desc"))
+    const messagesQuery = query(messagesRef, orderBy("date", "asc"))
     const messageDocs = await getDocs(messagesQuery)
     let messages = []
     messageDocs.forEach((doc) => {
@@ -102,11 +123,15 @@ const retrieveLatestMessage = async (otherUserId) => {
     const messagesRef = getMessagesRef(userId, otherUserId)
     const singleMessageRef = query(messagesRef, orderBy("date", "desc"), limit(1))
     const messageDoc = (await getDocs(singleMessageRef)).docs[0]
-    const message = {
-        id: messageDoc.id,
-        data: messageDoc.data()
+    if (messageDoc == undefined) {
+        return null
+    } else {
+        const message = {
+            id: messageDoc.id,
+            data: messageDoc.data()
+        }
+        return message
     }
-    return message
 }
 
 // Retrieve all conversations

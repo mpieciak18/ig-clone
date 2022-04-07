@@ -45,18 +45,22 @@ const ConvoPopup = (props) => {
     useEffect(async () => {
         if (results != null) {
             const newArr = await results.map(async result => {
-                const userImage = await getUrl(result.item.data.image)
-                const userHandle = result.item.data.username
-                const redirect = () => {
-                    navigate(`/messages/${result.item.id}`)
-                    window.location.reload()
+                if (result.item.id == user.id) {
+                    return null
+                } else {
+                    const userImage = await getUrl(result.item.data.image)
+                    const userHandle = result.item.data.username
+                    const redirect = () => {
+                        navigate(`/messages/${result.item.id}`)
+                        window.location.reload()
+                    }
+                    return (
+                        <div className="convo-result" onClick={redirect} key={result.item.id}>
+                            <img className="convo-result-image" src={userImage} />
+                            <div className="convo-result-name">@ {userHandle}</div>
+                        </div>
+                    )
                 }
-                return (
-                    <div className="convo-result" onClick={redirect} key={result.item.id}>
-                        <img className="convo-result-image" src={userImage} />
-                        <div className="convo-result-name">@ {userHandle}</div>
-                    </div>
-                )
             })
             const newResComp = await Promise.all(newArr)
             setResultsComp(newResComp)

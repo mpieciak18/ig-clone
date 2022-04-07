@@ -32,9 +32,7 @@ const Messages = (props) => {
     const [convos, setConvos] = useState(null)
     
     // Open search pop-up on click
-    const openPopup = () => {
-        updatePopUp('convosOn')
-    }
+    const openPopup = () => updatePopUp('convosOn')
 
     // Update userImage state when user changes
     useEffect(async () => {

@@ -58,7 +58,8 @@ const App = () => {
     )
     
     // Updates pop-ups state. If a popUpState property is passed, then said property is set to true
-    const updatePopUp = async (popUp = null) => {
+    const updatePopUp = (popUp = null) => {
+        console.log(popUp)
         const newState = { ...popUpState }
         for (const [key, val] of Object.entries(popUpState)) {
             if (key == popUp) {
@@ -67,21 +68,12 @@ const App = () => {
                 newState[key] = false
             }
         }
-        await setPopUpState(newState)
-    }
-
-    // Define private route handler
-    const PrivateRoute = ({ children }) => {
-        if (isLoggedIn) {
-            return children
-        } else {
-            return <Navigate to='/login' />
-        }
+        setPopUpState(newState)
     }
 
     // Update browser routes when pending, user, & popUpState change
     useEffect(() => {
-        if (isLoading == false) {
+        if (isLoading == false && isLoggedIn == true) {
             setRoutes(
                 <BrowserRouter basename={process.env.PUBLIC_URL}>
                     <Routes>
@@ -89,9 +81,7 @@ const App = () => {
                             <Home user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
                         } />
                         <Route exact path='/messages' element={
-                            <PrivateRoute>
-                                <Messages user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
-                            </PrivateRoute>
+                            <Messages user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
                         } />
                         <Route exact path='/:postOwnerId/:postId' element={
                             <Post user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
@@ -100,22 +90,50 @@ const App = () => {
                             <Profile user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
                         } />
                         <Route exact path='/messages/:otherUserId' element={
-                            <PrivateRoute>
-                                <Conversation user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
-                            </PrivateRoute>
+                            <Conversation user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
                         } />
                         <Route exact path='/saved' element={
-                            <PrivateRoute>
-                                <Saved user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
-                            </PrivateRoute>
+                            <Saved user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
                         } />
                         <Route exact path='/settings' element={
-                            <PrivateRoute>
-                                <Settings user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
-                            </PrivateRoute>
+                            <Settings user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
                         } />
                         <Route exact path='/signup' element={
-                                <SignUp user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
+                            <SignUp user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
+                        } />
+                        <Route exact path='/login' element={
+                            <Login user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
+                        } />
+                    </Routes>
+                </BrowserRouter>
+            )
+        } else if (isLoading == false && isLoggedIn == false) {
+            setRoutes(
+                <BrowserRouter basename={process.env.PUBLIC_URL}>
+                    <Routes>
+                        <Route exact path='/' element={
+                            <Home user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
+                        } />
+                        <Route exact path='/messages' element={
+                            <Login user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
+                        } />
+                        <Route exact path='/:postOwnerId/:postId' element={
+                            <Post user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
+                        } />
+                        <Route exact path='/:otherUserId' element={
+                            <Profile user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
+                        } />
+                        <Route exact path='/messages/:otherUserId' element={
+                            <Login user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
+                        } />
+                        <Route exact path='/saved' element={
+                            <Login user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
+                        } />
+                        <Route exact path='/settings' element={
+                            <Login user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
+                        } />
+                        <Route exact path='/signup' element={
+                            <SignUp user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
                         } />
                         <Route exact path='/login' element={
                             <Login user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />

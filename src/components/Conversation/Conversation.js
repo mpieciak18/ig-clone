@@ -1,50 +1,89 @@
-import { Navigate, useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import './Conversation.css'
 import { sendMessage, retrieveSingleConvo } from '../../firebase/messages.js'
-import {MessageBlock} from './children/MessageBlock.js'
+import { useEffect, useState } from 'react'
+import { ConvoMessages } from './children/ConvoMessages'
+import { ConvoForm } from './children/ConvoForm'
+import { Navbar } from '../other/Navbar'
+import { findUser } from '../../firebase/users'
 
 const Conversation = (props) => {
-    const { user, setUser } = props
+    const { user, setUser, popUpState, updatePopUp } = props
+
+    const navigate = useNavigate()
 
     // Grab other user's id from url parameters
-    const { userId } = useParams()
+    const { otherUserId } = useParams()
+
+    // Init other user state
+    const [otherUser, setOtherUser] = useState(null)
+
+    // Init convo title component state
+    const [convoTitle, setConvoTitle] = useState(null)
+
+    // Init messages array state
+    const [messagesArr, setMessagesArr] = useState(null)
+
+    // Set initial message input value & reset it on submission
+    const [messageValue, setMessageValue] = useState('')
+
+    // Update other user & messages array states when user changes
+    useEffect(async () => {
+        if (user != null) {
+            const otherUser = await findUser(otherUserId)
+            setOtherUser(otherUser)
+            const newMessagesArr = await retrieveSingleConvo(otherUserId)
+            setMessagesArr(newMessagesArr)
+        }
+    }, [user])
+
+    // Update convo title component when other user state changes
+    useEffect(() => {
+        if (otherUser != null) {
+            setConvoTitle(
+                <div id='convo-title-container'>
+                    <div id='title'>{otherUser.data.name}</div>
+                    <div id='subtitle' onClick={redirect}>@{otherUser.data.username}</div>
+                </div>
+            )
+        }
+    }, [otherUser])
+
+    // Updates message state / field
+    const updateMessage = (e) => {
+        const val = e.target.value
+        setMessageValue(val)
+    }
 
     // Add new message to specific convo in db
-    const sendNewMessage = async (event) => {
-        event.preventDefault()
-        const message = event.target.message
-        if (message.length > 0) {
-            await sendMessage(message, userId)
+    const sendNewMessage = async (e) => {
+        e.preventDefault()
+        if (messageValue.length > 0) {
+            await sendMessage(messageValue, otherUserId)
+            setMessageValue('')
+            const newMessagesArr = await retrieveSingleConvo(otherUserId)
+            setMessagesArr(newMessagesArr)
         }
     }
 
     // Redirect back to messages page
-    const redirect = () => {
-        return <Navigate to='/messages' />
-    }
+    const goBack = () => navigate('/messages')
 
-    // Retrieve all messages in conversation
-    const messages = retrieveSingleConvo(userId)
+    // Redirect to other user's page
+    const redirect = () => navigate(`/${otherUserId}`)
 
     return (
         <div id="conversation" className='page'>
-            <div id="convo-back-button" onClick={redirect}>
-                <div id='convo-back-arrow'>⇽</div>
-                <div id='convo-back-text'>Back to Messages</div>
+            <Navbar user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
+            <div id='conversation-container'>
+                <div id="convo-header">
+                    <div id='convo-back-arrow' onClick={goBack}>« Go Back</div>
+                    {convoTitle}
+                    <div id='convo-back-arrow-hidden'>« Go Back</div>
+                </div>
+                <ConvoMessages user={user} otherUserId={otherUserId} messagesArr={messagesArr} />
+                <ConvoForm messageValue={messageValue} updateMessage={updateMessage} sendNewMessage={sendNewMessage} />
             </div>
-            <div id="convo-messages">
-                {messages.map((message) => {
-                    return (
-                        <MessageBlock user={user} messageData={message.data} />
-                    )
-                })}
-            </div>
-            <form className="convo-message-bar" onSubmit={sendNewMessage}>
-                <input type="text" name="message" className="convo-message-bar-input" placeholder="Send a message..." />
-                <button type="submit" className="convo-message-button">
-                    <img className="convo-message-button-icon" />
-                </button>
-            </form>
         </div>
     )
 }
