@@ -49,7 +49,6 @@ const Messages = (props) => {
         if (user != null) {
             const newConvosArr = await retrieveConvos(convosCount)
             if (newConvosArr != null) {
-                console.log(convosCount)
                 setConvosArr(newConvosArr)
                 if (newConvosArr.length < convosCount) {
                     setAllLoaded('true')
