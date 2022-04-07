@@ -6,6 +6,7 @@ import { ConvoMessages } from './children/ConvoMessages'
 import { ConvoForm } from './children/ConvoForm'
 import { Navbar } from '../other/Navbar'
 import { findUser } from '../../firebase/users'
+import { convoSnapshot } from '../../firebase/messages.js'
 
 const Conversation = (props) => {
     const { user, setUser, popUpState, updatePopUp } = props
@@ -26,6 +27,11 @@ const Conversation = (props) => {
 
     // Set initial message input value & reset it on submission
     const [messageValue, setMessageValue] = useState('')
+
+    // Use onSnapshot to update messages array real-time
+    useEffect(() => {
+        convoSnapshot(otherUserId, setMessagesArr)
+    }, [])
 
     // Update other user & messages array states when user changes
     useEffect(async () => {
@@ -61,8 +67,8 @@ const Conversation = (props) => {
         if (messageValue.length > 0) {
             await sendMessage(messageValue, otherUserId)
             setMessageValue('')
-            const newMessagesArr = await retrieveSingleConvo(otherUserId)
-            setMessagesArr(newMessagesArr)
+            // const newMessagesArr = await retrieveSingleConvo(otherUserId)
+            // setMessagesArr(newMessagesArr)
         }
     }
 

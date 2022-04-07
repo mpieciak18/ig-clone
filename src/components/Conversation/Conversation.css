@@ -113,6 +113,7 @@
 
 .message-block.other {
     flex-direction: row;
+    justify-content: flex-start;
 }
 
 .message-block-bubble {

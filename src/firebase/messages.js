@@ -9,7 +9,8 @@ import {
     query,
     limit,
     orderBy,
-    updateDoc
+    updateDoc,
+    onSnapshot
 } from 'firebase/firestore'
 
 // Helper functions that return doc/collection references from db
@@ -116,6 +117,25 @@ const retrieveSingleConvo = async (otherUserId) => {
     return messages
 }
 
+// Retrieve single conversation & return array of message objects
+const convoSnapshot = async (otherUserId, updateState) => {
+    const userId = auth.currentUser.uid
+    const messagesRef = getMessagesRef(userId, otherUserId)
+    onSnapshot(messagesRef, async () => {
+        const messagesQuery = query(messagesRef, orderBy("date", "asc"))
+        const messageDocs = await getDocs(messagesQuery)
+        let messages = []
+        messageDocs.forEach((doc) => {
+            const message = {
+                id: doc.id,
+                data: doc.data()
+            }
+            messages = [...messages, message]
+        })
+        await updateState(messages)
+    })
+}
+
 // Retrieve latest message from a conversation
 // NOTE: user A's ID is the convo ID for user B & vice-versa
 const retrieveLatestMessage = async (otherUserId) => {
@@ -151,4 +171,4 @@ const retrieveConvos = async (quantity) => {
     return result
 }
 
-export { sendMessage, retrieveConvos, retrieveSingleConvo, retrieveLatestMessage }
+export { sendMessage, retrieveConvos, retrieveSingleConvo, retrieveLatestMessage, convoSnapshot }
