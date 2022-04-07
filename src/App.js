@@ -59,7 +59,6 @@ const App = () => {
     
     // Updates pop-ups state. If a popUpState property is passed, then said property is set to true
     const updatePopUp = (popUp = null) => {
-        console.log(popUp)
         const newState = { ...popUpState }
         for (const [key, val] of Object.entries(popUpState)) {
             if (key == popUp) {
