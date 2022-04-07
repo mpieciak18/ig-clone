@@ -74,7 +74,10 @@ const Follows = (props) => {
                 usersArr.map(async (otherUser) => {
                     const userId = otherUser.data.otherUser
                     const userInfo = await findUser(userId)
-                    const redirect = () => navigate(`/${userId}`)
+                    const redirect = () => {
+                        navigate(`/${userId}`)
+                        updatePopUp()
+                    }
                     const image = await getUrl(userInfo.data.image)
                     return (
                         <div className='follow-row' key={userId}>
