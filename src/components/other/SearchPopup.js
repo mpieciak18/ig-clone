@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { useNavigate, useLocation } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { userSearch } from "../../other/search.js"
 import { getUrl } from "../../firebase/storage.js"
 
@@ -8,7 +8,7 @@ const SearchPopup = (props) => {
 
     const navigate = useNavigate()
 
-    const location = useLocation()
+    const location = useParams()
 
     // Init results array state
     const [results, setResults] = useState(null)
@@ -44,7 +44,7 @@ const SearchPopup = (props) => {
                 const userHandle = result.item.data.username
                 const redirect = () => {
                     updatePopUp()
-                    if (location.postOwnerId == null) {
+                    if (location.otherUserId == null) {
                         navigate(`/${result.item.id}`)
                     } else {
                         navigate(`/${result.item.id}`)

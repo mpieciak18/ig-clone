@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { getFollowing, getFollowers } from '../../firebase/followers.js'
 import { FollowButton } from './FollowButton.js'
 import './other.css'
@@ -11,7 +11,7 @@ const Follows = (props) => {
 
     const navigate = useNavigate()
 
-    const location = useLocation()
+    const location = useParams()
 
     // Init following/follower users count
     const [usersCount, setUsersCount] = useState(20)
@@ -78,7 +78,8 @@ const Follows = (props) => {
                     const userInfo = await findUser(userId)
                     const redirect = () => {
                         updatePopUp()
-                        if (location.postOwnerId == null) {
+                        console.log(location)
+                        if (location.otherUserId == null) {
                             navigate(`/${userId}`)
                         } else {
                             navigate(`/${userId}`)
