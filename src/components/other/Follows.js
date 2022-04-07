@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { getFollowing, getFollowers } from '../../firebase/followers.js'
 import { FollowButton } from './FollowButton.js'
 import './other.css'
@@ -10,6 +10,8 @@ const Follows = (props) => {
     const { user, setUser, otherUserId, updatePopUp, initTab } = props
 
     const navigate = useNavigate()
+
+    const location = useLocation()
 
     // Init following/follower users count
     const [usersCount, setUsersCount] = useState(20)
@@ -75,8 +77,13 @@ const Follows = (props) => {
                     const userId = otherUser.data.otherUser
                     const userInfo = await findUser(userId)
                     const redirect = () => {
-                        navigate(`/${userId}`)
                         updatePopUp()
+                        if (location.postOwnerId == null) {
+                            navigate(`/${userId}`)
+                        } else {
+                            navigate(`/${userId}`)
+                            window.location.reload()
+                        }
                     }
                     const image = await getUrl(userInfo.data.image)
                     return (

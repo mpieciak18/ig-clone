@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import { userSearch } from "../../other/search.js"
 import { getUrl } from "../../firebase/storage.js"
 
@@ -7,6 +7,8 @@ const SearchPopup = (props) => {
     const { user, popUpState, updatePopUp, value } = props
 
     const navigate = useNavigate()
+
+    const location = useLocation()
 
     // Init results array state
     const [results, setResults] = useState(null)
@@ -41,8 +43,13 @@ const SearchPopup = (props) => {
                 const userImage = await getUrl(result.item.data.image)
                 const userHandle = result.item.data.username
                 const redirect = () => {
-                    navigate(`/${result.item.id}`)
                     updatePopUp()
+                    if (location.postOwnerId == null) {
+                        navigate(`/${result.item.id}`)
+                    } else {
+                        navigate(`/${result.item.id}`)
+                        window.location.reload()
+                    }
                 }
                 return (
                     <div className="search-result" onClick={redirect} key={result.item.id}>
