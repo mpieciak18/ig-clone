@@ -93,7 +93,10 @@ const Notifications = (props) => {
                     // Set up requisite variables
                     const otherUserId = notif.data.otherUser
                     const otherUser = await findUser(otherUserId)
-                    const redirect = () => navigate(`/${otherUserId}`)
+                    const redirectToProfile = () => {
+                        navigate(`/${otherUserId}`)
+                        updatePopUp()
+                    }
                     const image = await getUrl(otherUser.data.image)
                     // Set up text portion of returned component
                     let path
@@ -111,12 +114,16 @@ const Notifications = (props) => {
                         path = `/messages/${otherUserId}`
                         text = 'messaged you.'
                     }
+                    const redirectToPath = () => {
+                        navigate(`/${path}`)
+                        updatePopUp()
+                    }
                     const time = timeSince(notif.data.date)
                     return (
                         <div className='notif-row' key={notif.id}>
                             <div className='notif-row-left'>
-                                <img className='notif-image' onClick={redirect} src={image} />
-                                <div className='notif-text' onClick={() => navigate(path)}>
+                                <img className='notif-image' onClick={redirectToProfile} src={image} />
+                                <div className='notif-text' onClick={redirectToPath}>
                                     <div className='notif-name'>{otherUser.data.name}</div>
                                     <div className='notif-action'>{text}</div>
                                 </div>
