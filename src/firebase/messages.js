@@ -101,10 +101,10 @@ const updateConvoDate = async (userId, otherUserId, date) => {
 }
 
 // Retrieve single conversation & return array of message objects
-const retrieveSingleConvo = async (otherUserId) => {
+const retrieveSingleConvo = async (otherUserId, quantity) => {
     const userId = auth.currentUser.uid
     const messagesRef = getMessagesRef(userId, otherUserId)
-    const messagesQuery = query(messagesRef, orderBy("date", "asc"))
+    const messagesQuery = query(messagesRef, orderBy("date", "desc"), limit(quantity))
     const messageDocs = await getDocs(messagesQuery)
     let messages = []
     messageDocs.forEach((doc) => {
@@ -112,17 +112,17 @@ const retrieveSingleConvo = async (otherUserId) => {
             id: doc.id,
             data: doc.data()
         }
-        messages = [...messages, message]
+        messages = [message, ...messages]
     })
     return messages
 }
 
-// Retrieve single conversation & return array of message objects
-const convoSnapshot = async (otherUserId, updateState) => {
+// Add snapshot to single conversation
+const convoSnapshot = async (otherUserId, updateState, quantity) => {
     const userId = auth.currentUser.uid
     const messagesRef = getMessagesRef(userId, otherUserId)
     onSnapshot(messagesRef, async () => {
-        const messagesQuery = query(messagesRef, orderBy("date", "asc"))
+        const messagesQuery = query(messagesRef, orderBy("date", "desc"), limit(quantity))
         const messageDocs = await getDocs(messagesQuery)
         let messages = []
         messageDocs.forEach((doc) => {
@@ -130,7 +130,7 @@ const convoSnapshot = async (otherUserId, updateState) => {
                 id: doc.id,
                 data: doc.data()
             }
-            messages = [...messages, message]
+            messages = [message, ...messages]
         })
         await updateState(messages)
     })
@@ -160,15 +160,34 @@ const retrieveConvos = async (quantity) => {
     const convosRef = getConvosRef(userId)
     const convosQuery = query(convosRef, orderBy("date", "desc"), limit(quantity))
     const convoDocs = await getDocs(convosQuery)
-    const convos = (convoDocs.docs).map(async (doc) => {
+    let convos = []
+    convoDocs.docs.forEach(async (doc) => {
         const convo = {
             id: doc.id,
             lastMessage: await retrieveLatestMessage(doc.id)
         }
-        return convo
+        convos = [...convos, convo]
     })
-    const result = await Promise.all(convos)
-    return result
+    return convos
 }
 
-export { sendMessage, retrieveConvos, retrieveSingleConvo, retrieveLatestMessage, convoSnapshot }
+// Add snapshot to all conversation
+const convosSnapshot = async (updateState, quantity) => {
+    const userId = auth.currentUser.uid
+    const convosRef = getConvosRef(userId)
+    onSnapshot(convosRef, async () => {
+        const convosQuery = query(convosRef, orderBy("date", "desc"), limit(quantity))
+        const convosDocs = await getDocs(convosQuery)
+        let convos = []
+        convosDocs.forEach(async (doc) => {
+            const convo = {
+                id: doc.id,
+                lastMessage: await retrieveLatestMessage(doc.id)
+            }
+            convos = [...convos, convo]
+        })
+        await updateState(convos)
+    })
+}
+
+export { sendMessage, retrieveConvos, retrieveSingleConvo, retrieveLatestMessage, convoSnapshot, convosSnapshot }

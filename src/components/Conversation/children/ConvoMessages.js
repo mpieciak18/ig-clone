@@ -4,7 +4,7 @@ import { timeSince } from '../../../other/timeSince.js'
 
 const ConvoMessages = (props) => {
 
-    const { user, otherUser, messagesArr } = props
+    const { user, otherUser, messagesArr, loadMore } = props
 
     const [otherUserImg, setOtherUserImg] = useState(null)
 
@@ -67,7 +67,7 @@ const ConvoMessages = (props) => {
     }, [messagesArr, otherUserImg, otherUserName])
 
     return (
-        <div id='convo-messages'>
+        <div id='convo-messages' onScroll={loadMore}>
             {messages}
         </div>
     )

@@ -22,6 +22,12 @@ const Conversation = (props) => {
     // Init convo title component state
     const [convoTitle, setConvoTitle] = useState(null)
 
+    // Init messages number state
+    const [messagesNumber, setMessagesNumber] = useState(20)
+
+    // Init allLoades state
+    const [allLoaded, setAllLoaded] = useState(false)
+
     // Init messages array state
     const [messagesArr, setMessagesArr] = useState(null)
 
@@ -30,7 +36,7 @@ const Conversation = (props) => {
 
     // Use onSnapshot to update messages array real-time
     useEffect(() => {
-        convoSnapshot(otherUserId, setMessagesArr)
+        convoSnapshot(otherUserId, setMessagesArr, messagesNumber)
     }, [])
 
     // Update other user & messages array states when user changes
@@ -38,10 +44,29 @@ const Conversation = (props) => {
         if (user != null) {
             const otherUser = await findUser(otherUserId)
             setOtherUser(otherUser)
-            const newMessagesArr = await retrieveSingleConvo(otherUserId)
+            const newMessagesArr = await retrieveSingleConvo(otherUserId, messagesNumber)
             setMessagesArr(newMessagesArr)
         }
     }, [user])
+
+    // Update messagesArr when messagesNumber changes
+    useEffect(async () => {
+        const newMessagesArr = await retrieveSingleConvo(otherUserId, messagesNumber)
+        setMessagesArr(newMessagesArr)
+        if (newMessagesArr.length < messagesNumber) {
+            setAllLoaded(true)
+        }
+    }, [messagesNumber])
+
+    // Load more messages when user reaches bottom of messages component
+    const loadMore = (e) => {
+        const elem = e.target
+        if ((Math.ceil(elem.scrollHeight - elem.scrollTop) == elem.clientHeight) &&
+        (allLoaded == false)) {
+            const newMessagesNumber = messagesNumber + 20
+            setMessagesNumber(newMessagesNumber)
+        }
+    }
 
     // Update convo title component when other user state changes
     useEffect(() => {
@@ -85,7 +110,7 @@ const Conversation = (props) => {
                     {convoTitle}
                     <div id='convo-back-arrow-hidden'>« Go Back</div>
                 </div>
-                <ConvoMessages user={user} otherUser={otherUser} messagesArr={messagesArr} />
+                <ConvoMessages user={user} otherUser={otherUser} messagesArr={messagesArr} loadMore={loadMore} />
                 <ConvoForm messageValue={messageValue} updateMessage={updateMessage} sendNewMessage={sendNewMessage} />
             </div>
         </div>
