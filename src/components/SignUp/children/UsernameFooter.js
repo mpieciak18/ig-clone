@@ -41,7 +41,7 @@ const UsernameFooter = (props) => {
         // Check if username contains spaces or symbols other than "-" or "_"
         else if (username.match(/^[a-zA-Z0-9_.-]*$/) == null) {
             setUsernamePasses(false)
-            setFooterText('No spaces or symbols, other than "-" or "_"!')
+            setFooterText('No spaces or symbols, other than "-", "_", or "."!')
             setFooterClass('red')
         }
         // Username passes
