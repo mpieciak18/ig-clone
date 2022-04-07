@@ -32,7 +32,7 @@ const CommentsPreview = (props) => {
                 const commenterName = commenter.data.name
                 return (
                     <div className='post-comment' key={comment.id}>
-                        <Link to={`/profile/${commenterId}`} className='post-comment-name'>{commenterName}</Link>
+                        <Link to={`/${commenterId}`} className='post-comment-name'>{commenterName}</Link>
                         <div className='post-comment-text'>{comment.data.text}</div>
                     </div>
                 )
