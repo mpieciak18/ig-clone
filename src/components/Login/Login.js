@@ -58,7 +58,7 @@ const Login = (props) => {
                     </form>
                 </div>
             )
-        } else {}
+        }
     }, [errorClass, user, email, password])
 
     return (
