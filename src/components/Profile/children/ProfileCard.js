@@ -2,9 +2,12 @@ import { getUrl } from '../../../firebase/storage.js'
 import { useState, useEffect } from 'react'
 import { findUser } from '../../../firebase/users.js'
 import { Follows } from '../../other/Follows.js'
+import { useNavigate } from 'react-router-dom'
 
 const ProfileCard = (props) => {
     const { user, setUser, otherUserId, popUpState, updatePopUp } = props
+
+    const navigate = useNavigate()
 
     // Init profile image state
     const [img, setImg] = useState(null)
@@ -23,14 +26,22 @@ const ProfileCard = (props) => {
 
     // Open Follows pop-up (following)
     const clickFollowing = () => {
-        setFollowingVsFollower('following')
-        updatePopUp('followsOn')
+        if (user != null) {
+            setFollowingVsFollower('following')
+            updatePopUp('followsOn')
+        } else {
+            navigate('/signup')
+        }
     }
 
     // Open Follows pop-up (followers)
     const clickFollowers = () => {
-        setFollowingVsFollower('followers')
-        updatePopUp('followsOn')
+        if (user != null) {
+            setFollowingVsFollower('followers')
+            updatePopUp('followsOn')
+        } else {
+            navigate('/signup')
+        }
     }
 
     // Update img, otherUser, & otherUserFollowers states on render
