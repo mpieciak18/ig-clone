@@ -74,7 +74,6 @@ const App = () => {
     useEffect(() => {
         if (isLoading == false && isLoggedIn == true) {
             setRoutes(
-                // <BrowserRouter basename={process.env.PUBLIC_URL}>
                 <HashRouter>
                     <Routes>
                         <Route exact path='/' element={
@@ -101,16 +100,14 @@ const App = () => {
                         <Route exact path='/signup' element={
                             <SignUp user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
                         } />
-                        <Route exact path={process.env.PUBLIC_URL + '/login'} element={
+                        <Route exact path={'/login'} element={
                             <Login user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
                         } />
                     </Routes>
-                {/* </BrowserRouter> */}
                 </HashRouter>
                 )
         } else if (isLoading == false && isLoggedIn == false) {
             setRoutes(
-                // <BrowserRouter basename={process.env.PUBLIC_URL}>
                 <HashRouter>
                     <Routes>
                         <Route exact path='/' element={
@@ -141,7 +138,6 @@ const App = () => {
                             <Login user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
                         } />
                     </Routes>
-                {/* </BrowserRouter> */}
                 </HashRouter>
                 )
         } else {
