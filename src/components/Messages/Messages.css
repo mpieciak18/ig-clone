@@ -5,6 +5,7 @@
     .convo-row-right {
         margin-left: 10px;
         width: 100%;
+        max-width: calc(100% - 20px);
     }
 }
 
