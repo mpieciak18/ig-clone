@@ -1,8 +1,8 @@
 {
-  "name": "ig-clone",
+  "name": "markstagram",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://mpieciak18.github.io/ig-clone",
+  "homepage": "https://mpieciak18.github.io/markstagram",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
