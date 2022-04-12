@@ -5,7 +5,7 @@ import { NewPost } from './NewPost.js'
 import { SettingsPopup } from './SettingsPopup.js'
 import { Notifications } from './Notifications.js'
 import { SearchPopup } from './SearchPopup.js'
-import LogoSolid from '../../assets/images/ig-logo-4.png'
+import Logo from '../../assets/images/ig-logo-2.png'
 import HomeHollow from '../../assets/images/home.png'
 import HomeSolid from '../../assets/images/home-solid.png'
 import SettingsHollow from '../../assets/images/profile.png'
@@ -108,10 +108,10 @@ const Navbar = (props) => {
         <div id="navbar">
                 <NewPost user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
                 {notifications}
-                <img id="navbar-logo"
-                    src={LogoSolid}
-                    onClick={clickHome}
-                />
+                <div id="navbar-logo" onClick={clickHome}>
+                    <img id="navbar-logo-icon" src={Logo} />
+                    <div id="navbar-logo-text">Markstagram</div>
+                </div>
                 <input id="navbar-search" type='text' placeholder='Search' onChange={updateSearchVal} onFocus={clickSearch} />
                 <SearchPopup user={user} popUpState={popUpState} updatePopUp={updatePopUp} value={searchVal} />
                 <div id="navbar-buttons">
