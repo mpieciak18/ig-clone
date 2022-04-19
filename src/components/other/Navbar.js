@@ -105,7 +105,7 @@ const Navbar = (props) => {
             await setNotifications(<Notifications user={user} updatePopUp={updatePopUp} />)
             setNewPost(null)
             setSearchPopUp(null)
-            disableBodyScroll(document.getElementById('notifs'))                   
+            disableBodyScroll(document.getElementById('notifs-list'))                   
         } else if (popUpState.newPostOn == true) {
             await setNewPost(<NewPost user={user} setUser={setUser} updatePopUp={updatePopUp} />)
             setNotifications(null)
