@@ -71,12 +71,7 @@ const NewPost = (props) => {
     }
 
     // Closes newPost
-    const hideNewPost = (e) => {
-        const id = e.target.id
-        if (id == "new-post" || id == "new-post-x-button") {
-            updatePopUp()
-        }
-    }
+    const xButtonClick = () => updatePopUp()
     
     // Update button & button class
     useEffect(() => {
@@ -91,45 +86,37 @@ const NewPost = (props) => {
 
     // Update newPost component state and change scroll on body
     useEffect(() => {
-        const body = document.querySelector('body')
-        if (popUpState.newPostOn == true) {
-            // Update new post pop-up component state
-            setNewPostPopup(
-                <div id="new-post">
-                    <div id="new-post-parent">
-                        <div id='new-post-error' className={errorClass}>
-                            <p>There was an error!</p>
-                            <p>Please try again.</p>
-                        </div>
-                        <div id="new-post-header">
-                            <div id="new-post-x-button" onClick={hideNewPost}>✕ Cancel</div>
-                            <div id="new-post-title">New Post</div>
-                            <div id="new-post-x-button-hidden">✕ Cancel</div>
-                        </div>
-                        <div id="new-post-divider" />
-                        <form id="new-post-form" onSubmit={addPost}>
-                            <ImageInput inputRef={inputRef} setFile={setFile} setErrorClass={setErrorClass} />
-                            <div id='new-post-caption-parent'>
-                                <textarea 
-                                    id="new-post-caption-input" 
-                                    name="caption" 
-                                    placeholder='Enter a caption...' 
-                                    value={caption} 
-                                    onChange={updateCaption}
-                                />
-                                <CaptionFooter caption={caption} setCaptionPasses={setCaptionPasses} />
-                            </div>
-                            <button type={button} id="new-post-button" className={buttonClass}>Upload New Post</button>
-                        </form>
+        setNewPostPopup(
+            <div id="new-post">
+                <div id="new-post-parent">
+                    <div id='new-post-error' className={errorClass}>
+                        <p>There was an error!</p>
+                        <p>Please try again.</p>
                     </div>
+                    <div id="new-post-header">
+                        <div id="new-post-x-button" onClick={xButtonClick}>✕ Cancel</div>
+                        <div id="new-post-title">New Post</div>
+                        <div id="new-post-x-button-hidden">✕ Cancel</div>
+                    </div>
+                    <div id="new-post-divider" />
+                    <form id="new-post-form" onSubmit={addPost}>
+                        <ImageInput inputRef={inputRef} setFile={setFile} setErrorClass={setErrorClass} />
+                        <div id='new-post-caption-parent'>
+                            <textarea 
+                                id="new-post-caption-input" 
+                                name="caption" 
+                                placeholder='Enter a caption...' 
+                                value={caption} 
+                                onChange={updateCaption}
+                            />
+                            <CaptionFooter caption={caption} setCaptionPasses={setCaptionPasses} />
+                        </div>
+                        <button type={button} id="new-post-button" className={buttonClass}>Upload New Post</button>
+                    </form>
                 </div>
-            )
-            body.style.overflow = 'hidden'
-        } else {
-            setNewPostPopup(null)
-            body.style.overflow = 'auto'
-        }
-    }, [popUpState.newPostOn, caption, button, buttonClass, errorClass])
+            </div>
+        )
+    }, [caption, button, buttonClass, errorClass])
 
     return newPostPopup
 }

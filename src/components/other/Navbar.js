@@ -92,22 +92,29 @@ const Navbar = (props) => {
     // Init notifications component state
     const [notifications, setNotifications] = useState(null)
 
+    // Init new post component state
+    const [newPost, setNewPost] = useState(null)
+
     // Update notifications state when popUpState.notifsOn changes
     useEffect(async () => {
         const body = document.querySelector('body')
         if (popUpState.notifsOn == true) {
             setNotifications(<Notifications user={user} updatePopUp={updatePopUp} />)
             body.style.overflow = 'hidden'
+        } else if (popUpState.newPostOn == true) {
+            setNewPost(<NewPost user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />)
+            body.style.overflow = 'hidden'
         } else {
             setNotifications(null)
+            setNewPost(null)
             body.style.overflow = 'auto'
         }
     }, [popUpState])
 
     return (
         <div id="navbar">
-                <NewPost user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
                 {notifications}
+                {newPost}
                 <div id="navbar-logo" onClick={clickHome}>
                     <img id="navbar-logo-icon" src={Logo} />
                     <div id="navbar-logo-text">Markstagram</div>
