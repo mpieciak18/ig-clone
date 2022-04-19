@@ -20,28 +20,28 @@ const Home = (props) => {
     // Init all loaded state
     const [allLoaded, setAllLoaded] = useState(false)
 
-    // Load-more function that updates the posts reel
-    const loadMore = () => {
-        if (allLoaded == false) {
-            const newPostsNumber = postsNumber + 5
+    // Init isLoading state
+    const [isLoading, setIsLoading] = useState(false)
+
+    // Load more content when user reaches bottom of document
+    const loadMore = async (e) => {
+        const elem = e.target
+        console.log(postsNumber)
+        if (((Math.ceil(elem.scrollHeight - elem.scrollTop) == elem.clientHeight))
+        && (allLoaded == false) && (isLoading == false)) {
+            await setIsLoading(true)
+            const newPostsNumber = await (postsNumber + 5)
             setPostsNumber(newPostsNumber)
         }
     }
 
-    // Load more content when user reaches bottom of document
-    window.addEventListener('scroll', () => {
-        if ((window.innerHeight + Math.ceil(window.pageYOffset)) >= document.body.offsetHeight - 2) {
-            loadMore()
-      }
-    })
-
     // Update postsArr state when postsNumber state changes
     useEffect(async () => {
         const newPostsArr = await findPosts(postsNumber)
-        setPostsArr(newPostsArr)
         if (newPostsArr.length < postsNumber) {
-            setAllLoaded('true')
+            await setAllLoaded(true)
         }
+        setPostsArr(newPostsArr)
     }, [postsNumber])
 
     // Update posts component state when postArr state changes
@@ -67,14 +67,15 @@ const Home = (props) => {
                     })}
                 </div>
             )
-            setPosts(newPosts)
+            await setPosts(newPosts)
+            setIsLoading(false)
         }
     }, [postsArr, user])
 
     return (
         <div id='home' className='page'>
             <Navbar user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />
-            <div id='home-container'>
+            <div id='home-container' onScroll={loadMore}>
                 <UserCard user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
                 {posts}
             </div>
