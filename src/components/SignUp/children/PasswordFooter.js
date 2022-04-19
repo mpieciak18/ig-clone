@@ -12,7 +12,7 @@ const PasswordFooter = (props) => {
         // Checks if no password is entered
         if (password.length == 0) {
             setPasswordPasses(false)
-            setFooterText('Must contain >8 characters, 1+ uppercase letter, 1+ lowercase letter, and 1+ number.')
+            setFooterText('Must contain 8+ characters, 1+ uppercase letter, 1+ lowercase letter, and 1+ number.')
             setFooterClass('grey')
         // Checks for minimum length of 8
         } else if (password.match(/^.{0,7}$/) != null) {
@@ -27,12 +27,12 @@ const PasswordFooter = (props) => {
         // Checks for at least one lowercase letter
         } else if (password.match(/^[^a-z]*$/) != null) {
             setPasswordPasses(false)
-            setFooterText('Password needs an uppercase letter!')
+            setFooterText('Password needs a lowercase letter!')
             setFooterClass('red')
         // Checks for at least one number
         } else if (password.match(/^[^0-9]*$/) != null) {
             setPasswordPasses(false)
-            setFooterText('Password needs an uppercase letter!')
+            setFooterText('Password needs a number!')
             setFooterClass('red')
         } else {
             setPasswordPasses(true)
