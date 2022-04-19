@@ -1,10 +1,12 @@
 import { getComments } from "../../../../firebase/comments.js"
 import { findUser } from "../../../../firebase/users.js"
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 const CommentsPreview = (props) => {
     const {postId, postOwnerId, commentsNum } = props
+
+    const navigate = useNavigate()
 
     // Init comments array state
     const [commentsArr, setCommentsArr] = useState(null) 
@@ -31,8 +33,8 @@ const CommentsPreview = (props) => {
                 const commenter = await findUser(commenterId)
                 const commenterName = commenter.data.name
                 return (
-                    <div className='post-comment' key={comment.id}>
-                        <Link to={`/${commenterId}`} className='post-comment-name'>{commenterName}</Link>
+                    <div className='post-comment' key={comment.id} onClick={() => navigate(`/${commenterId}`)}>
+                        <div className='post-comment-name'>{commenterName}</div>
                         <div className='post-comment-text'>{comment.data.text}</div>
                     </div>
                 )
