@@ -912,11 +912,16 @@ div#new-post-image-preview {
     #search-popup {
         width: 100vw;
         height: calc(100vh - 50px);
+        align-items: center;
     }
     #search-popup-parent {
         height: calc(100vh - 150px);
         width: 100%;
         max-width: 500px;
+    }
+    #search-popup-title {
+        font-weight: bold;
+        font-size: x-large;
     }
 }
 
@@ -924,11 +929,17 @@ div#new-post-image-preview {
     #search-popup {
         width: 100%;
         height: calc(100vh - 100px);
+        align-items: flex-start;
+        padding-top: 20px;
     }
     #search-popup-parent {
-        height: calc(100vh - 150px);
+        height: calc(100vh - 230px);
         width: 90vw;
         max-width: 500px;
+    }
+    #search-popup-title {
+        font-weight: bold;
+        font-size: large;
     }
 }
 
@@ -938,7 +949,6 @@ div#new-post-image-preview {
     width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
     top: 50px;
 }
 
@@ -947,7 +957,6 @@ div#new-post-image-preview {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
     background-color: white;
     border-radius: 10px;
 }
@@ -976,11 +985,6 @@ div#new-post-image-preview {
     font-size: small;
     margin-right: 20px;
     opacity: 0;
-}
-
-#search-popup-title {
-    font-weight: bold;
-    font-size: x-large;
 }
 
 #search-popup-bottom {
