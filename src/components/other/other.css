@@ -1024,11 +1024,16 @@ div#new-post-image-preview {
     #convo-popup {
         width: 100vw;
         height: calc(100vh - 50px);
+        align-items: center;
     }
     #convo-popup-parent {
         height: calc(100vh - 150px);
         width: 100%;
         max-width: 500px;
+    }
+    #convo-popup-title {
+        font-weight: bold;
+        font-size: x-large;
     }
 }
 
@@ -1036,11 +1041,22 @@ div#new-post-image-preview {
     #convo-popup {
         width: 100%;
         height: calc(100vh - 100px);
+        align-items: flex-start;
+        padding-top: 15px;
     }
     #convo-popup-parent {
-        height: calc(100vh - 150px);
+        height: calc(100vh - 200px);
         width: 90vw;
         max-width: 500px;
+    }
+    #convo-popup-title {
+        font-weight: bold;
+        font-size: large;
+    }
+    #convo-popup-bottom {
+        max-height: calc(100% - 100px);
+        overflow: auto;
+        padding-bottom: 10px;
     }
 }
 
@@ -1050,7 +1066,6 @@ div#new-post-image-preview {
     width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
     top: 50px;
     z-index: 2;
 }
@@ -1089,11 +1104,6 @@ div#new-post-image-preview {
     font-size: small;
     margin-right: 20px;
     opacity: 0;
-}
-
-#convo-popup-title {
-    font-weight: bold;
-    font-size: x-large;
 }
 
 #convo-popup-middle {

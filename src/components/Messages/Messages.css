@@ -7,11 +7,17 @@
         width: 100%;
         max-width: calc(100% - 20px);
     }
+    #convos-bottom {
+        padding-bottom: 60px;
+    }
 }
 
 @media (max-width: 800px) {
     .convo-row {
         font-size: small;
+    }
+    #convos-bottom {
+        padding-bottom: 150px;
     }
 }
 
@@ -97,7 +103,6 @@
     flex-direction: column;
     flex-grow: 1;
     padding-top: 10px;
-    padding-bottom: 60px;
     max-width: 800px;
     width: 100%;
     overflow-y: auto;

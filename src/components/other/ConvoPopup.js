@@ -6,7 +6,7 @@ import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import './other.css'
 
 const ConvoPopup = (props) => {
-    const { user, popUpState, updatePopUp } = props
+    const { user, updatePopUp } = props
 
     const navigate = useNavigate()
 
@@ -71,31 +71,25 @@ const ConvoPopup = (props) => {
     }, [results])
     
     // Update popup when popUpState or resultsComp changes 
-    useEffect(async () => {
-        if (popUpState.convosOn == true) {
-            await setPopup(
-                <div id='convo-popup'>
-                    <div id='convo-popup-parent'>
-                        <div id='convo-popup-top'>
-                            <div id="convo-popup-x-button" onClick={hideSearch}>✕ Cancel</div>
-                            <div id="convo-popup-title">Message Someone</div>
-                            <div id="convo-popup-x-button-hidden">✕ Cancel</div>
-                        </div>
-                        <div id='convo-popup-middle'>
-                            <input id="convo-search" type='text' placeholder='Search' onChange={updateValue} />
-                        </div>
-                        <div id='convo-popup-bottom'>
-                            {resultsComp}
-                        </div>
+    useEffect(() => {
+        setPopup(
+            <div id='convo-popup'>
+                <div id='convo-popup-parent'>
+                    <div id='convo-popup-top'>
+                        <div id="convo-popup-x-button" onClick={hideSearch}>✕ Cancel</div>
+                        <div id="convo-popup-title">Message Someone</div>
+                        <div id="convo-popup-x-button-hidden">✕ Cancel</div>
+                    </div>
+                    <div id='convo-popup-middle'>
+                        <input id="convo-search" type='text' placeholder='Search' onChange={updateValue} />
+                    </div>
+                    <div id='convo-popup-bottom'>
+                        {resultsComp}
                     </div>
                 </div>
-            )
-            disableBodyScroll(document.getElementById('convo-popup'))
-        } else {
-            setPopup(null)
-            clearAllBodyScrollLocks()
-        }
-    }, [popUpState, resultsComp])
+            </div>
+        )
+    }, [resultsComp])
 
     return popup
 }

@@ -8,6 +8,7 @@ import { getUrl } from '../../firebase/storage'
 import { timeSinceTrunc } from '../../other/timeSinceTrunc.js'
 import MessageSolid from '../../assets/images/dm.png'
 import { ConvoPopup } from '../other/ConvoPopup.js'
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 
 const Messages = (props) => {
     // Redirect to signup page if not signed in
@@ -30,6 +31,20 @@ const Messages = (props) => {
 
     // Init convos component state
     const [convos, setConvos] = useState(null)
+
+    // Init search popup
+    const [searchPopUp, setSearchPopUp] = useState(null)
+
+    // Update search pop up state when popUpState changes
+    useEffect(async () => {
+        if (popUpState.convosOn == true) {
+            await setSearchPopUp(<ConvoPopup user={user} updatePopUp={updatePopUp} />)
+            disableBodyScroll(document.getElementById('convo-popup-bottom'))                                     
+        } else {
+            setSearchPopUp(null)
+            clearAllBodyScrollLocks()
+        }
+    }, [popUpState])
     
     // Open search pop-up on click
     const openPopup = () => updatePopUp('convosOn')
@@ -108,7 +123,7 @@ const Messages = (props) => {
         if (user != null) {
             setConvos(
                 <div id="convos">
-                    <ConvoPopup user={user} popUpState={popUpState} updatePopUp={updatePopUp} />
+                    {searchPopUp}
                     <div id='convos-top'>
                         <img id='convos-user-icon' src={userImage} />
                         <div id='convos-title'>
@@ -127,7 +142,7 @@ const Messages = (props) => {
         } else {
             setConvos(null)
         }
-    }, [convosList, userImage, user, popUpState])
+    }, [convosList, userImage, user, searchPopUp])
 
     // Load-more function that updates the convos component
     const loadMore = () => {

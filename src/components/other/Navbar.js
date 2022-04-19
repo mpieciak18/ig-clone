@@ -99,7 +99,7 @@ const Navbar = (props) => {
     // Init search pop-up component state
     const [searchPopUp, setSearchPopUp] = useState(null)
 
-    // Update notifications state when popUpState.notifsOn changes
+    // Update various states when popUpState changes
     useEffect(async () => {
         if (popUpState.notifsOn == true) {
             await setNotifications(<Notifications user={user} updatePopUp={updatePopUp} />)

@@ -12,7 +12,9 @@
     #convo-message-bar-input {
         width: 70%;
     }
-    
+    #convo-message-bar {
+        padding: 20px 0px 100px 0px;
+    }
 }
 
 @media (min-width: 800px) {
@@ -26,6 +28,9 @@
     }
     .message-block-bubble {
         max-width: 500px;
+    }
+    #convo-message-bar {
+        padding: 20px 0px;
     }
 }
 
@@ -153,7 +158,6 @@
 }
 
 #convo-message-bar {
-    padding: 20px 0px;
     border-top: 1px solid lightgray;
     display: flex;
     flex-direction: row;
