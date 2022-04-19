@@ -4,7 +4,7 @@ import { userSearch } from "../../other/search.js"
 import { getUrl } from "../../firebase/storage.js"
 
 const SearchPopup = (props) => {
-    const { updatePopUp, value } = props
+    const { user, updatePopUp, searchVal } = props
 
     const navigate = useNavigate()
 
@@ -24,8 +24,8 @@ const SearchPopup = (props) => {
 
     // Update results when value changes
     useEffect(async () => {
-        if (value != null) {
-            const res = await userSearch(value)
+        if (searchVal != null) {
+            const res = await userSearch(searchVal)
             if (res.length != 0) {
                 setResults(res)
             } else {
@@ -34,29 +34,33 @@ const SearchPopup = (props) => {
         } else {
             setResults(null)
         }
-    }, [value])
+    }, [searchVal])
 
     // Update results component when results change
     useEffect(async () => {
         if (results != null) {
             const newArr = await results.map(async result => {
-                const userImage = await getUrl(result.item.data.image)
-                const userHandle = result.item.data.username
-                const redirect = () => {
-                    updatePopUp()
-                    if (location.otherUserId == null) {
-                        navigate(`/${result.item.id}`)
-                    } else {
-                        navigate(`/${result.item.id}`)
-                        window.location.reload()
+                if (result.item.id == user.id) {
+                    return null
+                } else {
+                    const userImage = await getUrl(result.item.data.image)
+                    const userHandle = result.item.data.username
+                    const redirect = () => {
+                        updatePopUp()
+                        if (location.otherUserId == null) {
+                            navigate(`/${result.item.id}`)
+                        } else {
+                            navigate(`/${result.item.id}`)
+                            window.location.reload()
+                        }
                     }
+                    return (
+                        <div className="search-result" onClick={redirect} key={result.item.id}>
+                            <img className="search-result-image" src={userImage} />
+                            <div className="search-result-name">@ {userHandle}</div>
+                        </div>
+                    )
                 }
-                return (
-                    <div className="search-result" onClick={redirect} key={result.item.id}>
-                        <img className="search-result-image" src={userImage} />
-                        <div className="search-result-name">@ {userHandle}</div>
-                    </div>
-                )
             })
             const newResComp = await Promise.all(newArr)
             setResultsComp(newResComp)

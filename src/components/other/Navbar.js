@@ -112,9 +112,9 @@ const Navbar = (props) => {
             setSearchPopUp(null)
             disableBodyScroll(document.getElementById('new-post'))                   
         } else if (popUpState.searchOn == true) {
-            await setNewPost(<SearchPopup updatePopUp={updatePopUp} value={searchVal} />)
+            await setSearchPopUp(<SearchPopup user={user} updatePopUp={updatePopUp} searchVal={searchVal} />)
             setNotifications(null)
-            setSearchPopUp(null)
+            setNewPost(null)
             disableBodyScroll(document.getElementById('search-popup'))                   
         } else {
             setNotifications(null)
@@ -122,7 +122,7 @@ const Navbar = (props) => {
             setSearchPopUp(null)
             clearAllBodyScrollLocks()
         }
-    }, [popUpState])
+    }, [popUpState, searchVal])
 
     return (
         <div id="navbar">
