@@ -16,7 +16,7 @@ const NameFooter = (props) => {
         // Check if name only contains letters or spaces
         else if (name.match(/^[a-zA-Z\s]*$/) == null) {
             setNamePasses(false)
-            setFooterText('No spaces or symbols, other than "-" or "_"!')
+            setFooterText('Name cannot contain any symbols or special characters!')
             setFooterClass('red')
         }
         // Check if name is greater than 30 characters
@@ -25,10 +25,10 @@ const NameFooter = (props) => {
             setFooterText('Name is too long!')
             setFooterClass('red')
         }
-        // Check if name is greater than 3 characters
-        else if (name.match(/^.{0,2}$/) != null) {
+        // Check if name is greater than 1 character
+        else if (name.match(/^.{0,1}$/) != null) {
             setNamePasses(false)
-            setFooterText('Name is too short!')
+            setFooterText('Name must be 2 or more characters!')
             setFooterClass('red')
         }
         // Username passes
