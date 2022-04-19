@@ -8,7 +8,7 @@ import { findUser } from '../../firebase/users.js'
 
 const NewPost = (props) => {
     
-    const { user, setUser, popUpState, updatePopUp } = props
+    const { user, setUser, updatePopUp, ref } = props
 
     // Init useNavigate function
     const navigate = useNavigate()
@@ -87,7 +87,7 @@ const NewPost = (props) => {
     // Update newPost component state and change scroll on body
     useEffect(() => {
         setNewPostPopup(
-            <div id="new-post">
+            <div id="new-post" ref={ref}>
                 <div id="new-post-parent">
                     <div id='new-post-error' className={errorClass}>
                         <p>There was an error!</p>

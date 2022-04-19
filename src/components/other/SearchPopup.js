@@ -4,7 +4,7 @@ import { userSearch } from "../../other/search.js"
 import { getUrl } from "../../firebase/storage.js"
 
 const SearchPopup = (props) => {
-    const { user, popUpState, updatePopUp, value } = props
+    const { updatePopUp, value } = props
 
     const navigate = useNavigate()
 
@@ -67,28 +67,21 @@ const SearchPopup = (props) => {
     
     // Update popup when popUpState or resultsComp changes 
     useEffect(async () => {
-        const body = document.querySelector('body')
-        if (popUpState.searchOn == true) {
-            await setPopup(
-                <div id='search-popup'>
-                    <div id='search-popup-parent'>
-                        <div id='search-popup-top'>
-                            <div id="search-popup-x-button" onClick={hideSearch}>✕ Cancel</div>
-                            <div id="search-popup-title">Search</div>
-                            <div id="search-popup-x-button-hidden">✕ Cancel</div>
-                        </div>
-                        <div id='search-popup-bottom'>
-                            {resultsComp}
-                        </div>
+        setPopup(
+            <div id='search-popup'>
+                <div id='search-popup-parent'>
+                    <div id='search-popup-top'>
+                        <div id="search-popup-x-button" onClick={hideSearch}>✕ Cancel</div>
+                        <div id="search-popup-title">Search</div>
+                        <div id="search-popup-x-button-hidden">✕ Cancel</div>
+                    </div>
+                    <div id='search-popup-bottom'>
+                        {resultsComp}
                     </div>
                 </div>
-            )
-            body.style.overflow = 'hidden'
-        } else {
-            setPopup(null)
-            body.style.overflow = 'auto'
-        }
-    }, [popUpState, resultsComp])
+            </div>
+        )
+    }, [resultsComp])
 
     return popup
 }

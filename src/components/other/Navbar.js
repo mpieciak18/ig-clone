@@ -16,6 +16,7 @@ import NotificationsHollow from '../../assets/images/like.png'
 import NotificationsSolid from '../../assets/images/like-solid.png'
 import MessagesHollow from '../../assets/images/messages.png'
 import MessagesSolid from '../../assets/images/messages-solid.png'
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 const Navbar = (props) => {
     const { user, setUser, popUpState, updatePopUp } = props
@@ -95,19 +96,31 @@ const Navbar = (props) => {
     // Init new post component state
     const [newPost, setNewPost] = useState(null)
 
+    // Init search pop-up component state
+    const [searchPopUp, setSearchPopUp] = useState(null)
+
     // Update notifications state when popUpState.notifsOn changes
     useEffect(async () => {
-        const body = document.querySelector('body')
         if (popUpState.notifsOn == true) {
-            setNotifications(<Notifications user={user} updatePopUp={updatePopUp} />)
-            body.style.overflow = 'hidden'
+            await setNotifications(<Notifications user={user} updatePopUp={updatePopUp} />)
+            setNewPost(null)
+            setSearchPopUp(null)
+            disableBodyScroll(document.getElementById('notifs'))                   
         } else if (popUpState.newPostOn == true) {
-            setNewPost(<NewPost user={user} setUser={setUser} popUpState={popUpState} updatePopUp={updatePopUp} />)
-            body.style.overflow = 'hidden'
+            await setNewPost(<NewPost user={user} setUser={setUser} updatePopUp={updatePopUp} />)
+            setNotifications(null)
+            setSearchPopUp(null)
+            disableBodyScroll(document.getElementById('new-post'))                   
+        } else if (popUpState.searchOn == true) {
+            await setNewPost(<SearchPopup updatePopUp={updatePopUp} value={searchVal} />)
+            setNotifications(null)
+            setSearchPopUp(null)
+            disableBodyScroll(document.getElementById('search-popup'))                   
         } else {
             setNotifications(null)
             setNewPost(null)
-            body.style.overflow = 'auto'
+            setSearchPopUp(null)
+            clearAllBodyScrollLocks()
         }
     }, [popUpState])
 
@@ -120,7 +133,7 @@ const Navbar = (props) => {
                     <div id="navbar-logo-text">Markstagram</div>
                 </div>
                 <input id="navbar-search" type='text' placeholder='Search' onChange={updateSearchVal} onFocus={clickSearch} />
-                <SearchPopup user={user} popUpState={popUpState} updatePopUp={updatePopUp} value={searchVal} />
+                {searchPopUp}
                 <div id="navbar-buttons">
                     <img id="home-button" 
                         src={homeImg}

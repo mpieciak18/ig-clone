@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom"
 import { getUrl } from "../../../firebase/storage.js"
 import { Follows } from "../../other/Follows.js"
 import { useState, useEffect } from "react"
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 const UserCard = (props) => {
     const { user, popUpState, updatePopUp } = props
@@ -90,14 +91,12 @@ const UserCard = (props) => {
     }, [userImage, follows])
 
     // Update follows state if followsOn state changes
-    useEffect(() => {
-        const body = document.querySelector('body')
+    useEffect(async () => {
         if (popUpState.followsOn == false) {
-            body.style.overflow = 'auto'
             setFollows(null)
+            clearAllBodyScrollLocks()
         } else {
-            body.style.overflow = 'hidden'
-            setFollows(
+            await setFollows(
                 <Follows
                     user={user}
                     otherUserId={user.id}
@@ -105,6 +104,7 @@ const UserCard = (props) => {
                     initTab={followingVsFollower}
                 />
             )
+            disableBodyScroll(document.getElementById('follow'))
         }
     }, [popUpState.followsOn])
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { userSearch } from "../../other/search.js"
 import { getUrl } from "../../firebase/storage.js"
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import './other.css'
 
 const ConvoPopup = (props) => {
@@ -71,7 +72,6 @@ const ConvoPopup = (props) => {
     
     // Update popup when popUpState or resultsComp changes 
     useEffect(async () => {
-        const body = document.querySelector('body')
         if (popUpState.convosOn == true) {
             await setPopup(
                 <div id='convo-popup'>
@@ -90,10 +90,10 @@ const ConvoPopup = (props) => {
                     </div>
                 </div>
             )
-            body.style.overflow = 'hidden'
+            disableBodyScroll(document.getElementById('convo-popup'))
         } else {
             setPopup(null)
-            body.style.overflow = 'auto'
+            clearAllBodyScrollLocks()
         }
     }, [popUpState, resultsComp])
 

@@ -11,6 +11,7 @@ import { timeSince } from '../../other/timeSince'
 import { CommentsBar } from './children/Comments/CommentsBar'
 import { CommentsFull } from './children/Comments/CommentsFull'
 import { LinkCopied } from './children/LinkCopied'
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 
 const Post = (props) => {
     const { user, setUser, popUpState, updatePopUp } = props
@@ -80,15 +81,13 @@ const Post = (props) => {
     }
 
     // Update likes state & body scroll when popUpState.likesOn changes
-    useEffect(() => {
-        const body = document.querySelector('body')
+    useEffect(async () => {
         if (popUpState.likesOn == true && user != null) {
-            setLikes(<Likes user={user} setUser={setUser} updatePopUp={updatePopUp} postId={postId} postOwnerId={postOwnerId} />)
-            body.style.overflow = 'hidden'
-            
+            await setLikes(<Likes user={user} setUser={setUser} updatePopUp={updatePopUp} postId={postId} postOwnerId={postOwnerId} />)
+            disableBodyScroll(document.getElementById('likes'))            
         } else {
             setLikes(null)
-            body.style.overflow = 'auto'
+            clearAllBodyScrollLocks()
         }
     }, [popUpState.likesOn, user])
 
