@@ -78,7 +78,6 @@ const Follows = (props) => {
                     const userInfo = await findUser(userId)
                     const redirect = () => {
                         updatePopUp()
-                        console.log(location)
                         if (location.otherUserId == null) {
                             navigate(`/${userId}`)
                         } else {

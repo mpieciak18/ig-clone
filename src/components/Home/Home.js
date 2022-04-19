@@ -26,7 +26,6 @@ const Home = (props) => {
     // Load more content when user reaches bottom of document
     const loadMore = async (e) => {
         const elem = e.target
-        console.log(postsNumber)
         if (((Math.ceil(elem.scrollHeight - elem.scrollTop) == elem.clientHeight))
         && (allLoaded == false) && (isLoading == false)) {
             await setIsLoading(true)
