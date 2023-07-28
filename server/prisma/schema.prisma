@@ -28,6 +28,7 @@ model User {
   messages Message[]
   givenFollows Follow[] @relation("givenFollows")
   receivedFollows Follow[] @relation("receivedFollows")
+  notifications Notification[]
 }
 
 model Follow {
@@ -38,6 +39,9 @@ model Follow {
   giver User @relation("givenFollows", fields: [giverId], references: [id])
   receiverId Int
   receiver User @relation("receivedFollows", fields: [receiverId], references: [id])
+
+  notificationId Int
+  notification Notification
 }
 
 model Post {
@@ -63,6 +67,9 @@ model Comment {
   user User @relation(fields: [userId], references: [id])
   postId Int
   post Post @relation(fields: [postId], references: [id])
+
+  notificationId Int
+  notification Notification
 }
 
 model Like {
@@ -73,6 +80,9 @@ model Like {
   user User @relation(fields: [userId], references: [id])
   postId Int
   post Post @relation(fields: [postId], references: [id])
+
+  notificationId Int
+  notification Notification
 }
 
 model Save {
@@ -101,4 +111,30 @@ model Message {
   sender User @relation(fields: [senderId], references: [id])
   conversationId Int
   conversation Conversation @relation(fields: [conversationId], references: [id])
+
+  notificationId Int
+  notification Notification
+}
+
+model Notification {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+
+  // Nullable relations to each type that can generate a notification
+  likeId Int?
+  like Like? @relation(fields: [likeId], references: [id])
+
+  commentId Int?
+  comment Comment? @relation(fields: [commentId], references: [id])
+
+  followId Int?
+  follow Follow? @relation(fields: [followId], references: [id])
+
+  messageId Int?
+  message Message? @relation(fields: [messageId], references: [id])
+  
+  // Other fields...
 }
