@@ -23,4 +23,29 @@ export const createNewUser = async (req, res, next) => {
 	}
 };
 
-export const signIn = async (req, res, next) => {};
+// Verifies sign-in attempt by checking if username exists and if passwords match.
+// If both conditions don't pass, then an error message is returned to the client.
+// Otherwise, a signed JWT is returned back to the client.
+export const signIn = async (req, res, next) => {
+	// First, find user in database by username.
+	const user = await prisma.user.findUnique({
+		where: {
+			username: req.body.username,
+		},
+	});
+	if (!user) {
+		res.status(401);
+		res.json({ message: 'Invalid Username or Password' });
+		return;
+	}
+	// Second, compare passwords (ie, user input vs database value).
+	const isValid = await comparePasswords(req.body.password, user.password);
+	if (!isValid) {
+		res.status(401);
+		res.json({ message: 'Invalid Username or Password' });
+		return;
+	}
+	// Third, return auth token to client.
+	const token = createJwt(user);
+	res.json({ token });
+};
