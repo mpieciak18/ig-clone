@@ -9,6 +9,7 @@ export const createJwt = async (user: { id: any; username: any }) => {
 		},
 		process.env.JWT_SECRET
 	);
+	return token;
 };
 
 export const protect = async () => {};
