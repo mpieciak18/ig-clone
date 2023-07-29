@@ -3,9 +3,9 @@ import { body } from 'express-validator';
 
 const router = Router();
 
-// Synchronous error handler
-router.use((err, req, res, next) => {
-	//
-});
+// add in routes for every API endpoint below
+
+// synchronous error handler
+// // add code once all handlers + auth middleware are created // //
 
 export default router;
