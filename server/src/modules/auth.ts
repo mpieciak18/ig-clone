@@ -39,6 +39,10 @@ export const protect = async (req, res, next) => {
 	}
 };
 
-export const comparePasswords = async () => {};
+export const comparePasswords = async (password, hash) => {
+	return bcrypt.compare(password, hash);
+};
 
-export const hashPassword = async () => {};
+export const hashPassword = async (password) => {
+	return bcrypt.hash(password, 5);
+};
