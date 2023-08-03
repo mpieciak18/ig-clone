@@ -8,9 +8,9 @@ let envConfig;
 if (stage === 'production') {
 	envConfig = prodPort;
 } else if (stage === 'testing') {
-	envConfig = localPort;
-} else {
 	envConfig = testingPort;
+} else {
+	envConfig = localPort;
 }
 
 export const config = merge(
