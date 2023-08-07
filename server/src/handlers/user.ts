@@ -2,7 +2,7 @@ import prisma from '../db';
 import { comparePasswords, createJwt, hashPassword } from '../modules/auth';
 
 // Creates a new user in the database and returns a signed JWT to the client.
-// Any error is assumed to be related to user input and is returned to the c.ient as such.
+// Any error is assumed to be related to user input and is returned to the client as such.
 export const createNewUser = async (req, res, next) => {
 	try {
 		const user = await prisma.user.create({
@@ -15,11 +15,25 @@ export const createNewUser = async (req, res, next) => {
 				image: req.body.image,
 			},
 		});
-		const token = createJwt(user);
+		const token = await createJwt(user);
 		res.json({ token });
 	} catch (e) {
-		e.type = 'input';
-		next(e);
+		// Checks if error is a 'unique constraint failure'
+		if (e.code == 'P2002') {
+			if (e.meta.target.contains('email')) {
+				res.status(400);
+				res.json({ message: 'email in use' });
+			} else if (e.meta.target.contains('username')) {
+				res.status(400);
+				res.json({ message: 'username in use' });
+			} else {
+				e.type = 'input';
+				next(e);
+			}
+		} else {
+			e.type = 'input';
+			next(e);
+		}
 	}
 };
 
@@ -46,6 +60,6 @@ export const signIn = async (req, res, next) => {
 		return;
 	}
 	// Third, return auth token to client.
-	const token = createJwt(user);
+	const token = await createJwt(user);
 	res.json({ token });
 };
