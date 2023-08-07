@@ -20,10 +20,10 @@ export const createNewUser = async (req, res, next) => {
 	} catch (e) {
 		// Checks if error is a 'unique constraint failure'
 		if (e.code == 'P2002') {
-			if (e.meta.target.contains('email')) {
+			if (e.meta.target.includes('email')) {
 				res.status(400);
 				res.json({ message: 'email in use' });
-			} else if (e.meta.target.contains('username')) {
+			} else if (e.meta.target.includes('username')) {
 				res.status(400);
 				res.json({ message: 'username in use' });
 			} else {
