@@ -1,7 +1,15 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
+import { deleteUser } from './handlers/user';
 
 const router = Router();
+
+// // // // // //
+//    Users    //
+// // // // // //
+
+// Delete a user's account
+router.delete('/user', deleteUser);
 
 // // // // // //
 //   Follows   //
