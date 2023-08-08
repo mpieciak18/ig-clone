@@ -63,3 +63,40 @@ export const signIn = async (req, res, next) => {
 	const token = await createJwt(user);
 	res.json({ token });
 };
+
+// Deletes a user's account from the database
+// NOTE: Currently only used for testing purposes
+export const deleteUser = async (req, res, next) => {
+	// Check if user to be deleted belongs to signed in user
+	let user;
+	try {
+		user = await prisma.user.findUnique({ where: { id: req.userId } });
+	} catch (e) {
+		next(e);
+	}
+
+	// Throw error if does not belong to user / not found
+	if (!user) {
+		const e = new Error();
+		// @ts-expect-error
+		e.type = 'auth';
+		next(e);
+	}
+
+	// Delete user
+	let deletedUser;
+	try {
+		deletedUser = await user.delete({ where: { id: user.id } });
+	} catch (e) {
+		next(e);
+	}
+
+	// Throw error (default AKA 500) if no deleted user is returned from the db
+	if (!deletedUser) {
+		const e = new Error();
+		next(e);
+	}
+
+	// Return deleted user data
+	res.json({ deletedUser });
+};
