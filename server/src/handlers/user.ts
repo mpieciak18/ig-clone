@@ -16,14 +16,14 @@ export const createNewUser = async (req, res, next) => {
 			},
 		});
 		const token = await createJwt(user);
-		res.json({ token });
+		res.json({ token, user });
 	} catch (e) {
 		// Checks if error is a 'unique constraint failure'
 		if (e.code == 'P2002') {
-			if (e.meta.target.includes('email')) {
+			if (e.meta?.target?.includes('email')) {
 				res.status(400);
 				res.json({ message: 'email in use' });
-			} else if (e.meta.target.includes('username')) {
+			} else if (e.meta?.target?.includes('username')) {
 				res.status(400);
 				res.json({ message: 'username in use' });
 			} else {
@@ -70,9 +70,10 @@ export const deleteUser = async (req, res, next) => {
 	// Check if user to be deleted belongs to signed in user
 	let user;
 	try {
-		user = await prisma.user.findUnique({ where: { id: req.userId } });
+		user = await prisma.user.findUnique({ where: { id: req.body.userId } });
 	} catch (e) {
 		next(e);
+		return;
 	}
 
 	// Throw error if does not belong to user / not found
@@ -81,20 +82,23 @@ export const deleteUser = async (req, res, next) => {
 		// @ts-expect-error
 		e.type = 'auth';
 		next(e);
+		return;
 	}
 
 	// Delete user
 	let deletedUser;
 	try {
-		deletedUser = await user.delete({ where: { id: user.id } });
+		deletedUser = await prisma.user.delete({ where: { id: user.id } });
 	} catch (e) {
 		next(e);
+		return;
 	}
 
 	// Throw error (default AKA 500) if no deleted user is returned from the db
 	if (!deletedUser) {
 		const e = new Error();
 		next(e);
+		return;
 	}
 
 	// Return deleted user data

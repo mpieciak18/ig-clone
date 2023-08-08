@@ -4,6 +4,8 @@ import morgan from 'morgan';
 import cors from 'cors';
 import { protect } from './modules/auth';
 import { signIn, createNewUser } from './handlers/user';
+import { handleInputErrors } from './modules/middleware';
+import { body } from 'express-validator';
 
 // init express
 const app = express();
@@ -22,8 +24,24 @@ app.get('/', (req, res) => {
 // auth middleware
 app.use('/api', protect, router);
 // user handlers
-app.post('/create_new_user', createNewUser);
-app.post('/sign_in', signIn);
+app.post(
+	'/create_new_user',
+	body('email').isEmail(),
+	body('username').isString(),
+	body('password').isString(),
+	body('name').isString(),
+	body('bio').isString(),
+	body('image').isString(),
+	handleInputErrors,
+	createNewUser
+);
+app.post(
+	'/sign_in',
+	body('username').isString(),
+	body('password').isString(),
+	handleInputErrors,
+	signIn
+);
 
 // synchronous error handler
 app.use((err, req, res, next) => {
