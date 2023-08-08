@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
 import { deleteUser } from './handlers/user';
+import { handleInputErrors } from './modules/middleware';
 
 const router = Router();
 
@@ -9,7 +10,7 @@ const router = Router();
 // // // // // //
 
 // Delete a user's account
-router.delete('/user', deleteUser);
+router.delete('/user', body('userId').isInt(), handleInputErrors, deleteUser);
 
 // // // // // //
 //   Follows   //
