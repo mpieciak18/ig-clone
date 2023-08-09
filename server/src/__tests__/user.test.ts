@@ -103,9 +103,22 @@ describe('POST /sign_in', () => {
 		});
 		expect(response.status).toBe(401);
 	});
-	it('should fail to login with invalid inputs & return a 400 status', async () => {
+	it('should fail to login with an incorrect password & return a 401 status', async () => {
+		const response = await supertest(app).post('/sign_in').send({
+			username: 'test11',
+			password: 'OOPS!',
+		});
+		expect(response.status).toBe(401);
+	});
+	it('should fail to login with invalid inputs (ie, no username) & return a 400 status', async () => {
 		const response = await supertest(app).post('/sign_in').send({
 			password: '123_abc',
+		});
+		expect(response.status).toBe(400);
+	});
+	it('should fail to login with invalid inputs (ie, no password) & return a 400 status', async () => {
+		const response = await supertest(app).post('/sign_in').send({
+			username: 'test11',
 		});
 		expect(response.status).toBe(400);
 	});
