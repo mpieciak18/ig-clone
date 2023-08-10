@@ -13,11 +13,11 @@ const router = Router();
 router.put(
 	'/user',
 	body('email').optional().isEmail(),
-	body('username').optional().isString(),
-	body('password').optional().isString(),
-	body('name').optional().isString(),
+	body('username').optional().isString().isLength({ min: 3, max: 15 }),
+	body('password').optional().isString().isLength({ min: 4 }),
+	body('name').optional().isString().isLength({ min: 3, max: 30 }),
 	body('bio').optional().isString(),
-	body('image').optional().isString(),
+	body('image').optional().isURL(),
 	handleInputErrors,
 	updateUser
 );
