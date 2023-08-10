@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
-import { deleteUser } from './handlers/user';
+import { deleteUser, updateUser } from './handlers/user';
 import { handleInputErrors } from './modules/middleware';
 
 const router = Router();
@@ -9,6 +9,18 @@ const router = Router();
 //    Users    //
 // // // // // //
 
+// Update a user's account
+router.put(
+	'/user',
+	body('email').optional().isEmail(),
+	body('username').optional().isString(),
+	body('password').optional().isString(),
+	body('name').optional().isString(),
+	body('bio').optional().isString(),
+	body('image').optional().isString(),
+	handleInputErrors,
+	updateUser
+);
 // Delete a user's account
 router.delete('/user', body('userId').isInt(), handleInputErrors, deleteUser);
 

@@ -104,3 +104,6 @@ export const deleteUser = async (req, res, next) => {
 	// Return deleted user data
 	res.json({ deletedUser });
 };
+
+// Updates a user's account fields (note: these are the same fields passed to createNewUser)
+export const updateUser = async (req, res, next) => {};
