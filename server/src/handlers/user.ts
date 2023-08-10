@@ -61,7 +61,7 @@ export const signIn = async (req, res, next) => {
 	}
 	// Third, return auth token to client.
 	const token = await createJwt(user);
-	res.json({ token });
+	res.json({ token, user });
 };
 
 // Deletes a user's account from the database

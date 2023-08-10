@@ -26,10 +26,10 @@ app.use('/api', protect, router);
 // user handlers
 app.post(
 	'/create_new_user',
-	body('email').isEmail().isLength({ min: 3, max: 15 }),
-	body('username').isString().isLength({ min: 4 }),
-	body('password').isString().isLength({ min: 3, max: 30 }),
-	body('name').isString(),
+	body('email').isEmail(),
+	body('username').isString().isLength({ min: 3, max: 15 }),
+	body('password').isString().isLength({ min: 4 }),
+	body('name').isString().isLength({ min: 3, max: 30 }),
 	body('bio').isString(),
 	body('image').isURL(),
 	handleInputErrors,

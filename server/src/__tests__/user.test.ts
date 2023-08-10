@@ -1,6 +1,7 @@
 import app from '../server';
 import supertest from 'supertest';
 import jwt from 'jsonwebtoken';
+import { comparePasswords } from '../modules/auth';
 
 describe('POST /create_new_user & DELETE /api/user', () => {
 	let token;
@@ -75,13 +76,37 @@ describe('POST /create_new_user & DELETE /api/user', () => {
 	});
 });
 
-describe('POST /sign_in', () => {
-	it('should login & return a web token + a 200 status', async () => {
+describe('POST /sign_in & PUT /api/user', () => {
+	let token;
+	const initUser = {
+		email: 'test11@test11.com',
+		username: 'test11',
+		password: '123_abc',
+		name: 'Tester',
+		bio: "I'm a test account.",
+		image: 'https://images.rawpixel.com/image_png_1300/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png',
+	};
+	let ogUser;
+	const newUser = {
+		email: 'test12345@test12345.com',
+		username: 'test12345',
+		password: '456_dfe',
+		name: 'TESTER',
+		image: 'https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black-thumbnail.png',
+		bio: 'whattup',
+	};
+	it('should create account, login & return a web token + user + a 200 status', async () => {
+		await supertest(app).post('/create_new_user').send(initUser);
+		const username = initUser.username;
+		const password = initUser.password;
 		const response = await supertest(app).post('/sign_in').send({
-			username: 'test11',
-			password: '123_abc',
+			username,
+			password,
 		});
-		expect(response.body.token).toBeDefined();
+		token = response.body.token;
+		ogUser = response.body.user;
+		ogUser.password = password;
+		expect(token).toBeDefined();
 		expect(response.status).toBe(200);
 	});
 	it('should fail to login with fake username & return a 401 status', async () => {
@@ -109,5 +134,58 @@ describe('POST /sign_in', () => {
 			username: 'test11',
 		});
 		expect(response.status).toBe(400);
+	});
+	it('should update the user & return a 200 status + updated user attributes', async () => {
+		const response = await supertest(app)
+			.put('/api/user')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				email: newUser.email,
+				username: newUser.username,
+				password: newUser.password,
+				name: newUser.name,
+				image: newUser.image,
+				bio: newUser.bio,
+			});
+		const user = response.body.user;
+		const passwordsMatch = await comparePasswords(
+			newUser.password,
+			user.password
+		);
+		expect(response.status).toBe(200);
+		expect(user.email == newUser.email).toBeTruthy();
+		expect(user.username == newUser.username).toBeTruthy();
+		expect(passwordsMatch).toBeTruthy();
+		expect(user.name == newUser.name).toBeTruthy();
+		expect(user.image == newUser.image).toBeTruthy();
+		expect(user.bio == newUser.bio).toBeTruthy();
+	});
+	it('should update (revert) the user & return a 200 status + reverted user attributes', async () => {
+		const response = await supertest(app)
+			.put('/api/user')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				email: ogUser.email,
+				username: ogUser.username,
+				password: ogUser.password,
+				name: ogUser.name,
+				image: ogUser.image,
+				bio: ogUser.bio,
+			});
+		const user = response.body.user;
+		const passwordsMatch = await comparePasswords(
+			ogUser.password,
+			user.password
+		);
+		expect(response.status).toBe(200);
+		expect(user.email == ogUser.email).toBeTruthy();
+		expect(user.username == ogUser.username).toBeTruthy();
+		expect(passwordsMatch).toBeTruthy();
+		expect(user.name == ogUser.name).toBeTruthy();
+		expect(user.image == ogUser.image).toBeTruthy();
+		expect(user.bio == ogUser.bio).toBeTruthy();
+		await supertest(app)
+			.delete('/api/user')
+			.set('Authorization', `Bearer ${token}`);
 	});
 });
