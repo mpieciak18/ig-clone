@@ -92,11 +92,15 @@ export const deleteUser = async (req, res, next) => {
 // Updates a user's account fields (note: these are the same fields passed to createNewUser)
 export const updateUser = async (req, res, next) => {
 	// Format data needed for update
-	const keys = ['email', 'password', 'username', 'name', 'bio', 'image'];
+	const keys = ['email', 'username', 'name', 'bio', 'image'];
 	const data = {};
 	keys.forEach((key) => {
 		if (req.body[key]) data[key] = req.body[key];
 	});
+	if (req.body.password) {
+		// @ts-ignore
+		data.password = await hashPassword(req.body.password);
+	}
 
 	// Update user
 	let user;
@@ -106,9 +110,22 @@ export const updateUser = async (req, res, next) => {
 			data,
 		});
 	} catch (e) {
-		// Error handled at top-level (ie, server.ts) as 500 error
-		next(e);
-		return;
+		// Checks if there's a 'unique constraint failure' & handles it as a 401 error
+		if (e.code == 'P2002') {
+			if (e.meta?.target?.includes('email')) {
+				res.status(400);
+				res.json({ message: 'email in use' });
+			} else if (e.meta?.target?.includes('username')) {
+				res.status(400);
+				res.json({ message: 'username in use' });
+			} else {
+				next(e);
+			}
+		}
+		// Else, is handled as a 500 error
+		else {
+			next(e);
+		}
 	}
 
 	// While the previous try/catch (along with the 'protect' middleware) should catch all errors,
