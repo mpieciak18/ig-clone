@@ -22,7 +22,7 @@ router.put(
 	updateUser
 );
 // Delete a user's account
-router.delete('/user', body('userId').isInt(), handleInputErrors, deleteUser);
+router.delete('/user', handleInputErrors, deleteUser);
 
 // // // // // //
 //   Follows   //

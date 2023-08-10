@@ -70,7 +70,7 @@ export const deleteUser = async (req, res, next) => {
 	// Check if user to be deleted belongs to signed in user
 	let user;
 	try {
-		user = await prisma.user.findUnique({ where: { id: req.body.userId } });
+		user = await prisma.user.findUnique({ where: { id: req.user.id } });
 	} catch (e) {
 		next(e);
 		return;

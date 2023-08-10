@@ -1,5 +1,6 @@
 import app from '../server';
 import supertest from 'supertest';
+import jwt from 'jsonwebtoken';
 
 describe('POST /create_new_user & DELETE /api/user', () => {
 	let userToken;
@@ -50,32 +51,22 @@ describe('POST /create_new_user & DELETE /api/user', () => {
 		});
 		expect(response.status).toBe(400);
 	});
-	it('should fail to delete a user due to a missing input & return a 400 status', async () => {
+	it('should fail to delete a user due to a missing user id field within the auth token & return a 500 status', async () => {
+		const fakeToken = jwt.sign(
+			{
+				username: 'fake_user',
+			},
+			process.env.JWT_SECRET
+		);
 		const response = await supertest(app)
 			.delete('/api/user')
-			.set('Authorization', `Bearer ${userToken}`)
-			.send({});
-		expect(response.status).toBe(400);
-	});
-	it('should fail to delete a user due to an invalid input & return a 400 status', async () => {
-		const response = await supertest(app)
-			.delete('/api/user')
-			.set('Authorization', `Bearer ${userToken}`)
-			.send({ userId: 'abc123' });
-		expect(response.status).toBe(400);
-	});
-	it('should fail to delete a user due to an non-existent user id & return a 500 status', async () => {
-		const response = await supertest(app)
-			.delete('/api/user')
-			.set('Authorization', `Bearer ${userToken}`)
-			.send({ userId: '0' });
+			.set('Authorization', `Bearer ${fakeToken}`);
 		expect(response.status).toBe(500);
 	});
 	it('should fail to delete a user due to a lack of auth token & return a 401 status', async () => {
 		const response = await supertest(app)
 			.delete('/api/user')
-			.set('Authorization', `Bearer ${'test'}`)
-			.send({ userId });
+			.set('Authorization', `Bearer ${'test'}`);
 		expect(response.status).toBe(401);
 	});
 	it('should delete a user due & return a 200 status', async () => {
