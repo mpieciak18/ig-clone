@@ -136,6 +136,6 @@ export const updateUser = async (req, res, next) => {
 		return;
 	}
 
-	// Return deleted user data
+	// Return updated user data
 	res.json({ user });
 };
