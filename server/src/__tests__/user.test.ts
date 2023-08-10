@@ -3,8 +3,7 @@ import supertest from 'supertest';
 import jwt from 'jsonwebtoken';
 
 describe('POST /create_new_user & DELETE /api/user', () => {
-	let userToken;
-	let userId;
+	let token;
 	it('should fail to create a new user due to missing inputs & return a 401 status', async () => {
 		const response = await supertest(app).post('/create_new_user').send({
 			email: 'test@test.com',
@@ -35,9 +34,8 @@ describe('POST /create_new_user & DELETE /api/user', () => {
 			bio: "I'm a test account.",
 			image: 'https://images.rawpixel.com/image_png_1300/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png',
 		});
-		userToken = response.body.token;
-		userId = response.body.user.id;
-		expect(userToken).toBeDefined();
+		token = response.body.token;
+		expect(token).toBeDefined();
 		expect(response.status).toBe(200);
 	});
 	it('should fail to create a new user due to it already existing & return a 400 status', async () => {
@@ -72,8 +70,7 @@ describe('POST /create_new_user & DELETE /api/user', () => {
 	it('should delete a user due & return a 200 status', async () => {
 		const response = await supertest(app)
 			.delete('/api/user')
-			.set('Authorization', `Bearer ${userToken}`)
-			.send({ userId: userId });
+			.set('Authorization', `Bearer ${token}`);
 		expect(response.status).toBe(200);
 	});
 });

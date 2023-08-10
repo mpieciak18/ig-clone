@@ -67,43 +67,58 @@ export const signIn = async (req, res, next) => {
 // Deletes a user's account from the database
 // NOTE: Currently only used for testing purposes
 export const deleteUser = async (req, res, next) => {
-	// Check if user to be deleted belongs to signed in user
+	// Delete user
 	let user;
 	try {
-		user = await prisma.user.findUnique({ where: { id: req.user.id } });
+		user = await prisma.user.delete({ where: { id: req.user.id } });
 	} catch (e) {
+		// Error handled at top-level (ie, server.ts) as 500 error
 		next(e);
 		return;
 	}
 
-	// Throw error if does not belong to user / not found
+	// While the previous try/catch (along with the 'protect' middleware) should catch all errors,
+	// this is added as an extra step of error handling (in case the deletion 'runs' but nothing is returned).
 	if (!user) {
-		const e = new Error();
-		// @ts-expect-error
-		e.type = 'auth';
-		next(e);
-		return;
-	}
-
-	// Delete user
-	let deletedUser;
-	try {
-		deletedUser = await prisma.user.delete({ where: { id: user.id } });
-	} catch (e) {
-		next(e);
-		return;
-	}
-
-	// Throw error (default AKA 500) if no deleted user is returned from the db
-	if (!deletedUser) {
 		const e = new Error();
 		next(e);
 		return;
 	}
 
 	// Return deleted user data
-	res.json({ deletedUser });
+	res.json({ user });
 };
 
 // Updates a user's account fields (note: these are the same fields passed to createNewUser)
-export const updateUser = async (req, res, next) => {};
+export const updateUser = async (req, res, next) => {
+	// Format data needed for update
+	const keys = ['email', 'password', 'username', 'name', 'bio', 'image'];
+	const data = {};
+	keys.forEach((key) => {
+		if (req.body[key]) data[key] = req.body[key];
+	});
+
+	// Update user
+	let user;
+	try {
+		user = await prisma.user.update({
+			where: { id: req.user.id },
+			data,
+		});
+	} catch (e) {
+		// Error handled at top-level (ie, server.ts) as 500 error
+		next(e);
+		return;
+	}
+
+	// While the previous try/catch (along with the 'protect' middleware) should catch all errors,
+	// this is added as an extra step of error handling (in case the update 'runs' but nothing is returned).
+	if (!user) {
+		const e = new Error();
+		next(e);
+		return;
+	}
+
+	// Return deleted user data
+	res.json({ user });
+};
