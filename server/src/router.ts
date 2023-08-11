@@ -29,13 +29,15 @@ router.delete('/user', handleInputErrors, deleteUser);
 // // // // // //
 
 // Gets a user's given follows (e.g., to see who they follow)
-router.get('/follows/given');
+router.get('/follow/given');
 // Gets a user's received follows (e.g., to see their followers)
-router.get('/follows/received');
-// Creates a new follow when one user (the giver) follows another (the receiver)
-router.post('/follows');
-// Deletes a follow when one user (the giver) unfollows another (the receiver)
-router.delete('/follows');
+router.get('/follow/received');
+// Gets the follow data between the signed-in user & another user
+router.get('/follow/user');
+// Creates a follow when the signed-in user follows another user
+router.post('/follow');
+// Deletes a follow when the signed-in user unfollows another user
+router.delete('/follow');
 
 // // // // // //
 //    Posts    //
