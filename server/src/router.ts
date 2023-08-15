@@ -2,7 +2,12 @@ import { Router } from 'express';
 import { body } from 'express-validator';
 import { deleteUser, updateUser } from './handlers/user';
 import { handleInputErrors } from './modules/middleware';
-import { createFollow, deleteFollow, findFollow } from './handlers/follow';
+import {
+	createFollow,
+	deleteFollow,
+	findFollow,
+	getGivenFollows,
+} from './handlers/follow';
 
 const router = Router();
 
@@ -30,9 +35,14 @@ router.delete('/user', handleInputErrors, deleteUser);
 // // // // // //
 
 // Gets a user's given follows (e.g., to see who they follow)
-router.get('/follow/given');
+router.post(
+	'/follow/given',
+	body('id').isInt(),
+	handleInputErrors,
+	getGivenFollows
+);
 // Gets a user's received follows (e.g., to see their followers)
-router.get('/follow/received');
+router.post('/follow/received');
 // Finds the follow data between the signed-in user & another user (if it exists)
 router.post('/follow/user', body('id').isInt(), handleInputErrors, findFollow);
 // Creates a follow when the signed-in user follows another user

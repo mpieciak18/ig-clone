@@ -109,6 +109,43 @@ describe('POST /api/follow & DELETE /api/follow', () => {
 		expect(response.body.givenFollow.receiverId).toBe(otherUser.id);
 		expect(response.body.receivedFollow).toBeNull();
 	});
+	it('should fail to find given follows due to an invalid input (ie, no other user id) & return a 400 error', async () => {
+		const response = await supertest(app)
+			.post('/api/follow/given')
+			.set('Authorization', `Bearer ${token}`)
+			.send({});
+		expect(response.status).toBe(400);
+	});
+	it('should fail to find given follows due to no auth token & return a 401 error', async () => {
+		const response = await supertest(app)
+			.post('/api/follow/given')
+			.set('Authorization', `Bearer 1234`)
+			.send({ id: user.id });
+		expect(response.status).toBe(401);
+	});
+	it('should fail to find given follows due to a non-existent other user & return a 500 error', async () => {
+		const response = await supertest(app)
+			.post('/api/follow/given')
+			.set('Authorization', `Bearer ${token}`)
+			.send({ id: 1 });
+		expect(response.status).toBe(500);
+	});
+	it('should find given follows for both users & return a 200 error + correct follows data', async () => {
+		const response = await supertest(app)
+			.post('/api/follow/given')
+			.set('Authorization', `Bearer ${token}`)
+			.send({ id: user.id });
+		expect(response.status).toBe(200);
+		expect(response.body.givenFollows.length).toBeGreaterThan(0);
+		expect(response.body.givenFollows[0].giverId).toBe(user.id);
+		expect(response.body.givenFollows[0].receiverId).toBe(otherUser.id);
+		const response2 = await supertest(app)
+			.post('/api/follow/given')
+			.set('Authorization', `Bearer ${token}`)
+			.send({ id: otherUser.id });
+		expect(response2.status).toBe(200);
+		expect(response2.body.givenFollows.length).toEqual(0);
+	});
 	it('should fail to delete a follow due to an invalid input (ie, no follow id) & return a 400 error', async () => {
 		const response = await supertest(app)
 			.delete('/api/follow')
