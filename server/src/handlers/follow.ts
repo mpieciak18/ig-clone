@@ -150,5 +150,41 @@ export const getGivenFollows = async (req, res, next) => {
 	}
 
 	// Third, return given follows back to client
-	res.json({ givenFollows });
+	res.json({ follows: givenFollows });
+};
+
+// Gets the follows received by (any) user
+export const getReceivedFollows = async (req, res, next) => {
+	// First, confirm if provided user exists
+	// If no user is found, handle it at the top-level (server.ts) as 500 error
+	let otherUser;
+	try {
+		otherUser = await prisma.user.findUnique({
+			where: { id: req.body.id },
+		});
+	} catch (e) {
+		// DB errors are handled at top-level (server.ts) as 500 error
+		next(e);
+		return;
+	}
+	if (!otherUser) {
+		const e = new Error();
+		next(e);
+		return;
+	}
+
+	// Second, retrieve received follows
+	let receivedFollows;
+	try {
+		receivedFollows = await prisma.follow.findMany({
+			where: { receiverId: req.body.id },
+		});
+	} catch (e) {
+		// DB errors are handled at top-level (server.ts) as 500 error
+		next(e);
+		return;
+	}
+
+	// Third, return given follows back to client
+	res.json({ follows: receivedFollows });
 };

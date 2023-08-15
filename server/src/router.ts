@@ -7,6 +7,7 @@ import {
 	deleteFollow,
 	findFollow,
 	getGivenFollows,
+	getReceivedFollows,
 } from './handlers/follow';
 
 const router = Router();
@@ -42,7 +43,12 @@ router.post(
 	getGivenFollows
 );
 // Gets a user's received follows (e.g., to see their followers)
-router.post('/follow/received');
+router.post(
+	'/follow/received',
+	body('id').isInt(),
+	handleInputErrors,
+	getReceivedFollows
+);
 // Finds the follow data between the signed-in user & another user (if it exists)
 router.post('/follow/user', body('id').isInt(), handleInputErrors, findFollow);
 // Creates a follow when the signed-in user follows another user
