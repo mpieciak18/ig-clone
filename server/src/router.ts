@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { body } from 'express-validator';
 import { deleteUser, updateUser } from './handlers/user';
 import { handleInputErrors } from './modules/middleware';
+import { createFollow, deleteFollow } from './handlers/follow';
 
 const router = Router();
 
@@ -35,9 +36,9 @@ router.get('/follow/received');
 // Gets the follow data between the signed-in user & another user
 router.get('/follow/user');
 // Creates a follow when the signed-in user follows another user
-router.post('/follow', body('id').isInt(), handleInputErrors);
+router.post('/follow', body('id').isInt(), handleInputErrors, createFollow);
 // Deletes a follow when the signed-in user unfollows another user
-router.delete('/follow', body('id').isInt(), handleInputErrors);
+router.delete('/follow', body('id').isInt(), handleInputErrors, deleteFollow);
 
 // // // // // //
 //    Posts    //

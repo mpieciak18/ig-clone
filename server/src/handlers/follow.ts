@@ -24,7 +24,7 @@ export const createFollow = async (req, res, next) => {
 	// Second, create follow
 	let follow;
 	try {
-		follow = prisma.follow.create({
+		follow = await prisma.follow.create({
 			data: { giverId: req.user.id, receiverId: req.body.id },
 		});
 	} catch (e) {
@@ -49,7 +49,7 @@ export const deleteFollow = async (req, res, next) => {
 	// First, delete follow
 	let follow;
 	try {
-		follow = prisma.follow.delete({
+		follow = await prisma.follow.delete({
 			where: { id: req.body.id },
 		});
 	} catch (e) {
