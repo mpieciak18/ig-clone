@@ -49,9 +49,12 @@ describe('POST /api/follow & DELETE /api/follow', () => {
 		expect(response.status).toBe(400);
 	});
 	it('should fail to create a follow due to no auth token & return a 401 error', async () => {
-		const response = await supertest(app).post('/api/follow').send({
-			id: otherUser.id,
-		});
+		const response = await supertest(app)
+			.post('/api/follow')
+			.set('Authorization', `Bearer`)
+			.send({
+				id: otherUser.id,
+			});
 		expect(response.status).toBe(401);
 	});
 	it('should fail to create a follow due to a non-existent other user & return a 500 error', async () => {
@@ -81,6 +84,20 @@ describe('POST /api/follow & DELETE /api/follow', () => {
 			.set('Authorization', `Bearer ${token}`)
 			.send({});
 		expect(response.status).toBe(400);
+	});
+	it('should fail to find follow data due to no auth token & return a 401 error', async () => {
+		const response = await supertest(app)
+			.post('/api/follow/user')
+			.set('Authorization', `Bearer`)
+			.send({ id: otherUser.id });
+		expect(response.status).toBe(401);
+	});
+	it('should fail to find follow data due to a non-existent other user & return a 500 error', async () => {
+		const response = await supertest(app)
+			.post('/api/follow/user')
+			.set('Authorization', `Bearer ${token}`)
+			.send({ id: 1 });
+		expect(response.status).toBe(500);
 	});
 	it('should find follow data & return a 200 error + correct follow info', async () => {
 		const response = await supertest(app)
