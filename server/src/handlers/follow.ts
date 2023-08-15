@@ -68,3 +68,34 @@ export const deleteFollow = async (req, res, next) => {
 	// Send deleted follow data back to client
 	res.json({ follow });
 };
+
+// Gets a follow based on the other user's ID (if it exists)
+export const findFollow = async (req, res, next) => {
+	// First, find if signed-in user followed other user
+	console.log({ giverId: req.user.id, receiverId: req.body.id });
+	let givenFollow;
+	try {
+		givenFollow = await prisma.follow.findFirst({
+			where: { giverId: req.user.id, receiverId: req.body.id },
+		});
+	} catch (e) {
+		// DB errors are handled at top-level (server.ts) as 500 error
+		next(e);
+		return;
+	}
+	console.log(givenFollow);
+	// Second, find if signed-in user is followed by other user
+	let receivedFollow;
+	try {
+		receivedFollow = await prisma.follow.findFirst({
+			where: { giverId: req.params.id, receiverId: req.user.id },
+		});
+	} catch (e) {
+		// DB errors are handled at top-level (server.ts) as 500 error
+		next(e);
+		return;
+	}
+	console.log(receivedFollow);
+	// Third, return data back to client
+	res.json({ givenFollow, receivedFollow });
+};
