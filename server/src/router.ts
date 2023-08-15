@@ -34,7 +34,7 @@ router.get('/follow/given');
 // Gets a user's received follows (e.g., to see their followers)
 router.get('/follow/received');
 // Finds the follow data between the signed-in user & another user (if it exists)
-router.post('/follow/user', body('id').isInt(), findFollow);
+router.post('/follow/user', body('id').isInt(), handleInputErrors, findFollow);
 // Creates a follow when the signed-in user follows another user
 router.post('/follow', body('id').isInt(), handleInputErrors, createFollow);
 // Deletes a follow when the signed-in user unfollows another user
