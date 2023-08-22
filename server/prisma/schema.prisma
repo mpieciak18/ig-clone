@@ -47,7 +47,6 @@ model Post {
   createdAt DateTime @default(now())
 
   file    String   @unique
-  test    String[]
   caption String
 
   userId   Int
