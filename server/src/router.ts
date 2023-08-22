@@ -9,6 +9,7 @@ import {
 	getGivenFollows,
 	getReceivedFollows,
 } from './handlers/follow';
+import { createPost } from './handlers/post';
 import multer from 'multer';
 
 export const upload = multer({
@@ -75,7 +76,13 @@ router.get('/post/user');
 // Gets a single post
 router.get('/post/:id');
 // Creates a new post
-router.post('/post', upload.single('image'));
+router.post(
+	'/post',
+	body('caption'),
+	upload.single('image'),
+	handleInputErrors,
+	createPost
+);
 // Updates a single post
 router.put('/post');
 // Deletes a single posts
