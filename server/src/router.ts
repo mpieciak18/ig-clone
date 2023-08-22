@@ -9,6 +9,14 @@ import {
 	getGivenFollows,
 	getReceivedFollows,
 } from './handlers/follow';
+import multer from 'multer';
+
+export const upload = multer({
+	storage: multer.memoryStorage(),
+	limits: {
+		fileSize: 5 * 1024 * 1024, // limit to 5MB
+	},
+});
 
 const router = Router();
 
@@ -67,7 +75,7 @@ router.get('/posts/user');
 // Gets a single post
 router.get('/posts/:id');
 // Updates a single post
-router.put('/posts');
+router.put('/posts', upload.single('image'));
 // Deletes a single posts
 router.delete('/posts');
 
