@@ -74,8 +74,10 @@ router.get('/post/all');
 router.get('/post/user');
 // Gets a single post
 router.get('/post/:id');
+// Creates a new post
+router.post('/post', upload.single('image'));
 // Updates a single post
-router.put('/post', upload.single('image'));
+router.put('/post');
 // Deletes a single posts
 router.delete('/post');
 
