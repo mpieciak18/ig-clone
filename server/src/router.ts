@@ -69,15 +69,15 @@ router.delete('/follow', body('id').isInt(), handleInputErrors, deleteFollow);
 // // // // // //
 
 // Gets (a limited number of) posts for home page
-router.get('/posts/all');
+router.get('/post/all');
 // Gets (a limited number of) a user's posts
-router.get('/posts/user');
+router.get('/post/user');
 // Gets a single post
-router.get('/posts/:id');
+router.get('/post/:id');
 // Updates a single post
-router.put('/posts', upload.single('image'));
+router.put('/post', upload.single('image'));
 // Deletes a single posts
-router.delete('/posts');
+router.delete('/post');
 
 // synchronous error handler
 // // add code once all handlers + auth middleware are created // //
