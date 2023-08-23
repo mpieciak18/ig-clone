@@ -1,5 +1,6 @@
 import supertest from 'supertest';
 import app from '../server';
+import { it, describe, expect } from 'vitest';
 
 describe('POST /api/follow & DELETE /api/follow', () => {
 	let token;

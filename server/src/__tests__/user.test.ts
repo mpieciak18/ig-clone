@@ -2,6 +2,7 @@ import app from '../server';
 import supertest from 'supertest';
 import jwt from 'jsonwebtoken';
 import { comparePasswords } from '../modules/auth';
+import { it, describe, expect } from 'vitest';
 
 describe('POST /create_new_user & DELETE /api/user', () => {
 	let token;

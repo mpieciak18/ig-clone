@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
 import { deleteUser, updateUser } from './handlers/user';
-import { handleInputErrors } from './modules/middleware';
+import { handleInputErrors, uploadImage } from './modules/middleware';
 import {
 	createFollow,
 	deleteFollow,
@@ -12,12 +12,15 @@ import {
 import { createPost } from './handlers/post';
 import multer from 'multer';
 
-export const upload = multer({
-	storage: multer.memoryStorage(),
-	limits: {
-		fileSize: 5 * 1024 * 1024, // limit to 5MB
-	},
-});
+// export const upload = multer({
+// 	storage: multer.memoryStorage(),
+// 	limits: {
+// 		fileSize: 5 * 1024 * 1024, // limit to 5MB
+// 	},
+// });
+
+const storage = multer.memoryStorage(); // Just store the file in memory for testing
+export const upload = multer({ storage: storage });
 
 const router = Router();
 
@@ -78,9 +81,10 @@ router.get('/post/:id');
 // Creates a new post
 router.post(
 	'/post',
-	body('caption'),
-	upload.single('image'),
+	upload.single('file'),
+	body('caption').isString(),
 	handleInputErrors,
+	uploadImage,
 	createPost
 );
 // Updates a single post
