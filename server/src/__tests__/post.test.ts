@@ -17,6 +17,7 @@ describe('POST /api/post & DELETE /api/post', () => {
 		id: undefined,
 	};
 	const caption = 'this is a test';
+	const updatedCap = 'this is an updated caption';
 	let post;
 	it('should create user, get web token, user id, & a 200 status', async () => {
 		const response = await supertest(app)
@@ -84,6 +85,58 @@ describe('POST /api/post & DELETE /api/post', () => {
 			.set('Authorization', `Bearer`)
 			.send({ id: post.id });
 		expect(response.status).toBe(401);
+	});
+	it('should fail to update a post due to a non-existent post id & return a 500 code', async () => {
+		const response = await supertest(app)
+			.put('/api/post')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				id: 1,
+				caption: updatedCap,
+			});
+		expect(response.status).toBe(500);
+	});
+	it('should fail to update a post due to an invalid inputs & return a 400 code', async () => {
+		const response = await supertest(app)
+			.put('/api/post')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				id: 'abc',
+				caption: null,
+			});
+		expect(response.status).toBe(400);
+	});
+	it('should fail to update a post due to a missing post id & return a 400 code', async () => {
+		const response = await supertest(app)
+			.put('/api/post')
+			.set('Authorization', `Bearer ${token}`)
+			.send({ caption: updatedCap });
+		expect(response.status).toBe(400);
+	});
+	it('should fail to update a post due to a missing auth token & return a 401 code', async () => {
+		const response = await supertest(app)
+			.put('/api/post')
+			.set('Authorization', `Bearer`)
+			.send({ id: post.id, caption: updatedCap });
+		expect(response.status).toBe(401);
+	});
+	it('should update a post & return a 200 code + correct post info', async () => {
+		const response = await supertest(app)
+			.put('/api/post')
+			.set('Authorization', `Bearer ${token}`)
+			.send({ id: post.id, caption: updatedCap });
+		expect(response.status).toBe(200);
+		expect(response.body.post.caption).toBe(updatedCap);
+		expect(response.body.post.id).toBe(post.id);
+	});
+	it('should update (revert) a post & return a 200 code + correct post info', async () => {
+		const response = await supertest(app)
+			.put('/api/post')
+			.set('Authorization', `Bearer ${token}`)
+			.send({ id: post.id, caption });
+		expect(response.status).toBe(200);
+		expect(response.body.post.caption).toBe(caption);
+		expect(response.body.post.id).toBe(post.id);
 	});
 	it('should delete a post & return a 200 code + correct post info', async () => {
 		const response = await supertest(app)

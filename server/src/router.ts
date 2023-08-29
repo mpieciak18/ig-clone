@@ -90,7 +90,7 @@ router.post(
 router.put(
 	'/post',
 	body('id').isInt(),
-	body('caption').isInt(),
+	body('caption').isString(),
 	handleInputErrors,
 	updatePost
 );
