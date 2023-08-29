@@ -1,4 +1,3 @@
-import { deleteFileFromStorage } from '../config/gcloud';
 import prisma from '../db';
 
 export const createPost = async (req, res, next) => {
@@ -10,11 +9,12 @@ export const createPost = async (req, res, next) => {
 	}
 
 	// First, create post
+	const { buffer } = req.file;
 	let post;
 	try {
 		post = await prisma.post.create({
 			data: {
-				file: req.imageUrl,
+				image: buffer,
 				caption: req.body.caption,
 				userId: req.user.id,
 			},
@@ -37,8 +37,8 @@ export const createPost = async (req, res, next) => {
 };
 
 // Deletes a post
-export const deleteFollow = async (req, res, next) => {
-	// First, delete the post
+export const deletePost = async (req, res, next) => {
+	// Delete the post
 	let post;
 	try {
 		post = await prisma.post.delete({
@@ -56,9 +56,6 @@ export const deleteFollow = async (req, res, next) => {
 		next(e);
 		return;
 	}
-
-	// Second, delete file of deleted post from storage
-	await deleteFileFromStorage(post.file);
 
 	// Send deleted follow data back to client
 	res.json({ post });

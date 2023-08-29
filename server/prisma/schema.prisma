@@ -46,7 +46,7 @@ model Post {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
 
-  file    String   @unique
+  image   Bytes
   caption String
 
   userId   Int

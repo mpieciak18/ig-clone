@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
 import { deleteUser, updateUser } from './handlers/user';
-import { handleInputErrors, uploadImage } from './modules/middleware';
+import { handleInputErrors } from './modules/middleware';
 import {
 	createFollow,
 	deleteFollow,
@@ -9,7 +9,7 @@ import {
 	getGivenFollows,
 	getReceivedFollows,
 } from './handlers/follow';
-import { createPost } from './handlers/post';
+import { createPost, deletePost } from './handlers/post';
 import multer from 'multer';
 
 // export const upload = multer({
@@ -19,7 +19,7 @@ import multer from 'multer';
 // 	},
 // });
 
-const storage = multer.memoryStorage(); // Just store the file in memory for testing
+const storage = multer.memoryStorage();
 export const upload = multer({ storage: storage });
 
 const router = Router();
@@ -84,13 +84,12 @@ router.post(
 	upload.single('file'),
 	body('caption').isString(),
 	handleInputErrors,
-	uploadImage,
 	createPost
 );
 // Updates a single post
 router.put('/post');
-// Deletes a single posts
-router.delete('/post');
+// Deletes a single post
+router.delete('/post', body('id').isInt(), handleInputErrors, deletePost);
 
 // synchronous error handler
 // // add code once all handlers + auth middleware are created // //
