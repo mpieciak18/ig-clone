@@ -9,7 +9,7 @@ import {
 	getGivenFollows,
 	getReceivedFollows,
 } from './handlers/follow';
-import { createPost, deletePost } from './handlers/post';
+import { createPost, deletePost, updatePost } from './handlers/post';
 import multer from 'multer';
 
 // export const upload = multer({
@@ -87,7 +87,13 @@ router.post(
 	createPost
 );
 // Updates a single post
-router.put('/post');
+router.put(
+	'/post',
+	body('id').isInt(),
+	body('caption').isInt(),
+	handleInputErrors,
+	updatePost
+);
 // Deletes a single post
 router.delete('/post', body('id').isInt(), handleInputErrors, deletePost);
 
