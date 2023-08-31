@@ -5,6 +5,8 @@ import fs from 'fs/promises';
 import FormData from 'form-data';
 import { it, describe, expect } from 'vitest';
 
+const urlPattern = /^(http|https):\/\/[^ "]+$/;
+
 describe('POST /api/post & DELETE /api/post', () => {
 	let token;
 	const user = {
@@ -51,8 +53,7 @@ describe('POST /api/post & DELETE /api/post', () => {
 		expect(response.status).toBe(200);
 		expect(post?.userId).toBe(user.id);
 		expect(post?.caption).toBe(caption);
-		expect(post?.image).toHaveProperty('type', 'Buffer');
-		expect(Array.isArray(post?.image?.data)).toBe(true);
+		expect(post?.image).toMatch(urlPattern);
 	});
 	it('should fail to delete a post due to a non-existent post id & return a 500 code', async () => {
 		const response = await supertest(app)
@@ -148,8 +149,7 @@ describe('POST /api/post & DELETE /api/post', () => {
 		expect(response.status).toBe(200);
 		expect(response.body.post.id).toBe(post.id);
 		expect(response.body.post.caption).toBe(caption);
-		expect(post?.image).toHaveProperty('type', 'Buffer');
-		expect(Array.isArray(post?.image?.data)).toBe(true);
+		expect(response.body.post.image).toMatch(urlPattern);
 	});
 	it('should delete the user & return a 200 code + correct user info', async () => {
 		const response = await supertest(app)

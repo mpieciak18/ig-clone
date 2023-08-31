@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
 import { deleteUser, updateUser } from './handlers/user';
-import { handleInputErrors } from './modules/middleware';
+import { handleInputErrors, uploadImage } from './modules/middleware';
 import {
 	createFollow,
 	deleteFollow,
@@ -84,6 +84,7 @@ router.post(
 	upload.single('file'),
 	body('caption').isString(),
 	handleInputErrors,
+	uploadImage,
 	createPost
 );
 // Updates a single post

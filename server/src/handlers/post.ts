@@ -1,20 +1,22 @@
 import prisma from '../db';
+import { deleteFileFromStorage } from '../config/gcloud';
 
 export const createPost = async (req, res, next) => {
+	console.log(req.image);
+	console.log(req.body);
 	// If no image url is passed from the upload middleware, handle it at the top-level (server.ts) as 500 error
-	if (!req.file) {
+	if (!req.image) {
 		const e = new Error();
 		next(e);
 		return;
 	}
 
 	// First, create post
-	const { buffer } = req.file;
 	let post;
 	try {
 		post = await prisma.post.create({
 			data: {
-				image: buffer,
+				image: req.image,
 				caption: req.body.caption,
 				userId: req.user.id,
 			},
@@ -38,7 +40,7 @@ export const createPost = async (req, res, next) => {
 
 // Deletes a post
 export const deletePost = async (req, res, next) => {
-	// Delete the post
+	// First, delete the post
 	let post;
 	try {
 		post = await prisma.post.delete({
@@ -57,7 +59,15 @@ export const deletePost = async (req, res, next) => {
 		return;
 	}
 
-	// Send deleted follow data back to client
+	// Second, delete file of deleted post from storage
+	try {
+		await deleteFileFromStorage(post.image);
+	} catch (e) {
+		next(e);
+		return;
+	}
+
+	// Finally, send deleted follow data back to client
 	res.json({ post });
 };
 
