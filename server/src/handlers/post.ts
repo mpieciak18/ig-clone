@@ -59,8 +59,49 @@ export const getSinglePost = async (req, res, next) => {
 		return;
 	}
 
-	// Fourth, return data back to client
+	// Second, return data back to client
 	res.json({ post });
+};
+
+// Gets all posts from a single user by id
+export const getUserPosts = async (req, res, next) => {
+	// First, confirm if provided user exists
+	// If no user is found, handle it at the top-level (server.ts) as 500 error
+	let otherUser;
+	try {
+		otherUser = await prisma.user.findUnique({
+			where: { id: req.body.id },
+		});
+	} catch (e) {
+		// DB errors are handled at top-level (server.ts) as 500 error
+		next(e);
+		return;
+	}
+	if (!otherUser) {
+		const e = new Error();
+		next(e);
+		return;
+	}
+	// Second, get posts by user id
+	// If no post is found, handle it at the top-level (server.ts) as 500 error
+	let posts;
+	try {
+		posts = await prisma.post.findMany({
+			where: { userId: req.body.id },
+		});
+	} catch (e) {
+		// DB errors are handled at top-level (server.ts) as 500 error
+		next(e);
+		return;
+	}
+	if (!posts) {
+		const e = new Error();
+		next(e);
+		return;
+	}
+
+	// Second, return data back to client
+	res.json({ posts });
 };
 
 // Deletes a post

@@ -55,6 +55,7 @@ describe('POST /api/post & DELETE /api/post', () => {
 		expect(post?.caption).toBe(caption);
 		expect(post?.image).toMatch(urlPattern);
 	});
+	//
 	it('should fail to get a post by id due to a non-existent post id & return a 500 code', async () => {
 		const response = await supertest(app)
 			.post('/api/post/single')
@@ -95,6 +96,49 @@ describe('POST /api/post & DELETE /api/post', () => {
 		expect(response.status).toBe(200);
 		expect(response.body.post.id).toBe(post.id);
 	});
+	//
+	it('should fail to get a post by user id due to a non-existent post id & return a 500 code', async () => {
+		const response = await supertest(app)
+			.post('/api/post/user')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				id: 1,
+			});
+		expect(response.status).toBe(500);
+	});
+	it('should fail to get a post by user id due to an invalid inputs & return a 400 code', async () => {
+		const response = await supertest(app)
+			.post('/api/post/user')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				id: 'abc',
+			});
+		expect(response.status).toBe(400);
+	});
+	it('should fail to get a post by user id due to a missing post id & return a 400 code', async () => {
+		const response = await supertest(app)
+			.post('/api/post/user')
+			.set('Authorization', `Bearer ${token}`)
+			.send({});
+		expect(response.status).toBe(400);
+	});
+	it('should fail to get a post by user id due to a missing auth token & return a 401 code', async () => {
+		const response = await supertest(app)
+			.post('/api/post/user')
+			.set('Authorization', `Bearer`)
+			.send({ id: user.id });
+		expect(response.status).toBe(401);
+	});
+	it('should get a post by user id & return a 200 code + correct post info', async () => {
+		const response = await supertest(app)
+			.post('/api/post/user')
+			.set('Authorization', `Bearer ${token}`)
+			.send({ id: user.id });
+		expect(response.status).toBe(200);
+		expect(response.body.posts.length).toBeGreaterThan(0);
+		expect(response.body.posts[0].userId).toBe(user.id);
+	});
+	//
 	it('should fail to update a post due to a non-existent post id & return a 500 code', async () => {
 		const response = await supertest(app)
 			.put('/api/post')
@@ -147,6 +191,7 @@ describe('POST /api/post & DELETE /api/post', () => {
 		expect(response.body.post.caption).toBe(caption);
 		expect(response.body.post.id).toBe(post.id);
 	});
+	//
 	it('should fail to delete a post due to a non-existent post id & return a 500 code', async () => {
 		const response = await supertest(app)
 			.delete('/api/post')
@@ -191,6 +236,7 @@ describe('POST /api/post & DELETE /api/post', () => {
 		expect(response.body.post.caption).toBe(caption);
 		expect(response.body.post.image).toMatch(urlPattern);
 	});
+	//
 	it('should delete the user & return a 200 code + correct user info', async () => {
 		const response = await supertest(app)
 			.delete('/api/user')
