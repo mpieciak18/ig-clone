@@ -1,8 +1,8 @@
 import supertest from 'supertest';
 import app from '../server';
-import { Blob } from 'node-fetch';
-import fs from 'fs/promises';
-import FormData from 'form-data';
+// import { Blob } from 'node-fetch';
+// import fs from 'fs/promises';
+// import FormData from 'form-data';
 import { it, describe, expect } from 'vitest';
 
 const urlPattern = /^(http|https):\/\/[^ "]+$/;
@@ -55,37 +55,45 @@ describe('POST /api/post & DELETE /api/post', () => {
 		expect(post?.caption).toBe(caption);
 		expect(post?.image).toMatch(urlPattern);
 	});
-	it('should fail to delete a post due to a non-existent post id & return a 500 code', async () => {
+	it('should fail to get a post by id due to a non-existent post id & return a 500 code', async () => {
 		const response = await supertest(app)
-			.delete('/api/post')
+			.post('/api/post/single')
 			.set('Authorization', `Bearer ${token}`)
 			.send({
 				id: 1,
 			});
 		expect(response.status).toBe(500);
 	});
-	it('should fail to delete a post due to an invalid post id & return a 400 code', async () => {
+	it('should fail to get a post by id due to an invalid inputs & return a 400 code', async () => {
 		const response = await supertest(app)
-			.delete('/api/post')
+			.post('/api/post/single')
 			.set('Authorization', `Bearer ${token}`)
 			.send({
 				id: 'abc',
 			});
 		expect(response.status).toBe(400);
 	});
-	it('should fail to delete a post due to a missing post id & return a 400 code', async () => {
+	it('should fail to get a post by id due to a missing post id & return a 400 code', async () => {
 		const response = await supertest(app)
-			.delete('/api/post')
+			.post('/api/post/single')
 			.set('Authorization', `Bearer ${token}`)
 			.send({});
 		expect(response.status).toBe(400);
 	});
-	it('should fail to delete a post due to a missing auth token & return a 401 code', async () => {
+	it('should fail to get a post by id due to a missing auth token & return a 401 code', async () => {
 		const response = await supertest(app)
-			.delete('/api/post')
+			.post('/api/post/single')
 			.set('Authorization', `Bearer`)
 			.send({ id: post.id });
 		expect(response.status).toBe(401);
+	});
+	it('should get a post by id & return a 200 code + correct post info', async () => {
+		const response = await supertest(app)
+			.post('/api/post/single')
+			.set('Authorization', `Bearer ${token}`)
+			.send({ id: post.id });
+		expect(response.status).toBe(200);
+		expect(response.body.post.id).toBe(post.id);
 	});
 	it('should fail to update a post due to a non-existent post id & return a 500 code', async () => {
 		const response = await supertest(app)
@@ -138,6 +146,38 @@ describe('POST /api/post & DELETE /api/post', () => {
 		expect(response.status).toBe(200);
 		expect(response.body.post.caption).toBe(caption);
 		expect(response.body.post.id).toBe(post.id);
+	});
+	it('should fail to delete a post due to a non-existent post id & return a 500 code', async () => {
+		const response = await supertest(app)
+			.delete('/api/post')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				id: 1,
+			});
+		expect(response.status).toBe(500);
+	});
+	it('should fail to delete a post due to an invalid post id & return a 400 code', async () => {
+		const response = await supertest(app)
+			.delete('/api/post')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				id: 'abc',
+			});
+		expect(response.status).toBe(400);
+	});
+	it('should fail to delete a post due to a missing post id & return a 400 code', async () => {
+		const response = await supertest(app)
+			.delete('/api/post')
+			.set('Authorization', `Bearer ${token}`)
+			.send({});
+		expect(response.status).toBe(400);
+	});
+	it('should fail to delete a post due to a missing auth token & return a 401 code', async () => {
+		const response = await supertest(app)
+			.delete('/api/post')
+			.set('Authorization', `Bearer`)
+			.send({ id: post.id });
+		expect(response.status).toBe(401);
 	});
 	it('should delete a post & return a 200 code + correct post info', async () => {
 		const response = await supertest(app)

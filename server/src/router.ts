@@ -9,7 +9,7 @@ import {
 	getGivenFollows,
 	getReceivedFollows,
 } from './handlers/follow';
-import { createPost, deletePost, updatePost } from './handlers/post';
+import { createPost, getPost, deletePost, updatePost } from './handlers/post';
 import multer from 'multer';
 
 // export const upload = multer({
@@ -73,11 +73,11 @@ router.delete('/follow', body('id').isInt(), handleInputErrors, deleteFollow);
 // // // // // //
 
 // Gets (a limited number of) posts for home page
-router.get('/post/all');
+router.post('/post/all');
 // Gets (a limited number of) a user's posts
-router.get('/post/user');
+router.post('/post/user');
 // Gets a single post
-router.get('/post/:id');
+router.post('/post/single', body('id').isInt(), handleInputErrors, getPost);
 // Creates a new post
 router.post(
 	'/post',
@@ -97,6 +97,10 @@ router.put(
 );
 // Deletes a single post
 router.delete('/post', body('id').isInt(), handleInputErrors, deletePost);
+
+// // // // // //
+//   Comments  //
+// // // // // //
 
 // synchronous error handler
 // // add code once all handlers + auth middleware are created // //

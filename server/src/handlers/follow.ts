@@ -105,7 +105,7 @@ export const findFollow = async (req, res, next) => {
 	let receivedFollow;
 	try {
 		receivedFollow = await prisma.follow.findFirst({
-			where: { giverId: req.params.id, receiverId: req.user.id },
+			where: { giverId: req.body.id, receiverId: req.user.id },
 		});
 	} catch (e) {
 		// DB errors are handled at top-level (server.ts) as 500 error

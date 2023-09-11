@@ -1,6 +1,7 @@
 import prisma from '../db';
 import { deleteFileFromStorage } from '../config/gcloud';
 
+// Creates a post
 export const createPost = async (req, res, next) => {
 	console.log(req.image);
 	console.log(req.body);
@@ -35,6 +36,30 @@ export const createPost = async (req, res, next) => {
 	}
 
 	// Second, send post data back to client
+	res.json({ post });
+};
+
+// Gets a post based on a single post's id (if it exists)
+export const getPost = async (req, res, next) => {
+	// First, get post by id
+	// If no post is found, handle it at the top-level (server.ts) as 500 error
+	let post;
+	try {
+		post = await prisma.post.findUnique({
+			where: { id: req.body.id },
+		});
+	} catch (e) {
+		// DB errors are handled at top-level (server.ts) as 500 error
+		next(e);
+		return;
+	}
+	if (!post) {
+		const e = new Error();
+		next(e);
+		return;
+	}
+
+	// Fourth, return data back to client
 	res.json({ post });
 };
 
