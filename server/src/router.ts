@@ -9,7 +9,12 @@ import {
 	getGivenFollows,
 	getReceivedFollows,
 } from './handlers/follow';
-import { createPost, getPost, deletePost, updatePost } from './handlers/post';
+import {
+	createPost,
+	getSinglePost,
+	deletePost,
+	updatePost,
+} from './handlers/post';
 import multer from 'multer';
 
 // export const upload = multer({
@@ -77,7 +82,12 @@ router.post('/post/all');
 // Gets (a limited number of) a user's posts
 router.post('/post/user');
 // Gets a single post
-router.post('/post/single', body('id').isInt(), handleInputErrors, getPost);
+router.post(
+	'/post/single',
+	body('id').isInt(),
+	handleInputErrors,
+	getSinglePost
+);
 // Creates a new post
 router.post(
 	'/post',
