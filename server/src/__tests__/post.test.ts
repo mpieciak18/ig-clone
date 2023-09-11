@@ -143,6 +143,40 @@ describe('POST /api/post & DELETE /api/post', () => {
 		expect(response.body.posts[0].userId).toBe(user.id);
 	});
 	//
+	it('should fail to get all posts due to an invalid inputs & return a 400 code', async () => {
+		const response = await supertest(app)
+			.post('/api/post/all')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				limit: 'ten',
+			});
+		expect(response.status).toBe(400);
+	});
+	it('should fail to get all posts due to a missing inputs & return a 400 code', async () => {
+		const response = await supertest(app)
+			.post('/api/post/all')
+			.set('Authorization', `Bearer ${token}`)
+			.send({});
+		expect(response.status).toBe(400);
+	});
+	it('should fail to get all posts due to a missing auth token & return a 401 code', async () => {
+		const response = await supertest(app)
+			.post('/api/post/all')
+			.set('Authorization', `Bearer`)
+			.send({ limit });
+		expect(response.status).toBe(401);
+	});
+	it('should get all posts & return a 200 code + correct post info', async () => {
+		const response = await supertest(app)
+			.post('/api/post/all')
+			.set('Authorization', `Bearer ${token}`)
+			.send({ limit });
+		expect(response.status).toBe(200);
+		expect(response.body.posts.length).toBeGreaterThan(0);
+		expect(response.body.posts.length).toBeLessThanOrEqual(limit);
+		expect(response.body.posts[0].userId).toBe(user.id);
+	});
+	//
 	it('should fail to update a post due to a non-existent post id & return a 500 code', async () => {
 		const response = await supertest(app)
 			.put('/api/post')

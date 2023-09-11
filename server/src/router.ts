@@ -11,6 +11,7 @@ import {
 } from './handlers/follow';
 import {
 	createPost,
+	getPosts,
 	getSinglePost,
 	getUserPosts,
 	deletePost,
@@ -79,7 +80,7 @@ router.delete('/follow', body('id').isInt(), handleInputErrors, deleteFollow);
 // // // // // //
 
 // Gets (a limited number of) posts for home page
-router.post('/post/all');
+router.post('/post/all', body('limit').isInt(), handleInputErrors, getPosts);
 // Gets (a limited number of) a user's posts
 router.post(
 	'/post/user',

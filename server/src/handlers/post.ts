@@ -64,6 +64,30 @@ export const getSinglePost = async (req, res, next) => {
 };
 
 // Gets all posts from a single user by id
+export const getPosts = async (req, res, next) => {
+	// First, get all posts with limit
+	// If no posts are found, handle it at the top-level (server.ts) as 500 error
+	let posts;
+	try {
+		posts = await prisma.post.findMany({
+			take: req.body.limit,
+		});
+	} catch (e) {
+		// DB errors are handled at top-level (server.ts) as 500 error
+		next(e);
+		return;
+	}
+	if (!posts) {
+		const e = new Error();
+		next(e);
+		return;
+	}
+
+	// Second, return data back to client
+	res.json({ posts });
+};
+
+// Gets all posts from a single user by id
 export const getUserPosts = async (req, res, next) => {
 	// First, confirm if provided user exists
 	// If no user is found, handle it at the top-level (server.ts) as 500 error
