@@ -81,7 +81,13 @@ router.delete('/follow', body('id').isInt(), handleInputErrors, deleteFollow);
 // Gets (a limited number of) posts for home page
 router.post('/post/all');
 // Gets (a limited number of) a user's posts
-router.post('/post/user', body('id').isInt(), handleInputErrors, getUserPosts);
+router.post(
+	'/post/user',
+	body('id').isInt(),
+	body('limit').isInt(),
+	handleInputErrors,
+	getUserPosts
+);
 // Gets a single post
 router.post(
 	'/post/single',
