@@ -71,6 +71,7 @@ export const getPosts = async (req, res, next) => {
 	try {
 		posts = await prisma.post.findMany({
 			take: req.body.limit,
+			orderBy: { createdAt: 'desc' },
 		});
 	} catch (e) {
 		// DB errors are handled at top-level (server.ts) as 500 error
@@ -113,6 +114,7 @@ export const getUserPosts = async (req, res, next) => {
 		posts = await prisma.post.findMany({
 			where: { userId: req.body.id },
 			take: req.body.limit,
+			orderBy: { createdAt: 'desc' },
 		});
 	} catch (e) {
 		// DB errors are handled at top-level (server.ts) as 500 error
