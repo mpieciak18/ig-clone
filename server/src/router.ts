@@ -18,6 +18,12 @@ import {
 	updatePost,
 } from './handlers/post';
 import multer from 'multer';
+import {
+	createComment,
+	deleteComment,
+	updateComment,
+	getComments,
+} from './handlers/comment';
 
 // export const upload = multer({
 // 	storage: multer.memoryStorage(),
@@ -126,7 +132,7 @@ router.post(
 	body('id').isInt(),
 	body('limit').isInt(),
 	handleInputErrors,
-	getPostComments
+	getComments
 );
 // Creates a new comment
 router.post(
