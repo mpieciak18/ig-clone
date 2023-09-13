@@ -120,6 +120,33 @@ router.delete('/post', body('id').isInt(), handleInputErrors, deletePost);
 //   Comments  //
 // // // // // //
 
+// Gets (a limited number of) a post's comments
+router.post(
+	'/comment/post',
+	body('id').isInt(),
+	body('limit').isInt(),
+	handleInputErrors,
+	getPostComments
+);
+// Creates a new comment
+router.post(
+	'/comment',
+	body('id').isInt(),
+	body('message').isString(),
+	handleInputErrors,
+	createComment
+);
+// Updates a comment
+router.put(
+	'/comment',
+	body('id').isInt(),
+	body('message').isString(),
+	handleInputErrors,
+	updateComment
+);
+// Deletes a single post
+router.delete('/comment', body('id').isInt(), handleInputErrors, deleteComment);
+
 // synchronous error handler
 // // add code once all handlers + auth middleware are created // //
 
