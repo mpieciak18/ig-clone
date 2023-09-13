@@ -60,6 +60,8 @@ model Comment {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
 
+  message String
+
   userId Int
   user   User @relation(fields: [userId], references: [id])
   postId Int
