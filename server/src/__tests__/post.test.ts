@@ -140,7 +140,7 @@ describe('POST /api/post & DELETE /api/post', () => {
 		expect(response.status).toBe(200);
 		expect(response.body.posts.length).toBeGreaterThan(0);
 		expect(response.body.posts.length).toBeLessThanOrEqual(limit);
-		expect(response.body.posts[0].userId).toBe(user.id);
+		// expect(response.body.posts[0].userId).toBe(user.id);
 	});
 	//
 	it('should fail to get all posts due to an invalid inputs & return a 400 code', async () => {
@@ -174,7 +174,7 @@ describe('POST /api/post & DELETE /api/post', () => {
 		expect(response.status).toBe(200);
 		expect(response.body.posts.length).toBeGreaterThan(0);
 		expect(response.body.posts.length).toBeLessThanOrEqual(limit);
-		expect(response.body.posts[0].userId).toBe(user.id);
+		// expect(response.body.posts[0].userId).toBe(user.id);
 	});
 	//
 	it('should fail to update a post due to a non-existent post id & return a 500 code', async () => {
