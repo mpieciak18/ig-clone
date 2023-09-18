@@ -3,8 +3,6 @@ import { deleteFileFromStorage } from '../config/gcloud';
 
 // Creates a post
 export const createPost = async (req, res, next) => {
-	console.log(req.image);
-	console.log(req.body);
 	// If no image url is passed from the upload middleware, handle it at the top-level (server.ts) as 500 error
 	if (!req.image) {
 		const e = new Error();

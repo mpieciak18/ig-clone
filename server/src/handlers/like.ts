@@ -49,7 +49,6 @@ export const getLikes = async (req, res, next) => {
 		next(e);
 		return;
 	}
-	console.log(likes);
 
 	// Second, return likes back to client
 	res.json({ likes });
