@@ -55,6 +55,30 @@ export const getComments = async (req, res, next) => {
 	res.json({ comments });
 };
 
+// Gets a single comment by id
+export const getSingleComment = async (req, res, next) => {
+	// First, get all comments from post with limit
+	// If no comments are found, handle it at the top-level (server.ts) as 500 error
+	let comment;
+	try {
+		comment = await prisma.comment.findUnique({
+			where: { id: req.body.id },
+		});
+	} catch (e) {
+		// DB errors are handled at top-level (server.ts) as 500 error
+		next(e);
+		return;
+	}
+	if (!comment) {
+		const e = new Error();
+		next(e);
+		return;
+	}
+
+	// Second, return comment back to client
+	res.json({ comment });
+};
+
 // Deletes a comment
 export const deleteComment = async (req, res, next) => {
 	// First, attempt to delete the comment

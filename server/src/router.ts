@@ -23,6 +23,7 @@ import {
 	deleteComment,
 	updateComment,
 	getComments,
+	getSingleComment,
 } from './handlers/comment';
 
 // export const upload = multer({
@@ -133,6 +134,13 @@ router.post(
 	body('limit').isInt(),
 	handleInputErrors,
 	getComments
+);
+// Gets a single comment by id
+router.post(
+	'/comment/single',
+	body('id').isInt(),
+	handleInputErrors,
+	getSingleComment
 );
 // Creates a new comment
 router.post(
