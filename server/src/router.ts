@@ -27,6 +27,12 @@ import {
 } from './handlers/comment';
 import { createLike, deleteLike, getLikes } from './handlers/like';
 import { createSave, deleteSave, getSaves } from './handlers/save';
+import {
+	createConversation,
+	deleteConversation,
+	getConversations,
+	getConversation,
+} from './handlers/conversation';
 
 // export const upload = multer({
 // 	storage: multer.memoryStorage(),
@@ -190,6 +196,34 @@ router.post('/save/user', body('limit').isInt(), handleInputErrors, getSaves);
 router.post('/save', body('id').isInt(), handleInputErrors, createSave);
 // Deletes a single save
 router.delete('/save', body('id').isInt(), handleInputErrors, deleteSave);
+
+// // // // // //
+//Conversations//
+// // // // // //
+
+// Gets a user's conversations
+router.get('/conversation/user', getConversations);
+// Gets a single conversation
+router.post(
+	'/conversation/single',
+	body('id').isInt(),
+	handleInputErrors,
+	getConversation
+);
+// Creates a new conversation
+router.post(
+	'/conversation',
+	body('id').isInt(),
+	handleInputErrors,
+	createConversation
+);
+// Deletes a single save
+router.delete(
+	'/conversation',
+	body('id').isInt(),
+	handleInputErrors,
+	deleteConversation
+);
 
 // synchronous error handler
 // // add code once all handlers + auth middleware are created // //
