@@ -18,14 +18,14 @@ export const createComment = async (req, res, next) => {
 		return;
 	}
 
-	// If no post is created, handle it at the top-level (server.ts) as 500 error
+	// If no comment is created, handle it at the top-level (server.ts) as 500 error
 	if (!comment) {
 		const e = new Error();
 		next(e);
 		return;
 	}
 
-	// Second, send post data back to client
+	// Second, send comment data back to client
 	res.json({ comment });
 };
 
@@ -57,8 +57,8 @@ export const getComments = async (req, res, next) => {
 
 // Gets a single comment by id
 export const getSingleComment = async (req, res, next) => {
-	// First, get all comments from post with limit
-	// If no comments are found, handle it at the top-level (server.ts) as 500 error
+	// First, get commend by id
+	// If no comment is found, handle it at the top-level (server.ts) as 500 error
 	let comment;
 	try {
 		comment = await prisma.comment.findUnique({

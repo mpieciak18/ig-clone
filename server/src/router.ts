@@ -25,6 +25,7 @@ import {
 	getComments,
 	getSingleComment,
 } from './handlers/comment';
+import { createLike, deleteLike, getLikes } from './handlers/like';
 
 // export const upload = multer({
 // 	storage: multer.memoryStorage(),
@@ -160,6 +161,23 @@ router.put(
 );
 // Deletes a single post
 router.delete('/comment', body('id').isInt(), handleInputErrors, deleteComment);
+
+// // // // // //
+//    Likes    //
+// // // // // //
+
+// Gets (a limited number of) a post's likes
+router.post(
+	'/like/post',
+	body('id').isInt(),
+	body('limit').isInt(),
+	handleInputErrors,
+	getLikes
+);
+// Creates a new comment
+router.post('/like', body('id').isInt(), handleInputErrors, createLike);
+// Deletes a single post
+router.delete('/like', body('id').isInt(), handleInputErrors, deleteLike);
 
 // synchronous error handler
 // // add code once all handlers + auth middleware are created // //
