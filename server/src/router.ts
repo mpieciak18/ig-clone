@@ -26,6 +26,7 @@ import {
 	getSingleComment,
 } from './handlers/comment';
 import { createLike, deleteLike, getLikes } from './handlers/like';
+import { createSave, deleteSave, getSaves } from './handlers/save';
 
 // export const upload = multer({
 // 	storage: multer.memoryStorage(),
@@ -178,6 +179,17 @@ router.post(
 router.post('/like', body('id').isInt(), handleInputErrors, createLike);
 // Deletes a single post
 router.delete('/like', body('id').isInt(), handleInputErrors, deleteLike);
+
+// // // // // //
+//    Saves    //
+// // // // // //
+
+// Gets (a limited number of) a user's saves
+router.post('/save/user', body('limit').isInt(), handleInputErrors, getSaves);
+// Creates a new save
+router.post('/save', body('id').isInt(), handleInputErrors, createSave);
+// Deletes a single save
+router.delete('/save', body('id').isInt(), handleInputErrors, deleteSave);
 
 // synchronous error handler
 // // add code once all handlers + auth middleware are created // //

@@ -17,14 +17,14 @@ export const createLike = async (req, res, next) => {
 		return;
 	}
 
-	// If no post is created, handle it at the top-level (server.ts) as 500 error
+	// If no like is created, handle it at the top-level (server.ts) as 500 error
 	if (!like) {
 		const e = new Error();
 		next(e);
 		return;
 	}
 
-	// Second, send post data back to client
+	// Second, send like data back to client
 	res.json({ like });
 };
 

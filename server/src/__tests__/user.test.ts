@@ -89,8 +89,8 @@ describe('POST /sign_in & PUT /api/user', () => {
 		image: 'https://images.rawpixel.com/image_png_1300/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png',
 	};
 	const otherUser = {
-		email: 'test77@test77.com',
-		username: 'test77',
+		email: 'test69@test69.com',
+		username: 'test69',
 		password: '123_abc',
 		name: 'Tester',
 		bio: "I'm a test account.",
