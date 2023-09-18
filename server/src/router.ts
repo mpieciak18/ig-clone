@@ -33,6 +33,7 @@ import {
 	getConversations,
 	getConversation,
 } from './handlers/conversation';
+import { createMessage, deleteMessage, getMessages } from './handlers/message';
 
 // export const upload = multer({
 // 	storage: multer.memoryStorage(),
@@ -217,13 +218,29 @@ router.post(
 	handleInputErrors,
 	createConversation
 );
-// Deletes a single save
+// Deletes a single conversation
 router.delete(
 	'/conversation',
 	body('id').isInt(),
 	handleInputErrors,
 	deleteConversation
 );
+
+// // // // // //
+//   Messages  //
+// // // // // //
+
+// Gets a conversation's messages
+router.post(
+	'/message/conversation',
+	body('id').isInt(),
+	handleInputErrors,
+	getMessages
+);
+// Creates a new message
+router.post('/message', body('id').isInt(), handleInputErrors, createMessage);
+// Deletes a single message
+router.delete('/message', body('id').isInt(), handleInputErrors, deleteMessage);
 
 // synchronous error handler
 // // add code once all handlers + auth middleware are created // //
