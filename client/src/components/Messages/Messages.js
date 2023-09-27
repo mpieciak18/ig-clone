@@ -8,7 +8,6 @@ import { getUrl } from '../../firebase/storage';
 import { timeSinceTrunc } from '../../other/timeSinceTrunc.js';
 import MessageSolid from '../../assets/images/dm.png';
 import { ConvoPopup } from '../other/ConvoPopup.js';
-import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 const Messages = (props) => {
 	// Redirect to signup page if not signed in
@@ -41,10 +40,10 @@ const Messages = (props) => {
 			setSearchPopUp(
 				<ConvoPopup user={user} updatePopUp={updatePopUp} />
 			);
-			disableBodyScroll(document.getElementById('convo-popup-bottom'));
+			// disableBodyScroll(document.getElementById('convo-popup-bottom'));
 		} else {
 			setSearchPopUp(null);
-			clearAllBodyScrollLocks();
+			// clearAllBodyScrollLocks();
 		}
 	}, [popUpState]);
 

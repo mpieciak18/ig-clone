@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { userSearch } from '../../other/search.js';
 import { getUrl } from '../../firebase/storage.js';
-import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import './other.css';
 
 const ConvoPopup = (props) => {

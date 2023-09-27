@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import { getUrl } from '../../../firebase/storage.js';
 import { Follows } from '../../other/Follows.js';
 import { useState, useEffect } from 'react';
-import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 const UserCard = (props) => {
 	const { user, popUpState, updatePopUp } = props;
@@ -103,7 +102,7 @@ const UserCard = (props) => {
 	useEffect(() => {
 		if (popUpState.followsOn == false) {
 			setFollows(null);
-			clearAllBodyScrollLocks();
+			// clearAllBodyScrollLocks();
 		} else {
 			setFollows(
 				<Follows
@@ -113,7 +112,7 @@ const UserCard = (props) => {
 					initTab={followingVsFollower}
 				/>
 			);
-			disableBodyScroll(document.getElementById('follow'));
+			// disableBodyScroll(document.getElementById('follow'));
 		}
 	}, [popUpState.followsOn]);
 

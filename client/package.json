@@ -11,7 +11,6 @@
 		"deploy": "gh-pages -d build"
 	},
 	"dependencies": {
-		"body-scroll-lock": "^4.0.0-beta.0",
 		"firebase": "^10.4.0",
 		"fuse.js": "^6.6.2",
 		"react": "^18.2.0",

@@ -16,7 +16,6 @@ import NotificationsHollow from '../../assets/images/like.png';
 import NotificationsSolid from '../../assets/images/like-solid.png';
 import MessagesHollow from '../../assets/images/messages.png';
 import MessagesSolid from '../../assets/images/messages-solid.png';
-import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 const Navbar = (props) => {
 	const { user, setUser, popUpState, updatePopUp } = props;
@@ -107,7 +106,7 @@ const Navbar = (props) => {
 			);
 			setNewPost(null);
 			setSearchPopUp(null);
-			disableBodyScroll(document.getElementById('notifs-list'));
+			// disableBodyScroll(document.getElementById('notifs-list'));
 		} else if (popUpState.newPostOn == true) {
 			setNewPost(
 				<NewPost
@@ -118,7 +117,7 @@ const Navbar = (props) => {
 			);
 			setNotifications(null);
 			setSearchPopUp(null);
-			disableBodyScroll(document.getElementById('new-post'));
+			// disableBodyScroll(document.getElementById('new-post'));
 		} else if (popUpState.searchOn == true) {
 			setSearchPopUp(
 				<SearchPopup
@@ -129,12 +128,12 @@ const Navbar = (props) => {
 			);
 			setNotifications(null);
 			setNewPost(null);
-			disableBodyScroll(document.getElementById('search-popup'));
+			// disableBodyScroll(document.getElementById('search-popup'));
 		} else {
 			setNotifications(null);
 			setNewPost(null);
 			setSearchPopUp(null);
-			clearAllBodyScrollLocks();
+			// clearAllBodyScrollLocks();
 		}
 	}, [popUpState, searchVal]);
 

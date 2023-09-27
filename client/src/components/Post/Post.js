@@ -11,7 +11,6 @@ import { timeSince } from '../../other/timeSince';
 import { CommentsBar } from './children/Comments/CommentsBar';
 import { CommentsFull } from './children/Comments/CommentsFull';
 import { LinkCopied } from './children/LinkCopied';
-import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 const Post = (props) => {
 	const { user, setUser, popUpState, updatePopUp } = props;
@@ -100,10 +99,10 @@ const Post = (props) => {
 					postOwnerId={postOwnerId}
 				/>
 			);
-			disableBodyScroll(document.getElementById('likes'));
+			// disableBodyScroll(document.getElementById('likes'));
 		} else {
 			setLikes(null);
-			clearAllBodyScrollLocks();
+			// clearAllBodyScrollLocks();
 		}
 	}, [popUpState.likesOn, user]);
 
