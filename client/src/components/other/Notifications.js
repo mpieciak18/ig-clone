@@ -44,8 +44,8 @@ const Notifications = (props) => {
 
 	// Change notifsCount, allLoaded, button, and markAllRead states when whichTab changes
 	useEffect(() => {
-		setNotifsCount(0);
 		setAllLoaded(false);
+		console.log(whichTab);
 		if (whichTab == 'new') {
 			setButtonOne('active');
 			setButtonTwo('inactive');
@@ -53,53 +53,61 @@ const Notifications = (props) => {
 			setButtonOne('inactive');
 			setButtonTwo('active');
 		}
-		setNotifsCount(20);
+		if (notifsCount == 20) {
+			updateNotifsArr();
+		} else {
+			setNotifsCount(20);
+		}
 	}, [whichTab]);
+
+	const updateNotifsArr = async () => {
+		if (whichTab == 'new') {
+			getNewNotifications(notifsCount).then((newNotifsArr) => {
+				setNotifsArr(newNotifsArr);
+				if (newNotifsArr != null) {
+					setMarkAllRead(
+						<div
+							id='notifs-clear'
+							className='button'
+							onClick={clearNotifs}
+						>
+							Mark All Read
+						</div>
+					);
+				} else {
+					setMarkAllRead(
+						<div id='notifs-clear' className='message'>
+							No Unread Notifications
+						</div>
+					);
+				}
+				if (newNotifsArr.length < notifsCount) {
+					setAllLoaded(true);
+				}
+			});
+		} else {
+			getOldNotifications(notifsCount).then((newNotifsArr) => {
+				setNotifsArr(newNotifsArr);
+				if (newNotifsArr != null) {
+					setMarkAllRead(null);
+				} else {
+					setMarkAllRead(
+						<div id='notifs-clear' className='message'>
+							No Read Notifications
+						</div>
+					);
+				}
+				if (newNotifsArr?.length < notifsCount) {
+					setAllLoaded(true);
+				}
+			});
+		}
+	};
 
 	// Change notifsArr state when notifsCount changes
 	useEffect(() => {
 		if (notifsCount > 0) {
-			if (whichTab == 'new') {
-				getNewNotifications(notifsCount).then((newNotifsArr) => {
-					setNotifsArr(newNotifsArr);
-					if (newNotifsArr != null) {
-						setMarkAllRead(
-							<div
-								id='notifs-clear'
-								className='button'
-								onClick={clearNotifs}
-							>
-								Mark All Read
-							</div>
-						);
-					} else {
-						setMarkAllRead(
-							<div id='notifs-clear' className='message'>
-								No Unread Notifications
-							</div>
-						);
-					}
-					if (newNotifsArr.length < notifsCount) {
-						setAllLoaded(true);
-					}
-				});
-			} else {
-				getOldNotifications(notifsCount).then((newNotifsArr) => {
-					setNotifsArr(newNotifsArr);
-					if (newNotifsArr != null) {
-						setMarkAllRead(null);
-					} else {
-						setMarkAllRead(
-							<div id='notifs-clear' className='message'>
-								No Read Notifications
-							</div>
-						);
-					}
-					if (newNotifsArr.length < notifsCount) {
-						setAllLoaded(true);
-					}
-				});
-			}
+			updateNotifsArr();
 		} else {
 			setNotifsArr(null);
 		}
