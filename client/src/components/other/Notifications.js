@@ -9,10 +9,11 @@ import { getUrl } from '../../firebase/storage';
 import { findUser } from '../../firebase/users';
 import { timeSince } from '../../other/timeSince';
 import { useAuth } from '../../contexts/AuthContext';
+import { usePopUp } from '../../contexts/PopUpContext';
 
-const Notifications = (props) => {
+const Notifications = () => {
 	const { user } = useAuth();
-	const { updatePopUp } = props;
+	const { updatePopUp } = usePopUp();
 
 	const navigate = useNavigate();
 

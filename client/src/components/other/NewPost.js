@@ -6,10 +6,12 @@ import { ImageInput } from './ImageInput.js';
 import { CaptionFooter } from './CaptionFooter.js';
 import { findUser } from '../../firebase/users.js';
 import { useAuth } from '../../contexts/AuthContext.js';
+import { usePopUp } from '../../contexts/PopUpContext.js';
 
 const NewPost = (props) => {
 	const { user, setUser } = useAuth();
-	const { updatePopUp, ref } = props;
+	const { updatePopUp } = usePopUp();
+	const { ref } = props;
 
 	// Init useNavigate function
 	const navigate = useNavigate();

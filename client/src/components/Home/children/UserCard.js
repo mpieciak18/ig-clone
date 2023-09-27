@@ -3,11 +3,11 @@ import { getUrl } from '../../../firebase/storage.js';
 import { Follows } from '../../other/Follows.js';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../../contexts/AuthContext.js';
+import { usePopUp } from '../../../contexts/PopUpContext.js';
 
-const UserCard = (props) => {
+const UserCard = () => {
 	const { user } = useAuth();
-
-	const { popUpState, updatePopUp } = props;
+	const { popUpState, updatePopUp } = usePopUp();
 
 	const navigate = useNavigate();
 
@@ -111,7 +111,6 @@ const UserCard = (props) => {
 				<Follows
 					user={user}
 					otherUserId={user.id}
-					updatePopUp={updatePopUp}
 					initTab={followingVsFollower}
 				/>
 			);

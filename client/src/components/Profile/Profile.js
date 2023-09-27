@@ -8,9 +8,8 @@ import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 
-const Profile = (props) => {
+const Profile = () => {
 	const { user } = useAuth();
-	const { popUpState, updatePopUp } = props;
 
 	// Get other user id from url parameters
 	const { otherUserId } = useParams();
@@ -87,14 +86,10 @@ const Profile = (props) => {
 
 	return (
 		<div id='profile'>
-			<Navbar popUpState={popUpState} updatePopUp={updatePopUp} />
+			<Navbar />
 			<div id='profile-contents'>
 				<div id='profile-contents-left'>
-					<ProfileCard
-						otherUserId={otherUserId}
-						popUpState={popUpState}
-						updatePopUp={updatePopUp}
-					/>
+					<ProfileCard otherUserId={otherUserId} />
 				</div>
 				<div id='profile-contents-right'>
 					<ProfileButtons otherUserId={otherUserId} />

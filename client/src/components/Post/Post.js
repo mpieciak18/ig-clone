@@ -12,10 +12,11 @@ import { CommentsBar } from './children/Comments/CommentsBar';
 import { CommentsFull } from './children/Comments/CommentsFull';
 import { LinkCopied } from './children/LinkCopied';
 import { useAuth } from '../../contexts/AuthContext';
+import { usePopUp } from '../../contexts/PopUpContext';
 
-const Post = (props) => {
+const Post = () => {
 	const { user } = useAuth();
-	const { popUpState, updatePopUp } = props;
+	const { popUpState, updatePopUp } = usePopUp();
 
 	const { postOwnerId, postId } = useParams();
 
@@ -92,13 +93,7 @@ const Post = (props) => {
 	// Update likes state & body scroll when popUpState.likesOn changes
 	useEffect(() => {
 		if (popUpState.likesOn == true && user != null) {
-			setLikes(
-				<Likes
-					updatePopUp={updatePopUp}
-					postId={postId}
-					postOwnerId={postOwnerId}
-				/>
-			);
+			setLikes(<Likes postId={postId} postOwnerId={postOwnerId} />);
 			// disableBodyScroll(document.getElementById('likes'));
 		} else {
 			setLikes(null);
@@ -108,7 +103,7 @@ const Post = (props) => {
 
 	return (
 		<div id='post' className='page'>
-			<Navbar popUpState={popUpState} updatePopUp={updatePopUp} />
+			<Navbar />
 			{likes}
 			<div id='single-post-page'>
 				<LinkCopied linkCopied={linkCopied} />

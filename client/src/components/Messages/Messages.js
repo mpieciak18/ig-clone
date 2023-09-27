@@ -9,12 +9,11 @@ import { timeSinceTrunc } from '../../other/timeSinceTrunc.js';
 import MessageSolid from '../../assets/images/dm.png';
 import { ConvoPopup } from '../other/ConvoPopup.js';
 import { useAuth } from '../../contexts/AuthContext';
+import { usePopUp } from '../../contexts/PopUpContext';
 
-const Messages = (props) => {
-	const { user, setUser } = useAuth();
-
-	// Redirect to signup page if not signed in
-	const { popUpState, updatePopUp } = props;
+const Messages = () => {
+	const { user } = useAuth();
+	const { popUpState, updatePopUp } = usePopUp();
 
 	// Init user image state
 	const [userImage, setUserImage] = useState(null);
@@ -40,15 +39,13 @@ const Messages = (props) => {
 	// Update search pop up state when popUpState changes
 	useEffect(() => {
 		if (popUpState.convosOn == true) {
-			setSearchPopUp(
-				<ConvoPopup user={user} updatePopUp={updatePopUp} />
-			);
+			setSearchPopUp(<ConvoPopup />);
 			// disableBodyScroll(document.getElementById('convo-popup-bottom'));
 		} else {
 			setSearchPopUp(null);
 			// clearAllBodyScrollLocks();
 		}
-	}, [popUpState]);
+	}, [popUpState.convosOn]);
 
 	// Open search pop-up on click
 	const openPopup = () => updatePopUp('convosOn');
@@ -178,12 +175,7 @@ const Messages = (props) => {
 
 	return (
 		<div id='messages' className='page'>
-			<Navbar
-				user={user}
-				setUser={setUser}
-				popUpState={popUpState}
-				updatePopUp={updatePopUp}
-			/>
+			<Navbar />
 			{convos}
 		</div>
 	);

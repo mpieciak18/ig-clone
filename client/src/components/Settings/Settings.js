@@ -9,9 +9,8 @@ import { Navbar } from '../other/Navbar.js';
 import { findUser } from '../../firebase/users.js';
 import { useAuth } from '../../contexts/AuthContext';
 
-const Settings = (props) => {
+const Settings = () => {
 	const { user, setUser } = useAuth();
-	const { popUpState, updatePopUp } = props;
 
 	const location = useLocation();
 
@@ -237,7 +236,7 @@ const Settings = (props) => {
 
 	return (
 		<div id='settings' className='page'>
-			<Navbar popUpState={popUpState} updatePopUp={updatePopUp} />
+			<Navbar />
 			{settings}
 		</div>
 	);

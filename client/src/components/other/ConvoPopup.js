@@ -4,11 +4,11 @@ import { userSearch } from '../../other/search.js';
 import { getUrl } from '../../firebase/storage.js';
 import './other.css';
 import { useAuth } from '../../contexts/AuthContext.js';
+import { usePopUp } from '../../contexts/PopUpContext.js';
 
-const ConvoPopup = (props) => {
+const ConvoPopup = () => {
 	const { user } = useAuth();
-
-	const { updatePopUp } = props;
+	const { updatePopUp } = usePopUp();
 
 	const navigate = useNavigate();
 

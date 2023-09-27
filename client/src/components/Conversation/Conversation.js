@@ -9,10 +9,8 @@ import { findUser } from '../../firebase/users';
 import { convoSnapshot } from '../../firebase/messages.js';
 import { useAuth } from '../../contexts/AuthContext';
 
-const Conversation = (props) => {
+const Conversation = () => {
 	const { user } = useAuth();
-
-	const { popUpState, updatePopUp } = props;
 
 	const navigate = useNavigate();
 
@@ -117,7 +115,7 @@ const Conversation = (props) => {
 
 	return (
 		<div id='conversation' className='page'>
-			<Navbar popUpState={popUpState} updatePopUp={updatePopUp} />
+			<Navbar />
 			<div id='conversation-container'>
 				<div id='convo-header'>
 					<div id='convo-back-arrow' onClick={goBack}>

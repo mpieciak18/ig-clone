@@ -5,11 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 
-const Login = (props) => {
-	const { user, setUser } = useAuth();
-
-	// Redirect to home if already logged in
-	const { popUpState, updatePopUp } = props;
+const Login = () => {
+	const { user } = useAuth();
 
 	const navigate = useNavigate();
 
@@ -83,7 +80,7 @@ const Login = (props) => {
 
 	return (
 		<div id='login' className='page'>
-			<Navbar popUpState={popUpState} updatePopUp={updatePopUp} />
+			<Navbar />
 			{loginParent}
 		</div>
 	);

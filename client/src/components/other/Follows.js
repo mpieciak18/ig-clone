@@ -5,9 +5,11 @@ import './other.css';
 import { useEffect, useState } from 'react';
 import { getUrl } from '../../firebase/storage.js';
 import { findUser } from '../../firebase/users.js';
+import { usePopUp } from '../../contexts/PopUpContext.js';
 
 const Follows = (props) => {
-	const { otherUserId, updatePopUp, initTab } = props;
+	const { otherUserId, initTab } = props;
+	const { updatePopUp } = usePopUp();
 
 	const navigate = useNavigate();
 

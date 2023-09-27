@@ -17,11 +17,11 @@ import NotificationsSolid from '../../assets/images/like-solid.png';
 import MessagesHollow from '../../assets/images/messages.png';
 import MessagesSolid from '../../assets/images/messages-solid.png';
 import { useAuth } from '../../contexts/AuthContext';
+import { usePopUp } from '../../contexts/PopUpContext';
 
-const Navbar = (props) => {
+const Navbar = () => {
 	const { user } = useAuth();
-
-	const { popUpState, updatePopUp } = props;
+	const { popUpState, updatePopUp } = usePopUp();
 
 	const navigate = useNavigate();
 
@@ -104,19 +104,17 @@ const Navbar = (props) => {
 	// Update various states when popUpState changes
 	useEffect(() => {
 		if (popUpState.notifsOn == true) {
-			setNotifications(<Notifications updatePopUp={updatePopUp} />);
+			setNotifications(<Notifications />);
 			setNewPost(null);
 			setSearchPopUp(null);
 			// disableBodyScroll(document.getElementById('notifs-list'));
 		} else if (popUpState.newPostOn == true) {
-			setNewPost(<NewPost updatePopUp={updatePopUp} />);
+			setNewPost(<NewPost />);
 			setNotifications(null);
 			setSearchPopUp(null);
 			// disableBodyScroll(document.getElementById('new-post'));
 		} else if (popUpState.searchOn == true) {
-			setSearchPopUp(
-				<SearchPopup updatePopUp={updatePopUp} searchVal={searchVal} />
-			);
+			setSearchPopUp(<SearchPopup searchVal={searchVal} />);
 			setNotifications(null);
 			setNewPost(null);
 			// disableBodyScroll(document.getElementById('search-popup'));

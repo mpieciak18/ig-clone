@@ -5,9 +5,11 @@ import { getUrl } from '../../../firebase/storage.js';
 import { FollowButton } from '../../other/FollowButton.js';
 import { findUser } from '../../../firebase/users.js';
 import '../styles/Likes.css';
+import { usePopUp } from '../../../contexts/PopUpContext.js';
 
 const Likes = (props) => {
-	const { updatePopUp, postId, postOwnerId } = props;
+	const { updatePopUp } = usePopUp();
+	const { postId, postOwnerId } = props;
 
 	// Init likesNumber state
 	const [likesNumber, setLikesNumber] = useState(10);

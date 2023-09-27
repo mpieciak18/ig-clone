@@ -7,8 +7,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 
 const Home = (props) => {
-	const { user, setUser } = useAuth();
-	const { popUpState, updatePopUp } = props;
+	const { user } = useAuth();
 
 	// Init postsNumber state
 	const [postsNumber, setPostsNumber] = useState(5);
@@ -67,8 +66,6 @@ const Home = (props) => {
 								postLikes={post.data.likes}
 								postComments={post.data.comments}
 								user={user}
-								popUpState={popUpState}
-								updatePopUp={updatePopUp}
 							/>
 						);
 					})}
@@ -81,9 +78,9 @@ const Home = (props) => {
 
 	return (
 		<div id='home' className='page'>
-			<Navbar popUpState={popUpState} updatePopUp={updatePopUp} />
+			<Navbar />
 			<div id='home-container' onScroll={loadMore}>
-				<UserCard popUpState={popUpState} updatePopUp={updatePopUp} />
+				<UserCard />
 				{posts}
 			</div>
 		</div>

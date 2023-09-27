@@ -6,10 +6,9 @@ import { useState, useEffect } from 'react';
 import { Navbar } from '../other/Navbar.js';
 import { useAuth } from '../../contexts/AuthContext';
 
-const Saved = (props) => {
+const Saved = () => {
 	// Redirect to signup page if not signed in
 	const { user } = useAuth();
-	const { popUpState, updatePopUp } = props;
 
 	// Init postsNumber state
 	const [postsNumber, setPostsNumber] = useState(21);
@@ -100,7 +99,7 @@ const Saved = (props) => {
 
 	return (
 		<div id='saved' className='page'>
-			<Navbar popUpState={popUpState} updatePopUp={updatePopUp} />
+			<Navbar />
 			{posts}
 		</div>
 	);

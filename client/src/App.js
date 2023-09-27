@@ -38,254 +38,41 @@ const App = () => {
 		};
 	}, []);
 
-	// Initialize pop-ups state
-	const [popUpState, setPopUpState] = useState({
-		newPostOn: false,
-		followsOn: false,
-		notifsOn: false,
-		likesOn: false,
-		searchOn: false,
-		convosOn: false,
-	});
-
-	// Updates pop-ups state. If a popUpState property is passed, then said property is set to true
-	const updatePopUp = (popUp = null) => {
-		const newState = { ...popUpState };
-		for (const [key, val] of Object.entries(popUpState)) {
-			if (key == popUp) {
-				newState[key] = true;
-			} else {
-				newState[key] = false;
-			}
-		}
-		setPopUpState(newState);
-	};
-
 	// return routes;
 	return isLoading == false && !user ? (
 		<HashRouter>
 			<Routes>
-				<Route
-					exact
-					path='/'
-					element={
-						<Home
-							user={user}
-							setUser={setUser}
-							popUpState={popUpState}
-							updatePopUp={updatePopUp}
-						/>
-					}
-				/>
-				<Route
-					exact
-					path='/messages'
-					element={
-						<Messages
-							user={user}
-							setUser={setUser}
-							popUpState={popUpState}
-							updatePopUp={updatePopUp}
-						/>
-					}
-				/>
-				<Route
-					exact
-					path='/:postOwnerId/:postId'
-					element={
-						<Post
-							user={user}
-							setUser={setUser}
-							popUpState={popUpState}
-							updatePopUp={updatePopUp}
-						/>
-					}
-				/>
-				<Route
-					exact
-					path='/:otherUserId'
-					element={
-						<Profile
-							user={user}
-							setUser={setUser}
-							popUpState={popUpState}
-							updatePopUp={updatePopUp}
-						/>
-					}
-				/>
+				<Route exact path='/' element={<Home />} />
+				<Route exact path='/messages' element={<Messages />} />
+				<Route exact path='/:postOwnerId/:postId' element={<Post />} />
+				<Route exact path='/:otherUserId' element={<Profile />} />
 				<Route
 					exact
 					path='/messages/:otherUserId'
-					element={
-						<Conversation
-							user={user}
-							setUser={setUser}
-							popUpState={popUpState}
-							updatePopUp={updatePopUp}
-						/>
-					}
+					element={<Conversation />}
 				/>
-				<Route
-					exact
-					path='/saved'
-					element={
-						<Saved
-							user={user}
-							setUser={setUser}
-							popUpState={popUpState}
-							updatePopUp={updatePopUp}
-						/>
-					}
-				/>
-				<Route
-					exact
-					path='/settings'
-					element={
-						<Settings
-							user={user}
-							setUser={setUser}
-							popUpState={popUpState}
-							updatePopUp={updatePopUp}
-						/>
-					}
-				/>
-				<Route
-					exact
-					path='/signup'
-					element={
-						<SignUp
-							user={user}
-							setUser={setUser}
-							popUpState={popUpState}
-							updatePopUp={updatePopUp}
-						/>
-					}
-				/>
-				<Route
-					exact
-					path={'/login'}
-					element={
-						<Login
-							user={user}
-							setUser={setUser}
-							popUpState={popUpState}
-							updatePopUp={updatePopUp}
-						/>
-					}
-				/>
+				<Route exact path='/saved' element={<Saved />} />
+				<Route exact path='/settings' element={<Settings />} />
+				<Route exact path='/signup' element={<SignUp />} />
+				<Route exact path={'/login'} element={<Login />} />
 			</Routes>
 		</HashRouter>
 	) : isLoading == false && user ? (
 		<HashRouter>
 			<Routes>
-				<Route
-					exact
-					path='/'
-					element={
-						<Home
-							user={user}
-							setUser={setUser}
-							popUpState={popUpState}
-							updatePopUp={updatePopUp}
-						/>
-					}
-				/>
-				<Route
-					exact
-					path='/messages'
-					element={
-						<Login
-							user={user}
-							setUser={setUser}
-							popUpState={popUpState}
-							updatePopUp={updatePopUp}
-						/>
-					}
-				/>
-				<Route
-					exact
-					path='/:postOwnerId/:postId'
-					element={
-						<Post
-							user={user}
-							setUser={setUser}
-							popUpState={popUpState}
-							updatePopUp={updatePopUp}
-						/>
-					}
-				/>
-				<Route
-					exact
-					path='/:otherUserId'
-					element={
-						<Profile
-							user={user}
-							setUser={setUser}
-							popUpState={popUpState}
-							updatePopUp={updatePopUp}
-						/>
-					}
-				/>
+				<Route exact path='/' element={<Home />} />
+				<Route exact path='/messages' element={<Login />} />
+				<Route exact path='/:postOwnerId/:postId' element={<Post />} />
+				<Route exact path='/:otherUserId' element={<Profile />} />
 				<Route
 					exact
 					path='/messages/:otherUserId'
-					element={
-						<Login
-							user={user}
-							setUser={setUser}
-							popUpState={popUpState}
-							updatePopUp={updatePopUp}
-						/>
-					}
+					element={<Login />}
 				/>
-				<Route
-					exact
-					path='/saved'
-					element={
-						<Login
-							user={user}
-							setUser={setUser}
-							popUpState={popUpState}
-							updatePopUp={updatePopUp}
-						/>
-					}
-				/>
-				<Route
-					exact
-					path='/settings'
-					element={
-						<Login
-							user={user}
-							setUser={setUser}
-							popUpState={popUpState}
-							updatePopUp={updatePopUp}
-						/>
-					}
-				/>
-				<Route
-					exact
-					path='/signup'
-					element={
-						<SignUp
-							user={user}
-							setUser={setUser}
-							popUpState={popUpState}
-							updatePopUp={updatePopUp}
-						/>
-					}
-				/>
-				<Route
-					exact
-					path='/login'
-					element={
-						<Login
-							user={user}
-							setUser={setUser}
-							popUpState={popUpState}
-							updatePopUp={updatePopUp}
-						/>
-					}
-				/>
+				<Route exact path='/saved' element={<Login />} />
+				<Route exact path='/settings' element={<Login />} />
+				<Route exact path='/signup' element={<SignUp />} />
+				<Route exact path='/login' element={<Login />} />
 			</Routes>
 		</HashRouter>
 	) : null;

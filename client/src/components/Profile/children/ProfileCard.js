@@ -4,10 +4,12 @@ import { findUser } from '../../../firebase/users.js';
 import { Follows } from '../../other/Follows.js';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext.js';
+import { usePopUp } from '../../../contexts/PopUpContext.js';
 
 const ProfileCard = (props) => {
 	const { user } = useAuth();
-	const { otherUserId, popUpState, updatePopUp } = props;
+	const { popUpState, updatePopUp } = usePopUp();
+	const { otherUserId } = props;
 
 	const navigate = useNavigate();
 
@@ -123,7 +125,6 @@ const ProfileCard = (props) => {
 				setFollows(
 					<Follows
 						otherUserId={otherUserId}
-						updatePopUp={updatePopUp}
 						initTab={followingVsFollower}
 					/>
 				);
