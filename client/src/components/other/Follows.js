@@ -31,9 +31,6 @@ const Follows = (props) => {
 	// Init whichTab state
 	const [whichTab, setWhichTab] = useState(null);
 
-	// Init isChanging state
-	const [isChanging, setIsChanging] = useState(false);
-
 	// Init followers & following buttons classes
 	const [buttonOne, setButtonOne] = useState(null);
 	const [buttonTwo, setButtonTwo] = useState(null);
@@ -43,33 +40,19 @@ const Follows = (props) => {
 		setWhichTab(initTab);
 	}, [initTab]);
 
-	// Change usersCount, allLoaded, and button states when whichTab changes
+	// Change usersArr, allLoaded, and button states when whichTab changes
 	useEffect(() => {
 		setAllLoaded(false);
 		if (whichTab == 'following') {
 			setButtonOne('active');
 			setButtonTwo('inactive');
+			getFollowing(otherUserId, usersCount).then(setUsersArr);
 		} else {
 			setButtonOne('inactive');
 			setButtonTwo('active');
+			getFollowers(otherUserId, usersCount).then(setUsersArr);
 		}
-		setIsChanging(true);
 	}, [whichTab]);
-
-	// Change usersArr state when changing tabs
-	useEffect(() => {
-		if (isChanging && whichTab == 'following') {
-			getFollowing(otherUserId, usersCount).then((following) => {
-				setUsersArr(following);
-				setIsChanging(false);
-			});
-		} else if (isChanging && whichTab == 'followers') {
-			getFollowers(otherUserId, usersCount).then((followers) => {
-				setUsersArr(followers);
-				setIsChanging(false);
-			});
-		}
-	}, [isChanging]);
 
 	const updateUsers = async () => {
 		const newUsers = usersArr.map(async (otherUser) => {
