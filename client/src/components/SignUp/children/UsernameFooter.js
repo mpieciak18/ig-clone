@@ -55,7 +55,9 @@ const UsernameFooter = (props) => {
 	};
 
 	// Update username footer text, className, and usernamePasses state upon username change
-	useEffect(() => updateStates(), [username]);
+	useEffect(() => {
+		updateStates();
+	}, [username]);
 
 	return (
 		<div

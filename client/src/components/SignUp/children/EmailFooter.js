@@ -37,7 +37,9 @@ const EmailFooter = (props) => {
 	};
 
 	// Update email footer text, className, and emailPasses state upon email change
-	useEffect(() => updateStates(), [email]);
+	useEffect(() => {
+		updateStates();
+	}, [email]);
 
 	return (
 		<div
