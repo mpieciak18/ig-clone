@@ -15,7 +15,7 @@ const LikeButton = (props) => {
 
 	useEffect(() => {
 		if (user != null) {
-			likeExists(postId, postOwnerId).then(saveLikeId);
+			likeExists(postId, postOwnerId).then(setLikeId);
 		}
 	}, [user]);
 
