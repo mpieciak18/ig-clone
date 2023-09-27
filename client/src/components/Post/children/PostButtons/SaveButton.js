@@ -1,94 +1,93 @@
-import { saveExists, addSave, removeSave } from '../../../../firebase/saves.js'
-import { useState, useEffect } from 'react'
-import SaveHollow from '../../../../assets/images/save.png'
-import SaveSolid from '../../../../assets/images/save-solid.png'
+import { saveExists, addSave, removeSave } from '../../../../firebase/saves.js';
+import { useState, useEffect } from 'react';
+import SaveHollow from '../../../../assets/images/save.png';
+import SaveSolid from '../../../../assets/images/save-solid.png';
 
 const SaveButton = (props) => {
-    const { user, postId, postOwnerId, redirect } = props
+	const { user, postId, postOwnerId, redirect } = props;
 
-    // Init saveId state
-    const [saveId, setSaveId] =  useState(null)
+	// Init saveId state
+	const [saveId, setSaveId] = useState(null);
 
-    // Init isUpdating state
-    const [isUpdating, setIsUpdating] = useState(false)
+	// Init isUpdating state
+	const [isUpdating, setIsUpdating] = useState(false);
 
-    // Init icon image source state
-    const [img, setImg] = useState(SaveHollow)
+	// Init icon image source state
+	const [img, setImg] = useState(SaveHollow);
 
-    // Add or removes save from post
-    const addRemoveSave = async () => {
-        setIsUpdating(true)
-        if (saveId == null) {
-            const id = await addSave(postId, postOwnerId)
-            setSaveId(id)
-            setImg(SaveSolid)
-        } else {
-            await removeSave(saveId)
-            setSaveId(null)
-            setImg(SaveHollow)
-        }
-        setIsUpdating(false)
-    }
+	// Add or removes save from post
+	const addRemoveSave = async () => {
+		setIsUpdating(true);
+		if (saveId == null) {
+			const id = await addSave(postId, postOwnerId);
+			setSaveId(id);
+			setImg(SaveSolid);
+		} else {
+			await removeSave(saveId);
+			setSaveId(null);
+			setImg(SaveHollow);
+		}
+		setIsUpdating(false);
+	};
 
-    // Calls addRemoveSave() if not already running
-    const saveButtonFunction = () => {
-        if (user == null) {
-            redirect()
-        } else if (isUpdating == false) {
-            addRemoveSave()
-        }
-    }
+	// Calls addRemoveSave() if not already running
+	const saveButtonFunction = () => {
+		if (user == null) {
+			redirect();
+		} else if (isUpdating == false) {
+			addRemoveSave();
+		}
+	};
 
-    useEffect(async () => {
-        if (user != null) {   
-            const id = await saveExists(postId)
-            setSaveId(id)
-        }
-    }, [user])
+	useEffect(() => {
+		if (user != null) {
+			saveExists(postId).then(setSaveId);
+		}
+	}, [user]);
 
-    useEffect(() => {
-        if (saveId != null) {
-            setImg(SaveSolid)
-        } else {
-            setImg(SaveHollow)
-        }
-    }, [saveId])
+	useEffect(() => {
+		if (saveId != null) {
+			setImg(SaveSolid);
+		} else {
+			setImg(SaveHollow);
+		}
+	}, [saveId]);
 
-    return (
-        <img
-            className="post-save-button"
-            src={img}
-            onClick={saveButtonFunction}
-            onMouseDown={() => {
-                if (saveId == null) {
-                    setImg(SaveSolid)
-                } else {
-                    setImg(SaveHollow)
-                }
-            }}
-            onMouseUp={() => {
-                if (saveId == null) {
-                    setImg(SaveHollow)
-                } else {
-                    setImg(SaveSolid)
-                }
-            }}
-            onMouseOver={() => {
-                if (saveId == null) {
-                    setImg(SaveSolid)
-                } else {
-                    setImg(SaveHollow)
-                }
-            }}
-            onMouseOut={() => {
-                if (saveId == null) {
-                    setImg(SaveHollow)
-                } else {
-                    setImg(SaveSolid)
-                }
-            }} 
-        />
-    )
-}
+	return (
+		<img
+			className='post-save-button'
+			src={img}
+			onClick={saveButtonFunction}
+			onMouseDown={() => {
+				if (saveId == null) {
+					setImg(SaveSolid);
+				} else {
+					setImg(SaveHollow);
+				}
+			}}
+			onMouseUp={() => {
+				if (saveId == null) {
+					setImg(SaveHollow);
+				} else {
+					setImg(SaveSolid);
+				}
+			}}
+			onMouseOver={() => {
+				if (saveId == null) {
+					setImg(SaveSolid);
+				} else {
+					setImg(SaveHollow);
+				}
+			}}
+			onMouseOut={() => {
+				if (saveId == null) {
+					setImg(SaveHollow);
+				} else {
+					setImg(SaveSolid);
+				}
+			}}
+		/>
+	);
+};
 
-export { SaveButton }
+export { SaveButton };
