@@ -16,9 +16,12 @@ import NotificationsHollow from '../../assets/images/like.png';
 import NotificationsSolid from '../../assets/images/like-solid.png';
 import MessagesHollow from '../../assets/images/messages.png';
 import MessagesSolid from '../../assets/images/messages-solid.png';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Navbar = (props) => {
-	const { user, setUser, popUpState, updatePopUp } = props;
+	const { user } = useAuth();
+
+	const { popUpState, updatePopUp } = props;
 
 	const navigate = useNavigate();
 
@@ -101,30 +104,18 @@ const Navbar = (props) => {
 	// Update various states when popUpState changes
 	useEffect(() => {
 		if (popUpState.notifsOn == true) {
-			setNotifications(
-				<Notifications user={user} updatePopUp={updatePopUp} />
-			);
+			setNotifications(<Notifications updatePopUp={updatePopUp} />);
 			setNewPost(null);
 			setSearchPopUp(null);
 			// disableBodyScroll(document.getElementById('notifs-list'));
 		} else if (popUpState.newPostOn == true) {
-			setNewPost(
-				<NewPost
-					user={user}
-					setUser={setUser}
-					updatePopUp={updatePopUp}
-				/>
-			);
+			setNewPost(<NewPost updatePopUp={updatePopUp} />);
 			setNotifications(null);
 			setSearchPopUp(null);
 			// disableBodyScroll(document.getElementById('new-post'));
 		} else if (popUpState.searchOn == true) {
 			setSearchPopUp(
-				<SearchPopup
-					user={user}
-					updatePopUp={updatePopUp}
-					searchVal={searchVal}
-				/>
+				<SearchPopup updatePopUp={updatePopUp} searchVal={searchVal} />
 			);
 			setNotifications(null);
 			setNewPost(null);
@@ -202,7 +193,6 @@ const Navbar = (props) => {
 					onMouseOut={() => setSettingsImg(SettingsHollow)}
 				/>
 				<SettingsPopup
-					user={user}
 					viewSettings={viewSettings}
 					setViewSettings={setViewSettings}
 				/>

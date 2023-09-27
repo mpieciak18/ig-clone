@@ -7,9 +7,11 @@ import { ImageInput } from './children/ImageInput.js';
 import { uploadFile } from '../../firebase/storage';
 import { Navbar } from '../other/Navbar.js';
 import { findUser } from '../../firebase/users.js';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Settings = (props) => {
-	const { user, setUser, popUpState, updatePopUp } = props;
+	const { user, setUser } = useAuth();
+	const { popUpState, updatePopUp } = props;
 
 	const location = useLocation();
 
@@ -157,7 +159,6 @@ const Settings = (props) => {
 									File size limit: 5 mb
 								</label>
 								<ImageInput
-									user={user}
 									setFile={setFile}
 									setErrorClass={setErrorClass}
 									inputRef={inputRef}
@@ -236,12 +237,7 @@ const Settings = (props) => {
 
 	return (
 		<div id='settings' className='page'>
-			<Navbar
-				user={user}
-				setUser={setUser}
-				popUpState={popUpState}
-				updatePopUp={updatePopUp}
-			/>
+			<Navbar popUpState={popUpState} updatePopUp={updatePopUp} />
 			{settings}
 		</div>
 	);

@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signOutUser } from '../../firebase/users.js';
+import { useAuth } from '../../contexts/AuthContext.js';
 
 const SettingsPopup = (props) => {
-	const { user, viewSettings, setViewSettings } = props;
+	const { user } = useAuth();
+	const { viewSettings, setViewSettings } = props;
 
 	const navigate = useNavigate();
 

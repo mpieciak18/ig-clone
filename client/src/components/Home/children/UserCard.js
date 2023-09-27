@@ -2,9 +2,12 @@ import { useNavigate } from 'react-router-dom';
 import { getUrl } from '../../../firebase/storage.js';
 import { Follows } from '../../other/Follows.js';
 import { useState, useEffect } from 'react';
+import { useAuth } from '../../../contexts/AuthContext.js';
 
 const UserCard = (props) => {
-	const { user, popUpState, updatePopUp } = props;
+	const { user } = useAuth();
+
+	const { popUpState, updatePopUp } = props;
 
 	const navigate = useNavigate();
 

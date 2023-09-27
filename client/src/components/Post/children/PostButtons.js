@@ -1,50 +1,54 @@
-import { useNavigate, useLocation } from 'react-router-dom'
-import { LikeButton } from './PostButtons/LikeButton.js'
-import { SaveButton } from './PostButtons/SaveButton.js'
-import { CommentButton } from './PostButtons/CommentButton.js'
-import { ShareButton } from './PostButtons/ShareButton.js'
+import { useNavigate, useLocation } from 'react-router-dom';
+import { LikeButton } from './PostButtons/LikeButton.js';
+import { SaveButton } from './PostButtons/SaveButton.js';
+import { CommentButton } from './PostButtons/CommentButton.js';
+import { ShareButton } from './PostButtons/ShareButton.js';
 
 const PostButtons = (props) => {
-    const { user, postId, postOwnerId, inputRef, likesNum, setLikesNum, setLinkCopied } = props
-    
-    const path = useLocation().pathname
+	const {
+		postId,
+		postOwnerId,
+		inputRef,
+		likesNum,
+		setLikesNum,
+		setLinkCopied,
+	} = props;
 
-    const navigate = useNavigate()
+	const path = useLocation().pathname;
 
-    const redirectToSignUp = () => {
-        navigate('/signup', {state: {path: path}})
-    }
+	const navigate = useNavigate();
 
-    return (
-        <div className="post-buttons">
-            <div className="post-buttons-left">
-                <LikeButton 
-                    user={user}
-                    postId={postId}
-                    postOwnerId={postOwnerId}
-                    redirect={redirectToSignUp}
-                    likesNum={likesNum}
-                    setLikesNum={setLikesNum}
-                />
-                <CommentButton
-                    user={user}
-                    redirect={redirectToSignUp}
-                    inputRef={inputRef}
-                />
-                <ShareButton
-                    postId={postId}
-                    postOwnerId={postOwnerId}
-                    setLinkCopied={setLinkCopied}
-                />
-            </div>
-            <SaveButton
-                user={user}
-                postId={postId}
-                postOwnerId={postOwnerId}
-                redirect={redirectToSignUp}
-            />
-        </div>
-    ) 
-}
+	const redirectToSignUp = () => {
+		navigate('/signup', { state: { path: path } });
+	};
 
-export { PostButtons }
+	return (
+		<div className='post-buttons'>
+			<div className='post-buttons-left'>
+				<LikeButton
+					postId={postId}
+					postOwnerId={postOwnerId}
+					redirect={redirectToSignUp}
+					likesNum={likesNum}
+					setLikesNum={setLikesNum}
+				/>
+				<CommentButton
+					redirect={redirectToSignUp}
+					inputRef={inputRef}
+				/>
+				<ShareButton
+					postId={postId}
+					postOwnerId={postOwnerId}
+					setLinkCopied={setLinkCopied}
+				/>
+			</div>
+			<SaveButton
+				postId={postId}
+				postOwnerId={postOwnerId}
+				redirect={redirectToSignUp}
+			/>
+		</div>
+	);
+};
+
+export { PostButtons };

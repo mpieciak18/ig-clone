@@ -4,11 +4,13 @@ import {
 	removeFollow,
 } from '../../firebase/followers.js';
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { findUser } from '../../firebase/users.js';
+import { useAuth } from '../../contexts/AuthContext.js';
 
 const FollowButton = (props) => {
-	const { user, setUser, otherUserId } = props;
+	const { user, setUser } = useAuth();
+	const { otherUserId } = props;
 
 	const navigate = useNavigate();
 

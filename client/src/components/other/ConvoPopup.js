@@ -3,9 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { userSearch } from '../../other/search.js';
 import { getUrl } from '../../firebase/storage.js';
 import './other.css';
+import { useAuth } from '../../contexts/AuthContext.js';
 
 const ConvoPopup = (props) => {
-	const { user, updatePopUp } = props;
+	const { user } = useAuth();
+
+	const { updatePopUp } = props;
 
 	const navigate = useNavigate();
 

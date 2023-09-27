@@ -2,10 +2,11 @@ import { likeExists, addLike, removeLike } from '../../../../firebase/likes.js';
 import LikeHollow from '../../../../assets/images/like.png';
 import LikeSolid from '../../../../assets/images/like-solid.png';
 import { useEffect, useState } from 'react';
+import { useAuth } from '../../../../contexts/AuthContext.js';
 
 const LikeButton = (props) => {
-	const { user, postId, postOwnerId, redirect, setLikesNum, likesNum } =
-		props;
+	const { user } = useAuth();
+	const { postId, postOwnerId, redirect, setLikesNum, likesNum } = props;
 
 	const [likeId, setLikeId] = useState(null);
 

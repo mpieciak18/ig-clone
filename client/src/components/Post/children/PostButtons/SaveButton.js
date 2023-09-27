@@ -2,9 +2,11 @@ import { saveExists, addSave, removeSave } from '../../../../firebase/saves.js';
 import { useState, useEffect } from 'react';
 import SaveHollow from '../../../../assets/images/save.png';
 import SaveSolid from '../../../../assets/images/save-solid.png';
+import { useAuth } from '../../../../contexts/AuthContext.js';
 
 const SaveButton = (props) => {
-	const { user, postId, postOwnerId, redirect } = props;
+	const { user } = useAuth();
+	const { postId, postOwnerId, redirect } = props;
 
 	// Init saveId state
 	const [saveId, setSaveId] = useState(null);

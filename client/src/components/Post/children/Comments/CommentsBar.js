@@ -1,15 +1,14 @@
 import { newComment } from '../../../../firebase/comments.js';
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../../contexts/AuthContext.js';
 
 const CommentsBar = (props) => {
-	const { user, postId, postOwnerId, commentsNum, setCommentsNum, inputRef } =
+	const { user } = useAuth();
+	const { postId, postOwnerId, commentsNum, setCommentsNum, inputRef } =
 		props;
 	// Init form component state
 	const [form, setForm] = useState(null);
-
-	// Init values for redirect on click if user is not logged in
-	const path = useLocation().pathname;
 
 	const navigate = useNavigate();
 

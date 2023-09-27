@@ -4,9 +4,11 @@ import { Navbar } from '../other/Navbar.js';
 import { PostReel } from '../Post/children/PostReel.js';
 import { UserCard } from './children/UserCard.js';
 import { useEffect, useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Home = (props) => {
-	const { user, setUser, popUpState, updatePopUp } = props;
+	const { user, setUser } = useAuth();
+	const { popUpState, updatePopUp } = props;
 
 	// Init postsNumber state
 	const [postsNumber, setPostsNumber] = useState(5);
@@ -79,18 +81,9 @@ const Home = (props) => {
 
 	return (
 		<div id='home' className='page'>
-			<Navbar
-				user={user}
-				setUser={setUser}
-				popUpState={popUpState}
-				updatePopUp={updatePopUp}
-			/>
+			<Navbar popUpState={popUpState} updatePopUp={updatePopUp} />
 			<div id='home-container' onScroll={loadMore}>
-				<UserCard
-					user={user}
-					popUpState={popUpState}
-					updatePopUp={updatePopUp}
-				/>
+				<UserCard popUpState={popUpState} updatePopUp={updatePopUp} />
 				{posts}
 			</div>
 		</div>

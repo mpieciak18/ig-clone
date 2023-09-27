@@ -1,9 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { getUrl } from '../../../firebase/storage.js';
 import { timeSince } from '../../../other/timeSince.js';
+import { useAuth } from '../../../contexts/AuthContext.js';
 
 const ConvoMessages = (props) => {
-	const { user, otherUser, messagesArr, loadMore } = props;
+	const { user } = useAuth();
+
+	const { otherUser, messagesArr, loadMore } = props;
 
 	const [otherUserImg, setOtherUserImg] = useState(null);
 

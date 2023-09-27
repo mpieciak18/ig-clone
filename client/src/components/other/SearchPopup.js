@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { userSearch } from '../../other/search.js';
 import { getUrl } from '../../firebase/storage.js';
+import { useAuth } from '../../contexts/AuthContext.js';
 
 const SearchPopup = (props) => {
-	const { user, updatePopUp, searchVal } = props;
+	const { user } = useAuth;
+	const { updatePopUp, searchVal } = props;
 
 	const navigate = useNavigate();
 

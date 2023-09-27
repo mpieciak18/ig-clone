@@ -6,9 +6,11 @@ import { ProfileButtons } from './children/ProfileButtons.js';
 import { findPostsFromUser } from '../../firebase/posts.js';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Profile = (props) => {
-	const { user, setUser, popUpState, updatePopUp } = props;
+	const { user } = useAuth();
+	const { popUpState, updatePopUp } = props;
 
 	// Get other user id from url parameters
 	const { otherUserId } = useParams();
@@ -85,28 +87,17 @@ const Profile = (props) => {
 
 	return (
 		<div id='profile'>
-			<Navbar
-				user={user}
-				setUser={setUser}
-				popUpState={popUpState}
-				updatePopUp={updatePopUp}
-			/>
+			<Navbar popUpState={popUpState} updatePopUp={updatePopUp} />
 			<div id='profile-contents'>
 				<div id='profile-contents-left'>
 					<ProfileCard
-						user={user}
-						setUser={setUser}
 						otherUserId={otherUserId}
 						popUpState={popUpState}
 						updatePopUp={updatePopUp}
 					/>
 				</div>
 				<div id='profile-contents-right'>
-					<ProfileButtons
-						user={user}
-						setUser={setUser}
-						otherUserId={otherUserId}
-					/>
+					<ProfileButtons otherUserId={otherUserId} />
 					{posts}
 				</div>
 			</div>

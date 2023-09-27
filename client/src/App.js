@@ -9,15 +9,13 @@ import { Saved } from './components/SavedPosts/Saved.js';
 import { SignUp } from './components/SignUp/SignUp.js';
 import { Login } from './components/Login/Login.js';
 import { Conversation } from './components/Conversation/Conversation.js';
-import { auth, loggedIn, firebaseObserver } from './firebase/firebase.js';
+import { auth, firebaseObserver } from './firebase/firebase.js';
 import { findUser } from './firebase/users.js';
+import { useAuth } from './contexts/AuthContext.js';
 
 const App = () => {
-	// Initialize user state
-	const [user, setUser] = useState(null);
-
-	// Init logged in state
-	const [isLoggedIn, setIsLoggedIn] = useState(loggedIn());
+	// Init user context
+	const { user, setUser } = useAuth();
 
 	// Init loading state
 	const [isLoading, setIsLoading] = useState(true);
@@ -25,22 +23,20 @@ const App = () => {
 	// Update logged-in and loading states on mount
 	useEffect(() => {
 		firebaseObserver.subscribe('authStateChanged', (result) => {
-			setIsLoggedIn(result);
-			setIsLoading(false);
+			if (auth?.currentUser?.uid) {
+				findUser(auth.currentUser.uid).then((newUser) => {
+					setUser(newUser);
+					setIsLoading(false);
+				});
+			} else {
+				setUser(null);
+				setIsLoading(false);
+			}
 		});
 		return () => {
 			firebaseObserver.unsubscribe('authStateChanged');
 		};
 	}, []);
-
-	// Update user when logged-in state changes
-	useEffect(() => {
-		if (isLoggedIn == true) {
-			findUser(auth.currentUser.uid).then(setUser);
-		} else {
-			setUser(null);
-		}
-	}, [isLoggedIn]);
 
 	// Initialize pop-ups state
 	const [popUpState, setPopUpState] = useState({
@@ -66,7 +62,7 @@ const App = () => {
 	};
 
 	// return routes;
-	return isLoading == false && isLoggedIn == true ? (
+	return isLoading == false && !user ? (
 		<HashRouter>
 			<Routes>
 				<Route
@@ -179,7 +175,7 @@ const App = () => {
 				/>
 			</Routes>
 		</HashRouter>
-	) : isLoading == false && isLoggedIn == false ? (
+	) : isLoading == false && user ? (
 		<HashRouter>
 			<Routes>
 				<Route

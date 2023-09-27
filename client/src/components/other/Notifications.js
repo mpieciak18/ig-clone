@@ -8,9 +8,11 @@ import {
 import { getUrl } from '../../firebase/storage';
 import { findUser } from '../../firebase/users';
 import { timeSince } from '../../other/timeSince';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Notifications = (props) => {
-	const { user, updatePopUp } = props;
+	const { user } = useAuth();
+	const { updatePopUp } = props;
 
 	const navigate = useNavigate();
 

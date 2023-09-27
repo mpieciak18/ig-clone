@@ -7,7 +7,7 @@ import { getUrl } from '../../firebase/storage.js';
 import { findUser } from '../../firebase/users.js';
 
 const Follows = (props) => {
-	const { user, setUser, otherUserId, updatePopUp, initTab } = props;
+	const { otherUserId, updatePopUp, initTab } = props;
 
 	const navigate = useNavigate();
 
@@ -82,11 +82,7 @@ const Follows = (props) => {
 						</div>
 					</div>
 					<div className='follow-row-right'>
-						<FollowButton
-							user={user}
-							setUser={setUser}
-							otherUserId={userId}
-						/>
+						<FollowButton otherUserId={userId} />
 					</div>
 				</div>
 			);

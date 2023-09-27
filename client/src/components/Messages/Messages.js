@@ -8,10 +8,13 @@ import { getUrl } from '../../firebase/storage';
 import { timeSinceTrunc } from '../../other/timeSinceTrunc.js';
 import MessageSolid from '../../assets/images/dm.png';
 import { ConvoPopup } from '../other/ConvoPopup.js';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Messages = (props) => {
+	const { user, setUser } = useAuth();
+
 	// Redirect to signup page if not signed in
-	const { user, setUser, popUpState, updatePopUp } = props;
+	const { popUpState, updatePopUp } = props;
 
 	// Init user image state
 	const [userImage, setUserImage] = useState(null);

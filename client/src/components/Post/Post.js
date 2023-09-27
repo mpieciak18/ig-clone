@@ -11,9 +11,11 @@ import { timeSince } from '../../other/timeSince';
 import { CommentsBar } from './children/Comments/CommentsBar';
 import { CommentsFull } from './children/Comments/CommentsFull';
 import { LinkCopied } from './children/LinkCopied';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Post = (props) => {
-	const { user, setUser, popUpState, updatePopUp } = props;
+	const { user } = useAuth();
+	const { popUpState, updatePopUp } = props;
 
 	const { postOwnerId, postId } = useParams();
 
@@ -92,8 +94,6 @@ const Post = (props) => {
 		if (popUpState.likesOn == true && user != null) {
 			setLikes(
 				<Likes
-					user={user}
-					setUser={setUser}
 					updatePopUp={updatePopUp}
 					postId={postId}
 					postOwnerId={postOwnerId}
@@ -108,12 +108,7 @@ const Post = (props) => {
 
 	return (
 		<div id='post' className='page'>
-			<Navbar
-				user={user}
-				setUser={setUser}
-				popUpState={popUpState}
-				updatePopUp={updatePopUp}
-			/>
+			<Navbar popUpState={popUpState} updatePopUp={updatePopUp} />
 			{likes}
 			<div id='single-post-page'>
 				<LinkCopied linkCopied={linkCopied} />
@@ -144,7 +139,6 @@ const Post = (props) => {
 				/>
 				<div id='buttons-grid'>
 					<PostButtons
-						user={user}
 						postId={postId}
 						postOwnerId={postOwnerId}
 						inputRef={inputRef}
@@ -168,7 +162,6 @@ const Post = (props) => {
 				</div>
 				<div id='comment-bar-grid'>
 					<CommentsBar
-						user={user}
 						postId={postId}
 						postOwnerId={postOwnerId}
 						commentsNum={postComments}

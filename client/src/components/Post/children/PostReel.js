@@ -19,7 +19,6 @@ const PostReel = (props) => {
 		postOwnerId,
 		postLikes,
 		postComments,
-		user,
 	} = props;
 
 	// Init post owner name
@@ -88,7 +87,6 @@ const PostReel = (props) => {
 			<div className='post-bottom'>
 				<LinkCopied linkCopied={linkCopied} />
 				<PostButtons
-					user={user}
 					postId={postId}
 					postOwnerId={postOwnerId}
 					inputRef={inputRef}
@@ -133,7 +131,6 @@ const PostReel = (props) => {
 					commentsNum={commentsNum}
 				/>
 				<CommentsBar
-					user={user}
 					postId={postId}
 					postOwnerId={postOwnerId}
 					commentsNum={commentsNum}

@@ -7,7 +7,7 @@ import { findUser } from '../../../firebase/users.js';
 import '../styles/Likes.css';
 
 const Likes = (props) => {
-	const { user, setUser, updatePopUp, postId, postOwnerId } = props;
+	const { updatePopUp, postId, postOwnerId } = props;
 
 	// Init likesNumber state
 	const [likesNumber, setLikesNumber] = useState(10);
@@ -55,11 +55,7 @@ const Likes = (props) => {
 						</div>
 					</Link>
 					<div className='like-row-right'>
-						<FollowButton
-							user={user}
-							setUser={setUser}
-							otherUserId={likerId}
-						/>
+						<FollowButton otherUserId={likerId} />
 					</div>
 				</div>
 			);

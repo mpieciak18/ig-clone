@@ -3,10 +3,13 @@ import { Navbar } from '../other/Navbar.js';
 import { signInUser } from '../../firebase/users.js';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Login = (props) => {
+	const { user, setUser } = useAuth();
+
 	// Redirect to home if already logged in
-	const { user, setUser, popUpState, updatePopUp } = props;
+	const { popUpState, updatePopUp } = props;
 
 	const navigate = useNavigate();
 
@@ -80,12 +83,7 @@ const Login = (props) => {
 
 	return (
 		<div id='login' className='page'>
-			<Navbar
-				user={user}
-				setUser={setUser}
-				popUpState={popUpState}
-				updatePopUp={updatePopUp}
-			/>
+			<Navbar popUpState={popUpState} updatePopUp={updatePopUp} />
 			{loginParent}
 		</div>
 	);

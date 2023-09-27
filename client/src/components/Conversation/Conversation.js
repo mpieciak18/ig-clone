@@ -7,9 +7,12 @@ import { ConvoForm } from './children/ConvoForm';
 import { Navbar } from '../other/Navbar';
 import { findUser } from '../../firebase/users';
 import { convoSnapshot } from '../../firebase/messages.js';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Conversation = (props) => {
-	const { user, setUser, popUpState, updatePopUp } = props;
+	const { user } = useAuth();
+
+	const { popUpState, updatePopUp } = props;
 
 	const navigate = useNavigate();
 
@@ -114,12 +117,7 @@ const Conversation = (props) => {
 
 	return (
 		<div id='conversation' className='page'>
-			<Navbar
-				user={user}
-				setUser={setUser}
-				popUpState={popUpState}
-				updatePopUp={updatePopUp}
-			/>
+			<Navbar popUpState={popUpState} updatePopUp={updatePopUp} />
 			<div id='conversation-container'>
 				<div id='convo-header'>
 					<div id='convo-back-arrow' onClick={goBack}>
@@ -129,7 +127,6 @@ const Conversation = (props) => {
 					<div id='convo-back-arrow-hidden'>« Go Back</div>
 				</div>
 				<ConvoMessages
-					user={user}
 					otherUser={otherUser}
 					messagesArr={messagesArr}
 					loadMore={loadMore}

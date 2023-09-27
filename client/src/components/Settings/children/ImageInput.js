@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { getUrl } from '../../../firebase/storage.js';
+import { useAuth } from '../../../contexts/AuthContext.js';
 
 const ImageInput = (props) => {
-	const { user, inputRef, setFile, setErrorClass } = props;
+	const { user, inputRef } = useAuth();
+	const { setFile, setErrorClass } = props;
 
 	const [filePreviewUrl, setFilePreviewUrl] = useState(null);
 

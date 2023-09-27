@@ -4,10 +4,12 @@ import { findSinglePost } from '../../firebase/posts.js';
 import { PostPreview } from '../Post/children/PostPreview.js';
 import { useState, useEffect } from 'react';
 import { Navbar } from '../other/Navbar.js';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Saved = (props) => {
 	// Redirect to signup page if not signed in
-	const { user, setUser, popUpState, updatePopUp } = props;
+	const { user } = useAuth();
+	const { popUpState, updatePopUp } = props;
 
 	// Init postsNumber state
 	const [postsNumber, setPostsNumber] = useState(21);
@@ -67,7 +69,6 @@ const Saved = (props) => {
 									postOwnerId={post.data.user}
 									postLikes={post.data.likes}
 									postComments={post.data.comments}
-									user={user}
 								/>
 							);
 						})}
@@ -99,12 +100,7 @@ const Saved = (props) => {
 
 	return (
 		<div id='saved' className='page'>
-			<Navbar
-				user={user}
-				setUser={setUser}
-				popUpState={popUpState}
-				updatePopUp={updatePopUp}
-			/>
+			<Navbar popUpState={popUpState} updatePopUp={updatePopUp} />
 			{posts}
 		</div>
 	);
