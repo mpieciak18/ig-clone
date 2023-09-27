@@ -10,7 +10,7 @@ import { SignUp } from './components/SignUp/SignUp.js';
 import { Login } from './components/Login/Login.js';
 import { Conversation } from './components/Conversation/Conversation.js';
 import { auth, loggedIn, firebaseObserver } from './firebase/firebase.js';
-import { findUser } from './firebase/users.js';
+import { findUser, newUser } from './firebase/users.js';
 
 const App = () => {
 	// Initialize user state
@@ -39,9 +39,7 @@ const App = () => {
 	// Update user when logged-in state changes
 	useEffect(() => {
 		if (isLoggedIn == true) {
-			// const newUser = await findUser(auth.currentUser.uid);
-			// setUser(newUser);
-			findUser(auth.currentUser.uid).then(newUser);
+			findUser(auth.currentUser.uid).then(setUser);
 		} else {
 			setUser(null);
 		}
