@@ -243,6 +243,18 @@ router.post('/message', body('id').isInt(), handleInputErrors, createMessage);
 router.delete('/message', body('id').isInt(), handleInputErrors, deleteMessage);
 
 // synchronous error handler
-// // add code once all handlers + auth middleware are created // //
+// @ts-ignore
+router.use((err, req, res, next) => {
+	if (err.type === 'auth') {
+		res.status(401);
+		res.json({ message: 'unauthorized' });
+	} else if (err.type === 'input') {
+		res.status(400);
+		res.json({ message: 'invalid input' });
+	} else {
+		res.status(500);
+		res.json({ message: 'server error' });
+	}
+});
 
 export default router;
