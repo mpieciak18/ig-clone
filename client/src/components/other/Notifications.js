@@ -48,7 +48,6 @@ const Notifications = () => {
 	// Change notifsCount, allLoaded, button, and markAllRead states when whichTab changes
 	useEffect(() => {
 		setAllLoaded(false);
-		console.log(whichTab);
 		if (whichTab == 'new') {
 			setButtonOne('active');
 			setButtonTwo('inactive');

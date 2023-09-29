@@ -25,9 +25,6 @@ const Navbar = () => {
 
 	const navigate = useNavigate();
 
-	// Init settings pop-up visibility state
-	const [viewSettings, setViewSettings] = useState(false);
-
 	// Init navbar buttons
 	const [homeImg, setHomeImg] = useState(HomeHollow);
 	const [messageImg, setMessageImg] = useState(MessagesHollow);
@@ -53,21 +50,21 @@ const Navbar = () => {
 	const clickNewPost = () => {
 		if (user == null) {
 			navigate('/signup');
-		} else if (popUpState.newPostOn == false) {
-			updatePopUp('newPostOn');
-		} else {
+		} else if (popUpState.newPostOn) {
 			updatePopUp();
+		} else {
+			updatePopUp('newPostOn');
 		}
 	};
 
 	// Update popUpState.notifsOn (or redirect to sign-up page)
-	const clickNotifications = async () => {
+	const clickNotifications = () => {
 		if (user == null) {
 			navigate('/signup');
-		} else if (popUpState.notifsOn == false) {
-			await updatePopUp('notifsOn');
-		} else {
+		} else if (popUpState.notifsOn) {
 			updatePopUp();
+		} else {
+			updatePopUp('notifsOn');
 		}
 	};
 
@@ -82,54 +79,23 @@ const Navbar = () => {
 	};
 
 	// Update viewSettings (or redirect to sign-up page)
-	const clickSettings = () => {
+	const clickSettings = function () {
 		if (user == null) {
 			navigate('/signup');
-		} else if (viewSettings == false) {
-			setViewSettings(true);
+		} else if (popUpState.settingsOn) {
+			updatePopUp();
 		} else {
-			setViewSettings(false);
+			updatePopUp('settingsOn');
 		}
 	};
 
-	// Init notifications component state
-	const [notifications, setNotifications] = useState(null);
-
-	// Init new post component state
-	const [newPost, setNewPost] = useState(null);
-
-	// Init search pop-up component state
-	const [searchPopUp, setSearchPopUp] = useState(null);
-
-	// Update various states when popUpState changes
-	useEffect(() => {
-		if (popUpState.notifsOn == true) {
-			setNotifications(<Notifications />);
-			setNewPost(null);
-			setSearchPopUp(null);
-			// disableBodyScroll(document.getElementById('notifs-list'));
-		} else if (popUpState.newPostOn == true) {
-			setNewPost(<NewPost />);
-			setNotifications(null);
-			setSearchPopUp(null);
-			// disableBodyScroll(document.getElementById('new-post'));
-		} else if (popUpState.searchOn == true) {
-			setSearchPopUp(<SearchPopup searchVal={searchVal} />);
-			setNotifications(null);
-			setNewPost(null);
-			// disableBodyScroll(document.getElementById('search-popup'));
-		} else {
-			setNotifications(null);
-			setNewPost(null);
-			setSearchPopUp(null);
-			// clearAllBodyScrollLocks();
-		}
-	}, [popUpState, searchVal]);
-
 	return (
 		<div id='navbar'>
-			{notifications}
-			{newPost}
+			{popUpState.notifsOn ? (
+				<Notifications />
+			) : popUpState.newPostOn ? (
+				<NewPost />
+			) : null}
 			<div id='navbar-logo' onClick={clickHome}>
 				<img id='navbar-logo-icon' src={Logo} />
 				<div id='navbar-logo-text'>Markstagram</div>
@@ -141,7 +107,7 @@ const Navbar = () => {
 				onChange={updateSearchVal}
 				onFocus={clickSearch}
 			/>
-			{searchPopUp}
+			{popUpState.searchOn ? <SearchPopup searchVal={searchVal} /> : null}
 			<div id='navbar-buttons'>
 				<img
 					id='home-button'
@@ -190,10 +156,20 @@ const Navbar = () => {
 					onMouseOver={() => setSettingsImg(SettingsSolid)}
 					onMouseOut={() => setSettingsImg(SettingsHollow)}
 				/>
-				<SettingsPopup
-					viewSettings={viewSettings}
-					setViewSettings={setViewSettings}
-				/>
+				{popUpState.settingsOn ? <SettingsPopup /> : null}
+				{popUpState.settingsOn ? (
+					<div
+						onClick={clickSettings}
+						style={{
+							position: 'fixed',
+							opacity: 0,
+							height: '100vh',
+							width: '100vw',
+							left: 0,
+							top: 0,
+						}}
+					/>
+				) : null}
 			</div>
 		</div>
 	);

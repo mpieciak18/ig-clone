@@ -51,34 +51,6 @@ const Saved = () => {
 		}
 	}, [postsNumber, user]);
 
-	// Update posts component state on render & when postsArr state changes
-	useEffect(() => {
-		if (postsArr != null) {
-			setPosts(
-				<div id='saved-posts'>
-					<div id='saved-posts-title'>Saved Posts</div>
-					<div id='saved-posts-content'>
-						{postsArr.map((post) => {
-							return (
-								<PostPreview
-									postId={post.id}
-									postText={post.data.text}
-									postImage={post.data.image}
-									postDate={post.data.date}
-									postOwnerId={post.data.user}
-									postLikes={post.data.likes}
-									postComments={post.data.comments}
-								/>
-							);
-						})}
-					</div>
-				</div>
-			);
-		} else {
-			setPosts(<div id='user-posts-empty'>This user has no posts.</div>);
-		}
-	}, [postsArr]);
-
 	// Load-more function that updates the posts reel
 	const loadMore = () => {
 		if (allLoaded == false) {
@@ -100,7 +72,29 @@ const Saved = () => {
 	return (
 		<div id='saved' className='page'>
 			<Navbar />
-			{posts}
+			{postsArr != null ? (
+				<div id='saved-posts'>
+					<div id='saved-posts-title'>Saved Posts</div>
+					<div id='saved-posts-content'>
+						{postsArr.map((post) => {
+							return (
+								<PostPreview
+									key={post.id}
+									postId={post.id}
+									postText={post.data.text}
+									postImage={post.data.image}
+									postDate={post.data.date}
+									postOwnerId={post.data.user}
+									postLikes={post.data.likes}
+									postComments={post.data.comments}
+								/>
+							);
+						})}
+					</div>
+				</div>
+			) : (
+				<div id='user-posts-empty'>This user has no posts.</div>
+			)}
 		</div>
 	);
 };

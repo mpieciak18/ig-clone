@@ -10,6 +10,7 @@ export const PopUpProvider = ({ children }) => {
 		likesOn: false,
 		searchOn: false,
 		convosOn: false,
+		settingsOn: false,
 	});
 
 	// Updates pop-ups state. If a popUpState property is passed, then said property is set to true
