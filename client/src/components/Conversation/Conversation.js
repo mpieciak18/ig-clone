@@ -1,9 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import './Conversation.css';
 import { sendMessage, retrieveSingleConvo } from '../../firebase/messages.js';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { ConvoMessages } from './children/ConvoMessages';
-import { ConvoForm } from './children/ConvoForm';
 import { Navbar } from '../other/Navbar';
 import { findUser } from '../../firebase/users';
 import { convoSnapshot } from '../../firebase/messages.js';
@@ -20,14 +19,8 @@ const Conversation = () => {
 	// Init other user state
 	const [otherUser, setOtherUser] = useState(null);
 
-	// Init convo title component state
-	const [convoTitle, setConvoTitle] = useState(null);
-
 	// Init messages number state
 	const [messagesNumber, setMessagesNumber] = useState(20);
-
-	// Init allLoades state
-	const [allLoaded, setAllLoaded] = useState(false);
 
 	// Init messages array state
 	const [messagesArr, setMessagesArr] = useState(null);
@@ -59,9 +52,6 @@ const Conversation = () => {
 		retrieveSingleConvo(otherUserId, messagesNumber).then(
 			(newMessagesArr) => {
 				setMessagesArr(newMessagesArr);
-				if (newMessagesArr.length < messagesNumber) {
-					setAllLoaded(true);
-				}
 			}
 		);
 	}, [messagesNumber]);
@@ -74,20 +64,6 @@ const Conversation = () => {
 			setMessagesNumber(newMessagesNumber);
 		}
 	};
-
-	// Update convo title component when other user state changes
-	useEffect(() => {
-		if (otherUser != null) {
-			setConvoTitle(
-				<div id='convo-title-container'>
-					<div id='title'>{otherUser.data.name}</div>
-					<div id='subtitle' onClick={redirect}>
-						@{otherUser.data.username}
-					</div>
-				</div>
-			);
-		}
-	}, [otherUser]);
 
 	// Updates message state / field
 	const updateMessage = (e) => {
@@ -121,7 +97,14 @@ const Conversation = () => {
 					<div id='convo-back-arrow' onClick={goBack}>
 						« Go Back
 					</div>
-					{convoTitle}
+					{otherUser ? (
+						<div id='convo-title-container'>
+							<div id='title'>{otherUser.data.name}</div>
+							<div id='subtitle' onClick={redirect}>
+								@{otherUser.data.username}
+							</div>
+						</div>
+					) : null}
 					<div id='convo-back-arrow-hidden'>« Go Back</div>
 				</div>
 				<ConvoMessages
@@ -129,11 +112,24 @@ const Conversation = () => {
 					messagesArr={messagesArr}
 					loadMore={loadMore}
 				/>
-				<ConvoForm
-					messageValue={messageValue}
-					updateMessage={updateMessage}
-					sendNewMessage={sendNewMessage}
-				/>
+				<form id='convo-message-bar' onSubmit={sendNewMessage}>
+					<input
+						type='text'
+						id='convo-message-bar-input'
+						placeholder='Send a message...'
+						value={messageValue}
+						onChange={updateMessage}
+					/>
+					<button
+						type={messageValue.length > 0 ? 'active' : 'inactive'}
+						id='convo-message-button'
+						className={
+							messageValue.length > 0 ? 'submit' : 'button'
+						}
+					>
+						Send
+					</button>
+				</form>
 			</div>
 		</div>
 	);
