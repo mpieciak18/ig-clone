@@ -6,7 +6,7 @@ import { UserCard } from './children/UserCard.js';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 
-const Home = (props) => {
+const Home = () => {
 	const { user } = useAuth();
 
 	// Init postsNumber state
@@ -14,9 +14,6 @@ const Home = (props) => {
 
 	// Init posts array state
 	const [postsArr, setPostsArr] = useState(null);
-
-	// Init posts component state
-	const [posts, setPosts] = useState(null);
 
 	// Init all loaded state
 	const [allLoaded, setAllLoaded] = useState(false);
@@ -33,9 +30,8 @@ const Home = (props) => {
 			allLoaded == false &&
 			isLoading == false
 		) {
-			await setIsLoading(true);
-			const newPostsNumber = await (postsNumber + 5);
-			setPostsNumber(newPostsNumber);
+			setIsLoading(true);
+			setPostsNumber(postsNumber + 5);
 		}
 	};
 
@@ -46,42 +42,32 @@ const Home = (props) => {
 				setAllLoaded(true);
 			}
 			setPostsArr(newPostsArr);
+			setIsLoading(false);
 		});
 	}, [postsNumber]);
-
-	// Update posts component state when postArr state changes
-	useEffect(() => {
-		if (postsArr != null) {
-			const newPosts = (
-				<div id='home-posts'>
-					{postsArr.map((post) => {
-						return (
-							<PostReel
-								key={post.id}
-								postId={post.id}
-								postText={post.data.text}
-								postImage={post.data.image}
-								postDate={post.data.date}
-								postOwnerId={post.data.user}
-								postLikes={post.data.likes}
-								postComments={post.data.comments}
-								user={user}
-							/>
-						);
-					})}
-				</div>
-			);
-			setPosts(newPosts);
-			setIsLoading(false);
-		}
-	}, [postsArr, user]);
 
 	return (
 		<div id='home' className='page'>
 			<Navbar />
 			<div id='home-container' onScroll={loadMore}>
 				<UserCard />
-				{posts}
+				<div id='home-posts'>
+					{postsArr && user
+						? postsArr.map((post) => (
+								<PostReel
+									key={post.id}
+									postId={post.id}
+									postText={post.data.text}
+									postImage={post.data.image}
+									postDate={post.data.date}
+									postOwnerId={post.data.user}
+									postLikes={post.data.likes}
+									postComments={post.data.comments}
+									user={user}
+								/>
+						  ))
+						: null}
+				</div>
 			</div>
 		</div>
 	);
