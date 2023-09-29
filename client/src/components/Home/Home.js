@@ -4,11 +4,8 @@ import { Navbar } from '../other/Navbar.js';
 import { PostReel } from '../Post/children/PostReel.js';
 import { UserCard } from './children/UserCard.js';
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
 
 const Home = () => {
-	const { user } = useAuth();
-
 	// Init postsNumber state
 	const [postsNumber, setPostsNumber] = useState(5);
 
@@ -52,7 +49,7 @@ const Home = () => {
 			<div id='home-container' onScroll={loadMore}>
 				<UserCard />
 				<div id='home-posts'>
-					{postsArr && user
+					{postsArr
 						? postsArr.map((post) => (
 								<PostReel
 									key={post.id}
@@ -63,7 +60,6 @@ const Home = () => {
 									postOwnerId={post.data.user}
 									postLikes={post.data.likes}
 									postComments={post.data.comments}
-									user={user}
 								/>
 						  ))
 						: null}

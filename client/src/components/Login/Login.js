@@ -2,7 +2,7 @@ import './Login.css';
 import { Navbar } from '../other/Navbar.js';
 import { signInUser } from '../../firebase/users.js';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 
 const Login = () => {
@@ -20,8 +20,6 @@ const Login = () => {
 
 	const [errorClass, setErrorClass] = useState('inactive');
 
-	const [loginParent, setLoginParent] = useState(null);
-
 	const newLogin = async (e) => {
 		e.preventDefault();
 		// Add new user to firebase/auth & return any errors
@@ -36,9 +34,10 @@ const Login = () => {
 		}
 	};
 
-	useEffect(() => {
-		if (user == null) {
-			setLoginParent(
+	return (
+		<div id='login' className='page'>
+			<Navbar />
+			{!user ? (
 				<div id='login-parent'>
 					<div id='login-error' className={errorClass}>
 						There was an error! Please try again.
@@ -74,14 +73,7 @@ const Login = () => {
 						</button>
 					</form>
 				</div>
-			);
-		}
-	}, [errorClass, user, email, password]);
-
-	return (
-		<div id='login' className='page'>
-			<Navbar />
-			{loginParent}
+			) : null}
 		</div>
 	);
 };
