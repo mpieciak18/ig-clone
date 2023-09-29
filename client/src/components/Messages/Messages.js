@@ -2,14 +2,12 @@ import './Messages.css';
 import { retrieveConvos } from '../../firebase/messages.js';
 import { useState, useEffect } from 'react';
 import { Navbar } from '../other/Navbar.js';
-import { Link } from 'react-router-dom';
-import { findUser } from '../../firebase/users';
 import { getUrl } from '../../firebase/storage';
-import { timeSinceTrunc } from '../../other/timeSinceTrunc.js';
 import MessageSolid from '../../assets/images/dm.png';
 import { ConvoPopup } from '../other/ConvoPopup.js';
 import { useAuth } from '../../contexts/AuthContext';
 import { usePopUp } from '../../contexts/PopUpContext';
+import { MessagesChild } from './children/MessagesChild';
 
 const Messages = () => {
 	const { user } = useAuth();
@@ -77,84 +75,6 @@ const Messages = () => {
 		}
 	}, [convosCount, user]);
 
-	const updateConvosList = async () => {
-		const convosObjs = convosArr.map(async (convo) => {
-			// Other user variables
-			const otherUserId = convo.id;
-			const otherUser = await findUser(otherUserId);
-			const name = otherUser.data.name;
-			const username = otherUser.data.username;
-			const image = await getUrl(otherUser.data.image);
-			// Last message variables
-			const message = convo.lastMessage.data.message;
-			const time = timeSinceTrunc(convo.lastMessage.data.date);
-			let sender;
-			if (convo.lastMessage.data.sender == user.id) {
-				sender = 'You';
-			} else {
-				sender = 'Them';
-			}
-			return (
-				<Link
-					className='convo-row'
-					key={otherUserId}
-					to={`/messages/${otherUserId}`}
-				>
-					<div className='convo-row-left'>
-						<img className='convo-image' src={image} />
-						<div className='convo-text'>
-							<div className='convo-name'>{name}</div>
-							<div className='convo-username'>@{username}</div>
-						</div>
-					</div>
-					<div className='convo-row-right'>
-						<div className='convo-row-message'>
-							{sender}: "{message}"
-						</div>
-						<div className='convo-row-time'>{time}</div>
-					</div>
-				</Link>
-			);
-		});
-		const returnVal = await Promise.all(convosObjs);
-		setConvosList(returnVal);
-	};
-
-	// Update convos list state when convosArr state changes
-	useEffect(() => {
-		if (convosArr != null) {
-			updateConvosList();
-		} else {
-			setConvosList(null);
-		}
-	}, [convosArr]);
-
-	// Update convos state when convos list and user image states change
-	useEffect(() => {
-		if (user != null) {
-			setConvos(
-				<div id='convos'>
-					{searchPopUp}
-					<div id='convos-top'>
-						<img id='convos-user-icon' src={userImage} />
-						<div id='convos-title'>Messages</div>
-						<div id='convos-message-icon-container'>
-							<img
-								id='convos-message-icon'
-								src={MessageSolid}
-								onClick={openPopup}
-							/>
-						</div>
-					</div>
-					<div id='convos-divider'></div>
-					<div id='convos-bottom'>{convosList}</div>
-				</div>
-			);
-		} else {
-			setConvos(null);
-		}
-	}, [convosList, userImage, user, searchPopUp]);
-
 	// Load-more function that updates the convos component
 	const loadMore = () => {
 		if (allLoaded == false) {
@@ -176,7 +96,33 @@ const Messages = () => {
 	return (
 		<div id='messages' className='page'>
 			<Navbar />
-			{convos}
+			{user ? (
+				<div id='convos'>
+					{searchPopUp}
+					<div id='convos-top'>
+						<img id='convos-user-icon' src={userImage} />
+						<div id='convos-title'>Messages</div>
+						<div id='convos-message-icon-container'>
+							<img
+								id='convos-message-icon'
+								src={MessageSolid}
+								onClick={openPopup}
+							/>
+						</div>
+					</div>
+					<div id='convos-divider'></div>
+					<div id='convos-bottom'>
+						{convosArr
+							? convosArr.map((convo) => (
+									<MessagesChild
+										key={convo.id}
+										convo={convo}
+									/>
+							  ))
+							: null}
+					</div>
+				</div>
+			) : null}
 		</div>
 	);
 };
