@@ -69,18 +69,16 @@ const FollowButton = (props) => {
 		}
 	};
 
-	if (user.id == otherUserId) {
-		return <div className={`follow-button inactive`}>This is you.</div>;
-	} else {
-		return (
-			<div
-				className={`follow-button ${followButtonClass}`}
-				onClick={clickFollow}
-			>
-				{followText}
-			</div>
-		);
-	}
+	return user?.id == otherUserId ? (
+		<div className={`follow-button inactive`}>This is you.</div>
+	) : (
+		<div
+			className={`follow-button ${followButtonClass}`}
+			onClick={clickFollow}
+		>
+			{followText}
+		</div>
+	);
 };
 
 export { FollowButton };

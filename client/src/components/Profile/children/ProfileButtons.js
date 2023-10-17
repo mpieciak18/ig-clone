@@ -1,7 +1,7 @@
 import { FollowButton } from '../../other/FollowButton.js';
 import { useNavigate } from 'react-router-dom';
 import { signOutUser } from '../../../firebase/users.js';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import MessageHollow from '../../../assets/images/dm.png';
 import MessageSolid from '../../../assets/images/dm-solid.png';
 import { useAuth } from '../../../contexts/AuthContext.js';
@@ -35,65 +35,31 @@ const ProfileButtons = (props) => {
 		}
 	};
 
-	// Init buttons component state
-	const [buttons, setButtons] = useState(null);
-
-	// Update buttons component state when user prop changes and on render
-	useEffect(() => {
-		if (user == null) {
-			setButtons(
-				<div id='profile-buttons-section'>
-					<div
-						className='follow-button active'
-						onClick={() => navigate('/signup')}
-					>
-						Follow
-					</div>
-					<div id='profile-direct-message-button-container'>
-						<img
-							id='profile-direct-message-button'
-							src={img}
-							onClick={clickMessages}
-							onMouseDown={() => setImg(MessageSolid)}
-							onMouseUp={() => setImg(MessageHollow)}
-							onMouseOver={() => setImg(MessageSolid)}
-							onMouseOut={() => setImg(MessageHollow)}
-						/>
-					</div>
-				</div>
-			);
-		} else if (user.id != otherUserId) {
-			setButtons(
-				<div id='profile-buttons-section'>
-					<FollowButton otherUserId={otherUserId} />
-					<div id='profile-direct-message-button-container'>
-						<img
-							id='profile-direct-message-button'
-							src={img}
-							onClick={clickMessages}
-							onMouseDown={() => setImg(MessageSolid)}
-							onMouseUp={() => setImg(MessageHollow)}
-							onMouseOver={() => setImg(MessageSolid)}
-							onMouseOut={() => setImg(MessageHollow)}
-						/>
-					</div>
-				</div>
-			);
-		} else {
-			setButtons(
-				<div id='profile-buttons-section'>
-					<div id='profile-settings-button' onClick={clickSettings}>
-						Settings
-					</div>
-					<div id='profile-logout-button' onClick={clickLogout}>
-						Logout
-					</div>
-				</div>
-			);
-		}
-	}, [user]);
-
-	return buttons;
+	return user?.id == otherUserId ? (
+		<div id='profile-buttons-section'>
+			<div id='profile-settings-button' onClick={clickSettings}>
+				Settings
+			</div>
+			<div id='profile-logout-button' onClick={clickLogout}>
+				Logout
+			</div>
+		</div>
+	) : (
+		<div id='profile-buttons-section'>
+			<FollowButton otherUserId={otherUserId} />
+			<div id='profile-direct-message-button-container'>
+				<img
+					id='profile-direct-message-button'
+					src={img}
+					onClick={clickMessages}
+					onMouseDown={() => setImg(MessageSolid)}
+					onMouseUp={() => setImg(MessageHollow)}
+					onMouseOver={() => setImg(MessageSolid)}
+					onMouseOut={() => setImg(MessageHollow)}
+				/>
+			</div>
+		</div>
+	);
 };
 
 export { ProfileButtons };
