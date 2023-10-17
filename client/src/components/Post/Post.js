@@ -76,9 +76,6 @@ const Post = () => {
 	// Init linkCopied state for share button
 	const [linkCopied, setLinkCopied] = useState(false);
 
-	// Init likes component state
-	const [likes, setLikes] = useState(null);
-
 	// Set likesOn to true (or redirect to signup page) when likes are clicked
 	const path = useLocation().pathname;
 	const navigate = useNavigate();
@@ -134,15 +131,11 @@ const Post = () => {
 					/>
 					<div id='beneath-buttons'>
 						<div id='likes-count' onClick={clickLikes}>
-							{(() => {
-								if (postLikes == 0) {
-									return `0 likes`;
-								} else if (postLikes == 1) {
-									return `1 like`;
-								} else {
-									return `${postLikes} likes`;
-								}
-							})()}
+							{postLikes == 0
+								? `0 likes`
+								: postLikes == 1
+								? `1 like`
+								: `${postLikes} likes`}
 						</div>
 					</div>
 				</div>
