@@ -60,8 +60,6 @@ const ProfileCard = (props) => {
 		}
 	}, [popUpState]);
 
-	// return profileCard;
-
 	return otherUser ? (
 		<div id='profile-card'>
 			<div id='profile-card-top'>
