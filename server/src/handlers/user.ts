@@ -139,3 +139,27 @@ export const updateUser = async (req, res, next) => {
 	// Return updated user data
 	res.json({ user });
 };
+
+// Attempts to find user by id
+export const getSingleUser = async (req, res, next) => {
+	let user;
+	// First, find user in database by id.
+	try {
+		user = await prisma.user.findUnique({
+			where: {
+				id: req.body.id,
+			},
+		});
+	} catch (e) {
+		// Error handled at top-level (ie, server.ts) as 500 error
+		next(e);
+		return;
+	}
+	if (!user) {
+		const e = new Error();
+		next(e);
+		return;
+	}
+	// Second, return user record to client.
+	res.json({ user });
+};

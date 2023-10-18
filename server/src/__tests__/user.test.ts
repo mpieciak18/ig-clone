@@ -77,7 +77,7 @@ describe('POST /create_new_user & DELETE /api/user', () => {
 	});
 });
 
-describe('POST /sign_in & PUT /api/user', () => {
+describe('POST /sign_in, POST /api/user/single, & PUT /api/user', () => {
 	let token;
 	let otherToken;
 	const initUser = {
@@ -124,6 +124,7 @@ describe('POST /sign_in & PUT /api/user', () => {
 		expect(otherToken).toBeDefined();
 		expect(response.status).toBe(200);
 	});
+	//
 	it('should fail to login with fake username & return a 401 status', async () => {
 		const response = await supertest(app).post('/sign_in').send({
 			username: 'fake_test',
@@ -150,6 +151,55 @@ describe('POST /sign_in & PUT /api/user', () => {
 		});
 		expect(response.status).toBe(400);
 	});
+	//
+	it('should fail to find a user due to a non-existent id & return a 500 status', async () => {
+		const response = await supertest(app)
+			.post('/api/user/single')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				id: 2,
+			});
+		expect(response.status).toBe(500);
+	});
+	it('should fail to find a user due to a invalid inputs & return a 400 status', async () => {
+		const response = await supertest(app)
+			.post('/api/user/single')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				id: 'abc',
+			});
+		expect(response.status).toBe(400);
+	});
+	it('should fail to find a user due to a missing auth token & return a 401 status', async () => {
+		const response = await supertest(app)
+			.post('/api/user/single')
+			.set('Authorization', `Bearer `)
+			.send({
+				id: ogUser.id,
+			});
+		expect(response.status).toBe(401);
+	});
+	it('should find a user & return a 200 status + correct user info', async () => {
+		const response = await supertest(app)
+			.post('/api/user/single')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				id: ogUser.id,
+			});
+		const user = response.body.user;
+		const passwordsMatch = await comparePasswords(
+			ogUser.password,
+			user.password
+		);
+		expect(response.status).toBe(200);
+		expect(user.email == ogUser.email).toBeTruthy();
+		expect(user.username == ogUser.username).toBeTruthy();
+		expect(passwordsMatch).toBeTruthy();
+		expect(user.name == ogUser.name).toBeTruthy();
+		expect(user.image == ogUser.image).toBeTruthy();
+		expect(user.bio == ogUser.bio).toBeTruthy();
+	});
+	//
 	it('should fail to update the user due to no auth token & return a 401 status', async () => {
 		const response = await supertest(app)
 			.put('/api/user')

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
-import { deleteUser, updateUser } from './handlers/user';
+import { deleteUser, updateUser, getSingleUser } from './handlers/user';
 import { handleInputErrors, uploadImage } from './modules/middleware';
 import {
 	createFollow,
@@ -62,6 +62,13 @@ router.put(
 	body('image').optional().isURL(),
 	handleInputErrors,
 	updateUser
+);
+// Gets a single user
+router.post(
+	'/user/single',
+	body('id').isInt(),
+	handleInputErrors,
+	getSingleUser
 );
 // Delete a user's account
 router.delete('/user', handleInputErrors, deleteUser);
