@@ -72,30 +72,43 @@ export const signOutUser = async () => {
 };
 
 // Retrieve user
-export const findUser = async (userId) => {
-	const usersRef = collection(db, 'users');
-	const userRef = doc(usersRef, userId);
-	const userDoc = await getDoc(userRef);
-	const user = {
-		id: userDoc.id,
-		data: userDoc.data(),
-	};
-	return user;
+export const findUser = async (id) => {
+	const response = await fetch(
+		import.meta.env.VITE_API_URL + '/api/user/single',
+		{
+			body: { id },
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${user.token}`,
+			},
+		}
+	);
+	if (response.status == 200) {
+		const json = await response.json();
+		return json.user;
+	} else {
+		throw new Error();
+	}
 };
 
-// Retrieve all users
-export const findAllUsers = async () => {
-	const usersRef = collection(db, 'users');
-	const usersDocs = await getDocs(usersRef);
-	let users = [];
-	usersDocs.docs.forEach((doc) => {
-		const user = {
-			id: doc.id,
-			data: doc.data(),
-		};
-		users = [...users, user];
-	});
-	return users;
+// Searches users by name
+export const searchUsers = async (name) => {
+	const response = await fetch(
+		import.meta.env.VITE_API_URL + '/api/user/search',
+		{
+			body: { name },
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${user.token}`,
+			},
+		}
+	);
+	if (response.status == 200) {
+		const json = await response.json();
+		return json.users;
+	} else {
+		throw new Error();
+	}
 };
 
 // Update user

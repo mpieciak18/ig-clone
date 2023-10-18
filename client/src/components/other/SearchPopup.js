@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { userSearch } from '../../other/search.js';
+import { searchUsers } from '../../firebase/users.js';
 import { getUrl } from '../../firebase/storage.js';
 import { useAuth } from '../../contexts/AuthContext.js';
 import { usePopUp } from '../../contexts/PopUpContext.js';
@@ -31,7 +31,7 @@ const SearchPopup = (props) => {
 	// Update results when value changes
 	useEffect(() => {
 		if (searchVal != null) {
-			userSearch(searchVal).then((res) => {
+			searchUsers(searchVal).then((res) => {
 				if (res.length != 0) {
 					setResults(res);
 				} else {
@@ -48,14 +48,14 @@ const SearchPopup = (props) => {
 			if (result.item.id == user.id) {
 				return null;
 			} else {
-				const userImage = await getUrl(result.item.data.image);
-				const userHandle = result.item.data.username;
+				const userImage = await getUrl(result.image);
+				const userHandle = result.username;
 				const redirect = () => {
 					updatePopUp();
 					if (location.otherUserId == null) {
-						navigate(`/${result.item.id}`);
+						navigate(`/${result.id}`);
 					} else {
-						navigate(`/${result.item.id}`);
+						navigate(`/${result.id}`);
 						window.location.reload();
 					}
 				};
@@ -63,7 +63,7 @@ const SearchPopup = (props) => {
 					<div
 						className='search-result'
 						onClick={redirect}
-						key={result.item.id}
+						key={result.id}
 					>
 						<img className='search-result-image' src={userImage} />
 						<div className='search-result-name'>@ {userHandle}</div>

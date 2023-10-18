@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { userSearch } from '../../other/search.js';
+import { searchUsers } from '../../firebase/users.js';
 import { getUrl } from '../../firebase/storage.js';
 import './other.css';
 import { useAuth } from '../../contexts/AuthContext.js';
@@ -35,7 +35,7 @@ const ConvoPopup = () => {
 	// Update results when value changes
 	useEffect(() => {
 		if (value != null) {
-			userSearch(value).then((res) => {
+			searchUsers(value).then((res) => {
 				if (res.length != 0) {
 					setResults(res);
 				} else {
@@ -49,20 +49,20 @@ const ConvoPopup = () => {
 
 	const updateResultsComp = async () => {
 		const newArr = await results.map(async (result) => {
-			if (result.item.id == user.id) {
+			if (result.id == user.id) {
 				return null;
 			} else {
-				const userImage = await getUrl(result.item.data.image);
-				const userHandle = result.item.data.username;
+				const userImage = await getUrl(result.image);
+				const userHandle = result.username;
 				const redirect = () => {
-					navigate(`/messages/${result.item.id}`);
+					navigate(`/messages/${result.id}`);
 					updatePopUp();
 				};
 				return (
 					<div
 						className='convo-result'
 						onClick={redirect}
-						key={result.item.id}
+						key={result.id}
 					>
 						<img className='convo-result-image' src={userImage} />
 						<div className='convo-result-name'>@ {userHandle}</div>
