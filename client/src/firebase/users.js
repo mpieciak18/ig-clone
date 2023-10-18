@@ -8,7 +8,7 @@ import {
 	query,
 	where,
 } from 'firebase/firestore';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext.js';
 
 const { user, setUser } = useAuth();
 
