@@ -23,7 +23,8 @@ export const newUser = async (username, name, email, password) => {
 		const json = await response.json();
 		const newUser = json.user;
 		newUser.token = json.token;
-		setUser(newUser);
+		await setUser(newUser);
+		localStorage.setItem('markstagramUser', newUser);
 		return;
 	} else {
 		throw new Error();
@@ -44,7 +45,8 @@ export const signInUser = async (email, password) => {
 		const json = await response.json();
 		const signedInUser = json.user;
 		signedInUser.token = json.token;
-		setUser(signedInUser);
+		await setUser(signedInUser);
+		localStorage.setItem('markstagramUser', signedInUser);
 		return;
 	} else {
 		throw new Error();
@@ -54,6 +56,7 @@ export const signInUser = async (email, password) => {
 // Sign out user
 export const signOutUser = async () => {
 	await setUser(null);
+	localStorage.removeItem('markstagramUser');
 };
 
 // Retrieve user

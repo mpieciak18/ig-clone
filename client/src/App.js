@@ -9,8 +9,6 @@ import { Saved } from './components/SavedPosts/Saved.js';
 import { SignUp } from './components/SignUp/SignUp.js';
 import { Login } from './components/Login/Login.js';
 import { Conversation } from './components/Conversation/Conversation.js';
-import { auth, firebaseObserver } from './firebase/firebase.js';
-import { findUser } from './firebase/users.js';
 import { useAuth } from './contexts/AuthContext.js';
 
 const App = () => {
@@ -20,22 +18,24 @@ const App = () => {
 	// Init loading state
 	const [isLoading, setIsLoading] = useState(true);
 
-	// Update logged-in and loading states on mount
+	// Update user and loading states on mount
 	useEffect(() => {
-		firebaseObserver.subscribe('authStateChanged', (result) => {
-			if (auth?.currentUser?.uid) {
-				findUser(auth.currentUser.uid).then((newUser) => {
-					setUser(newUser);
+		if (user) {
+			const data = localStorage.getItem('markstagramUser');
+			if (data) {
+				setUser(data).then(() => {
 					setIsLoading(false);
 				});
 			} else {
-				setUser(null);
-				setIsLoading(false);
+				setUser(null).then(() => {
+					setIsLoading(false);
+				});
 			}
-		});
-		return () => {
-			firebaseObserver.unsubscribe('authStateChanged');
-		};
+		} else {
+			setUser(null).then(() => {
+				setIsLoading(false);
+			});
+		}
 	}, []);
 
 	// return routes;
