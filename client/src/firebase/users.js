@@ -1,13 +1,6 @@
 // Firebase modules
 import { db } from './firebase.js';
-import {
-	doc,
-	collection,
-	getDocs,
-	getDoc,
-	query,
-	where,
-} from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { useAuth } from '../contexts/AuthContext.js';
 
 const { user, setUser } = useAuth();
@@ -22,22 +15,18 @@ export const newUser = async (username, name, email, password) => {
 		bio: '',
 		image: import.meta.env.VITE_DEFAULT_IMG,
 	};
-	try {
-		const response = await fetch(
-			import.meta.env.VITE_API_URL + '/create_new_user',
-			{ body, method: 'POST' }
-		);
-		if (response.status == 200) {
-			const json = await response.json();
-			const newUser = json.user;
-			newUser.token = json.token;
-			setUser(newUser);
-			return;
-		} else {
-			throw new Error();
-		}
-	} catch (error) {
-		throw error;
+	const response = await fetch(
+		import.meta.env.VITE_API_URL + '/create_new_user',
+		{ body, method: 'POST' }
+	);
+	if (response.status == 200) {
+		const json = await response.json();
+		const newUser = json.user;
+		newUser.token = json.token;
+		setUser(newUser);
+		return;
+	} else {
+		throw new Error();
 	}
 };
 
@@ -47,22 +36,18 @@ export const signInUser = async (email, password) => {
 		email,
 		password,
 	};
-	try {
-		const response = fetch(import.meta.env.VITE_API_URL + '/sign_in', {
-			body,
-			method: 'POST',
-		});
-		if (response.status == 200) {
-			const json = await response.json();
-			const signedInUser = json.user;
-			signedInUser.token = json.token;
-			setUser(signedInUser);
-			return;
-		} else {
-			throw new Error();
-		}
-	} catch (error) {
-		throw error;
+	const response = fetch(import.meta.env.VITE_API_URL + '/sign_in', {
+		body,
+		method: 'POST',
+	});
+	if (response.status == 200) {
+		const json = await response.json();
+		const signedInUser = json.user;
+		signedInUser.token = json.token;
+		setUser(signedInUser);
+		return;
+	} else {
+		throw new Error();
 	}
 };
 
@@ -116,28 +101,21 @@ export const updateUser = async (image, name, bio) => {
 	if (image) body.image = image;
 	if (name) body.name = name;
 	if (bio) body.bio = bio;
-	try {
-		const response = await fetch(
-			import.meta.env.VITE_API_URL + '/api/user',
-			{
-				body,
-				method: 'PUT',
-				headers: {
-					Authorization: `Bearer ${user.token}`,
-				},
-			}
-		);
-		if (response.status == 200) {
-			const json = await response.json();
-			const updatedUser = json.user;
-			updatedUser.token = user.token;
-			await setUser(updatedUser);
-			return;
-		} else {
-			throw new Error();
-		}
-	} catch (error) {
-		throw error;
+	const response = await fetch(import.meta.env.VITE_API_URL + '/api/user', {
+		body,
+		method: 'PUT',
+		headers: {
+			Authorization: `Bearer ${user.token}`,
+		},
+	});
+	if (response.status == 200) {
+		const json = await response.json();
+		const updatedUser = json.user;
+		updatedUser.token = user.token;
+		await setUser(updatedUser);
+		return;
+	} else {
+		throw new Error();
 	}
 };
 
