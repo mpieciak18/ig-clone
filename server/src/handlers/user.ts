@@ -163,3 +163,42 @@ export const getSingleUser = async (req, res, next) => {
 	// Second, return user record to client.
 	res.json({ user });
 };
+
+// Attempts to find user(s) by name or username
+export const getUsersByName = async (req, res, next) => {
+	let users;
+	// First, search users by name in database
+	try {
+		users = await prisma.user.findMany({
+			where: {
+				OR: [
+					{
+						name: {
+							contains: `%${req.body.name}%`,
+							mode: 'insensitive',
+						},
+					},
+					{
+						username: {
+							contains: `%${req.body.name}%`,
+							mode: 'insensitive',
+						},
+					},
+				],
+			},
+		});
+	} catch (e) {
+		// Error handled at top-level (ie, server.ts) as 500 error
+		next(e);
+		return;
+	}
+	if (!users) {
+		// While the previous try/catch (along with the 'protect' middleware) should catch all errors,
+		// this is added as an extra step of error handling (in case the search 'runs' but nothing returns
+		const e = new Error();
+		next(e);
+		return;
+	}
+	// Second, return users array to client.
+	res.json({ users });
+};

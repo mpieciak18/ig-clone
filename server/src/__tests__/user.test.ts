@@ -200,6 +200,45 @@ describe('POST /sign_in, POST /api/user/single, & PUT /api/user', () => {
 		expect(user.bio == ogUser.bio).toBeTruthy();
 	});
 	//
+	it('should fail to search for users due to a invalid inputs & return a 400 status', async () => {
+		const response = await supertest(app)
+			.post('/api/user/search')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				name: 12345,
+			});
+		expect(response.status).toBe(400);
+	});
+	it('should fail to search for users due to a missing auth token & return a 401 status', async () => {
+		const response = await supertest(app)
+			.post('/api/user/search')
+			.set('Authorization', `Bearer `)
+			.send({
+				name: ogUser.name,
+			});
+		expect(response.status).toBe(401);
+	});
+	it('should find no users & return a 200 status + empty users arr', async () => {
+		const response = await supertest(app)
+			.post('/api/user/search')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				name: 'this will never return any results',
+			});
+		expect(response.status).toBe(200);
+		expect(response.body.users.length).toEqual(0);
+	});
+	it('should find users & return a 200 status + non-empty users arr', async () => {
+		const response = await supertest(app)
+			.post('/api/user/search')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				name: ogUser.name,
+			});
+		expect(response.status).toBe(200);
+		expect(response.body.users.length).toBeGreaterThan(0);
+	});
+	//
 	it('should fail to update the user due to no auth token & return a 401 status', async () => {
 		const response = await supertest(app)
 			.put('/api/user')

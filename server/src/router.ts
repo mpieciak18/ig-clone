@@ -1,6 +1,11 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
-import { deleteUser, updateUser, getSingleUser } from './handlers/user';
+import {
+	deleteUser,
+	updateUser,
+	getSingleUser,
+	getUsersByName,
+} from './handlers/user';
 import { handleInputErrors, uploadImage } from './modules/middleware';
 import {
 	createFollow,
@@ -69,6 +74,13 @@ router.post(
 	body('id').isInt(),
 	handleInputErrors,
 	getSingleUser
+);
+// Searches for users (by name)
+router.post(
+	'/user/search',
+	body('name').isString(),
+	handleInputErrors,
+	getUsersByName
 );
 // Delete a user's account
 router.delete('/user', handleInputErrors, deleteUser);
