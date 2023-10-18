@@ -6,11 +6,10 @@ import { NameFooter } from './children/NameFooter.js';
 import { ImageInput } from './children/ImageInput.js';
 import { uploadFile } from '../../firebase/storage';
 import { Navbar } from '../other/Navbar.js';
-import { findUser } from '../../firebase/users.js';
 import { useAuth } from '../../contexts/AuthContext';
 
 const Settings = () => {
-	const { user, setUser } = useAuth();
+	const { user } = useAuth();
 
 	const location = useLocation();
 
@@ -87,13 +86,11 @@ const Settings = () => {
 				path = `${user.id}/${image}`;
 				await uploadFile(file, path);
 			}
-			const possibleError = await updateUser(path, name, bio);
-			if (possibleError == null) {
+			try {
+				await updateUser(path, name, bio);
 				// Redirect to own profile upon successful settings update
-				const updatedUser = await findUser(user.id);
-				await setUser(updatedUser);
 				navigate(`/${user.id}`);
-			} else {
+			} catch {
 				setErrorClass('active');
 				setTimeout(() => {
 					setErrorClass('inactive');

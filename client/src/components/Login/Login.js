@@ -22,15 +22,14 @@ const Login = () => {
 
 	const newLogin = async (e) => {
 		e.preventDefault();
-		// Add new user to firebase/auth & return any errors
-		const newUserId = await signInUser(email, password);
-		if (newUserId == null) {
+		try {
+			await signInUser(email, password);
+			navigate('/');
+		} catch (error) {
 			setErrorClass('active');
 			setTimeout(() => {
 				setErrorClass('inactive');
 			}, 3000);
-		} else {
-			navigate('/');
 		}
 	};
 

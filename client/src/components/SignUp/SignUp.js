@@ -62,12 +62,13 @@ const SignUp = (props) => {
 	const newSignUp = async (e) => {
 		e.preventDefault();
 		// Add new user to firebase/auth & return any errors
-		const newUserId = await newUser(username, name, email, password);
-		if (newUserId != null) {
-			const newUser = await findUser(newUserId);
+		try {
+			const response = await newUser(username, name, email, password);
+			const newUser = response.user;
+			newUser.token = response.token;
 			await setUser(newUser);
 			navigate('/settings', { state: { newSignUp: true } });
-		} else {
+		} catch {
 			setErrorClass('active');
 			setTimeout(() => {
 				setErrorClass('inactive');
