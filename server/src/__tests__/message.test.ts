@@ -53,7 +53,6 @@ describe('messages', () => {
 				id: otherUser.id,
 			});
 		conversation = response.body.conversation;
-		console.log(conversation);
 		const idOne = conversation.users[0].id;
 		const idTwo = conversation.users[1].id;
 		expect(response.status).toBe(200);
