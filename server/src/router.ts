@@ -5,6 +5,7 @@ import {
 	updateUser,
 	getSingleUser,
 	getUsersByName,
+	isEmailUnique,
 } from './handlers/user';
 import { handleInputErrors, uploadImage } from './modules/middleware';
 import {
@@ -81,6 +82,13 @@ router.post(
 	body('name').isString(),
 	handleInputErrors,
 	getUsersByName
+);
+// Checks if an email is unique (ie, not taken by another user)
+router.post(
+	'/user/is-email-unique',
+	body('email').isString(),
+	handleInputErrors,
+	isEmailUnique
 );
 // Delete a user's account
 router.delete('/user', handleInputErrors, deleteUser);

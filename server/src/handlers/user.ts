@@ -202,3 +202,26 @@ export const getUsersByName = async (req, res, next) => {
 	// Second, return users array to client.
 	res.json({ users });
 };
+
+// Checks if an email is unique (ie, not taken by another user)
+export const isEmailUnique = async (req, res, next) => {
+	let user;
+	let isEmailUnique = false;
+	// First, search for a user by email
+	try {
+		user = await prisma.user.findUnique({
+			where: {
+				email: req.body.email,
+			},
+		});
+	} catch (e) {
+		// Error handled at top-level (ie, server.ts) as 500 error
+		next(e);
+		return;
+	}
+	if (!user) {
+		isEmailUnique = true;
+	}
+	// Second, return result (bool) to client.
+	res.json({ isEmailUnique });
+};

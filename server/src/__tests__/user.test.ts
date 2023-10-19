@@ -239,6 +239,45 @@ describe('POST /sign_in, POST /api/user/single, & PUT /api/user', () => {
 		expect(response.body.users.length).toBeGreaterThan(0);
 	});
 	//
+	it('should fail to check if email is unique due to a invalid inputs & return a 400 status', async () => {
+		const response = await supertest(app)
+			.post('/api/user/is-email-unique')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				email: 12345,
+			});
+		expect(response.status).toBe(400);
+	});
+	it('should fail to check if email is unique due to a missing auth token & return a 401 status', async () => {
+		const response = await supertest(app)
+			.post('/api/user/is-email-unique')
+			.set('Authorization', `Bearer `)
+			.send({
+				email: ogUser.email,
+			});
+		expect(response.status).toBe(401);
+	});
+	it('should check if email is unique & return a 200 status + "true" answer', async () => {
+		const response = await supertest(app)
+			.post('/api/user/is-email-unique')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				email: 'thisemailisunique@bro.com',
+			});
+		expect(response.status).toBe(200);
+		expect(response.body.isEmailUnique).toBeTruthy();
+	});
+	it('should check if email is unique & return a 200 status + "false" answer', async () => {
+		const response = await supertest(app)
+			.post('/api/user/is-email-unique')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				email: ogUser.email,
+			});
+		expect(response.status).toBe(200);
+		expect(response.body.isEmailUnique).toBeFalsy();
+	});
+	//
 	it('should fail to update the user due to no auth token & return a 401 status', async () => {
 		const response = await supertest(app)
 			.put('/api/user')
