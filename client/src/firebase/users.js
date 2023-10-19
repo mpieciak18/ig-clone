@@ -114,26 +114,46 @@ export const updateUser = async (image, name, bio) => {
 	}
 };
 
-// Query for username & return true if it exists in db
-export const usernameExists = async (username) => {
-	const usersRef = collection(db, 'users');
-	const userQuery = query(usersRef, where('username', '==', username));
-	const userDoc = await getDocs(userQuery);
-	if (userDoc.empty != true) {
-		return true;
+// Query for username & return true if it is not taken
+export const isUsernameUnique = async (username) => {
+	const user = getLocalUser();
+	const response = await fetch(
+		import.meta.env.VITE_API_URL + '/api/user/is-username-unique',
+		{
+			body: { username },
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${user.token}`,
+			},
+		}
+	);
+	if (response.status == 200) {
+		const json = await response.json();
+		const { isUsernameUnique } = json;
+		return isUsernameUnique;
 	} else {
-		return false;
+		throw new Error();
 	}
 };
 
-// Query for email & return true if it exists in db
-export const emailExists = async (email) => {
-	const usersRef = collection(db, 'users');
-	const userQuery = query(usersRef, where('email', '==', email));
-	const userDoc = await getDocs(userQuery);
-	if (userDoc.empty != true) {
-		return true;
+// Query for email & return true if it is not taken
+export const isEmailUnique = async (email) => {
+	const user = getLocalUser();
+	const response = await fetch(
+		import.meta.env.VITE_API_URL + '/api/user/is-email-unique',
+		{
+			body: { email },
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${user.token}`,
+			},
+		}
+	);
+	if (response.status == 200) {
+		const json = await response.json();
+		const { isEmailUnique } = json;
+		return isEmailUnique;
 	} else {
-		return false;
+		throw new Error();
 	}
 };

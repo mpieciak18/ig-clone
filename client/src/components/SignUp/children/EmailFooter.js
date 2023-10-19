@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { emailExists } from '../../../firebase/users.js';
+import { isEmailUnique } from '../../../firebase/users.js';
 
 const EmailFooter = (props) => {
 	const { setEmailPasses, email } = props;
@@ -23,8 +23,8 @@ const EmailFooter = (props) => {
 			setEmailPasses(false);
 			setFooterText('Email is not valid!');
 			setFooterClass('red');
-			// Checks if email already exists
-		} else if (await emailExists(email)) {
+			// Checks if email is unique
+		} else if (!(await isEmailUnique(email))) {
 			setEmailPasses(false);
 			setFooterText('Email is already taken!');
 			setFooterClass('red');

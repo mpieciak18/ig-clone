@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { usernameExists } from '../../../firebase/users.js';
+import { isUsernameUnique } from '../../../firebase/users.js';
 
 const UsernameFooter = (props) => {
 	const { setUsernamePasses, username } = props;
@@ -10,9 +10,9 @@ const UsernameFooter = (props) => {
 
 	const updateStates = async () => {
 		// First, query db for username if > 2 and < 16
-		let result = false;
+		let isUnique = false;
 		if (username.length > 2 && username.length < 16) {
-			result = await usernameExists(username);
+			isUnique = await isUsernameUnique(username);
 		}
 		// Second, check if username passes criteria
 		// Check if no username entered
@@ -34,7 +34,7 @@ const UsernameFooter = (props) => {
 			setFooterClass('red');
 		}
 		// Check if username is taken already
-		else if (result == true) {
+		else if (!isUnique) {
 			setUsernamePasses(false);
 			setFooterText('Username is already taken!');
 			setFooterClass('red');
