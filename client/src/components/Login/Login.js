@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 
 const Login = () => {
-	const { user } = useAuth();
+	const { user, setUser } = useAuth();
 
 	const navigate = useNavigate();
 
@@ -23,7 +23,9 @@ const Login = () => {
 	const newLogin = async (e) => {
 		e.preventDefault();
 		try {
-			await signInUser(email, password);
+			const signedInUser = await signInUser(email, password);
+			await setUser(signedInUser);
+			localStorage.setItem('markstagramUser', signedInUser);
 			navigate('/');
 		} catch (error) {
 			setErrorClass('active');

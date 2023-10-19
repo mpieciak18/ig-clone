@@ -1,16 +1,16 @@
-import { signOutUser } from '../../firebase/users.js';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext.js';
 import { usePopUp } from '../../contexts/PopUpContext.js';
 
 const SettingsPopup = () => {
-	const { user } = useAuth();
+	const { user, setUser } = useAuth();
 	const { updatePopUp } = usePopUp();
 	const navigate = useNavigate();
 
 	// Logout user
 	const logout = async () => {
-		await signOutUser();
+		await setUser(null);
+		localStorage.removeItem('markstagramUser');
 		navigate('/');
 	};
 

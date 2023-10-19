@@ -1,13 +1,12 @@
 import { FollowButton } from '../../other/FollowButton.js';
 import { useNavigate } from 'react-router-dom';
-import { signOutUser } from '../../../firebase/users.js';
 import { useState } from 'react';
 import MessageHollow from '../../../assets/images/dm.png';
 import MessageSolid from '../../../assets/images/dm-solid.png';
 import { useAuth } from '../../../contexts/AuthContext.js';
 
 const ProfileButtons = (props) => {
-	const { user } = useAuth();
+	const { user, setUser } = useAuth();
 	const { otherUserId } = props;
 
 	const navigate = useNavigate();
@@ -17,7 +16,8 @@ const ProfileButtons = (props) => {
 
 	// Logs user out
 	const clickLogout = async () => {
-		await signOutUser();
+		await setUser(null);
+		localStorage.removeItem('markstagramUser');
 		navigate('/');
 	};
 

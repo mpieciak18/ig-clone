@@ -87,8 +87,9 @@ const Settings = () => {
 				await uploadFile(file, path);
 			}
 			try {
-				await updateUser(path, name, bio);
-				// Redirect to own profile upon successful settings update
+				const updatedUser = await updateUser(path, name, bio);
+				await setUser(updatedUser);
+				localStorage.setItem('markstagramUser', updatedUser);
 				navigate(`/${user.id}`);
 			} catch {
 				setErrorClass('active');

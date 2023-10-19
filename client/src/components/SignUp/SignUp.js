@@ -63,10 +63,9 @@ const SignUp = (props) => {
 		e.preventDefault();
 		// Add new user to firebase/auth & return any errors
 		try {
-			const response = await newUser(username, name, email, password);
-			const newUser = response.user;
-			newUser.token = response.token;
+			const newUser = await newUser(username, name, email, password);
 			await setUser(newUser);
+			localStorage.setItem('markstagramUser', newUser);
 			navigate('/settings', { state: { newSignUp: true } });
 		} catch {
 			setErrorClass('active');

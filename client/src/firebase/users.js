@@ -1,9 +1,9 @@
 // Firebase modules
 import { db } from './firebase.js';
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import { useAuth } from '../contexts/AuthContext.js';
 
-const { user, setUser } = useAuth();
+// Get signed-in user's info from local storage
+const getLocalUser = () => localStorage.getItem('markstagramUser');
 
 // Register new user
 export const newUser = async (username, name, email, password) => {
@@ -23,9 +23,7 @@ export const newUser = async (username, name, email, password) => {
 		const json = await response.json();
 		const newUser = json.user;
 		newUser.token = json.token;
-		await setUser(newUser);
-		localStorage.setItem('markstagramUser', newUser);
-		return;
+		return newUser;
 	} else {
 		throw new Error();
 	}
@@ -45,22 +43,15 @@ export const signInUser = async (email, password) => {
 		const json = await response.json();
 		const signedInUser = json.user;
 		signedInUser.token = json.token;
-		await setUser(signedInUser);
-		localStorage.setItem('markstagramUser', signedInUser);
-		return;
+		return signedInUser;
 	} else {
 		throw new Error();
 	}
 };
 
-// Sign out user
-export const signOutUser = async () => {
-	await setUser(null);
-	localStorage.removeItem('markstagramUser');
-};
-
 // Retrieve user
 export const findUser = async (id) => {
+	const user = getLocalUser();
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/user/single',
 		{
@@ -81,6 +72,7 @@ export const findUser = async (id) => {
 
 // Searches users by name
 export const searchUsers = async (name) => {
+	const user = getLocalUser();
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/user/search',
 		{
@@ -104,6 +96,7 @@ export const updateUser = async (image, name, bio) => {
 	if (image) body.image = image;
 	if (name) body.name = name;
 	if (bio) body.bio = bio;
+	const user = getLocalUser();
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/user', {
 		body,
 		method: 'PUT',
@@ -115,8 +108,7 @@ export const updateUser = async (image, name, bio) => {
 		const json = await response.json();
 		const updatedUser = json.user;
 		updatedUser.token = user.token;
-		await setUser(updatedUser);
-		return;
+		return updatedUser;
 	} else {
 		throw new Error();
 	}
