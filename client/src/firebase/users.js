@@ -1,7 +1,3 @@
-// Firebase modules
-import { db } from './firebase.js';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-
 // Get signed-in user's info from local storage
 const getLocalUser = () => localStorage.getItem('markstagramUser');
 
