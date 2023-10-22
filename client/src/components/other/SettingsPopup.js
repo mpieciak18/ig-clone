@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext.js';
 import { usePopUp } from '../../contexts/PopUpContext.js';
+import { removeLocalUser } from '../../services/localstor.js';
 
 const SettingsPopup = () => {
 	const { user, setUser } = useAuth();
@@ -10,7 +11,7 @@ const SettingsPopup = () => {
 	// Logout user
 	const logout = async () => {
 		await setUser(null);
-		localStorage.removeItem('markstagramUser');
+		removeLocalUser();
 		navigate('/');
 	};
 

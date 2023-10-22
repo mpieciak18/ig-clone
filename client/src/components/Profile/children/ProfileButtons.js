@@ -4,6 +4,7 @@ import { useState } from 'react';
 import MessageHollow from '../../../assets/images/dm.png';
 import MessageSolid from '../../../assets/images/dm-solid.png';
 import { useAuth } from '../../../contexts/AuthContext.js';
+import { removeLocalUser } from '../../../services/localstor.js';
 
 const ProfileButtons = (props) => {
 	const { user, setUser } = useAuth();
@@ -17,7 +18,7 @@ const ProfileButtons = (props) => {
 	// Logs user out
 	const clickLogout = async () => {
 		await setUser(null);
-		localStorage.removeItem('markstagramUser');
+		removeLocalUser();
 		navigate('/');
 	};
 

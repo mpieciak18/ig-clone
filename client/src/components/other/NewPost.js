@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { uploadFile } from '../../services/storage.js';
+import { uploadFile } from '../../services/compress.js';
 import { newPost } from '../../services/posts.js';
 import { ImageInput } from './ImageInput.js';
 import { CaptionFooter } from './CaptionFooter.js';

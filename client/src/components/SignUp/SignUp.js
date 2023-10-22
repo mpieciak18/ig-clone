@@ -8,6 +8,7 @@ import { newUser, findUser } from '../../services/users.js';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { setLocalUser } from '../../services/localstor';
 
 const SignUp = (props) => {
 	// Redirect to settings if already signed in
@@ -65,7 +66,7 @@ const SignUp = (props) => {
 		try {
 			const newUser = await newUser(username, name, email, password);
 			await setUser(newUser);
-			localStorage.setItem('markstagramUser', newUser);
+			setLocalUser(newUser);
 			navigate('/settings', { state: { newSignUp: true } });
 		} catch {
 			setErrorClass('active');

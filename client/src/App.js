@@ -10,6 +10,7 @@ import { SignUp } from './components/SignUp/SignUp.js';
 import { Login } from './components/Login/Login.js';
 import { Conversation } from './components/Conversation/Conversation.js';
 import { useAuth } from './contexts/AuthContext.js';
+import { getLocalUser } from './services/localstor.js';
 
 const App = () => {
 	// Init user context
@@ -21,9 +22,9 @@ const App = () => {
 	// Update user and loading states on mount
 	useEffect(() => {
 		if (user) {
-			const data = localStorage.getItem('markstagramUser');
-			if (data) {
-				setUser(data).then(() => {
+			const localUser = getLocalUser();
+			if (localUser) {
+				setUser(localUser).then(() => {
 					setIsLoading(false);
 				});
 			} else {

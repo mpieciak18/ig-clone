@@ -4,6 +4,7 @@ import { signInUser } from '../../services/users.js';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { setLocalUser } from '../../services/localstor';
 
 const Login = () => {
 	const { user, setUser } = useAuth();
@@ -25,7 +26,7 @@ const Login = () => {
 		try {
 			const signedInUser = await signInUser(email, password);
 			await setUser(signedInUser);
-			localStorage.setItem('markstagramUser', signedInUser);
+			setLocalUser(signedInUser);
 			navigate('/');
 		} catch (error) {
 			setErrorClass('active');

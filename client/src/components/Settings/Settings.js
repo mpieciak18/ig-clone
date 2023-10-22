@@ -6,6 +6,7 @@ import { NameFooter } from './children/NameFooter.js';
 import { ImageInput } from './children/ImageInput.js';
 import { Navbar } from '../other/Navbar.js';
 import { useAuth } from '../../contexts/AuthContext';
+import { setLocalUser } from '../../services/localstor';
 
 const Settings = () => {
 	const { user } = useAuth();
@@ -80,7 +81,7 @@ const Settings = () => {
 			try {
 				const updatedUser = await updateUser(name, bio, file);
 				await setUser(updatedUser);
-				localStorage.setItem('markstagramUser', updatedUser);
+				setLocalUser(updatedUser);
 				navigate(`/${user.id}`);
 			} catch {
 				setErrorClass('active');

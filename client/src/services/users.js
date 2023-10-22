@@ -1,5 +1,5 @@
-import { getLocalUser } from './localStorage';
-import { compressFile } from './storage';
+import { getToken } from './localstor';
+import { compressFile } from './compress';
 
 // Register new user
 export const newUser = async (username, name, email, password) => {
@@ -47,14 +47,13 @@ export const signInUser = async (email, password) => {
 
 // Retrieve user
 export const findUser = async (id) => {
-	const user = getLocalUser();
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/user/single',
 		{
 			body: { id },
 			method: 'POST',
 			headers: {
-				Authorization: `Bearer ${user.token}`,
+				Authorization: `Bearer ${getToken()}`,
 			},
 		}
 	);
@@ -68,14 +67,13 @@ export const findUser = async (id) => {
 
 // Searches users by name
 export const searchUsers = async (name) => {
-	const user = getLocalUser();
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/user/search',
 		{
 			body: { name },
 			method: 'POST',
 			headers: {
-				Authorization: `Bearer ${user.token}`,
+				Authorization: `Bearer ${getToken()}`,
 			},
 		}
 	);
@@ -96,18 +94,17 @@ export const updateUser = async (name, bio, image) => {
 		const compressedImage = await compressFile(image);
 		formData.append('image', compressedImage);
 	}
-	const user = getLocalUser();
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/user', {
 		body,
 		method: 'PUT',
 		headers: {
-			Authorization: `Bearer ${user.token}`,
+			Authorization: `Bearer ${getToken()}`,
 		},
 	});
 	if (response.status == 200) {
 		const json = await response.json();
 		const updatedUser = json.user;
-		updatedUser.token = user.token;
+		updatedUser.token = getToken();
 		return updatedUser;
 	} else {
 		throw new Error();
@@ -116,14 +113,13 @@ export const updateUser = async (name, bio, image) => {
 
 // Query for username & return true if it is not taken
 export const isUsernameUnique = async (username) => {
-	const user = getLocalUser();
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/user/is-username-unique',
 		{
 			body: { username },
 			method: 'POST',
 			headers: {
-				Authorization: `Bearer ${user.token}`,
+				Authorization: `Bearer ${getToken()}`,
 			},
 		}
 	);
@@ -138,14 +134,13 @@ export const isUsernameUnique = async (username) => {
 
 // Query for email & return true if it is not taken
 export const isEmailUnique = async (email) => {
-	const user = getLocalUser();
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/user/is-email-unique',
 		{
 			body: { email },
 			method: 'POST',
 			headers: {
-				Authorization: `Bearer ${user.token}`,
+				Authorization: `Bearer ${getToken()}`,
 			},
 		}
 	);
