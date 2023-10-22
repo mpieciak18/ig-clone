@@ -54,12 +54,12 @@ const Post = () => {
 	};
 
 	const updatePostStates = async () => {
-		const post = await findSinglePost(postId, postOwnerId);
-		setPostImage(post.data.image);
-		setPostComments(post.data.comments);
-		setPostDate(post.data.date);
-		setPostLikes(post.data.likes);
-		setPostText(post.data.text);
+		const post = await findSinglePost(postId);
+		setPostImage(post.image);
+		setPostComments(post.comments);
+		setPostDate(post.date);
+		setPostLikes(post.likes);
+		setPostText(post.text);
 	};
 
 	// Update previous states on render & changes

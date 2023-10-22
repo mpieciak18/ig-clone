@@ -27,10 +27,7 @@ const Saved = () => {
 		if (savedArr != null) {
 			let newPostsArr = [];
 			for (const save of savedArr) {
-				const result = await findSinglePost(
-					save.data.postId,
-					save.data.postOwner
-				);
+				const result = await findSinglePost(save.data.postId);
 				newPostsArr = [...newPostsArr, result];
 			}
 			setPostsArr(newPostsArr);
@@ -81,12 +78,12 @@ const Saved = () => {
 								<PostPreview
 									key={post.id}
 									postId={post.id}
-									postText={post.data.text}
-									postImage={post.data.image}
-									postDate={post.data.date}
-									postOwnerId={post.data.user}
-									postLikes={post.data.likes}
-									postComments={post.data.comments}
+									postText={post.text}
+									postImage={post.image}
+									postDate={post.date}
+									postOwnerId={post.user}
+									postLikes={post.likes}
+									postComments={post.comments}
 								/>
 							);
 						})}
