@@ -2,8 +2,6 @@ import supertest from 'supertest';
 import app from '../server';
 import { it, describe, expect } from 'vitest';
 
-const urlPattern = /^(http|https):\/\/[^ "]+$/;
-
 describe('messages', () => {
 	let token;
 	let otherToken;

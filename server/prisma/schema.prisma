@@ -18,8 +18,8 @@ model User {
   username String @unique
   password String
   name     String
-  bio      String
-  image    String
+  bio      String?
+  image    String?
 
   posts           Post[]
   comments        Comment[]

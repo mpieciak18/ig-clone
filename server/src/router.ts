@@ -61,13 +61,14 @@ const router = Router();
 // Update a user's account
 router.put(
 	'/user',
+	upload.single('file'),
 	body('email').optional().isEmail(),
 	body('username').optional().isString().isLength({ min: 3, max: 15 }),
 	body('password').optional().isString().isLength({ min: 4 }),
 	body('name').optional().isString().isLength({ min: 3, max: 30 }),
 	body('bio').optional().isString(),
-	body('image').optional().isURL(),
 	handleInputErrors,
+	uploadImage,
 	updateUser
 );
 // Gets a single user

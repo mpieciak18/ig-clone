@@ -30,8 +30,6 @@ app.post(
 	body('username').isString().isLength({ min: 3, max: 15 }),
 	body('password').isString().isLength({ min: 4 }),
 	body('name').isString().isLength({ min: 3, max: 30 }),
-	body('bio').isString(),
-	body('image').isURL(),
 	handleInputErrors,
 	createNewUser
 );

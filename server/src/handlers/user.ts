@@ -1,19 +1,15 @@
 import prisma from '../db';
 import { comparePasswords, createJwt, hashPassword } from '../modules/auth';
+import { deleteFileFromStorage } from '../config/gcloud';
 
 // Creates a new user in the database and returns a signed JWT to the client.
 // Any error is assumed to be related to user input and is returned to the client as such.
 export const createNewUser = async (req, res, next) => {
+	const data = req.body;
+	data.password = await hashPassword(req.body.password);
 	try {
 		const user = await prisma.user.create({
-			data: {
-				email: req.body.email,
-				username: req.body.username,
-				password: await hashPassword(req.body.password),
-				name: req.body.name,
-				bio: req.body.bio,
-				image: req.body.image,
-			},
+			data: data,
 		});
 		const token = await createJwt(user);
 		res.json({ token, user });
@@ -89,10 +85,10 @@ export const deleteUser = async (req, res, next) => {
 	res.json({ user });
 };
 
-// Updates a user's account fields (note: these are the same fields passed to createNewUser)
+// Updates a user's account fields
 export const updateUser = async (req, res, next) => {
 	// Format data needed for update
-	const keys = ['email', 'username', 'name', 'bio', 'image'];
+	const keys = ['email', 'username', 'name', 'bio'];
 	const data = {};
 	keys.forEach((key) => {
 		if (req.body[key]) data[key] = req.body[key];
@@ -100,6 +96,24 @@ export const updateUser = async (req, res, next) => {
 	if (req.body.password) {
 		// @ts-ignore
 		data.password = await hashPassword(req.body.password);
+	}
+	// If an image was uploaded, add it to the data
+	// Also, get the user's old image
+	let oldImage;
+	if (req.image) {
+		try {
+			// @ts-ignore
+			data.image = req.image;
+			const oldData = await prisma.user.findUnique({
+				where: { id: req.user.id },
+				select: {
+					image: true,
+				},
+			});
+			oldImage = oldData?.image;
+		} catch (e) {
+			next(e);
+		}
 	}
 
 	// Update user
@@ -134,6 +148,14 @@ export const updateUser = async (req, res, next) => {
 		const e = new Error();
 		next(e);
 		return;
+	}
+
+	if (oldImage) {
+		try {
+			await deleteFileFromStorage(oldImage);
+		} catch (e) {
+			next(e);
+		}
 	}
 
 	// Return updated user data

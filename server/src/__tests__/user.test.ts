@@ -3,81 +3,11 @@ import supertest from 'supertest';
 import jwt from 'jsonwebtoken';
 import { comparePasswords } from '../modules/auth';
 import { it, describe, expect } from 'vitest';
+import { deleteFileFromStorage } from '../config/gcloud';
 
-describe('POST /create_new_user & DELETE /api/user', () => {
-	let token;
-	it('should fail to create a new user due to missing inputs & return a 401 status', async () => {
-		const response = await supertest(app).post('/create_new_user').send({
-			email: 'test@test.com',
-			username: 'test22',
-			password: 'easy_as_abc_123',
-			bio: "I'm a test account.",
-			image: 'https://images.rawpixel.com/image_png_1300/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png',
-		});
-		expect(response.status).toBe(400);
-	});
-	it('should fail to create a new user due to an invalid email & return a 401 status', async () => {
-		const response = await supertest(app).post('/create_new_user').send({
-			email: 'this_is_not_an_email',
-			username: 'test22',
-			password: 'easy_as_abc_123',
-			name: 'Tester',
-			bio: "I'm a test account.",
-			image: 'https://images.rawpixel.com/image_png_1300/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png',
-		});
-		expect(response.status).toBe(400);
-	});
-	it('should create a new user & return a web token + a 200 status', async () => {
-		const response = await supertest(app).post('/create_new_user').send({
-			email: 'test@test.com',
-			username: 'test22',
-			password: 'easy_as_abc_123',
-			name: 'Tester',
-			bio: "I'm a test account.",
-			image: 'https://images.rawpixel.com/image_png_1300/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png',
-		});
-		token = response.body.token;
-		expect(token).toBeDefined();
-		expect(response.status).toBe(200);
-	});
-	it('should fail to create a new user due to it already existing & return a 400 status', async () => {
-		const response = await supertest(app).post('/create_new_user').send({
-			email: 'test@test.com',
-			username: 'test22',
-			password: 'easy_as_abc_123',
-			name: 'Tester',
-			bio: "I'm a test account.",
-			image: 'https://images.rawpixel.com/image_png_1300/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png',
-		});
-		expect(response.status).toBe(400);
-	});
-	it('should fail to delete a user due to a missing user id field within the auth token & return a 500 status', async () => {
-		const fakeToken = jwt.sign(
-			{
-				username: 'fake_user',
-			},
-			process.env.JWT_SECRET
-		);
-		const response = await supertest(app)
-			.delete('/api/user')
-			.set('Authorization', `Bearer ${fakeToken}`);
-		expect(response.status).toBe(500);
-	});
-	it('should fail to delete a user due to a lack of auth token & return a 401 status', async () => {
-		const response = await supertest(app)
-			.delete('/api/user')
-			.set('Authorization', `Bearer ${'test'}`);
-		expect(response.status).toBe(401);
-	});
-	it('should delete a user due & return a 200 status', async () => {
-		const response = await supertest(app)
-			.delete('/api/user')
-			.set('Authorization', `Bearer ${token}`);
-		expect(response.status).toBe(200);
-	});
-});
+const urlPattern = /^(http|https):\/\/[^ "]+$/;
 
-describe('POST /sign_in, POST /api/user/single, & PUT /api/user', () => {
+describe('/create_new_user, /sign_in, & /api/user', () => {
 	let token;
 	let otherToken;
 	const initUser = {
@@ -85,44 +15,84 @@ describe('POST /sign_in, POST /api/user/single, & PUT /api/user', () => {
 		username: 'test11',
 		password: '123_abc',
 		name: 'Tester',
-		bio: "I'm a test account.",
-		image: 'https://images.rawpixel.com/image_png_1300/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png',
 	};
-	const otherUser = {
+	const initOtherUser = {
 		email: 'test69@test69.com',
 		username: 'test69',
 		password: '123_abc',
 		name: 'Tester',
-		bio: "I'm a test account.",
-		image: 'https://images.rawpixel.com/image_png_1300/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png',
 	};
-	let ogUser;
+	let user;
+	let otherUser;
 	const newUser = {
 		email: 'test12345@test12345.com',
 		username: 'test12345',
 		password: '456_dfe',
 		name: 'TESTER',
-		image: 'https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black-thumbnail.png',
 		bio: 'whattup',
 	};
-	it('should create both accounts, login with first account & return a web token + user + a 200 status', async () => {
-		await supertest(app).post('/create_new_user').send(initUser);
-		const otherRes = await supertest(app)
-			.post('/create_new_user')
-			.send(otherUser);
-		const username = initUser.username;
-		const password = initUser.password;
-		const response = await supertest(app).post('/sign_in').send({
-			username,
-			password,
+	//
+	it('should fail to create a new user due to missing inputs & return a 400 status', async () => {
+		const response = await supertest(app).post('/create_new_user').send({
+			email: initUser.email,
+			username: initUser.username,
+			password: initUser.password,
+		});
+		expect(response.status).toBe(400);
+	});
+	it('should fail to create a new user due to an invalid email & return a 400 status', async () => {
+		const response = await supertest(app).post('/create_new_user').send({
+			email: 'this_is_not_an_email',
+			username: initUser.username,
+			password: initUser.password,
+			name: initUser.name,
+		});
+		expect(response.status).toBe(400);
+	});
+	it('should create new users & return web tokens + 200 statuses + correct users info', async () => {
+		const response = await supertest(app).post('/create_new_user').send({
+			email: initUser.email,
+			username: initUser.username,
+			password: initUser.password,
+			name: initUser.name,
+		});
+		const response2 = await supertest(app).post('/create_new_user').send({
+			email: initOtherUser.email,
+			username: initOtherUser.username,
+			password: initOtherUser.password,
+			name: initOtherUser.name,
 		});
 		token = response.body.token;
-		ogUser = response.body.user;
-		ogUser.password = password;
-		otherToken = otherRes.body.token;
-		expect(token).toBeDefined();
-		expect(otherToken).toBeDefined();
+		user = response.body.user;
+		user.password = initUser.password;
+		otherToken = response2.body.token;
+		otherUser = response2.body.user;
 		expect(response.status).toBe(200);
+		expect(token).toBeDefined();
+		expect(user.email).toEqual(initUser.email);
+		expect(user.username).toEqual(initUser.username);
+		expect(user.name).toEqual(initUser.name);
+		expect(response2.status).toBe(200);
+		expect(otherToken).toBeDefined();
+		expect(otherUser.email).toEqual(initOtherUser.email);
+		expect(otherUser.username).toEqual(initOtherUser.username);
+		expect(otherUser.name).toEqual(initOtherUser.name);
+	});
+	it('should fail to create new users due to them already existing & return 400 statuses', async () => {
+		const response = await supertest(app).post('/create_new_user').send({
+			email: initUser.email,
+			username: initUser.username,
+			password: initUser.password,
+			name: initUser.name,
+		});
+		const response2 = await supertest(app).post('/create_new_user').send({
+			email: initOtherUser.email,
+			username: initOtherUser.username,
+			password: initOtherUser.password,
+			name: initOtherUser.name,
+		});
+		expect(response.status).toBe(400);
+		expect(response2.status).toBe(400);
 	});
 	//
 	it('should fail to login with fake username & return a 401 status', async () => {
@@ -151,6 +121,17 @@ describe('POST /sign_in, POST /api/user/single, & PUT /api/user', () => {
 		});
 		expect(response.status).toBe(400);
 	});
+	it('should login & return a 200 status + correct user info + token', async () => {
+		const response = await supertest(app).post('/sign_in').send({
+			username: user.username,
+			password: user.password,
+		});
+		expect(response.status).toBe(200);
+		expect(response.body.token).toBeDefined();
+		expect(response.body.user.email).toEqual(user.email);
+		expect(response.body.user.username).toEqual(user.username);
+		expect(response.body.user.name).toEqual(user.name);
+	});
 	//
 	it('should fail to find a user due to a non-existent id & return a 500 status', async () => {
 		const response = await supertest(app)
@@ -175,7 +156,7 @@ describe('POST /sign_in, POST /api/user/single, & PUT /api/user', () => {
 			.post('/api/user/single')
 			.set('Authorization', `Bearer `)
 			.send({
-				id: ogUser.id,
+				id: user.id,
 			});
 		expect(response.status).toBe(401);
 	});
@@ -184,20 +165,20 @@ describe('POST /sign_in, POST /api/user/single, & PUT /api/user', () => {
 			.post('/api/user/single')
 			.set('Authorization', `Bearer ${token}`)
 			.send({
-				id: ogUser.id,
+				id: user.id,
 			});
-		const user = response.body.user;
+		const foundUser = response.body.user;
 		const passwordsMatch = await comparePasswords(
-			ogUser.password,
-			user.password
+			user.password,
+			foundUser.password
 		);
 		expect(response.status).toBe(200);
-		expect(user.email == ogUser.email).toBeTruthy();
-		expect(user.username == ogUser.username).toBeTruthy();
+		expect(foundUser.email == user.email).toBeTruthy();
+		expect(foundUser.username == user.username).toBeTruthy();
 		expect(passwordsMatch).toBeTruthy();
-		expect(user.name == ogUser.name).toBeTruthy();
-		expect(user.image == ogUser.image).toBeTruthy();
-		expect(user.bio == ogUser.bio).toBeTruthy();
+		expect(foundUser.name == user.name).toBeTruthy();
+		expect(foundUser.image == user.image).toBeTruthy();
+		expect(foundUser.bio == user.bio).toBeTruthy();
 	});
 	//
 	it('should fail to search for users due to a invalid inputs & return a 400 status', async () => {
@@ -214,7 +195,7 @@ describe('POST /sign_in, POST /api/user/single, & PUT /api/user', () => {
 			.post('/api/user/search')
 			.set('Authorization', `Bearer `)
 			.send({
-				name: ogUser.name,
+				name: user.name,
 			});
 		expect(response.status).toBe(401);
 	});
@@ -233,7 +214,7 @@ describe('POST /sign_in, POST /api/user/single, & PUT /api/user', () => {
 			.post('/api/user/search')
 			.set('Authorization', `Bearer ${token}`)
 			.send({
-				name: ogUser.name,
+				name: user.name,
 			});
 		expect(response.status).toBe(200);
 		expect(response.body.users.length).toBeGreaterThan(0);
@@ -253,7 +234,7 @@ describe('POST /sign_in, POST /api/user/single, & PUT /api/user', () => {
 			.post('/api/user/is-email-unique')
 			.set('Authorization', `Bearer `)
 			.send({
-				email: ogUser.email,
+				email: user.email,
 			});
 		expect(response.status).toBe(401);
 	});
@@ -272,7 +253,7 @@ describe('POST /sign_in, POST /api/user/single, & PUT /api/user', () => {
 			.post('/api/user/is-email-unique')
 			.set('Authorization', `Bearer ${token}`)
 			.send({
-				email: ogUser.email,
+				email: user.email,
 			});
 		expect(response.status).toBe(200);
 		expect(response.body.isEmailUnique).toBeFalsy();
@@ -292,7 +273,7 @@ describe('POST /sign_in, POST /api/user/single, & PUT /api/user', () => {
 			.post('/api/user/is-username-unique')
 			.set('Authorization', `Bearer `)
 			.send({
-				username: ogUser.username,
+				username: user.username,
 			});
 		expect(response.status).toBe(401);
 	});
@@ -311,7 +292,7 @@ describe('POST /sign_in, POST /api/user/single, & PUT /api/user', () => {
 			.post('/api/user/is-username-unique')
 			.set('Authorization', `Bearer ${token}`)
 			.send({
-				username: ogUser.username,
+				username: user.username,
 			});
 		expect(response.status).toBe(200);
 		expect(response.body.isUsernameUnique).toBeFalsy();
@@ -320,90 +301,99 @@ describe('POST /sign_in, POST /api/user/single, & PUT /api/user', () => {
 	it('should fail to update the user due to no auth token & return a 401 status', async () => {
 		const response = await supertest(app)
 			.put('/api/user')
-			.set('Authorization', `Bearer`)
-			.send({
-				email: newUser.email,
-				username: newUser.username,
-				password: newUser.password,
-				name: newUser.name,
-				image: newUser.image,
-				bio: newUser.bio,
-			});
+			.set('Authorization', `Bearer `)
+			.set('Content-Type', 'multipart/form-data')
+			.field('name', newUser.name)
+			.field('bio', newUser.bio)
+			.field('email', newUser.email)
+			.field('username', newUser.username)
+			.field('password', newUser.password);
+		// .attach('file', './src/__tests__/test2.png');
 		expect(response.status).toBe(401);
 	});
 	it('should fail to update the user due to invalid inputs & return a 400 status', async () => {
 		const response = await supertest(app)
 			.put('/api/user')
 			.set('Authorization', `Bearer ${token}`)
-			.send({
-				email: 'this is not an email',
-			});
+			.set('Content-Type', 'multipart/form-data')
+			.field('name', 1)
+			.field('bio', newUser.bio)
+			.field('email', 'thisisnotanemail')
+			.field('username', 1)
+			.field('password', 1);
+		// .attach('file', './src/__tests__/test2.png');
 		expect(response.status).toBe(400);
 	});
 	it('should fail to update the user due to duplicate email/username & return a 400 status', async () => {
 		const response = await supertest(app)
 			.put('/api/user')
 			.set('Authorization', `Bearer ${token}`)
-			.send({
-				email: otherUser.email,
-				username: otherUser.username,
-			});
+			.set('Content-Type', 'multipart/form-data')
+			.field('name', newUser.name)
+			.field('bio', newUser.bio)
+			.field('email', otherUser.email)
+			.field('username', otherUser.username)
+			.field('password', newUser.password);
+		// .attach('file', './src/__tests__/test2.png');
 		expect(response.status).toBe(400);
 	});
 	it('should update the user & return a 200 status + updated user attributes', async () => {
 		const response = await supertest(app)
 			.put('/api/user')
 			.set('Authorization', `Bearer ${token}`)
-			.send({
-				email: newUser.email,
-				username: newUser.username,
-				password: newUser.password,
-				name: newUser.name,
-				image: newUser.image,
-				bio: newUser.bio,
-			});
-		const user = response.body.user;
+			.set('Content-Type', 'multipart/form-data')
+			.field('name', newUser.name)
+			.field('bio', newUser.bio)
+			.field('email', newUser.email)
+			.field('username', newUser.username)
+			.field('password', newUser.password)
+			.attach('file', './src/__tests__/test2.png');
+		const updatedUser = response.body.user;
+		user = updatedUser;
 		const passwordsMatch = await comparePasswords(
 			newUser.password,
-			user.password
+			updatedUser.password
 		);
 		expect(response.status).toBe(200);
-		expect(user.email == newUser.email).toBeTruthy();
-		expect(user.username == newUser.username).toBeTruthy();
+		expect(updatedUser.email == newUser.email).toBeTruthy();
+		expect(updatedUser.username == newUser.username).toBeTruthy();
 		expect(passwordsMatch).toBeTruthy();
-		expect(user.name == newUser.name).toBeTruthy();
-		expect(user.image == newUser.image).toBeTruthy();
-		expect(user.bio == newUser.bio).toBeTruthy();
+		expect(updatedUser.name == newUser.name).toBeTruthy();
+		expect(updatedUser.image).toMatch(urlPattern);
+		expect(updatedUser.bio == newUser.bio).toBeTruthy();
 	});
-	it('should update (revert) the user & return a 200 status + reverted user attributes', async () => {
-		const response = await supertest(app)
-			.put('/api/user')
-			.set('Authorization', `Bearer ${token}`)
-			.send({
-				email: ogUser.email,
-				username: ogUser.username,
-				password: ogUser.password,
-				name: ogUser.name,
-				image: ogUser.image,
-				bio: ogUser.bio,
-			});
-		const user = response.body.user;
-		const passwordsMatch = await comparePasswords(
-			ogUser.password,
-			user.password
+	//
+	it('should fail to delete a user due to a missing user id field within the auth token & return a 500 status', async () => {
+		const fakeToken = jwt.sign(
+			{
+				username: 'fake_user',
+			},
+			process.env.JWT_SECRET
 		);
-		expect(response.status).toBe(200);
-		expect(user.email == ogUser.email).toBeTruthy();
-		expect(user.username == ogUser.username).toBeTruthy();
-		expect(passwordsMatch).toBeTruthy();
-		expect(user.name == ogUser.name).toBeTruthy();
-		expect(user.image == ogUser.image).toBeTruthy();
-		expect(user.bio == ogUser.bio).toBeTruthy();
-		await supertest(app)
+		const response = await supertest(app)
+			.delete('/api/user')
+			.set('Authorization', `Bearer ${fakeToken}`);
+		expect(response.status).toBe(500);
+	});
+	it('should fail to delete a user due to a lack of auth token & return a 401 status', async () => {
+		const response = await supertest(app)
+			.delete('/api/user')
+			.set('Authorization', `Bearer ${'test'}`);
+		expect(response.status).toBe(401);
+	});
+	it('should delete users & return a 200 statuses + correct users info', async () => {
+		const response = await supertest(app)
 			.delete('/api/user')
 			.set('Authorization', `Bearer ${token}`);
-		await supertest(app)
+		const response2 = await supertest(app)
 			.delete('/api/user')
 			.set('Authorization', `Bearer ${otherToken}`);
+		const delUser = response.body.user;
+		expect(response.status).toBe(200);
+		expect(delUser.id).toEqual(user.id);
+		const delUser2 = response2.body.user;
+		expect(response2.status).toBe(200);
+		expect(delUser2.id).toEqual(otherUser.id);
+		await deleteFileFromStorage(user.image);
 	});
 });
