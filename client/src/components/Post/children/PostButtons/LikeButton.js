@@ -1,4 +1,4 @@
-import { likeExists, addLike, removeLike } from '../../../../firebase/likes.js';
+import { likeExists, addLike, removeLike } from '../../../../services/likes.js';
 import LikeHollow from '../../../../assets/images/like.png';
 import LikeSolid from '../../../../assets/images/like-solid.png';
 import { useEffect, useState } from 'react';

@@ -1,8 +1,7 @@
 import './Messages.css';
-import { retrieveConvos } from '../../firebase/messages.js';
+import { retrieveConvos } from '../../services/messages.js';
 import { useState, useEffect } from 'react';
 import { Navbar } from '../other/Navbar.js';
-import { getUrl } from '../../firebase/storage';
 import MessageSolid from '../../assets/images/dm.png';
 import { ConvoPopup } from '../other/ConvoPopup.js';
 import { useAuth } from '../../contexts/AuthContext';
@@ -51,7 +50,7 @@ const Messages = () => {
 	// Update userImage state when user changes
 	useEffect(() => {
 		if (user != null) {
-			getUrl(user.data.image).then(setUserImage);
+			setUserImage(user.data.image);
 		} else {
 			setUserImage(null);
 		}

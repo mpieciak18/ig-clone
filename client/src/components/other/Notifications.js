@@ -4,9 +4,8 @@ import {
 	getNewNotifications,
 	getOldNotifications,
 	readNotifications,
-} from '../../firebase/notifications';
-import { getUrl } from '../../firebase/storage';
-import { findUser } from '../../firebase/users';
+} from '../../services/notifications';
+import { findUser } from '../../services/users';
 import { timeSince } from '../../other/timeSince';
 import { useAuth } from '../../contexts/AuthContext';
 import { usePopUp } from '../../contexts/PopUpContext';
@@ -124,7 +123,6 @@ const Notifications = () => {
 				navigate(`/${otherUserId}`);
 				updatePopUp();
 			};
-			const image = await getUrl(otherUser.data.image);
 			// Set up text portion of returned component
 			let path;
 			let text;
@@ -152,7 +150,7 @@ const Notifications = () => {
 						<img
 							className='notif-image'
 							onClick={redirectToProfile}
-							src={image}
+							src={otherUser.data.image}
 						/>
 						<div className='notif-text' onClick={redirectToPath}>
 							<div className='notif-name'>

@@ -1,6 +1,5 @@
-import { getUrl } from '../../../firebase/storage.js';
 import { useState, useEffect } from 'react';
-import { findUser } from '../../../firebase/users.js';
+import { findUser } from '../../../services/users.js';
 import { Follows } from '../../other/Follows.js';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext.js';
@@ -45,7 +44,7 @@ const ProfileCard = (props) => {
 	// Update img, otherUser, & otherUserFollowers states on render
 	useEffect(() => {
 		findUser(otherUserId).then((newUser) => {
-			getUrl(newUser.data.image).then(setImg);
+			setImg(newUser.data.image);
 			setOtherUser(newUser);
 		});
 	}, []);

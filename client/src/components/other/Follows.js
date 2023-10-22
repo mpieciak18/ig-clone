@@ -1,10 +1,9 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { getFollowing, getFollowers } from '../../firebase/followers.js';
+import { getFollowing, getFollowers } from '../../services/followers.js';
 import { FollowButton } from './FollowButton.js';
 import './other.css';
 import { useEffect, useState } from 'react';
-import { getUrl } from '../../firebase/storage.js';
-import { findUser } from '../../firebase/users.js';
+import { findUser } from '../../services/users.js';
 import { usePopUp } from '../../contexts/PopUpContext.js';
 
 const Follows = (props) => {
@@ -69,11 +68,13 @@ const Follows = (props) => {
 					window.location.reload();
 				}
 			};
-			const image = await getUrl(userInfo.data.image);
 			return (
 				<div className='follow-row' key={userId}>
 					<div className='follow-row-left' onClick={redirect}>
-						<img className='follow-image' src={image} />
+						<img
+							className='follow-image'
+							src={userInfo.data.image}
+						/>
 						<div className='follow-text'>
 							<div className='follow-name'>
 								{userInfo.data.name}

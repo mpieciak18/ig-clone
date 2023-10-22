@@ -1,9 +1,8 @@
-import { getComments } from '../../../../firebase/comments.js';
-import { findUser } from '../../../../firebase/users.js';
+import { getComments } from '../../../../services/comments.js';
+import { findUser } from '../../../../services/users.js';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { timeSinceTrunc } from '../../../../other/timeSinceTrunc.js';
-import { getUrl } from '../../../../firebase/storage.js';
 
 const CommentsFull = (props) => {
 	const {
@@ -48,7 +47,7 @@ const CommentsFull = (props) => {
 			const commenterId = comment.data.user;
 			const commenter = await findUser(commenterId);
 			const commenterName = commenter.data.name;
-			const commenterImage = await getUrl(commenter.data.image);
+			const commenterImage = commenter.data.image;
 			const commentDate = timeSinceTrunc(comment.data.date);
 			return (
 				<div className='post-comment' key={comment.id}>

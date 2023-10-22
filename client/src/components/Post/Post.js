@@ -1,10 +1,9 @@
 import './styles/Post.css';
 import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
-import { findSinglePost } from '../../firebase/posts.js';
+import { findSinglePost } from '../../services/posts.js';
 import { Navbar } from '../other/Navbar.js';
 import { useEffect, useState, useRef } from 'react';
-import { findUser } from '../../firebase/users';
-import { getUrl } from '../../firebase/storage';
+import { findUser } from '../../services/users';
 import { Likes } from './children/Likes';
 import { PostButtons } from './children/PostButtons';
 import { timeSince } from '../../other/timeSince';
@@ -51,14 +50,12 @@ const Post = () => {
 		const pOwner = await findUser(postOwnerId);
 		setPostOwnerName(pOwner.data.name);
 		setPostOwnerUsername(pOwner.data.username);
-		const pOwnerImgSrc = await getUrl(pOwner.data.image);
-		setPostOwnerImage(pOwnerImgSrc);
+		setPostOwnerImage(pOwner.data.imag);
 	};
 
 	const updatePostStates = async () => {
 		const post = await findSinglePost(postId, postOwnerId);
-		const pImgSrc = await getUrl(post.data.image);
-		setPostImage(pImgSrc);
+		setPostImage(post.data.image);
 		setPostComments(post.data.comments);
 		setPostDate(post.data.date);
 		setPostLikes(post.data.likes);

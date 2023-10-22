@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { isEmailUnique } from '../../../firebase/users.js';
+import { isEmailUnique } from '../../../services/users.js';
 
 const EmailFooter = (props) => {
 	const { setEmailPasses, email } = props;

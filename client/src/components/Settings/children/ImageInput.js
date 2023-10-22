@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { getUrl } from '../../../firebase/storage.js';
 import { useAuth } from '../../../contexts/AuthContext.js';
 
 const ImageInput = (props) => {
@@ -34,7 +33,7 @@ const ImageInput = (props) => {
 		) {
 			inputRef.current.value = '';
 			setFile(null);
-			setFilePreviewUrl(getUrl(user.data.image));
+			setFilePreviewUrl(user.data.image);
 			setErrorClass('active');
 			setTimeout(() => {
 				setErrorClass('inactive');
@@ -47,7 +46,7 @@ const ImageInput = (props) => {
 
 	useEffect(() => {
 		if (user != null) {
-			getUrl(user.data.image).then(setFilePreviewUrl);
+			setFilePreviewUrl(user.data.image);
 		}
 	}, [user]);
 

@@ -1,5 +1,5 @@
-import { getComments } from '../../../../firebase/comments.js';
-import { findUser } from '../../../../firebase/users.js';
+import { getComments } from '../../../../services/comments.js';
+import { findUser } from '../../../../services/users.js';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 

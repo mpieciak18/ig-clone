@@ -1,6 +1,5 @@
 import '../styles/PostPreview.css';
 import { Link } from 'react-router-dom';
-import { getUrl } from '../../../firebase/storage.js';
 import { useEffect, useState } from 'react';
 import LikeIcon from '../../../assets/images/like.png';
 import CommentsIcon from '../../../assets/images/messages.png';
@@ -16,13 +15,7 @@ const PostPreview = (props) => {
 		postComments,
 	} = props;
 
-	const [img, setImg] = useState(null);
-
 	const [overlay, setOverlay] = useState('inactive');
-
-	useEffect(() => {
-		getUrl(postImage).then(setImg);
-	}, []);
 
 	return (
 		<Link
@@ -33,7 +26,7 @@ const PostPreview = (props) => {
 			onMouseOver={() => setOverlay('active')}
 			onMouseOut={() => setOverlay('inactive')}
 		>
-			<img className='single-post-box-image' src={img} />
+			<img className='single-post-box-image' src={postImage} />
 			<div className={`single-post-box-overlay ${overlay}`}>
 				<div className='single-post-box-likes'>
 					<img

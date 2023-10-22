@@ -4,7 +4,7 @@ import { UsernameFooter } from './children/UsernameFooter.js';
 import { PasswordFooter } from './children/PasswordFooter.js';
 import { NameFooter } from './children/NameFooter.js';
 import { EmailFooter } from './children/EmailFooter.js';
-import { newUser, findUser } from '../../firebase/users.js';
+import { newUser, findUser } from '../../services/users.js';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
@@ -61,7 +61,7 @@ const SignUp = (props) => {
 
 	const newSignUp = async (e) => {
 		e.preventDefault();
-		// Add new user to firebase/auth & return any errors
+		// Add new user to services/auth & return any errors
 		try {
 			const newUser = await newUser(username, name, email, password);
 			await setUser(newUser);

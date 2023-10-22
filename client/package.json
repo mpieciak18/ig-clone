@@ -11,11 +11,9 @@
 		"deploy": "gh-pages -d build"
 	},
 	"dependencies": {
-		"firebase": "^10.4.0",
-		"fuse.js": "^6.6.2",
+		"@saschazar/wasm-webp": "^3.0.1",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"react-event-observer": "^0.5.11",
 		"react-router-dom": "^6.16.0"
 	},
 	"devDependencies": {

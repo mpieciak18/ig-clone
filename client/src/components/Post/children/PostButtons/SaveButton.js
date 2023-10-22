@@ -1,4 +1,4 @@
-import { saveExists, addSave, removeSave } from '../../../../firebase/saves.js';
+import { saveExists, addSave, removeSave } from '../../../../services/saves.js';
 import { useState, useEffect } from 'react';
 import SaveHollow from '../../../../assets/images/save.png';
 import SaveSolid from '../../../../assets/images/save-solid.png';

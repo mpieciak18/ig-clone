@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { getUrl } from '../../../firebase/storage.js';
 import { timeSince } from '../../../other/timeSince.js';
 import { useAuth } from '../../../contexts/AuthContext.js';
 
@@ -19,11 +18,8 @@ const ConvoMessages = (props) => {
 	// Update image source on render
 	useEffect(() => {
 		if (otherUser != null) {
-			getUrl(otherUser.data.image).then((otherUrl) => {
-				setOtherUserImg(otherUrl);
-				const name = otherUser.data.name;
-				setOtherUserName(name);
-			});
+			setOtherUserImg(otherUser.data.image);
+			setOtherUserName(otherUser.data.name);
 		}
 	}, [otherUser]);
 

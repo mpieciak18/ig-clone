@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { getUrl } from '../../../firebase/storage.js';
 import { Follows } from '../../other/Follows.js';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../../contexts/AuthContext.js';
@@ -41,8 +40,7 @@ const UserCard = () => {
 	// Update user card state or user image state when user prop changes
 	useEffect(() => {
 		if (user) {
-			const path = user.data.image;
-			getUrl(path).then(setUserImage);
+			setUserImage(user.data.image);
 		}
 	}, [user]);
 

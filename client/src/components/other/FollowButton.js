@@ -2,10 +2,10 @@ import {
 	checkForFollow,
 	addFollow,
 	removeFollow,
-} from '../../firebase/followers.js';
+} from '../../services/followers.js';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { findUser } from '../../firebase/users.js';
+import { findUser } from '../../services/users.js';
 import { useAuth } from '../../contexts/AuthContext.js';
 
 const FollowButton = (props) => {

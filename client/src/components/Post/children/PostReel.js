@@ -4,8 +4,7 @@ import { Link } from 'react-router-dom';
 import { CommentsBar } from './Comments/CommentsBar.js';
 import { CommentsPreview } from './Comments/CommentsPreview.js';
 import { PostButtons } from './PostButtons.js';
-import { findUser } from '../../../firebase/users.js';
-import { getUrl } from '../../../firebase/storage.js';
+import { findUser } from '../../../services/users.js';
 import { timeSince } from '../../../other/timeSince.js';
 import { LinkCopied } from './LinkCopied.js';
 
@@ -46,9 +45,9 @@ const PostReel = (props) => {
 		const pOwner = await findUser(postOwnerId);
 		setPostOwnerName(pOwner.data.name);
 		setPostOwnerUsername(pOwner.data.username);
-		const pOwnerImgSrc = await getUrl(pOwner.data.image);
+		const pOwnerImgSrc = pOwner.data.image;
 		setPostOwnerImgSrc(pOwnerImgSrc);
-		const pImgSrc = await getUrl(postImage);
+		const pImgSrc = postImage;
 		setPostImgSrc(pImgSrc);
 	};
 

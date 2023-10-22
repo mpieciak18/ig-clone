@@ -1,10 +1,9 @@
 import './Settings.css';
-import { updateUser } from '../../firebase/users.js';
+import { updateUser } from '../../services/users.js';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { NameFooter } from './children/NameFooter.js';
 import { ImageInput } from './children/ImageInput.js';
-import { uploadFile } from '../../firebase/storage';
 import { Navbar } from '../other/Navbar.js';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -78,16 +77,8 @@ const Settings = () => {
 		e.preventDefault();
 		// Check validation first
 		if (namePasses == true) {
-			let path;
-			if (file == null) {
-				path = user.data.image;
-			} else {
-				const image = file.name;
-				path = `${user.id}/${image}`;
-				await uploadFile(file, path);
-			}
 			try {
-				const updatedUser = await updateUser(path, name, bio);
+				const updatedUser = await updateUser(name, bio, file);
 				await setUser(updatedUser);
 				localStorage.setItem('markstagramUser', updatedUser);
 				navigate(`/${user.id}`);

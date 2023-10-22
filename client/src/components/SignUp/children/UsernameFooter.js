@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { isUsernameUnique } from '../../../firebase/users.js';
+import { isUsernameUnique } from '../../../services/users.js';
 
 const UsernameFooter = (props) => {
 	const { setUsernamePasses, username } = props;

@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import { timeSinceTrunc } from '../../../other/timeSinceTrunc';
 import { useAuth } from '../../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
-import { findUser } from '../../../firebase/users';
-import { getUrl } from '../../../firebase/storage';
+import { findUser } from '../../../services/users';
 
 export const MessagesChild = (props) => {
 	const { convo } = props;
@@ -21,7 +20,7 @@ export const MessagesChild = (props) => {
 	// Update image when otherUser changes
 	useEffect(() => {
 		if (otherUser) {
-			getUrl(otherUser.data.image).then(setImage);
+			setImage(otherUser.data.image);
 		}
 	}, [otherUser]);
 

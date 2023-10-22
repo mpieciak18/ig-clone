@@ -1,5 +1,5 @@
-// Get signed-in user's info from local storage
-const getLocalUser = () => localStorage.getItem('markstagramUser');
+import { getLocalUser } from './localStorage';
+import { compressFile } from './storage';
 
 // Register new user
 export const newUser = async (username, name, email, password) => {
@@ -87,11 +87,15 @@ export const searchUsers = async (name) => {
 	}
 };
 
-// Update user
-export const updateUser = async (image, name, bio) => {
-	if (image) body.image = image;
-	if (name) body.name = name;
-	if (bio) body.bio = bio;
+// Updates the user's name, bio, and/or image
+export const updateUser = async (name, bio, image) => {
+	const formData = new FormData();
+	if (name) formData.append('name', name);
+	if (bio) formData.append('bio', bio);
+	if (image) {
+		const compressedImage = await compressFile(image);
+		formData.append('image', compressedImage);
+	}
 	const user = getLocalUser();
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/user', {
 		body,

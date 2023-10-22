@@ -1,6 +1,6 @@
 import './Saved.css';
-import { findSaves } from '../../firebase/saves.js';
-import { findSinglePost } from '../../firebase/posts.js';
+import { findSaves } from '../../services/saves.js';
+import { findSinglePost } from '../../services/posts.js';
 import { PostPreview } from '../Post/children/PostPreview.js';
 import { useState, useEffect } from 'react';
 import { Navbar } from '../other/Navbar.js';

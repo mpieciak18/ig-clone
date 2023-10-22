@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { getLikes } from '../../../firebase/likes.js';
-import { getUrl } from '../../../firebase/storage.js';
+import { getLikes } from '../../../services/likes.js';
 import { FollowButton } from '../../other/FollowButton.js';
-import { findUser } from '../../../firebase/users.js';
+import { findUser } from '../../../services/users.js';
 import '../styles/Likes.css';
 import { usePopUp } from '../../../contexts/PopUpContext.js';
 
@@ -44,7 +43,7 @@ const Likes = (props) => {
 			const liker = await findUser(likerId);
 			const likerName = liker.data.name;
 			const likerUsername = liker.data.username;
-			const likerImage = await getUrl(liker.data.image);
+			const likerImage = liker.data.image;
 			return (
 				<div className='like-row' key={like.id}>
 					<Link className='like-row-left' to={`/${likerId}`}>

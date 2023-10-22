@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { searchUsers } from '../../firebase/users.js';
-import { getUrl } from '../../firebase/storage.js';
+import { searchUsers } from '../../services/users.js';
 import './other.css';
 import { useAuth } from '../../contexts/AuthContext.js';
 import { usePopUp } from '../../contexts/PopUpContext.js';
@@ -52,8 +51,6 @@ const ConvoPopup = () => {
 			if (result.id == user.id) {
 				return null;
 			} else {
-				const userImage = await getUrl(result.image);
-				const userHandle = result.username;
 				const redirect = () => {
 					navigate(`/messages/${result.id}`);
 					updatePopUp();
@@ -64,8 +61,13 @@ const ConvoPopup = () => {
 						onClick={redirect}
 						key={result.id}
 					>
-						<img className='convo-result-image' src={userImage} />
-						<div className='convo-result-name'>@ {userHandle}</div>
+						<img
+							className='convo-result-image'
+							src={result.image}
+						/>
+						<div className='convo-result-name'>
+							@ {result.username}
+						</div>
 					</div>
 				);
 			}

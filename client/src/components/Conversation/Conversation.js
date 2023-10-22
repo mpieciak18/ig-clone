@@ -1,11 +1,11 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import './Conversation.css';
-import { sendMessage, retrieveSingleConvo } from '../../firebase/messages.js';
+import { sendMessage, retrieveSingleConvo } from '../../services/messages.js';
 import { useEffect, useState } from 'react';
 import { ConvoMessages } from './children/ConvoMessages';
 import { Navbar } from '../other/Navbar';
-import { findUser } from '../../firebase/users';
-import { convoSnapshot } from '../../firebase/messages.js';
+import { findUser } from '../../services/users';
+import { convoSnapshot } from '../../services/messages.js';
 import { useAuth } from '../../contexts/AuthContext';
 
 const Conversation = () => {

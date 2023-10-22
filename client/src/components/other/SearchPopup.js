@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { searchUsers } from '../../firebase/users.js';
-import { getUrl } from '../../firebase/storage.js';
+import { searchUsers } from '../../services/users.js';
 import { useAuth } from '../../contexts/AuthContext.js';
 import { usePopUp } from '../../contexts/PopUpContext.js';
 
@@ -48,8 +47,6 @@ const SearchPopup = (props) => {
 			if (result.item.id == user.id) {
 				return null;
 			} else {
-				const userImage = await getUrl(result.image);
-				const userHandle = result.username;
 				const redirect = () => {
 					updatePopUp();
 					if (location.otherUserId == null) {
@@ -65,8 +62,13 @@ const SearchPopup = (props) => {
 						onClick={redirect}
 						key={result.id}
 					>
-						<img className='search-result-image' src={userImage} />
-						<div className='search-result-name'>@ {userHandle}</div>
+						<img
+							className='search-result-image'
+							src={result.image}
+						/>
+						<div className='search-result-name'>
+							@ {result.username}
+						</div>
 					</div>
 				);
 			}

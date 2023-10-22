@@ -1,6 +1,6 @@
 import './Login.css';
 import { Navbar } from '../other/Navbar.js';
-import { signInUser } from '../../firebase/users.js';
+import { signInUser } from '../../services/users.js';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';

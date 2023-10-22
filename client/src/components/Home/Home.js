@@ -1,5 +1,5 @@
 import './Home.css';
-import { findPosts } from '../../firebase/posts.js';
+import { findPosts } from '../../services/posts.js';
 import { Navbar } from '../other/Navbar.js';
 import { PostReel } from '../Post/children/PostReel.js';
 import { UserCard } from './children/UserCard.js';

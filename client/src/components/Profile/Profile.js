@@ -3,7 +3,7 @@ import { Navbar } from '../other/Navbar.js';
 import { PostPreview } from '../Post/children/PostPreview.js';
 import { ProfileCard } from './children/ProfileCard.js';
 import { ProfileButtons } from './children/ProfileButtons.js';
-import { findPostsFromUser } from '../../firebase/posts.js';
+import { findPostsFromUser } from '../../services/posts.js';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
