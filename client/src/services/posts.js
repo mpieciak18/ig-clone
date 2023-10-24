@@ -1,20 +1,5 @@
-import { auth, db } from './firebase.js';
-import {
-	doc,
-	collection,
-	setDoc,
-	getDoc,
-	getDocs,
-	updateDoc,
-	deleteDoc,
-	collectionGroup,
-	query,
-	limit,
-	orderBy,
-} from 'firebase/firestore';
-
-// Retrieve single post
-const findSinglePost = async (id) => {
+// Retrieve single post by post id
+export const findSinglePost = async (id) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/post/single',
 		{
@@ -34,123 +19,79 @@ const findSinglePost = async (id) => {
 };
 
 // Retrieve all posts
-const findPosts = async (arrQuantity) => {
-	const postsRef = collectionGroup(db, 'posts');
-	const postsQuery = query(
-		postsRef,
-		orderBy('date', 'desc'),
-		limit(arrQuantity)
+export const findPosts = async (limit) => {
+	const response = await fetch(
+		import.meta.env.VITE_API_URL + '/api/post/all',
+		{
+			body: { limit },
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${getToken()}`,
+			},
+		}
 	);
-	const postDocs = await getDocs(postsQuery);
-	let posts = [];
-	postDocs.forEach((doc) => {
-		const post = {
-			id: doc.id,
-			data: doc.data(),
-		};
-		posts = [...posts, post];
-	});
-	return posts;
+	if (response.status == 200) {
+		const json = await response.json();
+		return json.posts;
+	} else {
+		throw new Error();
+	}
 };
 
 // Retrieve all posts from user
-const findPostsFromUser = async (userId, arrQuantity) => {
-	const usersRef = collection(db, 'users');
-	const userRef = doc(usersRef, userId);
-	const postsRef = collection(userRef, 'posts');
-	const postsQuery = query(
-		postsRef,
-		orderBy('date', 'desc'),
-		limit(arrQuantity)
+export const findPostsFromUser = async (id, limit) => {
+	const response = await fetch(
+		import.meta.env.VITE_API_URL + '/api/post/user',
+		{
+			body: { id, limit },
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${getToken()}`,
+			},
+		}
 	);
-	const postDocs = await getDocs(postsQuery);
-	let posts = [];
-	postDocs.forEach((doc) => {
-		const post = {
-			id: doc.id,
-			data: doc.data(),
-		};
-		posts = [...posts, post];
-	});
-	return posts;
-};
-
-// Create new post & return new post ID
-const newPost = async (text, image) => {
-	const userId = auth.currentUser.uid;
-	const postData = {
-		text: text,
-		image: image,
-		date: Date.now(),
-		user: userId,
-		likes: 0,
-		comments: 0,
-	};
-	try {
-		const postId = await addPostToUserPostsCollection(postData);
-		await changePostCount(userId, true);
-		return postId;
-	} catch (error) {
-		return null;
-	}
-};
-
-// Add post to posts subcollection in user doc & return post ID
-const addPostToUserPostsCollection = async (data) => {
-	const userId = data.user;
-	const usersRef = collection(db, 'users');
-	const userRef = doc(usersRef, userId);
-	const postsRef = collection(userRef, 'posts');
-	const postRef = doc(postsRef);
-	await setDoc(postRef, data);
-	return postRef.id;
-};
-
-// Change post count for  user
-const changePostCount = async (userId, increase) => {
-	// First, grab old post count
-	const usersRef = collection(db, 'users');
-	const userRef = doc(usersRef, userId);
-	const userDoc = await getDoc(userRef);
-	let postCount = userDoc.data().posts;
-	// Second, increase or decrease follower count
-	if (increase == true) {
-		postCount += 1;
+	if (response.status == 200) {
+		const json = await response.json();
+		return json.posts;
 	} else {
-		postCount -= 1;
+		throw new Error();
 	}
-	// Third, assign new follower count to user doc
-	await updateDoc(userRef, { posts: postCount });
 };
 
-// Remove post from user's subcollection of posts
-const removePost = async (postId, userId) => {
-	const usersRef = collection(db, 'users');
-	const userRef = doc(usersRef, userId);
-	const userPostsRef = collection(userRef, 'posts');
-	const userPostRef = doc(userPostsRef, postId);
-	await changePostCount(userId, false);
-	await removeLikes(userPostRef);
-	await removeComments(userPostRef);
-	await deleteDoc(userPostRef);
-};
-
-// Remove all likes from a post
-const removeLikes = async (postRef) => {
-	const likesRef = collection(postRef, 'likes');
-	const likesDocs = await getDocs(likesRef);
-	likesDocs.forEach(async (like) => {
-		await deleteDoc(like);
+// Create new post & return new post data
+export const newPost = async (caption, image) => {
+	const body = new FormData();
+	body.append('caption', caption);
+	const compressedImage = await compressFile(image);
+	body.append('image', compressedImage);
+	const response = await fetch(import.meta.env.VITE_API_URL + '/api/post', {
+		body,
+		method: 'POST',
+		headers: {
+			Authorization: `Bearer ${getToken()}`,
+		},
 	});
+	if (response.status == 200) {
+		const json = await response.json();
+		return json.post;
+	} else {
+		throw new Error();
+	}
 };
 
-// Remove all comments from a post
-const removeComments = async (postRef) => {
-	const commentsRef = collection(postRef, 'comments');
-	const commentsDocs = await getDocs(commentsRef);
-	commentsDocs.forEach(async (comment) => {
-		await deleteDoc(comment);
+// Delete a user's post
+export const removePost = async (id) => {
+	const response = await fetch(import.meta.env.VITE_API_URL + '/api/post', {
+		body: { id },
+		method: 'DELETE',
+		headers: {
+			Authorization: `Bearer ${getToken()}`,
+		},
 	});
+	if (response.status == 200) {
+		const json = await response.json();
+		return json.post;
+	} else {
+		throw new Error();
+	}
 };
-
-export { findPosts, findPostsFromUser, findSinglePost, newPost, removePost };

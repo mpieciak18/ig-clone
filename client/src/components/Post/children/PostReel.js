@@ -4,52 +4,21 @@ import { Link } from 'react-router-dom';
 import { CommentsBar } from './Comments/CommentsBar.js';
 import { CommentsPreview } from './Comments/CommentsPreview.js';
 import { PostButtons } from './PostButtons.js';
-import { findUser } from '../../../services/users.js';
 import { timeSince } from '../../../other/timeSince.js';
 import { LinkCopied } from './LinkCopied.js';
 
 const PostReel = (props) => {
 	// Init props
-	const {
-		postId,
-		postText,
-		postImage,
-		postDate,
-		postOwnerId,
-		postLikes,
-		postComments,
-	} = props;
-
-	// Init post owner name
-	const [postOwnerName, setPostOwnerName] = useState(null);
-
-	// Init post owner username
-	const [postOwnerUsername, setPostOwnerUsername] = useState(null);
-
-	// Init post owner image state
-	const [postOwnerImgSrc, setPostOwnerImgSrc] = useState(null);
-
-	// Init post image state
-	const [postImgSrc, setPostImgSrc] = useState(null);
+	const { post } = props;
 
 	// Init post likes count state
-	const [likesNum, setLikesNum] = useState(postLikes);
+	const [likesNum, setLikesNum] = useState(post.likes.length);
 
 	// Init post comments count state
-	const [commentsNum, setCommentsNum] = useState(postComments);
+	const [commentsNum, setCommentsNum] = useState(post.comments.length);
 
 	// Set up ref for comment bar / comment button
 	const inputRef = useRef(null);
-
-	const updateStates = async () => {
-		const pOwner = await findUser(postOwnerId);
-		setPostOwnerName(pOwner.data.name);
-		setPostOwnerUsername(pOwner.data.username);
-		const pOwnerImgSrc = pOwner.data.image;
-		setPostOwnerImgSrc(pOwnerImgSrc);
-		const pImgSrc = postImage;
-		setPostImgSrc(pImgSrc);
-	};
 
 	// Update previous states on render & changes
 	useEffect(() => {
@@ -62,38 +31,38 @@ const PostReel = (props) => {
 	return (
 		<div className='single-post-component'>
 			<div className='post-top'>
-				<Link className='post-user-link' to={`/${postOwnerId}`}>
+				<Link className='post-user-link' to={`/${post.user.id}`}>
 					<img
 						className='post-user-link-avatar'
-						src={postOwnerImgSrc}
+						src={post.user.image}
 					/>
 					<div className='post-user-link-name-and-username-parent'>
 						<div className='post-user-link-name'>
-							{postOwnerName}
+							{post.user.name}
 						</div>
 						<div className='post-user-link-username'>
-							@{postOwnerUsername}
+							@{post.user.username}
 						</div>
 					</div>
 				</Link>
 				<div className='post-top-right'>
-					<div className='post-date'>{timeSince(postDate)}</div>
+					<div className='post-date'>{timeSince(post.createdAt)}</div>
 				</div>
 			</div>
-			<Link className='post-middle' to={`/${postOwnerId}/${postId}`}>
-				<img className='post-image' src={postImgSrc} />
+			<Link className='post-middle' to={`/${post.user.id}/${post.id}`}>
+				<img className='post-image' src={post.image} />
 			</Link>
 			<div className='post-bottom'>
 				<LinkCopied linkCopied={linkCopied} />
 				<PostButtons
-					postId={postId}
-					postOwnerId={postOwnerId}
+					postId={post.id}
+					postOwnerId={post.user.id}
 					inputRef={inputRef}
 					likesNum={likesNum}
 					setLikesNum={setLikesNum}
 					setLinkCopied={setLinkCopied}
 				/>
-				<Link className='post-likes' to={`/${postOwnerId}/${postId}`}>
+				<Link className='post-likes' to={`/${post.user.id}/${post.id}`}>
 					{(() => {
 						if (likesNum == 0) {
 							return `0 likes`;
@@ -105,14 +74,14 @@ const PostReel = (props) => {
 					})()}
 				</Link>
 				<div className='post-text-parent'>
-					<Link className='post-text-name' to={`/${postOwnerId}`}>
-						{postOwnerName}
+					<Link className='post-text-name' to={`/${post.user.id}`}>
+						{post.user.name}
 					</Link>
-					<div className='post-text'>{postText}</div>
+					<div className='post-text'>{post.caption}</div>
 				</div>
 				<Link
 					className='post-view-comments'
-					to={`/${postOwnerId}/${postId}`}
+					to={`/${post.user.id}/${post.id}`}
 				>
 					{(() => {
 						if (commentsNum == 0) {
@@ -125,13 +94,13 @@ const PostReel = (props) => {
 					})()}
 				</Link>
 				<CommentsPreview
-					postId={postId}
-					postOwnerId={postOwnerId}
+					postId={post.id}
+					postOwnerId={post.user.id}
 					commentsNum={commentsNum}
 				/>
 				<CommentsBar
-					postId={postId}
-					postOwnerId={postOwnerId}
+					postId={post.id}
+					postOwnerId={post.user.id}
 					commentsNum={commentsNum}
 					setCommentsNum={setCommentsNum}
 					inputRef={inputRef}

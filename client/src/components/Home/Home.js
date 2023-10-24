@@ -51,16 +51,7 @@ const Home = () => {
 				<div id='home-posts'>
 					{postsArr
 						? postsArr.map((post) => (
-								<PostReel
-									key={post.id}
-									postId={post.id}
-									postText={post.data.text}
-									postImage={post.data.image}
-									postDate={post.data.date}
-									postOwnerId={post.data.user}
-									postLikes={post.data.likes}
-									postComments={post.data.comments}
-								/>
+								<PostReel key={post.id} post={post} />
 						  ))
 						: null}
 				</div>

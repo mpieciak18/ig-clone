@@ -87,12 +87,12 @@ export const searchUsers = async (name) => {
 
 // Updates the user's name, bio, and/or image
 export const updateUser = async (name, bio, image) => {
-	const formData = new FormData();
-	if (name) formData.append('name', name);
-	if (bio) formData.append('bio', bio);
+	const body = new FormData();
+	if (name) body.append('name', name);
+	if (bio) formbodyData.append('bio', bio);
 	if (image) {
 		const compressedImage = await compressFile(image);
-		formData.append('image', compressedImage);
+		body.append('image', compressedImage);
 	}
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/user', {
 		body,

@@ -1,32 +1,24 @@
 import '../styles/PostPreview.css';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import LikeIcon from '../../../assets/images/like.png';
 import CommentsIcon from '../../../assets/images/messages.png';
 
 const PostPreview = (props) => {
-	const {
-		postId,
-		postText,
-		postImage,
-		postDate,
-		postOwnerId,
-		postLikes,
-		postComments,
-	} = props;
+	const { post } = props;
 
 	const [overlay, setOverlay] = useState('inactive');
 
 	return (
 		<Link
 			className='single-post-box'
-			to={`/${postOwnerId}/${postId}`}
+			to={`/${post.user.id}/${post.id}`}
 			onPointerDown={() => setOverlay('active')}
 			onPointerUp={() => setOverlay('inactive')}
 			onMouseOver={() => setOverlay('active')}
 			onMouseOut={() => setOverlay('inactive')}
 		>
-			<img className='single-post-box-image' src={postImage} />
+			<img className='single-post-box-image' src={post.image} />
 			<div className={`single-post-box-overlay ${overlay}`}>
 				<div className='single-post-box-likes'>
 					<img
@@ -34,7 +26,7 @@ const PostPreview = (props) => {
 						src={LikeIcon}
 					/>
 					<div className='single-post-box-likes-number'>
-						{postLikes}
+						{post.likes.length}
 					</div>
 				</div>
 				<div className='single-post-box-comments'>
@@ -43,7 +35,7 @@ const PostPreview = (props) => {
 						src={CommentsIcon}
 					/>
 					<div className='single-post-box-comments-number'>
-						{postComments}
+						{post.comments.length}
 					</div>
 				</div>
 			</div>

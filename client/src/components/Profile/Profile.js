@@ -17,54 +17,25 @@ const Profile = () => {
 	// Init postsNumber state
 	const [postsNumber, setPostsNumber] = useState(21);
 
-	// Init postsArr state
-	const [postsArr, setPostsArr] = useState(null);
-
 	// Init posts component state
 	const [posts, setPosts] = useState(null);
 
 	// Init all loaded state
 	const [allLoaded, setAllLoaded] = useState(false);
 
-	// Update posts arr state when postsNumber state changes
+	// Update posts state when postsNumber state changes
 	useEffect(() => {
-		findPostsFromUser(otherUserId, postsNumber).then((newPostsArr) => {
-			if (newPostsArr != null) {
-				setPostsArr(newPostsArr);
-				if (newPostsArr.length < postsNumber) {
+		findPostsFromUser(otherUserId, postsNumber).then((newPosts) => {
+			if (newPosts != null) {
+				setPosts(newPosts);
+				if (newPosts.length < postsNumber) {
 					setAllLoaded(true);
 				}
 			} else {
-				setPostsArr(null);
+				setPosts(null);
 			}
 		});
 	}, [postsNumber]);
-
-	// Update posts component state on render & when postsArr state changes
-	useEffect(() => {
-		if (postsArr != null) {
-			setPosts(
-				<div id='user-posts'>
-					{postsArr.map((post) => {
-						return (
-							<PostPreview
-								postId={post.id}
-								postText={post.data.text}
-								postImage={post.data.image}
-								postDate={post.data.date}
-								postOwnerId={post.data.user}
-								postLikes={post.data.likes}
-								postComments={post.data.comments}
-								user={user}
-							/>
-						);
-					})}
-				</div>
-			);
-		} else {
-			setPosts(<div id='user-posts-empty'>This user has no posts.</div>);
-		}
-	}, [postsArr]);
 
 	// Load-more function that updates the posts reel
 	const loadMore = () => {
@@ -93,7 +64,15 @@ const Profile = () => {
 				</div>
 				<div id='profile-contents-right'>
 					<ProfileButtons otherUserId={otherUserId} />
-					{posts}
+					{posts ? (
+						<div id='user-posts'>
+							{posts.map((post) => {
+								return <PostPreview post={post} user={user} />;
+							})}
+						</div>
+					) : (
+						<div id='user-posts-empty'>This user has no posts.</div>
+					)}
 				</div>
 			</div>
 		</div>

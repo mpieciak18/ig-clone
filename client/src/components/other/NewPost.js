@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { uploadFile } from '../../services/compress.js';
 import { newPost } from '../../services/posts.js';
 import { ImageInput } from './ImageInput.js';
 import { CaptionFooter } from './CaptionFooter.js';
@@ -51,22 +50,23 @@ const NewPost = (props) => {
 		e.preventDefault();
 		// Check validation first
 		if (captionPasses == true && file != null) {
-			const image = file.name;
-			const path = `${user.id}/${image}`;
-			await uploadFile(file, path);
 			// Check for possible error with adding post to DB
-			const postId = await newPost(caption, path);
-			if (postId != null) {
-				const updatedUser = await findUser(user.id);
-				await setUser(updatedUser);
-				updatePopUp();
-				if (location.postOwnerId == null) {
-					navigate(`/${user.id}/${postId}`);
+			try {
+				const post = await newPost(caption, file);
+				if (post.id != null) {
+					const updatedUser = await findUser(user.id);
+					await setUser(updatedUser);
+					updatePopUp();
+					if (location.postOwnerId == null) {
+						navigate(`/${user.id}/${post.id}`);
+					} else {
+						navigate(`/${user.id}/${post.id}`);
+						window.location.reload();
+					}
 				} else {
-					navigate(`/${user.id}/${postId}`);
-					window.location.reload();
+					throw new Error();
 				}
-			} else {
+			} catch (e) {
 				setErrorClass('active');
 				setTimeout(() => {
 					setErrorClass('inactive');
@@ -89,56 +89,51 @@ const NewPost = (props) => {
 		}
 	}, [file, captionPasses]);
 
-	// Update newPost component state and change scroll on body
-	useEffect(() => {
-		setNewPostPopup(
-			<div id='new-post' ref={ref}>
-				<div id='new-post-parent'>
-					<div id='new-post-error' className={errorClass}>
-						<p>There was an error!</p>
-						<p>Please try again.</p>
-					</div>
-					<div id='new-post-header'>
-						<div id='new-post-x-button' onClick={xButtonClick}>
-							✕ Cancel
-						</div>
-						<div id='new-post-title'>New Post</div>
-						<div id='new-post-x-button-hidden'>✕ Cancel</div>
-					</div>
-					<div id='new-post-divider' />
-					<form id='new-post-form' onSubmit={addPost}>
-						<ImageInput
-							inputRef={inputRef}
-							setFile={setFile}
-							setErrorClass={setErrorClass}
-						/>
-						<div id='new-post-caption-parent'>
-							<textarea
-								id='new-post-caption-input'
-								name='caption'
-								placeholder='Enter a caption...'
-								value={caption}
-								onChange={updateCaption}
-							/>
-							<CaptionFooter
-								caption={caption}
-								setCaptionPasses={setCaptionPasses}
-							/>
-						</div>
-						<button
-							type={button}
-							id='new-post-button'
-							className={buttonClass}
-						>
-							Upload New Post
-						</button>
-					</form>
+	return (
+		<div id='new-post' ref={ref}>
+			<div id='new-post-parent'>
+				<div id='new-post-error' className={errorClass}>
+					<p>There was an error!</p>
+					<p>Please try again.</p>
 				</div>
+				<div id='new-post-header'>
+					<div id='new-post-x-button' onClick={xButtonClick}>
+						✕ Cancel
+					</div>
+					<div id='new-post-title'>New Post</div>
+					<div id='new-post-x-button-hidden'>✕ Cancel</div>
+				</div>
+				<div id='new-post-divider' />
+				<form id='new-post-form' onSubmit={addPost}>
+					<ImageInput
+						inputRef={inputRef}
+						setFile={setFile}
+						setErrorClass={setErrorClass}
+					/>
+					<div id='new-post-caption-parent'>
+						<textarea
+							id='new-post-caption-input'
+							name='caption'
+							placeholder='Enter a caption...'
+							value={caption}
+							onChange={updateCaption}
+						/>
+						<CaptionFooter
+							caption={caption}
+							setCaptionPasses={setCaptionPasses}
+						/>
+					</div>
+					<button
+						type={button}
+						id='new-post-button'
+						className={buttonClass}
+					>
+						Upload New Post
+					</button>
+				</form>
 			</div>
-		);
-	}, [caption, button, buttonClass, errorClass]);
-
-	return newPostPopup;
+		</div>
+	);
 };
 
 export { NewPost };
