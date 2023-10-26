@@ -13,7 +13,6 @@ export const handleInputErrors = (req, res, next) => {
 };
 
 export const uploadImage = async (req, res, next) => {
-	console.log(req.file);
 	try {
 		if (!req.file) {
 			res.status(400).send();
@@ -25,7 +24,6 @@ export const uploadImage = async (req, res, next) => {
 				contentType: req.file.mimetype,
 			});
 			const image = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
-			console.log(image);
 			req.image = image;
 			delete req.file;
 			next();

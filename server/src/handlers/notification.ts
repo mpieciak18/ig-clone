@@ -26,7 +26,7 @@ export const createNotif = async (req, res, next) => {
 	try {
 		notification = await prisma.notification.create({
 			data: {
-				userId: req.user.id,
+				userId: req.body.id,
 				message: req.body.message,
 				urlPath: req.body.urlPath,
 				read: false,
@@ -79,9 +79,9 @@ export const getNotifsUnread = async (req, res, next) => {
 	// First, try to get unread notifications
 	// If nothing is return (as oppposed to an empty array),
 	// then handle it at the top-level (server.ts) as 500 error
-	let notifs;
+	let notifications;
 	try {
-		notifs = await prisma.notification.findMany({
+		notifications = await prisma.notification.findMany({
 			where: { userId: req.user.id, read: false },
 		});
 	} catch (e) {
@@ -89,36 +89,24 @@ export const getNotifsUnread = async (req, res, next) => {
 		next(e);
 		return;
 	}
-	if (!notifs) {
+	if (!notifications) {
 		const e = new Error();
 		next(e);
 		return;
 	}
 
-	// Second, retrieve given follows
-	let givenFollows;
-	try {
-		givenFollows = await prisma.follow.findMany({
-			where: { giverId: req.body.id },
-		});
-	} catch (e) {
-		// DB errors are handled at top-level (server.ts) as 500 error
-		next(e);
-		return;
-	}
-
-	// Third, return given follows back to client
-	res.json({ follows: givenFollows });
+	// Second, return unread notifications back to client
+	res.json({ notifications });
 };
 
 // Gets the user's read notifications
 export const getNotifsRead = async (req, res, next) => {
-	// First, try to get unread notifications
+	// First, try to get read notifications
 	// If nothing is return (as oppposed to an empty array),
 	// then handle it at the top-level (server.ts) as 500 error
-	let notifs;
+	let notifications;
 	try {
-		notifs = await prisma.notification.findMany({
+		notifications = await prisma.notification.findMany({
 			where: { userId: req.user.id, read: true },
 		});
 	} catch (e) {
@@ -126,26 +114,14 @@ export const getNotifsRead = async (req, res, next) => {
 		next(e);
 		return;
 	}
-	if (!notifs) {
+	if (!notifications) {
 		const e = new Error();
 		next(e);
 		return;
 	}
 
-	// Second, retrieve given follows
-	let givenFollows;
-	try {
-		givenFollows = await prisma.follow.findMany({
-			where: { giverId: req.body.id },
-		});
-	} catch (e) {
-		// DB errors are handled at top-level (server.ts) as 500 error
-		next(e);
-		return;
-	}
-
-	// Third, return given follows back to client
-	res.json({ follows: givenFollows });
+	// Second, return read notifications back to client
+	res.json({ notifications });
 };
 
 // Updates a notification (as read)
