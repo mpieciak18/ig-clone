@@ -15,7 +15,7 @@ import {
 	getNotifsUnread,
 	updateNotifRead,
 	deleteNotif,
-} from './handlers/notifications';
+} from './handlers/notification';
 import {
 	createFollow,
 	deleteFollow,

@@ -181,6 +181,7 @@ export const updatePost = async (req, res, next) => {
 	} catch (e) {
 		// If error, handle it as a 500 error
 		next(e);
+		return;
 	}
 
 	// While the previous try/catch (along with the 'protect' middleware) should catch all errors,
