@@ -10,6 +10,13 @@ import {
 } from './handlers/user';
 import { handleInputErrors, uploadImage } from './modules/middleware';
 import {
+	createNotif,
+	getNotifsRead,
+	getNotifsUnread,
+	updateNotifRead,
+	deleteNotif,
+} from './handlers/notifications';
+import {
 	createFollow,
 	deleteFollow,
 	findFollow,
@@ -101,6 +108,38 @@ router.post(
 );
 // Delete a user's account
 router.delete('/user', handleInputErrors, deleteUser);
+
+// // // // // //
+//Notifications//
+// // // // // //
+
+// Creates a notification for another user
+router.post(
+	'/notification',
+	body('id').isInt(),
+	body('message').isString(),
+	body('urlPath').isString(),
+	handleInputErrors,
+	createNotif
+);
+// Gets a user's read notifications
+router.get('/notification/read', getNotifsRead);
+// Gets a user's unread notifications
+router.get('/notification/unread', getNotifsUnread);
+// Marks a notification as read
+router.put(
+	'/notification/read',
+	body('id').isInt(),
+	handleInputErrors,
+	updateNotifRead
+);
+// Deletes a notification
+router.delete(
+	'/notification',
+	body('id').isInt(),
+	handleInputErrors,
+	deleteNotif
+);
 
 // // // // // //
 //   Follows   //
