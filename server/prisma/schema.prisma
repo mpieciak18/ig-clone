@@ -14,8 +14,8 @@ model User {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
 
-  email    String @unique
-  username String @unique
+  email    String  @unique
+  username String  @unique
   password String
   name     String
   bio      String?
@@ -29,7 +29,8 @@ model User {
   messages        Message[]
   givenFollows    Follow[]       @relation("givenFollows")
   receivedFollows Follow[]       @relation("receivedFollows")
-  notifications   Notification[]
+  givenNotifs    Notification[] @relation("givenNotifications")
+  receivedNotifs   Notification[] @relation("receivedNotifications")
 }
 
 model Follow {
@@ -111,9 +112,11 @@ model Notification {
   createdAt DateTime @default(now())
 
   userId Int
-  user   User @relation(fields: [userId], references: [id])
+  user   User @relation("receivedNotifications", fields: [userId], references: [id])
 
+  otherUserId Int
+  otherUser   User @relation("givenNotifications", fields: [otherUserId], references: [id])
+
+  type    String
   read    Boolean
-  message String
-  urlPath String
 }

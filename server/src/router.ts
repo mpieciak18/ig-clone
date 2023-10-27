@@ -117,8 +117,7 @@ router.delete('/user', handleInputErrors, deleteUser);
 router.post(
 	'/notification',
 	body('id').isInt(),
-	body('message').isString(),
-	body('urlPath').isString(),
+	body('type').isString(),
 	handleInputErrors,
 	createNotif
 );

@@ -45,7 +45,6 @@ describe('/api/notification', () => {
 			.set('Authorization', `Bearer ${token}`)
 			.send({
 				id: otherUser.id,
-				message: 'this is a test',
 			});
 		expect(response.status).toBe(400);
 	});
@@ -55,8 +54,7 @@ describe('/api/notification', () => {
 			.set('Authorization', `Bearer`)
 			.send({
 				id: otherUser.id,
-				message: 'this is a test',
-				urlPath: '/test/path',
+				type: 'this is a test',
 			});
 		expect(response.status).toBe(401);
 	});
@@ -66,25 +64,22 @@ describe('/api/notification', () => {
 			.set('Authorization', `Bearer ${token}`)
 			.send({
 				id: 1,
-				message: 'this is a test',
-				urlPath: '/test/path',
+				type: 'this is a test',
 			});
 		expect(response.status).toBe(500);
 	});
-	it('should create a notification & return a 200 error + correct notification info', async () => {
+	it('should create a notification & return a 200 code + correct notification info', async () => {
 		const response = await supertest(app)
 			.post('/api/notification')
 			.set('Authorization', `Bearer ${token}`)
 			.send({
 				id: otherUser.id,
-				message: 'this is a test',
-				urlPath: '/test/path',
+				type: 'this is a test',
 			});
 		notification = response.body.notification;
 		expect(response.status).toBe(200);
 		expect(response.body.notification.userId).toBe(otherUser.id);
-		expect(response.body.notification.message).toBe('this is a test');
-		expect(response.body.notification.urlPath).toBe('/test/path');
+		expect(response.body.notification.type).toBe('this is a test');
 	});
 	//
 	it('should fail to find unread notifications due to no auth token & return a 401 error', async () => {

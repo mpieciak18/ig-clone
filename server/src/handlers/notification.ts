@@ -27,8 +27,8 @@ export const createNotif = async (req, res, next) => {
 		notification = await prisma.notification.create({
 			data: {
 				userId: req.body.id,
-				message: req.body.message,
-				urlPath: req.body.urlPath,
+				otherUserId: req.user.id,
+				type: req.body.type,
 				read: false,
 			},
 		});
