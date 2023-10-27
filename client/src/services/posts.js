@@ -1,3 +1,5 @@
+import { getToken } from './localstor';
+
 // Retrieve single post by post id
 export const findSinglePost = async (id) => {
 	const response = await fetch(
