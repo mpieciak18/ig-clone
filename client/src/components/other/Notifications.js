@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-	getNewNotifications,
-	getOldNotifications,
+	getReadNotifications,
+	getUnreadNotifications,
 	readNotifications,
 } from '../../services/notifications';
 import { findUser } from '../../services/users';
@@ -63,9 +63,9 @@ const Notifications = () => {
 
 	const updateNotifsArr = async () => {
 		if (whichTab == 'new') {
-			getNewNotifications(notifsCount).then((newNotifsArr) => {
+			getUnreadNotifications(notifsCount).then((newNotifsArr) => {
 				setNotifsArr(newNotifsArr);
-				if (newNotifsArr != null) {
+				if (newNotifsArr?.length == 0) {
 					setMarkAllRead(
 						<div
 							id='notifs-clear'
@@ -87,9 +87,9 @@ const Notifications = () => {
 				}
 			});
 		} else {
-			getOldNotifications(notifsCount).then((newNotifsArr) => {
+			getReadNotifications(notifsCount).then((newNotifsArr) => {
 				setNotifsArr(newNotifsArr);
-				if (newNotifsArr != null) {
+				if (newNotifsArr?.length == 0) {
 					setMarkAllRead(null);
 				} else {
 					setMarkAllRead(
@@ -244,8 +244,7 @@ const Notifications = () => {
 	const xButtonClick = () => updatePopUp();
 
 	const clearNotifs = () => {
-		readNotifications();
-		setNotifsCount(0);
+		readNotifications().then(() => setNotifsCount(0));
 	};
 
 	return notifsPopup;
