@@ -86,6 +86,8 @@ export const getNotifsUnread = async (req, res, next) => {
 	try {
 		notifications = await prisma.notification.findMany({
 			where: { userId: req.user.id, read: false },
+			orderBy: { createdAt: 'desc' },
+			take: req.body.limit,
 		});
 	} catch (e) {
 		// DB errors are handled at top-level (server.ts) as 500 error
@@ -111,6 +113,8 @@ export const getNotifsRead = async (req, res, next) => {
 	try {
 		notifications = await prisma.notification.findMany({
 			where: { userId: req.user.id, read: true },
+			orderBy: { createdAt: 'desc' },
+			take: req.body.limit,
 		});
 	} catch (e) {
 		// DB errors are handled at top-level (server.ts) as 500 error

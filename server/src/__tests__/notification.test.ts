@@ -107,14 +107,29 @@ describe('/api/notification', () => {
 	//
 	it('should fail to find unread notifications due to no auth token & return a 401 error', async () => {
 		const response = await supertest(app)
-			.get('/api/notification/getNotifsUnread')
-			.set('Authorization', `Bearer`);
+			.post('/api/notification/unread')
+			.set('Authorization', `Bearer`)
+			.send({
+				limit: 10,
+			});
 		expect(response.status).toBe(401);
+	});
+	it('should fail to find unread notifications due to invalid / missing inputs & return a 400 error', async () => {
+		const response = await supertest(app)
+			.post('/api/notification/unread')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				// limit: 10,
+			});
+		expect(response.status).toBe(400);
 	});
 	it('should find unread notifications & return a 200 error + correct notification info', async () => {
 		const response = await supertest(app)
-			.get('/api/notification/unread')
-			.set('Authorization', `Bearer ${otherToken}`);
+			.post('/api/notification/unread')
+			.set('Authorization', `Bearer ${otherToken}`)
+			.send({
+				limit: 10,
+			});
 		expect(response.status).toBe(200);
 		expect(response.body.notifications?.length).toBeGreaterThan(0);
 		const newNotif = response.body.notifications[0];
@@ -162,14 +177,25 @@ describe('/api/notification', () => {
 	//
 	it('should fail to find read notifications due to no auth token & return a 401 error', async () => {
 		const response = await supertest(app)
-			.get('/api/notification/read')
-			.set('Authorization', `Bearer`);
+			.post('/api/notification/read')
+			.set('Authorization', `Bearer`)
+			.send({ limit: 10 });
 		expect(response.status).toBe(401);
+	});
+	it('should fail to find read notifications due to invalid / missing inputs & return a 400 error', async () => {
+		const response = await supertest(app)
+			.post('/api/notification/read')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				// limit: 10,
+			});
+		expect(response.status).toBe(400);
 	});
 	it('should find read notifications & return a 200 error + correct notification info', async () => {
 		const response = await supertest(app)
-			.get('/api/notification/read')
-			.set('Authorization', `Bearer ${otherToken}`);
+			.post('/api/notification/read')
+			.set('Authorization', `Bearer ${otherToken}`)
+			.send({ limit: 10 });
 		expect(response.status).toBe(200);
 		expect(response.body.notifications?.length).toBeGreaterThan(0);
 		const newNotif = response.body.notifications[0];

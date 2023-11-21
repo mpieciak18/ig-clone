@@ -122,9 +122,19 @@ router.post(
 	createNotif
 );
 // Gets a user's read notifications
-router.get('/notification/read', getNotifsRead);
+router.post(
+	'/notification/read',
+	body('limit').isInt(),
+	handleInputErrors,
+	getNotifsRead
+);
 // Gets a user's unread notifications
-router.get('/notification/unread', getNotifsUnread);
+router.post(
+	'/notification/unread',
+	body('limit').isInt(),
+	handleInputErrors,
+	getNotifsUnread
+);
 // Marks a notification as read
 router.put(
 	'/notification/read',
