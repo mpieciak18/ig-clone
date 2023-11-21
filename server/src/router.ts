@@ -13,7 +13,7 @@ import {
 	createNotif,
 	getNotifsRead,
 	getNotifsUnread,
-	updateNotifRead,
+	updateNotifsRead,
 	deleteNotif,
 } from './handlers/notification';
 import {
@@ -135,13 +135,8 @@ router.post(
 	handleInputErrors,
 	getNotifsUnread
 );
-// Marks a notification as read
-router.put(
-	'/notification/read',
-	body('id').isInt(),
-	handleInputErrors,
-	updateNotifRead
-);
+// Marks all notifications as read
+router.put('/notification/read', handleInputErrors, updateNotifsRead);
 // Deletes a notification
 router.delete(
 	'/notification',

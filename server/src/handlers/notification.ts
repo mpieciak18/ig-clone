@@ -131,13 +131,12 @@ export const getNotifsRead = async (req, res, next) => {
 	res.json({ notifications });
 };
 
-// Updates a notification (as read)
-export const updateNotifRead = async (req, res, next) => {
+// Updates all notifications (as read)
+export const updateNotifsRead = async (req, res, next) => {
 	// Update notification
-	let notification;
+	let response;
 	try {
-		notification = await prisma.notification.update({
-			where: { id: req.body.id },
+		response = await prisma.notification.updateMany({
 			data: { read: true },
 		});
 	} catch (e) {
@@ -148,12 +147,12 @@ export const updateNotifRead = async (req, res, next) => {
 
 	// While the previous try/catch (along with the 'protect' middleware) should catch all errors,
 	// this is added as an extra step of error handling (in case the update 'runs' but nothing is returned).
-	if (!notification) {
+	if (!response.count) {
 		const e = new Error();
 		next(e);
 		return;
 	}
 
-	// Return updated user data
-	res.json({ notification });
+	// Return number of updated records
+	res.json({ count: response.count });
 };

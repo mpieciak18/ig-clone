@@ -136,32 +136,13 @@ describe('/api/notification', () => {
 		expect(newNotif.id).toEqual(notification.id);
 	});
 	//
-	it('should fail to update notification due to an invalid input & return a 400 error', async () => {
+	it('should fail to update notifications due to no auth token & return a 401 error', async () => {
 		const response = await supertest(app)
 			.put('/api/notification/read')
-			.set('Authorization', `Bearer ${otherToken}`)
-			.send({});
-		expect(response.status).toBe(400);
-	});
-	it('should fail to update notification due to no auth token & return a 401 error', async () => {
-		const response = await supertest(app)
-			.put('/api/notification/read')
-			.set('Authorization', `Bearer`)
-			.send({
-				id: notification.id,
-			});
+			.set('Authorization', `Bearer`);
 		expect(response.status).toBe(401);
 	});
-	it('should fail to update notification due to a non-existent id & return a 500 error', async () => {
-		const response = await supertest(app)
-			.put('/api/notification/read')
-			.set('Authorization', `Bearer ${otherToken}`)
-			.send({
-				id: 0,
-			});
-		expect(response.status).toBe(500);
-	});
-	it('should update notification & return a 200 error + correct notification info', async () => {
+	it('should update notifications & return a 200 error + updated records count', async () => {
 		const response = await supertest(app)
 			.put('/api/notification/read')
 			.set('Authorization', `Bearer ${otherToken}`)
@@ -169,9 +150,9 @@ describe('/api/notification', () => {
 				id: notification.id,
 			});
 		expect(response.status).toBe(200);
-		const newNotif = response.body.notification;
-		expect(newNotif.id).toEqual(notification.id);
-		expect(newNotif.read).toBeTruthy();
+		const newNotif = notification;
+		newNotif.read = true;
+		expect(response.body.count).toBeGreaterThanOrEqual(0);
 		notification.read = newNotif.read;
 	});
 	//
