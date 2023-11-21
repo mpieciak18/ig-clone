@@ -39,7 +39,7 @@ import {
 	getComments,
 	getSingleComment,
 } from './handlers/comment';
-import { createLike, deleteLike, getLikes } from './handlers/like';
+import { createLike, deleteLike, getLikes, getLikeUser } from './handlers/like';
 import { createSave, deleteSave, getSaves } from './handlers/save';
 import {
 	createConversation,
@@ -265,6 +265,8 @@ router.post(
 router.post('/like', body('id').isInt(), handleInputErrors, createLike);
 // Deletes a single post
 router.delete('/like', body('id').isInt(), handleInputErrors, deleteLike);
+// Gets signed-in user's like for a post
+router.post('/like/user', body('id').isInt(), handleInputErrors, getLikeUser);
 
 // // // // // //
 //    Saves    //

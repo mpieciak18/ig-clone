@@ -78,3 +78,21 @@ export const deleteLike = async (req, res, next) => {
 	// Finally, send deleted like back to client
 	res.json({ like });
 };
+
+// Gets like from signed-in user (if it exists for a post)
+export const getLikeUser = async (req, res, next) => {
+	// First, get like from post based on user id
+	let like;
+	try {
+		like = await prisma.like.findFirst({
+			where: { postId: req.body.id, userId: req.user.id },
+		});
+	} catch (e) {
+		// DB errors are handled at top-level (server.ts) as 500 error
+		next(e);
+		return;
+	}
+
+	// Second, return like (found or not) back to client
+	res.json({ like });
+};
