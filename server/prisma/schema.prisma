@@ -29,8 +29,8 @@ model User {
   messages        Message[]
   givenFollows    Follow[]       @relation("givenFollows")
   receivedFollows Follow[]       @relation("receivedFollows")
-  givenNotifs    Notification[] @relation("givenNotifications")
-  receivedNotifs   Notification[] @relation("receivedNotifications")
+  givenNotifs     Notification[] @relation("givenNotifications")
+  receivedNotifs  Notification[] @relation("receivedNotifications")
 }
 
 model Follow {
@@ -116,6 +116,9 @@ model Notification {
 
   otherUserId Int
   otherUser   User @relation("givenNotifications", fields: [otherUserId], references: [id])
+
+  // Pseudo-relational, optional field for post id
+  postId Int?
 
   type    String
   read    Boolean

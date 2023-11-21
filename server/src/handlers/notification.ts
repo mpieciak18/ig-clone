@@ -23,14 +23,17 @@ export const createNotif = async (req, res, next) => {
 
 	// Second, create notification
 	let notification;
+	const data = {
+		userId: req.body.id,
+		otherUserId: req.user.id,
+		type: req.body.type,
+		read: false,
+	};
+	// @ts-ignore
+	if (req.body.postId) data.postId = req.body.postId;
 	try {
 		notification = await prisma.notification.create({
-			data: {
-				userId: req.body.id,
-				otherUserId: req.user.id,
-				type: req.body.type,
-				read: false,
-			},
+			data,
 		});
 	} catch (e) {
 		// DB errors are handled at top-level (server.ts) as 500 error

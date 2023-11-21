@@ -2,6 +2,8 @@ import supertest from 'supertest';
 import app from '../server';
 import { it, describe, expect } from 'vitest';
 
+const urlPattern = /^(http|https):\/\/[^ "]+$/;
+
 describe('/api/notification', () => {
 	let token;
 	let otherToken;
@@ -20,7 +22,8 @@ describe('/api/notification', () => {
 		name: 'TESTER',
 		id: undefined,
 	};
-	it('should create both users, get web tokens, user ids, & a 200 statuses', async () => {
+	let post;
+	it('should create both users + a post, get web tokens, user ids, & a 200 statuses', async () => {
 		const response = await supertest(app)
 			.post('/create_new_user')
 			.send(user);
@@ -37,14 +40,29 @@ describe('/api/notification', () => {
 		otherUser.id = response2.body.user?.id;
 		expect(response2.body.user?.id).toBeDefined();
 		expect(response2.status).toBe(200);
+		// // //
+		const caption = 'this is a test';
+		const response3 = await supertest(app)
+			.post('/api/post')
+			.set('Authorization', `Bearer ${otherToken}`)
+			.set('Content-Type', 'multipart/form-data')
+			.field('caption', caption)
+			.attach('file', './src/__tests__/test.png');
+		post = response3.body.post;
+		expect(response3.status).toBe(200);
+		expect(post?.userId).toBe(otherUser.id);
+		expect(post?.caption).toBe(caption);
+		expect(post?.image).toMatch(urlPattern);
 	});
 	//
-	it('should fail to create a notification due to an invalid input & return a 400 error', async () => {
+	it('should fail to create a notification due to an invalid / missing inputs & return a 400 error', async () => {
 		const response = await supertest(app)
 			.post('/api/notification')
 			.set('Authorization', `Bearer ${token}`)
 			.send({
 				id: otherUser.id,
+				// type: 'post',
+				postId: 'this is an error',
 			});
 		expect(response.status).toBe(400);
 	});
@@ -54,7 +72,8 @@ describe('/api/notification', () => {
 			.set('Authorization', `Bearer`)
 			.send({
 				id: otherUser.id,
-				type: 'this is a test',
+				type: 'post',
+				postId: post.id,
 			});
 		expect(response.status).toBe(401);
 	});
@@ -64,7 +83,8 @@ describe('/api/notification', () => {
 			.set('Authorization', `Bearer ${token}`)
 			.send({
 				id: 1,
-				type: 'this is a test',
+				type: 'post',
+				postId: post.id,
 			});
 		expect(response.status).toBe(500);
 	});
@@ -74,12 +94,15 @@ describe('/api/notification', () => {
 			.set('Authorization', `Bearer ${token}`)
 			.send({
 				id: otherUser.id,
-				type: 'this is a test',
+				type: 'post',
+				postId: post.id,
 			});
 		notification = response.body.notification;
 		expect(response.status).toBe(200);
 		expect(response.body.notification.userId).toBe(otherUser.id);
-		expect(response.body.notification.type).toBe('this is a test');
+		expect(response.body.notification.otherUserId).toBe(user.id);
+		expect(response.body.notification.type).toBe('post');
+		expect(response.body.notification.read).toBeFalsy();
 	});
 	//
 	it('should fail to find unread notifications due to no auth token & return a 401 error', async () => {
@@ -184,6 +207,12 @@ describe('/api/notification', () => {
 			});
 		expect(response.status).toBe(200);
 		expect(response.body.notification.id).toBe(notification.id);
+		await supertest(app)
+			.delete('/api/post')
+			.set('Authorization', `Bearer ${otherToken}`)
+			.send({
+				id: post.id,
+			});
 		await supertest(app)
 			.delete('/api/user')
 			.set('Authorization', `Bearer ${token}`);
