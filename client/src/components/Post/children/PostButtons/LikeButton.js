@@ -16,7 +16,7 @@ const LikeButton = (props) => {
 
 	useEffect(() => {
 		if (user != null) {
-			likeExists(postId, postOwnerId).then(setLikeId);
+			likeExists(postId).then(setLikeId);
 		}
 	}, [user]);
 
@@ -39,7 +39,7 @@ const LikeButton = (props) => {
 			setImg(LikeSolid);
 			setLikesNum(likesNum + 1);
 		} else {
-			await removeLike(likeId, postId, postOwnerId);
+			await removeLike(likeId);
 			setLikeId(null);
 			setImg(LikeHollow);
 			setLikesNum(likesNum - 1);

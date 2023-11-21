@@ -2,13 +2,12 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { getLikes } from '../../../services/likes.js';
 import { FollowButton } from '../../other/FollowButton.js';
-import { findUser } from '../../../services/users.js';
 import '../styles/Likes.css';
 import { usePopUp } from '../../../contexts/PopUpContext.js';
 
 const Likes = (props) => {
 	const { updatePopUp } = usePopUp();
-	const { postId, postOwnerId } = props;
+	const { postId } = props;
 
 	// Init likesNumber state
 	const [likesNumber, setLikesNumber] = useState(10);
@@ -19,9 +18,6 @@ const Likes = (props) => {
 	// Init all likes loaded state
 	const [allLoaded, setAllLoaded] = useState(false);
 
-	// Init likes component state
-	const [likes, setLikes] = useState(null);
-
 	// Update likesNumber upon render
 	useEffect(() => {
 		setLikesNumber(10);
@@ -29,50 +25,13 @@ const Likes = (props) => {
 
 	// Update likesArr when likesNumber changes (ie, upon render or upon scroll-to-bottom)
 	useEffect(() => {
-		getLikes(postId, postOwnerId, likesNumber).then((newLikesArr) => {
+		getLikes(postId, likesNumber).then((newLikesArr) => {
 			setLikesArr(newLikesArr);
 			if (newLikesArr.length < likesNumber) {
 				setAllLoaded(true);
 			}
 		});
 	}, [likesNumber]);
-
-	const updateLikes = async () => {
-		const likesObjs = likesArr.map(async (like) => {
-			const likerId = like.data.user;
-			const liker = await findUser(likerId);
-			const likerName = liker.data.name;
-			const likerUsername = liker.data.username;
-			const likerImage = liker.data.image;
-			return (
-				<div className='like-row' key={like.id}>
-					<Link className='like-row-left' to={`/${likerId}`}>
-						<img className='like-image' src={likerImage} />
-						<div className='like-text'>
-							<div className='like-name'>{likerName}</div>
-							<div className='like-username'>
-								@{likerUsername}
-							</div>
-						</div>
-					</Link>
-					<div className='like-row-right'>
-						<FollowButton otherUserId={likerId} />
-					</div>
-				</div>
-			);
-		});
-		const returnVal = await Promise.all(likesObjs);
-		setLikes(returnVal);
-	};
-
-	// Update the likes component when the likesArr changes
-	useEffect(() => {
-		if (likesArr != null) {
-			updateLikes();
-		} else {
-			setLikes(null);
-		}
-	}, [likesArr]);
 
 	// Load more likes when user reaches bottom of pop-up
 	const loadMore = (e) => {
@@ -105,7 +64,36 @@ const Likes = (props) => {
 				</div>
 				<div id='likes-divider' />
 				<div id='likes-list' onScroll={loadMore}>
-					{likes}
+					{likesArr.length
+						? likesArr.map(async (like) => {
+								return (
+									<div className='like-row' key={like.id}>
+										<Link
+											className='like-row-left'
+											to={`/${like.user.id}`}
+										>
+											<img
+												className='like-image'
+												src={like.user.image}
+											/>
+											<div className='like-text'>
+												<div className='like-name'>
+													{like.user.name}
+												</div>
+												<div className='like-username'>
+													@{like.user.username}
+												</div>
+											</div>
+										</Link>
+										<div className='like-row-right'>
+											<FollowButton
+												otherUserId={like.user.id}
+											/>
+										</div>
+									</div>
+								);
+						  })
+						: null}
 				</div>
 			</div>
 		</div>

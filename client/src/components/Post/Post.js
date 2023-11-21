@@ -87,9 +87,7 @@ const Post = () => {
 	return (
 		<div id='post' className='page'>
 			<Navbar />
-			{popUpState.likesOn && user ? (
-				<Likes postId={postId} postOwnerId={postOwnerId} />
-			) : null}
+			{popUpState.likesOn && user ? <Likes postId={postId} /> : null}
 			<div id='single-post-page'>
 				<LinkCopied linkCopied={linkCopied} />
 				<div id='content-grid'>
