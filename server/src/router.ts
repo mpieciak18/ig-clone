@@ -261,9 +261,9 @@ router.post(
 	handleInputErrors,
 	getLikes
 );
-// Creates a new comment
+// Creates a new like
 router.post('/like', body('id').isInt(), handleInputErrors, createLike);
-// Deletes a single post
+// Deletes a like
 router.delete('/like', body('id').isInt(), handleInputErrors, deleteLike);
 // Gets signed-in user's like for a post
 router.post('/like/user', body('id').isInt(), handleInputErrors, getLikeUser);
