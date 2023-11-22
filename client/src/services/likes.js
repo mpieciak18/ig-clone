@@ -12,10 +12,9 @@ export const addLike = async (postId, postOwnerId) => {
 		},
 	});
 	if (response.status == 200) {
-		// add notification to recipient
-		await addNotification('like', postOwnerId, postId);
 		const json = await response.json();
 		if (json.like?.id) {
+			// add notification to recipient
 			await addNotification('like', postOwnerId, postId);
 			return json.like.id;
 		} else {
