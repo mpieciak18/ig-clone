@@ -37,16 +37,23 @@ export const removeFollow = async (id) => {
 	}
 };
 
-// Check if the signed-in user is following another user
-const checkForFollow = async (otherUserId) => {
-	const userId = auth.currentUser.uid;
-	const followingsRef = getFollowingsRef(userId);
-	const postRef = query(followingsRef, where('otherUser', '==', otherUserId));
-	const postDocs = await getDocs(postRef);
-	if (postDocs.empty == true) {
-		return null;
+// Check if the signed-in user is following another user (& return follow id)
+export const checkForFollow = async (id) => {
+	const response = await fetch(
+		import.meta.env.VITE_API_URL + '/api/follow/user',
+		{
+			method: 'POST',
+			body: { id },
+			headers: {
+				Authorization: `Bearer ${getToken()}`,
+			},
+		}
+	);
+	if (response.status == 200) {
+		const json = await response.json();
+		return json.givenFollow?.id ? json.givenFollow.id : null;
 	} else {
-		return postDocs.docs[0].id;
+		throw new Error();
 	}
 };
 
