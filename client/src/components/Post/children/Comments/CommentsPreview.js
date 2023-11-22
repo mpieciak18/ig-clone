@@ -16,7 +16,7 @@ const CommentsPreview = (props) => {
 
 	// Update commentsArr when comments count changes
 	useEffect(() => {
-		getComments(postOwnerId, postId, 2).then((array) => {
+		getComments(postId, 2).then((array) => {
 			if (array != undefined) {
 				array.reverse();
 				setCommentsArr(array);
@@ -57,7 +57,7 @@ const CommentsPreview = (props) => {
 
 	// Update comments arr state on render
 	useEffect(() => {
-		getComments(postOwnerId, postId, 2).then((array) => {
+		getComments(postId, 2).then((array) => {
 			if (array != undefined) {
 				array.reverse();
 				setCommentsArr(array);

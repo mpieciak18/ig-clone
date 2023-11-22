@@ -29,7 +29,7 @@ const CommentsFull = (props) => {
 	// Update commentsArr when commentsNum (total comments on a post) or commentQuantity (how many are rendered) changes
 	// E.g., user submits new comment on a post OR scrolls to load more
 	useEffect(() => {
-		getComments(postOwnerId, postId, commentQuantity).then((array) => {
+		getComments(postId, commentQuantity).then((array) => {
 			if (array != undefined) {
 				setCommentsArr(array);
 				// Declare all comments loaded if new array length < commentQuantity
@@ -102,7 +102,7 @@ const CommentsFull = (props) => {
 
 	// Update comments arr state on init render
 	useEffect(() => {
-		getComments(postOwnerId, postId, 10).then((array) => {
+		getComments(postId, 10).then((array) => {
 			if (array != undefined) {
 				setCommentsArr(array);
 			} else {

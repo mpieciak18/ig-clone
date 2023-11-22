@@ -1,4 +1,4 @@
-import { newComment } from '../../../../services/comments.js';
+import { addComment } from '../../../../services/comments.js';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../../contexts/AuthContext.js';
@@ -27,7 +27,7 @@ const CommentsBar = (props) => {
 	const addNewComment = async (e) => {
 		e.preventDefault();
 		if (commentValue.length > 0) {
-			await newComment(postOwnerId, postId, commentValue);
+			await addComment(postOwnerId, postId, commentValue);
 			setCommentValue('');
 			await setCommentsNum(commentsNum + 1);
 		}
