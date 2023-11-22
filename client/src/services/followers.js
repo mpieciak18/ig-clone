@@ -57,30 +57,42 @@ export const checkForFollow = async (id) => {
 	}
 };
 
-// Return array of user id's that given user follows
-const getFollowing = async (userId, arrQuantity) => {
-	const followingsRef = getFollowingsRef(userId, arrQuantity);
-	const followingsQuery = query(followingsRef, limit(arrQuantity));
-	const followingsDocs = await getDocs(followingsQuery);
-	const followings = followingsDocs.docs.map((following) => {
-		return {
-			id: following.id,
-			data: following.data(),
-		};
-	});
-	return followings;
+// Return array of users that signed-in user follows
+const getFollowing = async (id, limit) => {
+	const response = await fetch(
+		import.meta.env.VITE_API_URL + '/api/follow/given',
+		{
+			method: 'POST',
+			body: { id, limit },
+			headers: {
+				Authorization: `Bearer ${getToken()}`,
+			},
+		}
+	);
+	if (response.status == 200) {
+		const json = await response.json();
+		return json.follows;
+	} else {
+		throw new Error();
+	}
 };
 
-// Return array of user id's that follow the given user
-const getFollowers = async (userId, arrQuantity) => {
-	const followersRef = getFollowersRef(userId, arrQuantity);
-	const followersQuery = query(followersRef, limit(arrQuantity));
-	const followersDocs = await getDocs(followersQuery);
-	const followers = followersDocs.docs.map((follower) => {
-		return {
-			id: follower.id,
-			data: follower.data(),
-		};
-	});
-	return followers;
+// Return array of users that signed-in user is followed by
+export const getFollowers = async (id, limit) => {
+	const response = await fetch(
+		import.meta.env.VITE_API_URL + '/api/follow/received',
+		{
+			method: 'POST',
+			body: { id, limit },
+			headers: {
+				Authorization: `Bearer ${getToken()}`,
+			},
+		}
+	);
+	if (response.status == 200) {
+		const json = await response.json();
+		return json.follows;
+	} else {
+		throw new Error();
+	}
 };

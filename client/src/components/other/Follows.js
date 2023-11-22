@@ -3,7 +3,6 @@ import { getFollowing, getFollowers } from '../../services/followers.js';
 import { FollowButton } from './FollowButton.js';
 import './other.css';
 import { useEffect, useState } from 'react';
-import { findUser } from '../../services/users.js';
 import { usePopUp } from '../../contexts/PopUpContext.js';
 
 const Follows = (props) => {
@@ -19,9 +18,6 @@ const Follows = (props) => {
 
 	// Init following/follower users arr state
 	const [usersArr, setUsersArr] = useState(null);
-
-	// Init following/follower component state
-	const [users, setUsers] = useState(null);
 
 	// Init all loaded state
 	const [allLoaded, setAllLoaded] = useState(false);
@@ -55,52 +51,6 @@ const Follows = (props) => {
 		}
 	}, [whichTab]);
 
-	const updateUsers = async () => {
-		const newUsers = usersArr.map(async (otherUser) => {
-			const userId = otherUser.data.otherUser;
-			const userInfo = await findUser(userId);
-			const redirect = () => {
-				updatePopUp();
-				if (location.otherUserId == null) {
-					navigate(`/${userId}`);
-				} else {
-					navigate(`/${userId}`);
-					window.location.reload();
-				}
-			};
-			return (
-				<div className='follow-row' key={userId}>
-					<div className='follow-row-left' onClick={redirect}>
-						<img
-							className='follow-image'
-							src={userInfo.data.image}
-						/>
-						<div className='follow-text'>
-							<div className='follow-name'>
-								{userInfo.data.name}
-							</div>
-							<div className='follow-username'>
-								@{userInfo.data.username}
-							</div>
-						</div>
-					</div>
-					<div className='follow-row-right'>
-						<FollowButton otherUserId={userId} />
-					</div>
-				</div>
-			);
-		});
-		const returnVal = await Promise.all(newUsers);
-		setUsers(returnVal);
-	};
-
-	// Update users component state when usersArr changes
-	useEffect(() => {
-		if (usersArr != null) {
-			updateUsers();
-		}
-	}, [usersArr]);
-
 	// Load more follows/followers when user reaches bottom of pop-up
 	const loadMore = async (e) => {
 		if (allLoaded == false && isLoading == false) {
@@ -114,9 +64,11 @@ const Follows = (props) => {
 				setUsersCount(newCount);
 				let newUsersArr;
 				if (whichTab == 'following') {
-					await getFollowing(otherUserId, newCount).then(setUsersArr);
+					newUsersArr = await getFollowing(otherUserId, newCount);
+					setUsersArr(newUsersArr);
 				} else {
-					await getFollowers(otherUserId, newCount).then(setUsersArr);
+					newUsersArr = await getFollowers(otherUserId, newCount);
+					setUsersArr(newUsersArr);
 				}
 				if (newUsersArr.length < newCount) {
 					setAllLoaded(true);
@@ -160,7 +112,48 @@ const Follows = (props) => {
 				</div>
 				<div id='follows-divider' />
 				<div id='follows-list' onScroll={loadMore}>
-					{users}
+					{usersArr?.length
+						? usersArr.map((otherUser) => {
+								const redirect = () => {
+									updatePopUp();
+									if (location.otherUserId == null) {
+										navigate(`/${otherUser.id}`);
+									} else {
+										navigate(`/${otherUser.id}`);
+										window.location.reload();
+									}
+								};
+								return (
+									<div
+										className='follow-row'
+										key={otherUser.id}
+									>
+										<div
+											className='follow-row-left'
+											onClick={redirect}
+										>
+											<img
+												className='follow-image'
+												src={otherUser.image}
+											/>
+											<div className='follow-text'>
+												<div className='follow-name'>
+													{otherUser.name}
+												</div>
+												<div className='follow-username'>
+													@{otherUser.username}
+												</div>
+											</div>
+										</div>
+										<div className='follow-row-right'>
+											<FollowButton
+												otherUserId={otherUser.id}
+											/>
+										</div>
+									</div>
+								);
+						  })
+						: null}
 				</div>
 			</div>
 		</div>
