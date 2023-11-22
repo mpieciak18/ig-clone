@@ -20,17 +20,21 @@ export const addFollow = async (id) => {
 };
 
 // Remove follow from other user and self
-const removeFollow = async (followId, otherUserId) => {
-	// First, decrease other user follower count and self following count
-	await changeOtherUserFollowerCount(otherUserId, false);
-	const selfId = auth.currentUser.uid;
-	await changeSelfFollowingCount(selfId, false);
-	// Second, remove follower from other user
-	const otherUserFollowerRef = getFollowerRef(otherUserId, followId);
-	await deleteDoc(otherUserFollowerRef);
-	// Third, remove follow from self
-	const selfFollowingRef = getFollowingRef(selfId, followId);
-	await deleteDoc(selfFollowingRef);
+export const removeFollow = async (id) => {
+	const response = await fetch(import.meta.env.VITE_API_URL + '/api/follow', {
+		method: 'DELETE',
+		body: { id },
+		headers: {
+			Authorization: `Bearer ${getToken()}`,
+		},
+	});
+	if (response.status == 200) {
+		// const json = await response.json();
+		// return json.follow;
+		return;
+	} else {
+		throw new Error();
+	}
 };
 
 // Check if the signed-in user is following another user

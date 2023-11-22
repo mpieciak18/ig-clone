@@ -62,7 +62,7 @@ const FollowButton = (props) => {
 		} else if (isUpdating == false && followingId != null) {
 			setFollowButtonClass('inactive');
 			setIsUpdating(true);
-			await removeFollow(followingId, otherUserId);
+			await removeFollow(followingId);
 			setFollowingId(null);
 			const updatedUser = await findUser(user.id);
 			await setUser(updatedUser);
