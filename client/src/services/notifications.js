@@ -2,8 +2,8 @@ import { getToken } from './localstor';
 
 // Add new notification to other user when logged-in user performs a trigger
 // Triggers/types include new like, new comment, new follow, and new message
-export const addNotification = async (id, type, postId = null) => {
-	const body = { id, type };
+export const addNotification = async (type, userId, postId = null) => {
+	const body = { id: userId, type };
 	if (postId) body.postId = postId;
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/notification',
