@@ -40,7 +40,7 @@ import {
 	getSingleComment,
 } from './handlers/comment';
 import { createLike, deleteLike, getLikes, getLikeUser } from './handlers/like';
-import { createSave, deleteSave, getSaves } from './handlers/save';
+import { getSavePost, createSave, deleteSave, getSaves } from './handlers/save';
 import {
 	createConversation,
 	deleteConversation,
@@ -274,6 +274,8 @@ router.post('/like/user', body('id').isInt(), handleInputErrors, getLikeUser);
 //    Saves    //
 // // // // // //
 
+// Gets signed-in user's save for a post
+router.post('/save/post', body('id').isInt(), handleInputErrors, getSavePost);
 // Gets (a limited number of) a user's saves
 router.post('/save/user', body('limit').isInt(), handleInputErrors, getSaves);
 // Creates a new save

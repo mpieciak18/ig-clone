@@ -86,6 +86,39 @@ describe('saves', () => {
 		save = response.body.save;
 	});
 	//
+	it("should fail to get user's save from a post due to an invalid inputs & return a 500 code", async () => {
+		const response = await supertest(app)
+			.post('/api/save/post')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				id: '1',
+			});
+		expect(response.status).toBe(500);
+	});
+	it("should fail to get user's save from a post due to a missing inputs & return a 400 code", async () => {
+		const response = await supertest(app)
+			.post('/api/save/post')
+			.set('Authorization', `Bearer ${token}`)
+			.send({});
+		expect(response.status).toBe(400);
+	});
+	it("should fail to get user's save from a post due to a missing auth token & return a 401 code", async () => {
+		const response = await supertest(app)
+			.post('/api/save/post')
+			.set('Authorization', `Bearer`)
+			.send({ id: post.id });
+		expect(response.status).toBe(401);
+	});
+	it("should get user's save from a post & return a 200 code + correct like info", async () => {
+		const response = await supertest(app)
+			.post('/api/save/post')
+			.set('Authorization', `Bearer ${token}`)
+			.send({ id: post.id });
+		expect(response.status).toBe(200);
+		expect(response.body.save).toBeDefined();
+		expect(response.body.save.userId).toBe(user.id);
+	});
+	//
 	it('should fail to get all saves from a user due to an invalid inputs & return a 400 code', async () => {
 		const response = await supertest(app)
 			.post('/api/save/user')

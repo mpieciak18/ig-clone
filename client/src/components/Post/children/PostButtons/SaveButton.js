@@ -6,7 +6,7 @@ import { useAuth } from '../../../../contexts/AuthContext.js';
 
 const SaveButton = (props) => {
 	const { user } = useAuth();
-	const { postId, postOwnerId, redirect } = props;
+	const { postId, redirect } = props;
 
 	// Init saveId state
 	const [saveId, setSaveId] = useState(null);
@@ -21,7 +21,7 @@ const SaveButton = (props) => {
 	const addRemoveSave = async () => {
 		setIsUpdating(true);
 		if (saveId == null) {
-			const id = await addSave(postId, postOwnerId);
+			const id = await addSave(postId);
 			setSaveId(id);
 			setImg(SaveSolid);
 		} else {
@@ -34,25 +34,22 @@ const SaveButton = (props) => {
 
 	// Calls addRemoveSave() if not already running
 	const saveButtonFunction = () => {
-		if (user == null) {
-			redirect();
-		} else if (isUpdating == false) {
-			addRemoveSave();
-		}
+		if (user == null) redirect();
+		else if (isUpdating == false) addRemoveSave();
 	};
 
 	useEffect(() => {
 		if (user != null) {
-			saveExists(postId).then(setSaveId);
+			saveExists(postId).then((save) => {
+				if (save?.id) setSaveId(save.id);
+				else setSaveId(null);
+			});
 		}
 	}, [user]);
 
 	useEffect(() => {
-		if (saveId != null) {
-			setImg(SaveSolid);
-		} else {
-			setImg(SaveHollow);
-		}
+		if (saveId != null) setImg(SaveSolid);
+		else setImg(SaveHollow);
 	}, [saveId]);
 
 	return (
@@ -61,32 +58,20 @@ const SaveButton = (props) => {
 			src={img}
 			onClick={saveButtonFunction}
 			onMouseDown={() => {
-				if (saveId == null) {
-					setImg(SaveSolid);
-				} else {
-					setImg(SaveHollow);
-				}
+				if (saveId == null) setImg(SaveSolid);
+				else setImg(SaveHollow);
 			}}
 			onMouseUp={() => {
-				if (saveId == null) {
-					setImg(SaveHollow);
-				} else {
-					setImg(SaveSolid);
-				}
+				if (saveId == null) setImg(SaveHollow);
+				else setImg(SaveSolid);
 			}}
 			onMouseOver={() => {
-				if (saveId == null) {
-					setImg(SaveSolid);
-				} else {
-					setImg(SaveHollow);
-				}
+				if (saveId == null) setImg(SaveSolid);
+				else setImg(SaveHollow);
 			}}
 			onMouseOut={() => {
-				if (saveId == null) {
-					setImg(SaveHollow);
-				} else {
-					setImg(SaveSolid);
-				}
+				if (saveId == null) setImg(SaveHollow);
+				else setImg(SaveSolid);
 			}}
 		/>
 	);

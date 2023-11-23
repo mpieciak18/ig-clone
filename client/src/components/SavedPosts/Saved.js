@@ -1,6 +1,5 @@
 import './Saved.css';
-import { findSaves } from '../../services/saves.js';
-import { findSinglePost } from '../../services/posts.js';
+import { getSaves } from '../../services/saves.js';
 import { PostPreview } from '../Post/children/PostPreview.js';
 import { useState, useEffect } from 'react';
 import { Navbar } from '../other/Navbar.js';
@@ -10,49 +9,34 @@ const Saved = () => {
 	// Redirect to signup page if not signed in
 	const { user } = useAuth();
 
-	// Init postsNumber state
-	const [postsNumber, setPostsNumber] = useState(21);
+	// Init savesNumber state
+	const [savesNumber, setSavesNumber] = useState(21);
 
-	// Init postsArr state
-	const [postsArr, setPostsArr] = useState(null);
-
-	// Init posts state
-	const [posts, setPosts] = useState(null);
+	// Init savesArr state
+	const [savesArr, setSavesArr] = useState(null);
 
 	// Init all loaded state
 	const [allLoaded, setAllLoaded] = useState(false);
 
-	const updatePostsArr = async () => {
-		const savedArr = await findSaves(postsNumber);
-		if (savedArr != null) {
-			let newPostsArr = [];
-			for (const save of savedArr) {
-				const result = await findSinglePost(save.data.postId);
-				newPostsArr = [...newPostsArr, result];
-			}
-			setPostsArr(newPostsArr);
-			if (newPostsArr.length < postsNumber) {
-				setAllLoaded(true);
-			}
-		} else {
-			setPostsArr(null);
-		}
-	};
-
-	// Update posts state when postsNumber state changes
+	// Update savesArr state when savesNumber or user state changes
 	useEffect(() => {
 		if (user != null) {
-			updatePostsArr();
+			getSaves(savesNumber).then((savedArr) => {
+				setSavesArr(savedArr);
+				if (savedArr.length < savesNumber) {
+					setAllLoaded(true);
+				}
+			});
 		} else {
-			setPostsArr(null);
+			setSavesArr([]);
 		}
-	}, [postsNumber, user]);
+	}, [savesNumber, user]);
 
-	// Load-more function that updates the posts reel
+	// Load-more function that updates the saves reel
 	const loadMore = () => {
 		if (allLoaded == false) {
-			const newPostsNumber = postsNumber + 9;
-			setPostsNumber(newPostsNumber);
+			const newSavesNumber = savesNumber + 9;
+			setSavesNumber(newSavesNumber);
 		}
 	};
 
@@ -69,21 +53,21 @@ const Saved = () => {
 	return (
 		<div id='saved' className='page'>
 			<Navbar />
-			{postsArr != null ? (
+			{savesArr?.length > 0 ? (
 				<div id='saved-posts'>
 					<div id='saved-posts-title'>Saved Posts</div>
 					<div id='saved-posts-content'>
-						{postsArr.map((post) => {
+						{savesArr.map((save) => {
 							return (
 								<PostPreview
-									key={post.id}
-									postId={post.id}
-									postText={post.text}
-									postImage={post.image}
-									postDate={post.date}
-									postOwnerId={post.user}
-									postLikes={post.likes}
-									postComments={post.comments}
+									key={save.postId}
+									postId={save.postId}
+									postText={save.post.text}
+									postImage={save.post.image}
+									postDate={save.post.createdAt}
+									postOwnerId={save.post.userId}
+									postLikes={save.post.likes}
+									postComments={save.post.comments}
 								/>
 							);
 						})}
