@@ -142,6 +142,7 @@ export const getGivenFollows = async (req, res, next) => {
 	try {
 		givenFollows = await prisma.follow.findMany({
 			where: { giverId: req.body.id },
+			take: req.body.limit,
 		});
 	} catch (e) {
 		// DB errors are handled at top-level (server.ts) as 500 error
@@ -178,6 +179,7 @@ export const getReceivedFollows = async (req, res, next) => {
 	try {
 		receivedFollows = await prisma.follow.findMany({
 			where: { receiverId: req.body.id },
+			take: req.body.limit,
 		});
 	} catch (e) {
 		// DB errors are handled at top-level (server.ts) as 500 error

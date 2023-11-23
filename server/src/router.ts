@@ -153,6 +153,7 @@ router.delete(
 router.post(
 	'/follow/given',
 	body('id').isInt(),
+	body('limit').isInt(),
 	handleInputErrors,
 	getGivenFollows
 );
@@ -160,6 +161,7 @@ router.post(
 router.post(
 	'/follow/received',
 	body('id').isInt(),
+	body('limit').isInt(),
 	handleInputErrors,
 	getReceivedFollows
 );
