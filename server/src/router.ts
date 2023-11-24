@@ -323,7 +323,13 @@ router.post(
 	getMessages
 );
 // Creates a new message
-router.post('/message', body('id').isInt(), handleInputErrors, createMessage);
+router.post(
+	'/message',
+	body('id').isInt(),
+	body('message').isString(),
+	handleInputErrors,
+	createMessage
+);
 // Deletes a single message
 router.delete('/message', body('id').isInt(), handleInputErrors, deleteMessage);
 

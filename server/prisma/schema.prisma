@@ -101,6 +101,8 @@ model Message {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
 
+  message   String
+
   senderId       Int
   sender         User         @relation(fields: [senderId], references: [id])
   conversationId Int

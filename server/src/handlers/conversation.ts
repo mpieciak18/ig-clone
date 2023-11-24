@@ -80,7 +80,7 @@ export const getConversations = async (req, res, next) => {
 			take: req.body.limit,
 			include: {
 				users: true,
-				messages: true,
+				messages: { orderBy: { createdAt: 'desc' } },
 			},
 		});
 	} catch (e) {

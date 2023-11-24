@@ -7,6 +7,7 @@ describe('messages', () => {
 	let otherToken;
 	let conversation;
 	let message;
+	const messageText = 'what is up';
 	const user = {
 		email: 'test111@test111.com',
 		username: 'test111',
@@ -47,9 +48,7 @@ describe('messages', () => {
 		const response = await supertest(app)
 			.post('/api/conversation')
 			.set('Authorization', `Bearer ${token}`)
-			.send({
-				id: otherUser.id,
-			});
+			.send({ id: otherUser.id });
 		conversation = response.body.conversation;
 		const idOne = conversation.users[0].id;
 		const idTwo = conversation.users[1].id;
@@ -62,18 +61,14 @@ describe('messages', () => {
 		const response = await supertest(app)
 			.post('/api/message')
 			.set('Authorization', `Bearer ${token}`)
-			.send({
-				id: 1,
-			});
+			.send({ id: 1, message: messageText });
 		expect(response.status).toBe(500);
 	});
 	it('should fail to create a message due to an invalid inputs & return a 400 code', async () => {
 		const response = await supertest(app)
 			.post('/api/message')
 			.set('Authorization', `Bearer ${token}`)
-			.send({
-				id: 'abc',
-			});
+			.send({ id: 'abc', message: null });
 		expect(response.status).toBe(400);
 	});
 	it('should fail to create a message due to a missing inputs & return a 400 code', async () => {
@@ -87,18 +82,19 @@ describe('messages', () => {
 		const response = await supertest(app)
 			.post('/api/message')
 			.set('Authorization', `Bearer`)
-			.send({ id: conversation.id });
+			.send({ id: conversation.id, message: messageText });
 		expect(response.status).toBe(401);
 	});
 	it('should create a message & return a 200 code + correct message info', async () => {
 		const response = await supertest(app)
 			.post('/api/message')
 			.set('Authorization', `Bearer ${token}`)
-			.send({ id: conversation.id });
-		expect(response.status).toBe(200);
-		expect(response.body.message.conversationId).toBe(conversation.id);
-		expect(response.body.message.senderId).toBe(user.id);
+			.send({ id: conversation.id, message: messageText });
 		message = response.body.message;
+		expect(response.status).toBe(200);
+		expect(message.conversationId).toBe(conversation.id);
+		expect(message.senderId).toBe(user.id);
+		expect(message.message).toBe(messageText);
 	});
 	//
 	it('should fail to get all messages from a conversation due to an invalid inputs & return a 400 code', async () => {
@@ -136,6 +132,7 @@ describe('messages', () => {
 			message.conversationId
 		);
 		expect(response.body.messages[0].id).toBe(message.id);
+		expect(response.body.messages[0].message).toBe(message.message);
 	});
 	//
 	it('should fail to delete a message due to a non-existent message id & return a 500 code', async () => {

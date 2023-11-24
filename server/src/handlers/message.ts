@@ -9,6 +9,7 @@ export const createMessage = async (req, res, next) => {
 			data: {
 				conversationId: req.body.id,
 				senderId: req.user.id,
+				message: req.body.message,
 			},
 		});
 	} catch (e) {
