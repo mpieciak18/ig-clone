@@ -132,19 +132,29 @@ describe('conversations', () => {
 	//
 	it("should fail to get a user's conversations due to no auth token & return a 401 error", async () => {
 		const response = await supertest(app)
-			.get('/api/conversation/user')
-			.set('Authorization', `Bearer`);
+			.post('/api/conversation/user')
+			.set('Authorization', `Bearer`)
+			.send({ limit: 10 });
+		expect(response.status).toBe(401);
+	});
+	it("should fail to get a user's conversations due missing / invalid inputs & return a 401 error", async () => {
+		const response = await supertest(app)
+			.post('/api/conversation/user')
+			.set('Authorization', `Bearer`)
+			.send({ limit: 'abc' });
 		expect(response.status).toBe(401);
 	});
 	it("should get a user's conversations & return a 200 error + correct conversations info", async () => {
 		const response = await supertest(app)
-			.get('/api/conversation/user')
-			.set('Authorization', `Bearer ${token}`);
+			.post('/api/conversation/user')
+			.set('Authorization', `Bearer ${token}`)
+			.send({ limit: 10 });
 		expect(response.status).toBe(200);
 		expect(response.body.conversations.length).toBeGreaterThan(0);
 		const response2 = await supertest(app)
-			.get('/api/conversation/user')
-			.set('Authorization', `Bearer ${token}`);
+			.post('/api/conversation/user')
+			.set('Authorization', `Bearer ${token}`)
+			.send({ limit: 10 });
 		expect(response2.status).toBe(200);
 		expect(response2.body.conversations.length).toBeGreaterThan(0);
 	});

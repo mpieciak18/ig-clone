@@ -288,7 +288,7 @@ router.delete('/save', body('id').isInt(), handleInputErrors, deleteSave);
 // // // // // //
 
 // Gets a user's conversations
-router.get('/conversation/user', getConversations);
+router.post('/conversation/user', body('limit').isInt(), getConversations);
 // Gets a single conversation
 router.post(
 	'/conversation/single',
