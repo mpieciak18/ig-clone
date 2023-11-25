@@ -72,11 +72,17 @@ describe('/create_new_user, /sign_in, & /api/user', () => {
 		expect(user.email).toEqual(initUser.email);
 		expect(user.username).toEqual(initUser.username);
 		expect(user.name).toEqual(initUser.name);
+		expect(user._count.posts).toBeDefined();
+		expect(user._count.givenFollows).toBeDefined();
+		expect(user._count.receivedFollows).toBeDefined();
 		expect(response2.status).toBe(200);
 		expect(otherToken).toBeDefined();
 		expect(otherUser.email).toEqual(initOtherUser.email);
 		expect(otherUser.username).toEqual(initOtherUser.username);
 		expect(otherUser.name).toEqual(initOtherUser.name);
+		expect(otherUser._count.posts).toBeDefined();
+		expect(otherUser._count.givenFollows).toBeDefined();
+		expect(otherUser._count.receivedFollows).toBeDefined();
 	});
 	it('should fail to create new users due to them already existing & return 400 statuses', async () => {
 		const response = await supertest(app).post('/create_new_user').send({
@@ -131,6 +137,9 @@ describe('/create_new_user, /sign_in, & /api/user', () => {
 		expect(response.body.user.email).toEqual(user.email);
 		expect(response.body.user.username).toEqual(user.username);
 		expect(response.body.user.name).toEqual(user.name);
+		expect(response.body.user._count.posts).toBeDefined();
+		expect(response.body.user._count.givenFollows).toBeDefined();
+		expect(response.body.user._count.receivedFollows).toBeDefined();
 	});
 	//
 	it('should fail to find a user due to a non-existent id & return a 500 status', async () => {
@@ -361,6 +370,9 @@ describe('/create_new_user, /sign_in, & /api/user', () => {
 		expect(updatedUser.name == newUser.name).toBeTruthy();
 		expect(updatedUser.image).toMatch(urlPattern);
 		expect(updatedUser.bio == newUser.bio).toBeTruthy();
+		expect(updatedUser._count.posts).toBeDefined();
+		expect(updatedUser._count.givenFollows).toBeDefined();
+		expect(updatedUser._count.receivedFollows).toBeDefined();
 	});
 	//
 	it('should fail to delete a user due to a missing user id field within the auth token & return a 500 status', async () => {

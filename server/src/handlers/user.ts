@@ -12,6 +12,12 @@ export const createNewUser = async (req, res, next) => {
 			data: data,
 		});
 		const token = await createJwt(user);
+		// @ts-ignore
+		user._count = {
+			posts: 0,
+			receivedFollows: 0,
+			givenFollows: 0,
+		};
 		res.json({ token, user });
 	} catch (e) {
 		// Checks if error is a 'unique constraint failure'
@@ -41,6 +47,15 @@ export const signIn = async (req, res, next) => {
 	const user = await prisma.user.findUnique({
 		where: {
 			username: req.body.username,
+		},
+		include: {
+			_count: {
+				select: {
+					givenFollows: true,
+					receivedFollows: true,
+					posts: true,
+				},
+			},
 		},
 	});
 	if (!user) {
@@ -122,7 +137,17 @@ export const updateUser = async (req, res, next) => {
 		user = await prisma.user.update({
 			where: { id: req.user.id },
 			data,
+			include: {
+				_count: {
+					select: {
+						givenFollows: true,
+						receivedFollows: true,
+						posts: true,
+					},
+				},
+			},
 		});
+		console.log(user);
 	} catch (e) {
 		// Checks if there's a 'unique constraint failure' & handles it as a 401 error
 		if (e.code == 'P2002') {
