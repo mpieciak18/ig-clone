@@ -33,19 +33,37 @@ export const createConversation = async (req, res, next) => {
 	res.json({ conversation });
 };
 
-// Gets conversation by id
+// Attempts to get a conversation by the other user's id
 export const getConversation = async (req, res, next) => {
-	// First, get single conversation by id
+	// First, try to get single conversation by other user id
 	// If no conversations are found, handle it at the top-level (server.ts) as 500 error
 	let conversation;
 	try {
-		conversation = await prisma.conversation.findUnique({
+		conversation = await prisma.conversation.findFirst({
 			where: {
-				id: req.body.id,
+				AND: [
+					{
+						users: {
+							some: {
+								id: req.user.id,
+							},
+						},
+					},
+					{
+						users: {
+							some: {
+								id: req.body.id,
+							},
+						},
+					},
+				],
 			},
 			include: {
 				users: true,
-				messages: true,
+				messages: {
+					orderBy: { createdAt: 'desc' },
+					take: req.body.limit,
+				},
 			},
 		});
 	} catch (e) {
@@ -80,7 +98,7 @@ export const getConversations = async (req, res, next) => {
 			take: req.body.limit,
 			include: {
 				users: true,
-				messages: { orderBy: { createdAt: 'desc' } },
+				messages: { orderBy: { createdAt: 'desc' }, take: 1 },
 			},
 		});
 	} catch (e) {

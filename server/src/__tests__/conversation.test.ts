@@ -90,39 +90,40 @@ describe('conversations', () => {
 		expect(idTwo == user.id || idTwo == otherUser.id).toBeTruthy();
 	});
 	//
-	it('should fail to get a conversation due to an missing input & return a 400 error', async () => {
+	it('should fail to get a conversation due to missing inputs & return a 400 error', async () => {
 		const response = await supertest(app)
-			.post('/api/conversation/single')
+			.post('/api/conversation/otherUser')
 			.set('Authorization', `Bearer ${token}`)
 			.send({});
 		expect(response.status).toBe(400);
 	});
-	it('should fail to get a conversation due to an invalid input & return a 400 error', async () => {
+	it('should fail to get a conversation due to invalid inputs & return a 400 error', async () => {
 		const response = await supertest(app)
-			.post('/api/conversation/single')
+			.post('/api/conversation/otherUser')
 			.set('Authorization', `Bearer ${token}`)
-			.send({ id: 'abc' });
+			.send({ id: 'abc', limit: 'abc' });
 		expect(response.status).toBe(400);
 	});
 	it('should fail to get a conversation due to no auth token & return a 401 error', async () => {
 		const response = await supertest(app)
-			.post('/api/conversation/single')
+			.post('/api/conversation/otherUser')
 			.set('Authorization', `Bearer`)
-			.send({ id: conversation.id });
+			.send({ id: otherUser.id, limit: 10 });
 		expect(response.status).toBe(401);
 	});
 	it('should fail to get a conversation due to a non-existent other user & return a 500 error', async () => {
 		const response = await supertest(app)
-			.post('/api/conversation/single')
+			.post('/api/conversation/otherUser')
 			.set('Authorization', `Bearer ${token}`)
-			.send({ id: 1 });
+			.send({ id: 1, limit: 10 });
 		expect(response.status).toBe(500);
 	});
 	it('should get a conversation & return a 200 error + correct conversation info', async () => {
 		const response = await supertest(app)
-			.post('/api/conversation/single')
+			.post('/api/conversation/otherUser')
 			.set('Authorization', `Bearer ${token}`)
-			.send({ id: conversation.id });
+			.send({ id: otherUser.id, limit: 10 });
+		console.log(response.body);
 		const idOne = response.body.conversation.users[0].id;
 		const idTwo = response.body.conversation.users[1].id;
 		expect(response.status).toBe(200);

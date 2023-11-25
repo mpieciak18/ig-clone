@@ -289,10 +289,11 @@ router.delete('/save', body('id').isInt(), handleInputErrors, deleteSave);
 
 // Gets a user's conversations
 router.post('/conversation/user', body('limit').isInt(), getConversations);
-// Gets a single conversation
+// Gets a single conversation between two users, based on user ID
 router.post(
-	'/conversation/single',
+	'/conversation/otherUser',
 	body('id').isInt(),
+	body('limit').isInt(),
 	handleInputErrors,
 	getConversation
 );
