@@ -80,9 +80,9 @@ const Conversation = () => {
 					</div>
 					{otherUser ? (
 						<div id='convo-title-container'>
-							<div id='title'>{otherUser.data.name}</div>
+							<div id='title'>{otherUser.name}</div>
 							<div id='subtitle' onClick={redirect}>
-								@{otherUser.data.username}
+								@{otherUser.username}
 							</div>
 						</div>
 					) : null}

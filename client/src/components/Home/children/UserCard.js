@@ -40,7 +40,7 @@ const UserCard = () => {
 	// Update user card state or user image state when user prop changes
 	useEffect(() => {
 		if (user) {
-			setUserImage(user.data.image);
+			setUserImage(user.image);
 		}
 	}, [user]);
 
@@ -49,24 +49,24 @@ const UserCard = () => {
 			<div id='user-card-top' onClick={redirectToProfile}>
 				<img id='user-card-icon' src={userImage} />
 				<div id='user-card-names'>
-					<div id='user-card-name'>{user.data.name}</div>
-					<div id='user-card-username'>{`@${user.data.username}`}</div>
+					<div id='user-card-name'>{user.name}</div>
+					<div id='user-card-username'>{`@${user.username}`}</div>
 				</div>
 			</div>
 			<div id='user-card-bottom'>
 				<div id='user-card-posts' onClick={redirectToProfile}>
-					<p className='user-stats-child-num'>{user.data.posts}</p>
+					<p className='user-stats-child-num'>{user._count.posts}</p>
 					<p className='user-stats-child-type'>Posts</p>
 				</div>
 				<div id='user-card-following' onClick={clickFollowing}>
 					<p className='user-stats-child-num'>
-						{user.data.following}
+						{user._count.givenFollows}
 					</p>
 					<p className='user-stats-child-type'>Following</p>
 				</div>
 				<div id='user-card-followers' onClick={clickFollowers}>
 					<p className='user-stats-child-num'>
-						{user.data.followers}
+						{user._count.receivedFollows}
 					</p>
 					<p className='user-stats-child-type'>Followers</p>
 				</div>

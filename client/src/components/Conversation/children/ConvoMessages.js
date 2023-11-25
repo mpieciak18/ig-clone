@@ -18,8 +18,8 @@ const ConvoMessages = (props) => {
 	// Update image source on render
 	useEffect(() => {
 		if (otherUser != null) {
-			setOtherUserImg(otherUser.data.image);
-			setOtherUserName(otherUser.data.name);
+			setOtherUserImg(otherUser.image);
+			setOtherUserName(otherUser.name);
 		}
 	}, [otherUser]);
 
@@ -34,9 +34,9 @@ const ConvoMessages = (props) => {
 
 	// Update messages state when messagesArr changes
 	const generateMessages = () => {
-		return messagesArr.map((message) => {
+		return messagesArr.toReversed().map((message, i) => {
 			let sender;
-			if (user.id == message.data.sender) {
+			if (user.id == message.senderId) {
 				sender = 'self';
 			} else {
 				sender = 'other';
@@ -44,13 +44,20 @@ const ConvoMessages = (props) => {
 
 			let icon;
 			let name = null;
+			let senderChange = false;
 
-			if (message.data.senderChange == true) {
+			if (i == 0) {
+				senderChange = true;
+			} else if (messagesArr[i - 1].senderId != message.senderId) {
+				senderChange = true;
+			}
+
+			if (senderChange) {
 				if (sender == 'self') {
 					icon = <div className='message-block-icon' />;
 					name = (
 						<div className='message-name'>
-							You, {timeSince(message.data.date)}:
+							You, {timeSince(message.createdAt)}:
 						</div>
 					);
 				} else {
@@ -62,7 +69,7 @@ const ConvoMessages = (props) => {
 					);
 					name = (
 						<div className='message-name'>
-							{otherUserName}, {timeSince(message.data.date)}
+							{otherUserName}, {timeSince(message.createdAt)}:
 						</div>
 					);
 				}
@@ -80,7 +87,7 @@ const ConvoMessages = (props) => {
 						</div>
 						<div className='message-block-bubble'>
 							<div className='message-block-message'>
-								{message.data.message}
+								{message.message}
 							</div>
 						</div>
 					</div>
