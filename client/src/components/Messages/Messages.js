@@ -1,5 +1,5 @@
 import './Messages.css';
-import { retrieveConvos } from '../../services/messages.js';
+import { getConvos } from '../../services/messages.js';
 import { useState, useEffect } from 'react';
 import { Navbar } from '../other/Navbar.js';
 import MessageSolid from '../../assets/images/dm.png';
@@ -19,16 +19,10 @@ const Messages = () => {
 	const [convosCount, setConvosCount] = useState(20);
 
 	// Init convos arr state
-	const [convosArr, setConvosArr] = useState(null);
+	const [convosArr, setConvosArr] = useState([]);
 
 	// Init all convos loaded state
 	const [allLoaded, setAllLoaded] = useState(false);
-
-	// Init convos list component state
-	const [convosList, setConvosList] = useState(null);
-
-	// Init convos component state
-	const [convos, setConvos] = useState(null);
 
 	// Init search popup
 	const [searchPopUp, setSearchPopUp] = useState(null);
@@ -59,7 +53,7 @@ const Messages = () => {
 	// Update convosArr state when convosCount or user changes
 	useEffect(() => {
 		if (user != null) {
-			retrieveConvos(convosCount).then((newConvosArr) => {
+			getConvos(convosCount).then((newConvosArr) => {
 				if (newConvosArr != null) {
 					setConvosArr(newConvosArr);
 					if (newConvosArr.length < convosCount) {
@@ -70,7 +64,7 @@ const Messages = () => {
 				}
 			});
 		} else {
-			setConvosArr(null);
+			setConvosArr([]);
 		}
 	}, [convosCount, user]);
 
@@ -111,7 +105,7 @@ const Messages = () => {
 					</div>
 					<div id='convos-divider'></div>
 					<div id='convos-bottom'>
-						{convosArr
+						{convosArr?.length
 							? convosArr.map((convo) => (
 									<MessagesChild
 										key={convo.id}

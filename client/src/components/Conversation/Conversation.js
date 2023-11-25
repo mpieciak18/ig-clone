@@ -1,16 +1,12 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import './Conversation.css';
-import { sendMessage, retrieveSingleConvo } from '../../services/messages.js';
+import { sendMessage, getSingleConvo } from '../../services/messages.js';
 import { useEffect, useState } from 'react';
 import { ConvoMessages } from './children/ConvoMessages';
 import { Navbar } from '../other/Navbar';
 import { findUser } from '../../services/users';
-import { convoSnapshot } from '../../services/messages.js';
-import { useAuth } from '../../contexts/AuthContext';
 
 const Conversation = () => {
-	const { user } = useAuth();
-
 	const navigate = useNavigate();
 
 	// Grab other user's id from url parameters
@@ -22,39 +18,25 @@ const Conversation = () => {
 	// Init messages number state
 	const [messagesNumber, setMessagesNumber] = useState(20);
 
-	// Init messages array state
-	const [messagesArr, setMessagesArr] = useState(null);
+	// Init convo db record array state
+	const [convo, setConvo] = useState(null);
 
 	// Set initial message input value & reset it on submission
 	const [messageValue, setMessageValue] = useState('');
 
 	// Use onSnapshot to update messages array real-time
 	useEffect(() => {
-		convoSnapshot(otherUserId, setMessagesArr, messagesNumber);
+		if (otherUserId) {
+			findUser(otherUserId).then(setOtherUser);
+		}
 	}, []);
 
-	// Update other user & messages array states when user changes
+	// Update convo state when otherUser or messagesNumber changes
 	useEffect(() => {
-		if (user != null) {
-			findUser(otherUserId).then((otherUser) => {
-				setOtherUser(otherUser);
-				retrieveSingleConvo(otherUserId, messagesNumber).then(
-					(newMessagesArr) => {
-						setMessagesArr(newMessagesArr);
-					}
-				);
-			});
+		if (otherUser && messagesNumber) {
+			getSingleConvo(otherUserId, messagesNumber).then(setConvo);
 		}
-	}, [user]);
-
-	// Update messagesArr when messagesNumber changes
-	useEffect(() => {
-		retrieveSingleConvo(otherUserId, messagesNumber).then(
-			(newMessagesArr) => {
-				setMessagesArr(newMessagesArr);
-			}
-		);
-	}, [messagesNumber]);
+	}, [otherUser, messagesNumber]);
 
 	// Load more messages when user reaches bottom of messages component
 	const loadMore = (e) => {
@@ -75,9 +57,8 @@ const Conversation = () => {
 	const sendNewMessage = async (e) => {
 		e.preventDefault();
 		if (messageValue.length > 0) {
-			const message = messageValue;
 			setMessageValue('');
-			await sendMessage(messageValue, otherUserId);
+			await sendMessage(messageValue, convo.id, otherUser.id);
 			const elem = document.getElementById('convo-messages');
 			elem.scrollTop = elem.scrollHeight;
 		}
@@ -109,7 +90,7 @@ const Conversation = () => {
 				</div>
 				<ConvoMessages
 					otherUser={otherUser}
-					messagesArr={messagesArr}
+					messagesArr={convo.messages}
 					loadMore={loadMore}
 				/>
 				<form id='convo-message-bar' onSubmit={sendNewMessage}>

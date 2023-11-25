@@ -24,12 +24,12 @@ export const MessagesChild = (props) => {
 		}
 	}, [otherUser]);
 
-	const name = otherUser?.data?.name;
-	const username = otherUser?.data?.username;
-	const message = convo.lastMessage.data.message;
-	const time = timeSinceTrunc(convo.lastMessage.data.date);
+	const name = otherUser?.name;
+	const username = otherUser?.username;
+	const message = convo.messages[0];
+	const time = timeSinceTrunc(message.createdAt);
 	let sender;
-	if (convo.lastMessage.data.sender == user.id) {
+	if (message.senderId == user.id) {
 		sender = 'You';
 	} else {
 		sender = 'Them';
@@ -46,7 +46,7 @@ export const MessagesChild = (props) => {
 			</div>
 			<div className='convo-row-right'>
 				<div className='convo-row-message'>
-					{sender}: "{message}"
+					{sender}: "{message.message}"
 				</div>
 				<div className='convo-row-time'>{time}</div>
 			</div>
