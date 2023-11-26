@@ -33,7 +33,7 @@ const ImageInput = (props) => {
 		) {
 			inputRef.current.value = '';
 			setFile(null);
-			setFilePreviewUrl(user.data.image);
+			setFilePreviewUrl(user.image);
 			setErrorClass('active');
 			setTimeout(() => {
 				setErrorClass('inactive');
@@ -46,7 +46,7 @@ const ImageInput = (props) => {
 
 	useEffect(() => {
 		if (user != null) {
-			setFilePreviewUrl(user.data.image);
+			setFilePreviewUrl(user.image);
 		}
 	}, [user]);
 

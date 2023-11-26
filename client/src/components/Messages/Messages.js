@@ -44,7 +44,7 @@ const Messages = () => {
 	// Update userImage state when user changes
 	useEffect(() => {
 		if (user != null) {
-			setUserImage(user.data.image);
+			setUserImage(user.image);
 		} else {
 			setUserImage(null);
 		}

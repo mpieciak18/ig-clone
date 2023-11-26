@@ -1,74 +1,37 @@
 import { getComments } from '../../../../services/comments.js';
-import { findUser } from '../../../../services/users.js';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const CommentsPreview = (props) => {
-	const { postId, postOwnerId, commentsNum } = props;
+	const { postId, commentsNum } = props;
 
 	const navigate = useNavigate();
 
 	// Init comments array state
-	const [commentsArr, setCommentsArr] = useState(null);
+	const [commentsArr, setCommentsArr] = useState([]);
 
-	// Init comment component state
-	const [comments, setComments] = useState(null);
-
-	// Update commentsArr when comments count changes
+	// Update commentsArr when comments count changes and on init render
 	useEffect(() => {
-		getComments(postId, 2).then((array) => {
-			if (array != undefined) {
-				array.reverse();
-				setCommentsArr(array);
-			} else {
-				setCommentsArr(null);
-			}
-		});
+		getComments(postId, 2)
+			.then((array) => setCommentsArr(array.toReverse()))
+			.catch(() => setCommentsArr([]));
 	}, [commentsNum]);
 
-	const updateComments = async () => {
-		const commentsObjs = commentsArr.map(async (comment) => {
-			const commenterId = comment.data.user;
-			const commenter = await findUser(commenterId);
-			const commenterName = commenter.data.name;
-			return (
+	// Return component
+	return (
+		<div className='post-comments'>
+			{commentsArr.map(async (comment) => (
 				<div
 					className='post-comment'
 					key={comment.id}
-					onClick={() => navigate(`/${commenterId}`)}
+					onClick={() => navigate(`/${comment.user.id}`)}
 				>
-					<div className='post-comment-name'>{commenterName}</div>
-					<div className='post-comment-text'>{comment.data.text}</div>
+					<div className='post-comment-name'>{comment.user.name}</div>
+					<div className='post-comment-text'>{comment.message}</div>
 				</div>
-			);
-		});
-		const returnVal = await Promise.all(commentsObjs);
-		setComments(returnVal);
-	};
-
-	// Update comments component when commentsArr changes
-	useEffect(() => {
-		if (commentsArr != null) {
-			updateComments();
-		} else {
-			setComments(null);
-		}
-	}, [commentsArr]);
-
-	// Update comments arr state on render
-	useEffect(() => {
-		getComments(postId, 2).then((array) => {
-			if (array != undefined) {
-				array.reverse();
-				setCommentsArr(array);
-			} else {
-				setCommentsArr(null);
-			}
-		});
-	}, []);
-
-	// Return component
-	return <div className='post-comments'>{comments}</div>;
+			))}
+		</div>
+	);
 };
 
 export { CommentsPreview };

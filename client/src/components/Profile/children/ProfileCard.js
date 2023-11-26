@@ -44,7 +44,7 @@ const ProfileCard = (props) => {
 	// Update img, otherUser, & otherUserFollowers states on render
 	useEffect(() => {
 		findUser(otherUserId).then((newUser) => {
-			setImg(newUser.data.image);
+			setImg(newUser.image);
 			setOtherUser(newUser);
 		});
 	}, []);
@@ -64,34 +64,32 @@ const ProfileCard = (props) => {
 			<div id='profile-card-top'>
 				<img id='profile-card-icon' src={img} />
 				<div id='profile-card-text'>
-					<div id='profile-card-name'>{otherUser.data.name}</div>
-					<div id='profile-card-username'>
-						@{otherUser.data.username}
-					</div>
+					<div id='profile-card-name'>{otherUser.name}</div>
+					<div id='profile-card-username'>@{otherUser.username}</div>
 				</div>
 			</div>
 			<div id='profile-card-bottom'>
 				<div id='profile-card-stats'>
 					<div id='profile-card-posts'>
 						<p className='profile-stats-child-num'>
-							{otherUser.data.posts}
+							{otherUser._count.posts}
 						</p>
 						<p className='profile-stats-child-type'>Posts</p>
 					</div>
 					<div id='profile-card-following' onClick={clickFollowing}>
 						<p className='profile-stats-child-num'>
-							{otherUser.data.following}
+							{otherUser._count.givenFollows}
 						</p>
 						<p className='profile-stats-child-type'>Following</p>
 					</div>
 					<div id='profile-card-followers' onClick={clickFollowers}>
 						<p className='profile-stats-child-num'>
-							{otherUser.data.followers}
+							{otherUser._count.receivedFollows}
 						</p>
 						<p className='profile-stats-child-type'>Followers</p>
 					</div>
 				</div>
-				<div id='profile-card-bio'>{otherUser.data.bio}</div>
+				<div id='profile-card-bio'>{otherUser.bio}</div>
 			</div>
 			{popUpState?.followsOn ? (
 				<Follows

@@ -48,9 +48,9 @@ const Post = () => {
 
 	const updatePostOwnerStates = async () => {
 		const pOwner = await findUser(postOwnerId);
-		setPostOwnerName(pOwner.data.name);
-		setPostOwnerUsername(pOwner.data.username);
-		setPostOwnerImage(pOwner.data.imag);
+		setPostOwnerName(pOwner.name);
+		setPostOwnerUsername(pOwner.username);
+		setPostOwnerImage(pOwner.image);
 	};
 
 	const updatePostStates = async () => {

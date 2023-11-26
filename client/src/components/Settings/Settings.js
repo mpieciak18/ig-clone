@@ -96,8 +96,8 @@ const Settings = () => {
 	useEffect(() => {
 		setTimeout(async () => {
 			if (user != null) {
-				await setName(user.data.name);
-				await setBio(user.data.bio);
+				await setName(user.name);
+				await setBio(user.bio);
 				setUserLoaded(true);
 			} else {
 				setUserLoaded(false);
@@ -206,8 +206,8 @@ const Settings = () => {
 				if (user == null) {
 					redirectToSignUp();
 				} else {
-					setName(user.data.name);
-					setBio(user.data.bio);
+					setName(user.name);
+					setBio(user.bio);
 					setUserLoaded(true);
 				}
 			}

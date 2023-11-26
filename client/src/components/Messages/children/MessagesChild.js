@@ -20,7 +20,7 @@ export const MessagesChild = (props) => {
 	// Update image when otherUser changes
 	useEffect(() => {
 		if (otherUser) {
-			setImage(otherUser.data.image);
+			setImage(otherUser.image);
 		}
 	}, [otherUser]);
 

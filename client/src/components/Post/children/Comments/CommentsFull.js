@@ -1,5 +1,4 @@
 import { getComments } from '../../../../services/comments.js';
-import { findUser } from '../../../../services/users.js';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { timeSinceTrunc } from '../../../../other/timeSinceTrunc.js';
@@ -21,71 +20,20 @@ const CommentsFull = (props) => {
 	const [allLoaded, setAllLoaded] = useState(false);
 
 	// Init comments array state
-	const [commentsArr, setCommentsArr] = useState(null);
-
-	// Init comment component state
-	const [comments, setComments] = useState(null);
+	const [commentsArr, setCommentsArr] = useState([]);
 
 	// Update commentsArr when commentsNum (total comments on a post) or commentQuantity (how many are rendered) changes
 	// E.g., user submits new comment on a post OR scrolls to load more
 	useEffect(() => {
-		getComments(postId, commentQuantity).then((array) => {
-			if (array != undefined) {
+		getComments(postId, commentQuantity)
+			.then((array) => {
 				setCommentsArr(array);
-				// Declare all comments loaded if new array length < commentQuantity
 				if (array.length < commentQuantity) {
 					setAllLoaded(true);
 				}
-			} else {
-				setCommentsArr(null);
-			}
-		});
+			})
+			.catch(() => setCommentsArr([]));
 	}, [commentsNum, commentQuantity]);
-
-	const updateComments = async () => {
-		const commentsObjs = commentsArr.map(async (comment) => {
-			const commenterId = comment.data.user;
-			const commenter = await findUser(commenterId);
-			const commenterName = commenter.data.name;
-			const commenterImage = commenter.data.image;
-			const commentDate = timeSinceTrunc(comment.data.date);
-			return (
-				<div className='post-comment' key={comment.id}>
-					<div className='post-comment-left'>
-						<Link
-							to={`/${commenterId}`}
-							className='post-comment-icon'
-						>
-							<img src={commenterImage} />
-						</Link>
-						<div className='post-comment-text'>
-							<Link
-								to={`/${commenterId}`}
-								className='post-comment-name'
-							>
-								{commenterName}
-							</Link>
-							<div className='post-comment-text'>
-								{comment.data.text}
-							</div>
-						</div>
-					</div>
-					<div className='post-comment-right'>{commentDate}</div>
-				</div>
-			);
-		});
-		const returnVal = await Promise.all(commentsObjs);
-		setComments(returnVal);
-	};
-
-	// Update comments component when commentsArr changes in response to the useEffect statement above
-	useEffect(() => {
-		if (commentsArr != null) {
-			updateComments();
-		} else {
-			setComments(null);
-		}
-	}, [commentsArr]);
 
 	// Load more comments on scroll
 	const loadMore = (e) => {
@@ -102,13 +50,9 @@ const CommentsFull = (props) => {
 
 	// Update comments arr state on init render
 	useEffect(() => {
-		getComments(postId, 10).then((array) => {
-			if (array != undefined) {
-				setCommentsArr(array);
-			} else {
-				setCommentsArr(null);
-			}
-		});
+		getComments(postId, 10)
+			.then(setCommentsArr)
+			.catch(() => setCommentsArr([]));
 	}, []);
 
 	// Return component
@@ -131,7 +75,32 @@ const CommentsFull = (props) => {
 				</div>
 				<div className='post-comment-right'>...</div>
 			</div>
-			{comments}
+			{commentsArr.map(async (comment) => (
+				<div className='post-comment' key={comment.id}>
+					<div className='post-comment-left'>
+						<Link
+							to={`/${comment.userId}`}
+							className='post-comment-icon'
+						>
+							<img src={comment.user.image} />
+						</Link>
+						<div className='post-comment-text'>
+							<Link
+								to={`/${comment.userId}`}
+								className='post-comment-name'
+							>
+								{comment.user.name}
+							</Link>
+							<div className='post-comment-text'>
+								{comment.message}
+							</div>
+						</div>
+					</div>
+					<div className='post-comment-right'>
+						{timeSinceTrunc(comment.createdAt)}
+					</div>
+				</div>
+			))}
 		</div>
 	);
 };

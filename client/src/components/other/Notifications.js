@@ -5,7 +5,6 @@ import {
 	getUnreadNotifications,
 	readNotifications,
 } from '../../services/notifications';
-import { findUser } from '../../services/users';
 import { timeSince } from '../../other/timeSince';
 import { useAuth } from '../../contexts/AuthContext';
 import { usePopUp } from '../../contexts/PopUpContext';
@@ -22,12 +21,6 @@ const Notifications = () => {
 	// Init notifications arr state
 	const [notifsArr, setNotifsArr] = useState(null);
 
-	// Init notifications child component state
-	const [notifs, setNotifs] = useState(null);
-
-	// Init notifications pop-up component state
-	const [notifsPopup, setNotifsPopup] = useState(null);
-
 	// Init all loaded state
 	const [allLoaded, setAllLoaded] = useState(false);
 
@@ -40,9 +33,6 @@ const Notifications = () => {
 	// Init new & old notifications button classes
 	const [buttonOne, setButtonOne] = useState(null);
 	const [buttonTwo, setButtonTwo] = useState(null);
-
-	// Init markAllRead component
-	const [markAllRead, setMarkAllRead] = useState(null);
 
 	// Change notifsCount, allLoaded, button, and markAllRead states when whichTab changes
 	useEffect(() => {
@@ -65,23 +55,6 @@ const Notifications = () => {
 		if (whichTab == 'new') {
 			getUnreadNotifications(notifsCount).then((newNotifsArr) => {
 				setNotifsArr(newNotifsArr);
-				if (newNotifsArr?.length == 0) {
-					setMarkAllRead(
-						<div
-							id='notifs-clear'
-							className='button'
-							onClick={clearNotifs}
-						>
-							Mark All Read
-						</div>
-					);
-				} else {
-					setMarkAllRead(
-						<div id='notifs-clear' className='message'>
-							No Unread Notifications
-						</div>
-					);
-				}
 				if (newNotifsArr.length < notifsCount) {
 					setAllLoaded(true);
 				}
@@ -89,15 +62,6 @@ const Notifications = () => {
 		} else {
 			getReadNotifications(notifsCount).then((newNotifsArr) => {
 				setNotifsArr(newNotifsArr);
-				if (newNotifsArr?.length == 0) {
-					setMarkAllRead(null);
-				} else {
-					setMarkAllRead(
-						<div id='notifs-clear' className='message'>
-							No Read Notifications
-						</div>
-					);
-				}
 				if (newNotifsArr?.length < notifsCount) {
 					setAllLoaded(true);
 				}
@@ -110,115 +74,9 @@ const Notifications = () => {
 		if (notifsCount > 0) {
 			updateNotifsArr();
 		} else {
-			setNotifsArr(null);
+			setNotifsArr([]);
 		}
 	}, [notifsCount]);
-
-	const updateNotifs = async () => {
-		const newNotifs = notifsArr.map(async (notif) => {
-			// Set up requisite variables
-			const otherUserId = notif.data.otherUser;
-			const otherUser = await findUser(otherUserId);
-			const redirectToProfile = () => {
-				navigate(`/${otherUserId}`);
-				updatePopUp();
-			};
-			// Set up text portion of returned component
-			let path;
-			let text;
-			if (notif.data.type == 'like') {
-				path = `/${user.id}/${notif.data.post}`;
-				text = 'liked your post.';
-			} else if (notif.data.type == 'comment') {
-				path = `/${user.id}/${notif.data.post}`;
-				text = 'commented on a post.';
-			} else if (notif.data.type == 'follow') {
-				path = `/${otherUserId}`;
-				text = 'is following you.';
-			} else {
-				path = `/messages/${otherUserId}`;
-				text = 'messaged you.';
-			}
-			const redirectToPath = () => {
-				navigate(`/${path}`);
-				updatePopUp();
-			};
-			const time = timeSince(notif.data.date);
-			return (
-				<div className='notif-row' key={notif.id}>
-					<div className='notif-row-left'>
-						<img
-							className='notif-image'
-							onClick={redirectToProfile}
-							src={otherUser.data.image}
-						/>
-						<div className='notif-text' onClick={redirectToPath}>
-							<div className='notif-name'>
-								{otherUser.data.name}
-							</div>
-							<div className='notif-action'>{text}</div>
-						</div>
-					</div>
-					<div className='notif-row-right'>
-						<div className='notif-time'>{time}</div>
-					</div>
-				</div>
-			);
-		});
-		const returnVal = await Promise.all(newNotifs);
-		setNotifs(returnVal);
-	};
-
-	// Update notifs component state when notifsArr changes
-	useEffect(() => {
-		if (notifsArr != null) {
-			updateNotifs();
-		} else {
-			setNotifs(null);
-		}
-	}, [notifsArr]);
-
-	// Update notifsPopup component
-	useEffect(() => {
-		setNotifsPopup(
-			<div id='notifs'>
-				<div id='notifs-pop-up'>
-					<div id='notifs-header'>
-						<div id='notifs-x-button' onClick={xButtonClick}>
-							« Go Back
-						</div>
-						<div id='notifs-header-menu'>
-							<div id='notifs-button-label'>Notifications:</div>
-							<div
-								id='new-button'
-								className={buttonOne}
-								onClick={newClick}
-							>
-								New
-							</div>
-							<div
-								id='old-button'
-								className={buttonTwo}
-								onClick={oldClick}
-							>
-								Old
-							</div>
-						</div>
-						<div id='notifs-x-button-hidden'>« Go Back</div>
-					</div>
-					<div id='notifs-divider' />
-					<div
-						id='notifs-list'
-						className={buttonOne}
-						onScroll={loadMore}
-					>
-						{notifs}
-					</div>
-					{markAllRead}
-				</div>
-			</div>
-		);
-	}, [buttonOne, buttonTwo, notifs, markAllRead]);
 
 	// Load more notifications when user reaches bottom of pop-up
 	const loadMore = async (e) => {
@@ -247,7 +105,108 @@ const Notifications = () => {
 		readNotifications().then(() => setNotifsCount(0));
 	};
 
-	return notifsPopup;
+	return (
+		<div id='notifs'>
+			<div id='notifs-pop-up'>
+				<div id='notifs-header'>
+					<div id='notifs-x-button' onClick={xButtonClick}>
+						« Go Back
+					</div>
+					<div id='notifs-header-menu'>
+						<div id='notifs-button-label'>Notifications:</div>
+						<div
+							id='new-button'
+							className={buttonOne}
+							onClick={newClick}
+						>
+							New
+						</div>
+						<div
+							id='old-button'
+							className={buttonTwo}
+							onClick={oldClick}
+						>
+							Old
+						</div>
+					</div>
+					<div id='notifs-x-button-hidden'>« Go Back</div>
+				</div>
+				<div id='notifs-divider' />
+				<div id='notifs-list' className={buttonOne} onScroll={loadMore}>
+					{notifsArr.map(async (notif) => {
+						const otherUserId = notif.otherUserId;
+						const otherUser = notif.otherUser;
+						const redirectToProfile = () => {
+							navigate(`/${otherUserId}`);
+							updatePopUp();
+						};
+						let path;
+						let text;
+						if (notif.type == 'like') {
+							path = `/${user.id}/${notif.postId}`;
+							text = 'liked your post.';
+						} else if (notif.type == 'comment') {
+							path = `/${user.id}/${notif.postId}`;
+							text = 'commented on a post.';
+						} else if (notif.type == 'follow') {
+							path = `/${otherUserId}`;
+							text = 'is following you.';
+						} else {
+							path = `/messages/${otherUserId}`;
+							text = 'messaged you.';
+						}
+						const redirectToPath = () => {
+							navigate(`/${path}`);
+							updatePopUp();
+						};
+						const time = timeSince(notif.createdAt);
+						return (
+							<div className='notif-row' key={notif.id}>
+								<div className='notif-row-left'>
+									<img
+										className='notif-image'
+										onClick={redirectToProfile}
+										src={otherUser.image}
+									/>
+									<div
+										className='notif-text'
+										onClick={redirectToPath}
+									>
+										<div className='notif-name'>
+											{otherUser.name}
+										</div>
+										<div className='notif-action'>
+											{text}
+										</div>
+									</div>
+								</div>
+								<div className='notif-row-right'>
+									<div className='notif-time'>{time}</div>
+								</div>
+							</div>
+						);
+					})}
+				</div>
+				{whichTab == 'new' && notifsArr?.length > 0 ? (
+					<div id='notifs-clear' className='message'>
+						No Unread Notifications
+					</div>
+				) : whichTab == 'new' ? (
+					<div
+						id='notifs-clear'
+						className='button'
+						onClick={clearNotifs}
+					>
+						Mark All Read
+					</div>
+				) : whichTab == 'old' && notifsArr?.length > 0 ? (
+					<div id='notifs-clear' className='message'>
+						No Read Notifications
+					</div>
+				) : null}
+			</div>
+		</div>
+	);
 };
 
 export { Notifications };
