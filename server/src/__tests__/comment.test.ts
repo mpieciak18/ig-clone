@@ -167,7 +167,7 @@ describe('comments', () => {
 		expect(response.status).toBe(200);
 		expect(response.body.comments.length).toBeGreaterThan(0);
 		expect(response.body.comments.length).toBeLessThanOrEqual(limit);
-		expect(response.body.comments[0].userId).toBe(user.id);
+		expect(response.body.comments[0].user.id).toBe(user.id);
 	});
 	//
 	it('should fail to update a comment due to a non-existent comment id & return a 500 code', async () => {

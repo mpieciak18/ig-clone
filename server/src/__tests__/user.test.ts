@@ -188,6 +188,9 @@ describe('/create_new_user, /sign_in, & /api/user', () => {
 		expect(foundUser.name == user.name).toBeTruthy();
 		expect(foundUser.image == user.image).toBeTruthy();
 		expect(foundUser.bio == user.bio).toBeTruthy();
+		expect(foundUser._count.posts).toBeDefined();
+		expect(foundUser._count.givenFollows).toBeDefined();
+		expect(foundUser._count.receivedFollows).toBeDefined();
 	});
 	//
 	it('should fail to search for users due to a invalid inputs & return a 400 status', async () => {

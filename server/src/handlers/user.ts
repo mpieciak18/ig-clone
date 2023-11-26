@@ -196,6 +196,15 @@ export const getSingleUser = async (req, res, next) => {
 			where: {
 				id: req.body.id,
 			},
+			include: {
+				_count: {
+					select: {
+						givenFollows: true,
+						receivedFollows: true,
+						posts: true,
+					},
+				},
+			},
 		});
 	} catch (e) {
 		// Error handled at top-level (ie, server.ts) as 500 error
