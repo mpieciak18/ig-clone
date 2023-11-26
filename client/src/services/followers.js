@@ -58,7 +58,7 @@ export const checkForFollow = async (id) => {
 };
 
 // Return array of users that signed-in user follows
-const getFollowing = async (id, limit) => {
+export const getFollowing = async (id, limit) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/follow/given',
 		{
