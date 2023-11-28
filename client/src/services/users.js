@@ -21,6 +21,7 @@ export const createUser = async (username, name, email, password) => {
 	);
 	if (response.status == 200) {
 		const json = await response.json();
+		console.log(json);
 		const newUser = json.user;
 		newUser.token = json.token;
 		return newUser;
@@ -52,13 +53,14 @@ export const signInUser = async (email, password) => {
 		email,
 		password,
 	});
-	const response = fetch(import.meta.env.VITE_API_URL + '/sign_in', {
+	const response = await fetch(import.meta.env.VITE_API_URL + '/sign_in', {
 		body,
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 	});
 	if (response.status == 200) {
 		const json = await response.json();
+		console.log(json);
 		const signedInUser = json.user;
 		signedInUser.token = json.token;
 		return signedInUser;

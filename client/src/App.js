@@ -23,10 +23,9 @@ const App = () => {
 	// Update user and loading states on mount
 	useEffect(() => {
 		const localUser = getLocalUser();
-		if (localUser && !user) {
-			setUser(localUser).then(() => {
-				setIsLoading(false);
-			});
+		if (localUser && !user && setUser) {
+			setUser(localUser);
+			setIsLoading(false);
 		} else {
 			setIsLoading(false);
 		}
