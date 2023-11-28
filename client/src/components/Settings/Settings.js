@@ -9,7 +9,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { setLocalUser } from '../../services/localstor';
 
 const Settings = () => {
-	const { user } = useAuth();
+	const { user, setUser } = useAuth();
 
 	const location = useLocation();
 
@@ -80,7 +80,7 @@ const Settings = () => {
 		if (namePasses == true) {
 			try {
 				const updatedUser = await updateUser(name, bio, file);
-				await setUser(updatedUser);
+				setUser(updatedUser);
 				setLocalUser(updatedUser);
 				navigate(`/${user.id}`);
 			} catch {

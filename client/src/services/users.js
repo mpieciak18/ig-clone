@@ -112,20 +112,20 @@ export const searchUsers = async (name) => {
 };
 
 // Updates the user's name, bio, and/or image
-export const updateUser = async (name, bio, image) => {
+export const updateUser = async (name, bio, image = null) => {
 	const body = new FormData();
 	if (name) body.append('name', name);
-	if (bio) formbodyData.append('bio', bio);
+	if (bio) body.append('bio', bio);
 	if (image) {
 		const compressedImage = await compressFile(image);
-		body.append('image', compressedImage);
+		console.log(compressedImage);
+		body.append('file', compressedImage);
 	}
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/user', {
-		body: JSON.stringify(body),
+		body,
 		method: 'PUT',
 		headers: {
 			Authorization: `Bearer ${getToken()}`,
-			'Content-Type': 'application/json',
 		},
 	});
 	if (response.status == 200) {

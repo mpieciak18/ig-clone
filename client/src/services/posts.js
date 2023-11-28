@@ -68,7 +68,7 @@ export const newPost = async (caption, image) => {
 	const body = new FormData();
 	body.append('caption', caption);
 	const compressedImage = await compressFile(image);
-	body.append('image', compressedImage);
+	body.append('file', compressedImage);
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/post', {
 		body,
 		method: 'POST',

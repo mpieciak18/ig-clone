@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../../contexts/AuthContext.js';
 
 const ImageInput = (props) => {
-	const { user, inputRef } = useAuth();
-	const { setFile, setErrorClass } = props;
+	const { user } = useAuth();
+	const { setFile, setErrorClass, inputRef } = props;
 
 	const [filePreviewUrl, setFilePreviewUrl] = useState(null);
 
