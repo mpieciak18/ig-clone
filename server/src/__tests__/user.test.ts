@@ -98,9 +98,9 @@ describe('/create_new_user, /sign_in, & /api/user', () => {
 			name: initOtherUser.name,
 		});
 		expect(response.status).toBe(400);
-		expect(response.body.errors[0].field).toEqual('email');
+		expect(response.body.notUnique[0]).toEqual('email');
 		expect(response2.status).toBe(400);
-		expect(response2.body.errors[0].field).toEqual('email');
+		expect(response2.body.notUnique[0]).toEqual('email');
 	});
 	//
 	it('should fail to login with fake username & return a 401 status', async () => {

@@ -23,18 +23,12 @@ export const createNewUser = async (req, res, next) => {
 		// Checks if error is a 'unique constraint failure'
 		console.log(e);
 		if (e.code == 'P2002') {
-			const errors = [];
+			const notUnique = [];
 			if (e.meta?.target) {
-				e.meta.target.forEach((field) => {
-					errors.push({
-						message: field + ' in use',
-						notUnique: true,
-						field,
-					});
-				});
+				e.meta.target.forEach((field) => notUnique.push(field));
 			}
 			res.status(400);
-			res.json({ errors });
+			res.json({ notUnique });
 		} else {
 			e.type = 'input';
 			next(e);
