@@ -21,17 +21,20 @@ export const createNewUser = async (req, res, next) => {
 		res.json({ token, user });
 	} catch (e) {
 		// Checks if error is a 'unique constraint failure'
+		console.log(e);
 		if (e.code == 'P2002') {
-			if (e.meta?.target?.includes('email')) {
-				res.status(400);
-				res.json({ message: 'email in use' });
-			} else if (e.meta?.target?.includes('username')) {
-				res.status(400);
-				res.json({ message: 'username in use' });
-			} else {
-				e.type = 'input';
-				next(e);
+			const errors = [];
+			if (e.meta?.target) {
+				e.meta.target.forEach((field) => {
+					errors.push({
+						message: field + ' in use',
+						notUnique: true,
+						field,
+					});
+				});
 			}
+			res.status(400);
+			res.json({ errors });
 		} else {
 			e.type = 'input';
 			next(e);
