@@ -11,6 +11,7 @@ import { Login } from './components/Login/Login.js';
 import { Conversation } from './components/Conversation/Conversation.js';
 import { useAuth } from './contexts/AuthContext.js';
 import { getLocalUser } from './services/localstor.js';
+import { HomeLoggedOut } from './components/Home/HomeLoggedOut.js';
 
 const App = () => {
 	// Init user context
@@ -21,21 +22,13 @@ const App = () => {
 
 	// Update user and loading states on mount
 	useEffect(() => {
-		if (user) {
-			const localUser = getLocalUser();
-			if (localUser) {
-				setUser(localUser).then(() => {
-					setIsLoading(false);
-				});
-			} else {
-				setUser(null).then(() => {
-					setIsLoading(false);
-				});
-			}
-		} else {
-			setUser(null).then(() => {
+		const localUser = getLocalUser();
+		if (localUser && !user) {
+			setUser(localUser).then(() => {
 				setIsLoading(false);
 			});
+		} else {
+			setIsLoading(false);
 		}
 	}, []);
 
@@ -61,19 +54,9 @@ const App = () => {
 	) : isLoading == false && !user ? (
 		<HashRouter>
 			<Routes>
-				<Route exact path='/' element={<Home />} />
-				<Route exact path='/messages' element={<Login />} />
-				<Route exact path='/:postOwnerId/:postId' element={<Post />} />
-				<Route exact path='/:otherUserId' element={<Profile />} />
-				<Route
-					exact
-					path='/messages/:otherUserId'
-					element={<Login />}
-				/>
-				<Route exact path='/saved' element={<Login />} />
-				<Route exact path='/settings' element={<Login />} />
 				<Route exact path='/signup' element={<SignUp />} />
 				<Route exact path='/login' element={<Login />} />
+				<Route exact path='*' element={<HomeLoggedOut />} />
 			</Routes>
 		</HashRouter>
 	) : null;

@@ -12,7 +12,7 @@ export const setLocalUser = (user) => {
 // Get signed-in user's token from local storage
 export const getToken = () => {
 	const user = getLocalUser();
-	return user.token;
+	return user?.token;
 };
 
 export const removeLocalUser = () => {

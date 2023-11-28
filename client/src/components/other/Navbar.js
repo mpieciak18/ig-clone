@@ -1,5 +1,5 @@
 import './other.css';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NewPost } from './NewPost.js';
 import { SettingsPopup } from './SettingsPopup.js';

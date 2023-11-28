@@ -4,7 +4,6 @@ import { UsernameFooter } from './children/UsernameFooter.js';
 import { PasswordFooter } from './children/PasswordFooter.js';
 import { NameFooter } from './children/NameFooter.js';
 import { EmailFooter } from './children/EmailFooter.js';
-import { newUser, findUser } from '../../services/users.js';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
