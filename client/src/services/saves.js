@@ -2,9 +2,10 @@
 export const addSave = async (id) => {
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/save', {
 		method: 'POST',
-		body: { id },
+		body: JSON.stringify({ id }),
 		headers: {
 			Authorization: `Bearer ${getToken()}`,
+			'Content-Type': 'application/json',
 		},
 	});
 	if (response.status == 200) {
@@ -19,9 +20,10 @@ export const addSave = async (id) => {
 export const removeSave = async (id) => {
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/save', {
 		method: 'DELETE',
-		body: { id },
+		body: JSON.stringify({ id }),
 		headers: {
 			Authorization: `Bearer ${getToken()}`,
+			'Content-Type': 'application/json',
 		},
 	});
 	if (response.status == 200) {
@@ -38,9 +40,10 @@ export const getSaves = async (limit) => {
 		import.meta.env.VITE_API_URL + '/api/save/user',
 		{
 			method: 'POST',
-			body: { limit },
+			body: JSON.stringify({ limit }),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
+				'Content-Type': 'application/json',
 			},
 		}
 	);
@@ -58,9 +61,10 @@ export const saveExists = async (id) => {
 		import.meta.env.VITE_API_URL + '/api/save/post',
 		{
 			method: 'POST',
-			body: { id },
+			body: JSON.stringify({ id }),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
+				'Content-Type': 'application/json',
 			},
 		}
 	);

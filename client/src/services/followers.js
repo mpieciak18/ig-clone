@@ -4,9 +4,10 @@ import { addNotification } from './notifications.js';
 export const addFollow = async (id) => {
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/follow', {
 		method: 'POST',
-		body: { id },
+		body: JSON.stringify({ id }),
 		headers: {
 			Authorization: `Bearer ${getToken()}`,
+			'Content-Type': 'application/json',
 		},
 	});
 	if (response.status == 200) {
@@ -23,9 +24,10 @@ export const addFollow = async (id) => {
 export const removeFollow = async (id) => {
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/follow', {
 		method: 'DELETE',
-		body: { id },
+		body: JSON.stringify({ id }),
 		headers: {
 			Authorization: `Bearer ${getToken()}`,
+			'Content-Type': 'application/json',
 		},
 	});
 	if (response.status == 200) {
@@ -43,9 +45,10 @@ export const checkForFollow = async (id) => {
 		import.meta.env.VITE_API_URL + '/api/follow/user',
 		{
 			method: 'POST',
-			body: { id },
+			body: JSON.stringify({ id }),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
+				'Content-Type': 'application/json',
 			},
 		}
 	);
@@ -63,9 +66,10 @@ export const getFollowing = async (id, limit) => {
 		import.meta.env.VITE_API_URL + '/api/follow/given',
 		{
 			method: 'POST',
-			body: { id, limit },
+			body: JSON.stringify({ id, limit }),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
+				'Content-Type': 'application/json',
 			},
 		}
 	);
@@ -83,9 +87,10 @@ export const getFollowers = async (id, limit) => {
 		import.meta.env.VITE_API_URL + '/api/follow/received',
 		{
 			method: 'POST',
-			body: { id, limit },
+			body: JSON.stringify({ id, limit }),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
+				'Content-Type': 'application/json',
 			},
 		}
 	);

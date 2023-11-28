@@ -7,9 +7,10 @@ export const sendMessage = async (message, id, recipientId) => {
 		import.meta.env.VITE_API_URL + '/api/conversation',
 		{
 			method: 'POST',
-			body: { message, id },
+			body: JSON.stringify({ message, id }),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
+				'Content-Type': 'application/json',
 			},
 		}
 	);
@@ -29,9 +30,10 @@ export const getSingleConvo = async (id, limit) => {
 		import.meta.env.VITE_API_URL + '/api/conversation/otherUser',
 		{
 			method: 'POST',
-			body: { id, limit },
+			body: JSON.stringify({ id, limit }),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
+				'Content-Type': 'application/json',
 			},
 		}
 	);
@@ -49,9 +51,10 @@ export const getConvos = async (limit) => {
 		import.meta.env.VITE_API_URL + '/api/conversation/user',
 		{
 			method: 'POST',
-			body: { limit },
+			body: JSON.stringify({ limit }),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
+				'Content-Type': 'application/json',
 			},
 		}
 	);

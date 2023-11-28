@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { setLocalUser } from '../../services/localstor';
+import { createUser } from '../../services/users';
 
 const SignUp = (props) => {
 	// Redirect to settings if already signed in
@@ -18,6 +19,7 @@ const SignUp = (props) => {
 
 	// Init criteria for form validation
 	const [username, setUsername] = useState('');
+	const [usernameUnique, setUsernameUnique] = useState(true);
 	const [usernamePasses, setUsernamePasses] = useState(false);
 	const updateUsername = (e) => setUsername(e.target.value);
 
@@ -26,6 +28,7 @@ const SignUp = (props) => {
 	const updateName = (e) => setName(e.target.value);
 
 	const [email, setEmail] = useState('');
+	const [emailUnique, setEmailUnique] = useState(true);
 	const [emailPasses, setEmailPasses] = useState(false);
 	const updateEmail = (e) => setEmail(e.target.value);
 
@@ -59,11 +62,21 @@ const SignUp = (props) => {
 		}
 	}, [allPass]);
 
+	// Hanldes any fields failed due to duplicates during sign-up
+	const handleDups = (dups) => {
+		setEmailUnique(dups.includes('email'));
+		setUsernameUnique(dups.includes('username'));
+	};
+
 	const newSignUp = async (e) => {
 		e.preventDefault();
 		// Add new user to services/auth & return any errors
 		try {
-			const newUser = await newUser(username, name, email, password);
+			const newUser = await createUser(username, name, email, password);
+			if (newUser.notUnique) {
+				handleDups(newUser.notUnique);
+				throw new Error();
+			}
 			await setUser(newUser);
 			setLocalUser(newUser);
 			navigate('/settings', { state: { newSignUp: true } });
@@ -101,6 +114,7 @@ const SignUp = (props) => {
 						<UsernameFooter
 							setUsernamePasses={setUsernamePasses}
 							username={username}
+							isUnique={usernameUnique}
 						/>
 					</div>
 					<div id='sign-up-name-section'>
@@ -122,6 +136,7 @@ const SignUp = (props) => {
 						<EmailFooter
 							setEmailPasses={setEmailPasses}
 							email={email}
+							isUnique={emailUnique}
 						/>
 					</div>
 					<div id='sign-up-password-section'>

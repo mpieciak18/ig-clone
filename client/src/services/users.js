@@ -2,24 +2,45 @@ import { getToken } from './localstor';
 import { compressFile } from './compress';
 
 // Register new user
-export const newUser = async (username, name, email, password) => {
-	const body = {
+export const createUser = async (username, name, email, password) => {
+	const body = JSON.stringify({
 		email,
 		username,
 		password,
 		name,
 		bio: '',
 		image: import.meta.env.VITE_DEFAULT_IMG,
-	};
+	});
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/create_new_user',
-		{ body, method: 'POST' }
+		{
+			body,
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
 		const newUser = json.user;
 		newUser.token = json.token;
 		return newUser;
+	} else if (response.status == 400) {
+		const json = await response.json();
+		if (!json.notUnique) {
+			throw new Error();
+		} else {
+			// If there is a unique constraint error in the database,
+			// here is how the response is handled on the back-end:
+			// ...
+			// const notUnique = [];
+			// if (e.meta?.target) {
+			// 	e.meta.target.forEach((field) => notUnique.push(field));
+			// }
+			// res.status(400);
+			// res.json({ notUnique });
+			// ...
+			return json.notUnique;
+		}
 	} else {
 		throw new Error();
 	}
@@ -27,13 +48,14 @@ export const newUser = async (username, name, email, password) => {
 
 // Sign in user
 export const signInUser = async (email, password) => {
-	const body = {
+	const body = JSON.stringify({
 		email,
 		password,
-	};
+	});
 	const response = fetch(import.meta.env.VITE_API_URL + '/sign_in', {
 		body,
 		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
 	});
 	if (response.status == 200) {
 		const json = await response.json();
@@ -50,10 +72,11 @@ export const findUser = async (id) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/user/single',
 		{
-			body: { id },
+			body: JSON.stringify({ id }),
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
+				'Content-Type': 'application/json',
 			},
 		}
 	);
@@ -70,10 +93,11 @@ export const searchUsers = async (name) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/user/search',
 		{
-			body: { name },
+			body: JSON.stringify({ name }),
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
+				'Content-Type': 'application/json',
 			},
 		}
 	);
@@ -95,10 +119,11 @@ export const updateUser = async (name, bio, image) => {
 		body.append('image', compressedImage);
 	}
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/user', {
-		body,
+		body: JSON.stringify(body),
 		method: 'PUT',
 		headers: {
 			Authorization: `Bearer ${getToken()}`,
+			'Content-Type': 'application/json',
 		},
 	});
 	if (response.status == 200) {
@@ -116,10 +141,11 @@ export const isUsernameUnique = async (username) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/user/is-username-unique',
 		{
-			body: { username },
+			body: JSON.stringify({ username }),
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
+				'Content-Type': 'application/json',
 			},
 		}
 	);
@@ -137,10 +163,11 @@ export const isEmailUnique = async (email) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/user/is-email-unique',
 		{
-			body: { email },
+			body: JSON.stringify({ email }),
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
+				'Content-Type': 'application/json',
 			},
 		}
 	);

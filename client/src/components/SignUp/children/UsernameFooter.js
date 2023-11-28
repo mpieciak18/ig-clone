@@ -1,20 +1,13 @@
 import { useState, useEffect } from 'react';
-import { isUsernameUnique } from '../../../services/users.js';
 
 const UsernameFooter = (props) => {
-	const { setUsernamePasses, username } = props;
+	const { setUsernamePasses, username, isUnique } = props;
 	const [footerText, setFooterText] = useState(
 		'Username must be 3-15 characters.'
 	);
 	const [footerClass, setFooterClass] = useState('grey');
 
-	const updateStates = async () => {
-		// First, query db for username if > 2 and < 16
-		let isUnique = false;
-		if (username.length > 2 && username.length < 16) {
-			isUnique = await isUsernameUnique(username);
-		}
-		// Second, check if username passes criteria
+	const updateStates = () => {
 		// Check if no username entered
 		if (username.match(/^.{0,0}$/) != null) {
 			setUsernamePasses(false);
@@ -33,17 +26,17 @@ const UsernameFooter = (props) => {
 			setFooterText('Username is too long!');
 			setFooterClass('red');
 		}
-		// Check if username is taken already
-		else if (!isUnique) {
-			setUsernamePasses(false);
-			setFooterText('Username is already taken!');
-			setFooterClass('red');
-		}
 		// Check if username contains spaces or symbols other than "-" or "_"
 		// /^[a-zA-Z0-9_.-\u00E0-\u00FC\u00C0-\u017F]*$/ can be used in the future for intntl letters
 		else if (username.match(/^[a-zA-Z0-9_.-]*$/) == null) {
 			setUsernamePasses(false);
 			setFooterText('No spaces or symbols, other than "-", "_", or "."!');
+			setFooterClass('red');
+		}
+		// Check if username is taken already
+		else if (!isUnique) {
+			setUsernamePasses(false);
+			setFooterText('Username is already taken!');
 			setFooterClass('red');
 		}
 		// Username passes

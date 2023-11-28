@@ -8,10 +8,11 @@ export const addNotification = async (type, userId, postId = null) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/notification',
 		{
-			body,
+			body: JSON.stringify(body),
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
+				'Content-Type': 'application/json',
 			},
 		}
 	);
@@ -29,9 +30,10 @@ export const getUnreadNotifications = async (limit) => {
 		import.meta.env.VITE_API_URL + '/api/notification/unread',
 		{
 			method: 'POST',
-			body: { limit },
+			body: JSON.stringify({ limit }),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
+				'Content-Type': 'application/json',
 			},
 		}
 	);
@@ -49,9 +51,10 @@ export const getReadNotifications = async (limit) => {
 		import.meta.env.VITE_API_URL + '/api/notification/read',
 		{
 			method: 'POST',
-			body: { limit },
+			body: JSON.stringify({ limit }),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
+				'Content-Type': 'application/json',
 			},
 		}
 	);

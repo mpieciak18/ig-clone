@@ -21,7 +21,6 @@ export const createNewUser = async (req, res, next) => {
 		res.json({ token, user });
 	} catch (e) {
 		// Checks if error is a 'unique constraint failure'
-		console.log(e);
 		if (e.code == 'P2002') {
 			const notUnique = [];
 			if (e.meta?.target) {

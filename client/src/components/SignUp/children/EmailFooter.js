@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { isEmailUnique } from '../../../services/users.js';
 
 const EmailFooter = (props) => {
-	const { setEmailPasses, email } = props;
+	const { setEmailPasses, email, isUnique } = props;
 	const [footerText, setFooterText] = useState(
 		'Email address must be valid.'
 	);
@@ -24,7 +23,7 @@ const EmailFooter = (props) => {
 			setFooterText('Email is not valid!');
 			setFooterClass('red');
 			// Checks if email is unique
-		} else if (!(await isEmailUnique(email))) {
+		} else if (!isUnique) {
 			setEmailPasses(false);
 			setFooterText('Email is already taken!');
 			setFooterClass('red');

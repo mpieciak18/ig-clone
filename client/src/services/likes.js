@@ -4,11 +4,12 @@ import { addNotification } from './notifications.js';
 export const addLike = async (postId, postOwnerId) => {
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/like', {
 		method: 'POST',
-		body: {
+		body: JSON.stringify({
 			id: postId,
-		},
+		}),
 		headers: {
 			Authorization: `Bearer ${getToken()}`,
+			'Content-Type': 'application/json',
 		},
 	});
 	if (response.status == 200) {
@@ -29,11 +30,12 @@ export const addLike = async (postId, postOwnerId) => {
 export const removeLike = async (id) => {
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/like', {
 		method: 'DELETE',
-		body: {
+		body: JSON.stringify({
 			id,
-		},
+		}),
 		headers: {
 			Authorization: `Bearer ${getToken()}`,
+			'Content-Type': 'application/json',
 		},
 	});
 	if (response.status == 200) {
@@ -49,11 +51,12 @@ export const likeExists = async (id) => {
 		import.meta.env.VITE_API_URL + '/api/like/user',
 		{
 			method: 'POST',
-			body: {
+			body: JSON.stringify({
 				id,
-			},
+			}),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
+				'Content-Type': 'application/json',
 			},
 		}
 	);
@@ -71,12 +74,13 @@ export const getLikes = async (id, limit) => {
 		import.meta.env.VITE_API_URL + '/api/like/post',
 		{
 			method: 'POST',
-			body: {
+			body: JSON.stringify({
 				id,
 				limit,
-			},
+			}),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
+				'Content-Type': 'application/json',
 			},
 		}
 	);

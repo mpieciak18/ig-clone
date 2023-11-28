@@ -6,12 +6,13 @@ export const addComment = async (postOwnerId, postId, message) => {
 		import.meta.env.VITE_API_URL + '/api/comment',
 		{
 			method: 'POST',
-			body: {
+			body: JSON.stringify({
 				id: postId,
 				message,
-			},
+			}),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
+				'Content-Type': 'application/json',
 			},
 		}
 	);
@@ -31,11 +32,12 @@ export const removeComment = async (id) => {
 		import.meta.env.VITE_API_URL + '/api/comment',
 		{
 			method: 'DELETE',
-			body: {
+			body: JSON.stringify({
 				id,
-			},
+			}),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
+				'Content-Type': 'application/json',
 			},
 		}
 	);
@@ -55,12 +57,13 @@ export const getComments = async (id, limit) => {
 		import.meta.env.VITE_API_URL + '/api/comment/post',
 		{
 			method: 'POST',
-			body: {
+			body: JSON.stringify({
 				id,
 				limit,
-			},
+			}),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
+				'Content-Type': 'application/json',
 			},
 		}
 	);
