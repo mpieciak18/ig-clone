@@ -103,35 +103,35 @@ describe('/create_new_user, /sign_in, & /api/user', () => {
 		expect(response2.body.notUnique[0]).toEqual('email');
 	});
 	//
-	it('should fail to login with fake username & return a 401 status', async () => {
+	it('should fail to login with fake email & return a 401 status', async () => {
 		const response = await supertest(app).post('/sign_in').send({
-			username: 'fake_test',
-			password: '123_abc',
+			email: 'fake_email@email.com',
+			password: user.password,
 		});
 		expect(response.status).toBe(401);
 	});
 	it('should fail to login with an incorrect password & return a 401 status', async () => {
 		const response = await supertest(app).post('/sign_in').send({
-			username: 'test11',
-			password: 'OOPS!',
+			email: user.email,
+			password: 'wrongpassword',
 		});
 		expect(response.status).toBe(401);
 	});
 	it('should fail to login with invalid inputs (ie, no username) & return a 400 status', async () => {
 		const response = await supertest(app).post('/sign_in').send({
-			password: '123_abc',
+			password: user.password,
 		});
 		expect(response.status).toBe(400);
 	});
 	it('should fail to login with invalid inputs (ie, no password) & return a 400 status', async () => {
 		const response = await supertest(app).post('/sign_in').send({
-			username: 'test11',
+			email: user.email,
 		});
 		expect(response.status).toBe(400);
 	});
 	it('should login & return a 200 status + correct user info + token', async () => {
 		const response = await supertest(app).post('/sign_in').send({
-			username: user.username,
+			email: user.email,
 			password: user.password,
 		});
 		expect(response.status).toBe(200);

@@ -35,7 +35,7 @@ app.post(
 );
 app.post(
 	'/sign_in',
-	body('username').isString(),
+	body('email').isEmail(),
 	body('password').isString(),
 	handleInputErrors,
 	signIn

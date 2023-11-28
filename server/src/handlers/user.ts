@@ -42,7 +42,7 @@ export const signIn = async (req, res, next) => {
 	// First, find user in database by username.
 	const user = await prisma.user.findUnique({
 		where: {
-			username: req.body.username,
+			email: req.body.email,
 		},
 		include: {
 			_count: {
