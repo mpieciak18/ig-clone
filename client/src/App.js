@@ -1,4 +1,4 @@
-import { Routes, Route, HashRouter } from 'react-router-dom';
+import { Routes, Route, HashRouter, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Home } from './components/Home/Home.js';
 import { Messages } from './components/Messages/Messages.js';
@@ -46,8 +46,16 @@ const App = () => {
 				/>
 				<Route exact path='/saved' element={<Saved />} />
 				<Route exact path='/settings' element={<Settings />} />
-				<Route exact path='/signup' element={<SignUp />} />
-				<Route exact path='/login' element={<Login />} />
+				<Route
+					exact
+					path='/signup'
+					element={<Navigate to='/' replace />}
+				/>
+				<Route
+					exact
+					path='/login'
+					element={<Navigate to='/' replace />}
+				/>
 			</Routes>
 		</HashRouter>
 	) : isLoading == false && !user ? (

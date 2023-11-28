@@ -1,5 +1,5 @@
 import './SignUp.css';
-import { Navbar } from '../other/Navbar.js';
+import Logo from '../../assets/images/ig-logo-2.png';
 import { UsernameFooter } from './children/UsernameFooter.js';
 import { PasswordFooter } from './children/PasswordFooter.js';
 import { NameFooter } from './children/NameFooter.js';
@@ -10,10 +10,9 @@ import { useAuth } from '../../contexts/AuthContext';
 import { setLocalUser } from '../../services/localstor';
 import { createUser } from '../../services/users';
 
-const SignUp = (props) => {
+const SignUp = () => {
 	// Redirect to settings if already signed in
 	const { setUser } = useAuth();
-	const { popUpState, updatePopUp } = props;
 
 	const navigate = useNavigate();
 
@@ -91,7 +90,10 @@ const SignUp = (props) => {
 
 	return (
 		<div id='sign-up' className='page'>
-			<Navbar popUpState={popUpState} updatePopUp={updatePopUp} />
+			<div id='navbar-logo-logged-out'>
+				<img id='navbar-logo-icon' src={Logo} />
+				<div id='navbar-logo-text'>Markstagram</div>
+			</div>
 			<div id='sign-up-parent'>
 				<div id='sign-up-error' className={errorClass}>
 					There was an error! Please try again.
@@ -171,6 +173,7 @@ const SignUp = (props) => {
 					</div>
 				</form>
 			</div>
+			<div />
 		</div>
 	);
 };

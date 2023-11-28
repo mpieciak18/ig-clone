@@ -1,5 +1,5 @@
 import './Login.css';
-import { Navbar } from '../other/Navbar.js';
+import Logo from '../../assets/images/ig-logo-2.png';
 import { signInUser } from '../../services/users.js';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -38,44 +38,46 @@ const Login = () => {
 
 	return (
 		<div id='login' className='page'>
-			<Navbar />
-			{!user ? (
-				<div id='login-parent'>
-					<div id='login-error' className={errorClass}>
-						There was an error! Please try again.
-					</div>
-					<form id='login-form' onSubmit={newLogin}>
-						<div id='login-header'>
-							<img id='login-logo' />
-							<div id='login-title'>Login</div>
-						</div>
-						<div id='login-email-input-parent'>
-							<input
-								id='login-email-input'
-								placeholder='email'
-								value={email}
-								onChange={updateEmail}
-							/>
-						</div>
-						<div id='login-password-input-parent'>
-							<input
-								id='login-password-input'
-								type='password'
-								placeholder='password'
-								value={password}
-								onChange={updatePassword}
-							/>
-						</div>
-						<button
-							type='submit'
-							id='login-button-submit'
-							className='active'
-						>
-							Login
-						</button>
-					</form>
+			<div id='navbar-logo-logged-out'>
+				<img id='navbar-logo-icon' src={Logo} />
+				<div id='navbar-logo-text'>Markstagram</div>
+			</div>
+			<div id='login-parent'>
+				<div id='login-error' className={errorClass}>
+					There was an error! Please try again.
 				</div>
-			) : null}
+				<form id='login-form' onSubmit={newLogin}>
+					<div id='login-header'>
+						<img id='login-logo' />
+						<div id='login-title'>Login</div>
+					</div>
+					<div id='login-email-input-parent'>
+						<input
+							id='login-email-input'
+							placeholder='email'
+							value={email}
+							onChange={updateEmail}
+						/>
+					</div>
+					<div id='login-password-input-parent'>
+						<input
+							id='login-password-input'
+							type='password'
+							placeholder='password'
+							value={password}
+							onChange={updatePassword}
+						/>
+					</div>
+					<button
+						type='submit'
+						id='login-button-submit'
+						className='active'
+					>
+						Login
+					</button>
+				</form>
+			</div>
+			<div />
 		</div>
 	);
 };
