@@ -1,11 +1,9 @@
 import { validationResult } from 'express-validator';
-import { bucket } from '../config/gcloud';
+import { bucket, getUrl } from '../config/gcloud';
 import { randomUUID } from 'crypto';
 
 export const handleInputErrors = (req, res, next) => {
-	console.log(req.body);
 	const errors = validationResult(req);
-	console.log(errors);
 	if (!errors.isEmpty()) {
 		res.status(400);
 		res.json({ errors: errors.array() });
@@ -25,10 +23,11 @@ export const uploadImage = async (req, res, next) => {
 		}
 		const fileName = randomUUID();
 		try {
-			await bucket.file(fileName).save(req.file.buffer, {
+			const fileRef = bucket.file(fileName);
+			await fileRef.save(req.file.buffer, {
 				contentType: req.file.mimetype,
 			});
-			const image = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+			const image = await getUrl(fileRef);
 			req.image = image;
 			delete req.file;
 			next();

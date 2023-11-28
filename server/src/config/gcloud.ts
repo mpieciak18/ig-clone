@@ -1,5 +1,5 @@
 import { initializeApp, cert } from 'firebase-admin/app';
-import { getStorage } from 'firebase-admin/storage';
+import { getDownloadURL, getStorage } from 'firebase-admin/storage';
 import serviceAccount from './gcloudKey.json';
 
 initializeApp({
@@ -10,10 +10,19 @@ initializeApp({
 
 export const bucket = getStorage().bucket();
 
+export const getUrl = async (ref) => {
+	const url = await getDownloadURL(ref);
+	return url;
+};
+
 export const deleteFileFromStorage = async (url) => {
 	try {
-		// Assuming the URL structure is like: `https://storage.googleapis.com/<bucket-name>/<file-name>`
-		const fileName = url.split('/').pop();
+		// Assumes the URL structure is like : `https://firebasestorage.googleapis.com/v0/b/{appName}/o/{fileName}?alt={token}`
+		const fileName = url
+			.split(
+				`https://firebasestorage.googleapis.com/v0/b/${process.env.APP_URL}/o/`
+			)[1]
+			.split('?alt=')[0];
 
 		if (!fileName) {
 			throw new Error("Couldn't extract file name from the URL");
