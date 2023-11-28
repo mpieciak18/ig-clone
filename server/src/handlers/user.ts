@@ -143,7 +143,6 @@ export const updateUser = async (req, res, next) => {
 				},
 			},
 		});
-		console.log(user);
 	} catch (e) {
 		// Checks if there's a 'unique constraint failure' & handles it as a 401 error
 		if (e.code == 'P2002') {

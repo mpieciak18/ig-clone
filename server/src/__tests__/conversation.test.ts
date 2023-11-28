@@ -123,7 +123,6 @@ describe('conversations', () => {
 			.post('/api/conversation/otherUser')
 			.set('Authorization', `Bearer ${token}`)
 			.send({ id: otherUser.id, limit: 10 });
-		console.log(response.body);
 		const idOne = response.body.conversation.users[0].id;
 		const idTwo = response.body.conversation.users[1].id;
 		expect(response.status).toBe(200);
