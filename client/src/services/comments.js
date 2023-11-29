@@ -1,4 +1,5 @@
 import { addNotification } from './notifications.js';
+import { getToken } from './localstor.js';
 
 // Create new comment & return comment ID
 export const addComment = async (postOwnerId, postId, message) => {

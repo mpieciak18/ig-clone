@@ -1,4 +1,5 @@
 import { addNotification } from './notifications.js';
+import { getToken } from './localstor.js';
 
 // Add new follow
 export const addFollow = async (id) => {

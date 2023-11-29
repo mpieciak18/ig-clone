@@ -1,4 +1,5 @@
 import { addNotification } from './notifications.js';
+import { getToken } from './localstor.js';
 
 // Send message from logged-in user to other user
 // NOTE: user A's ID is the convo ID for user B & vice-versa

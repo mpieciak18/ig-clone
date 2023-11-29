@@ -1,3 +1,5 @@
+import { getToken } from './localstor.js';
+
 // Add post to a new "save"
 export const addSave = async (id) => {
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/save', {
