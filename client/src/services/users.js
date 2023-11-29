@@ -104,6 +104,7 @@ export const searchUsers = async (name) => {
 	);
 	if (response.status == 200) {
 		const json = await response.json();
+		console.log(json.users);
 		return json.users;
 	} else {
 		throw new Error();
