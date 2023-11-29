@@ -13,7 +13,7 @@ const Likes = (props) => {
 	const [likesNumber, setLikesNumber] = useState(10);
 
 	// Init users state
-	const [likesArr, setLikesArr] = useState(null);
+	const [likesArr, setLikesArr] = useState([]);
 
 	// Init all likes loaded state
 	const [allLoaded, setAllLoaded] = useState(false);
@@ -65,7 +65,7 @@ const Likes = (props) => {
 				<div id='likes-divider' />
 				<div id='likes-list' onScroll={loadMore}>
 					{likesArr.length
-						? likesArr.map(async (like) => {
+						? likesArr.map((like) => {
 								return (
 									<div className='like-row' key={like.id}>
 										<Link

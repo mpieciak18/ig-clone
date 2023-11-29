@@ -71,7 +71,7 @@ export const getLikes = async (id, limit) => {
 			method: 'POST',
 			body: JSON.stringify({
 				id: Number(id),
-				limit: Number(id),
+				limit: Number(limit),
 			}),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,

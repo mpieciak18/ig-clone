@@ -38,6 +38,9 @@ export const getLikes = async (req, res, next) => {
 			where: { postId: req.body.id },
 			take: req.body.limit,
 			orderBy: { createdAt: 'desc' },
+			include: {
+				user: true,
+			},
 		});
 	} catch (e) {
 		// DB errors are handled at top-level (server.ts) as 500 error
