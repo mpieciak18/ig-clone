@@ -5,7 +5,6 @@ import {
 } from '../../services/followers.js';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { findUser } from '../../services/users.js';
 import { useAuth } from '../../contexts/AuthContext.js';
 
 const FollowButton = (props) => {
@@ -57,15 +56,19 @@ const FollowButton = (props) => {
 			setIsUpdating(true);
 			const newFollow = await addFollow(otherUserId);
 			setFollowingId(newFollow.id);
-			const updatedUser = await findUser(user.id);
+			const updatedUser = await deepCopy(user);
+			updatedUser._count.givenFollows++;
 			await setUser(updatedUser);
+			setLocalUser(updatedUser);
 		} else if (isUpdating == false && followingId != null) {
 			setFollowButtonClass('inactive');
 			setIsUpdating(true);
 			await removeFollow(followingId);
 			setFollowingId(null);
-			const updatedUser = await findUser(user.id);
+			const updatedUser = await deepCopy(user);
+			updatedUser._count.givenFollows--;
 			await setUser(updatedUser);
+			setLocalUser(updatedUser);
 		}
 	};
 
