@@ -5,9 +5,7 @@ import { getToken } from './localstor.js';
 export const addLike = async (postId, postOwnerId) => {
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/like', {
 		method: 'POST',
-		body: JSON.stringify({
-			id: postId,
-		}),
+		body: JSON.stringify({ id: Number(postId) }),
 		headers: {
 			Authorization: `Bearer ${getToken()}`,
 			'Content-Type': 'application/json',
@@ -31,9 +29,7 @@ export const addLike = async (postId, postOwnerId) => {
 export const removeLike = async (id) => {
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/like', {
 		method: 'DELETE',
-		body: JSON.stringify({
-			id,
-		}),
+		body: JSON.stringify({ id: Number(id) }),
 		headers: {
 			Authorization: `Bearer ${getToken()}`,
 			'Content-Type': 'application/json',
@@ -52,9 +48,7 @@ export const likeExists = async (id) => {
 		import.meta.env.VITE_API_URL + '/api/like/user',
 		{
 			method: 'POST',
-			body: JSON.stringify({
-				id,
-			}),
+			body: JSON.stringify({ id: Number(id) }),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
@@ -76,8 +70,8 @@ export const getLikes = async (id, limit) => {
 		{
 			method: 'POST',
 			body: JSON.stringify({
-				id,
-				limit,
+				id: Number(id),
+				limit: Number(id),
 			}),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,

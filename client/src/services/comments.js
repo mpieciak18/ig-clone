@@ -8,7 +8,7 @@ export const addComment = async (postOwnerId, postId, message) => {
 		{
 			method: 'POST',
 			body: JSON.stringify({
-				id: postId,
+				id: Number(postId),
 				message,
 			}),
 			headers: {
@@ -34,7 +34,7 @@ export const removeComment = async (id) => {
 		{
 			method: 'DELETE',
 			body: JSON.stringify({
-				id,
+				id: Number(id),
 			}),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
@@ -59,8 +59,8 @@ export const getComments = async (id, limit) => {
 		{
 			method: 'POST',
 			body: JSON.stringify({
-				id,
-				limit,
+				id: Number(id),
+				limit: Number(limit),
 			}),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,

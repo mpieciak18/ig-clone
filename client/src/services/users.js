@@ -21,7 +21,6 @@ export const createUser = async (username, name, email, password) => {
 	);
 	if (response.status == 200) {
 		const json = await response.json();
-		console.log(json);
 		const newUser = json.user;
 		newUser.token = json.token;
 		return newUser;
@@ -74,7 +73,7 @@ export const findUser = async (id) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/user/single',
 		{
-			body: JSON.stringify({ id }),
+			body: JSON.stringify({ id: limit(id) }),
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${getToken()}`,

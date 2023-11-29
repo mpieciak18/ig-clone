@@ -6,7 +6,8 @@ export const findSinglePost = async (id) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/post/single',
 		{
-			body: { id },
+			body: JSON.stringify({ id: Number(id) }),
+			// body: { id },
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
@@ -27,7 +28,7 @@ export const findPosts = async (limit) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/post/all',
 		{
-			body: { limit },
+			body: JSON.stringify({ limit: Number(limit) }),
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
@@ -48,7 +49,7 @@ export const findPostsFromUser = async (id, limit) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/post/user',
 		{
-			body: { id, limit },
+			body: JSON.stringify({ id: Number(id), limit: Number(limit) }),
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
@@ -88,7 +89,7 @@ export const newPost = async (caption, image) => {
 // Delete a user's post
 export const removePost = async (id) => {
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/post', {
-		body: JSON.stringify({ id }),
+		body: JSON.stringify({ id: Number(id) }),
 		method: 'DELETE',
 		headers: {
 			Authorization: `Bearer ${getToken()}`,

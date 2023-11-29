@@ -39,6 +39,7 @@ export const createPost = async (req, res, next) => {
 
 // Gets a post based on a single post's id (if it exists)
 export const getSinglePost = async (req, res, next) => {
+	console.log(req.body);
 	// First, get post by id
 	// If no post is found, handle it at the top-level (server.ts) as 500 error
 	let post;
