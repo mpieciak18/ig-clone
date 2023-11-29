@@ -3,9 +3,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { newPost } from '../../services/posts.js';
 import { ImageInput } from './ImageInput.js';
 import { CaptionFooter } from './CaptionFooter.js';
-import { findUser } from '../../services/users.js';
 import { useAuth } from '../../contexts/AuthContext.js';
 import { usePopUp } from '../../contexts/PopUpContext.js';
+import { deepCopy } from '../../other/deepCopy.js';
+import { setLocalUser } from '../../services/localstor.js';
 
 const NewPost = (props) => {
 	const { user, setUser } = useAuth();
@@ -17,9 +18,6 @@ const NewPost = (props) => {
 
 	// Init useParams
 	const location = useParams();
-
-	// Init new post pop-up component state
-	const [newPostPopup, setNewPostPopup] = useState(null);
 
 	// Init ref for ImageInput component
 	const inputRef = useRef();
@@ -49,13 +47,15 @@ const NewPost = (props) => {
 	const addPost = async (e) => {
 		e.preventDefault();
 		// Check validation first
-		if (captionPasses == true && file != null) {
+		if (captionPasses && file) {
 			// Check for possible error with adding post to DB
 			try {
 				const post = await newPost(caption, file);
-				if (post.id != null) {
-					const updatedUser = await findUser(user.id);
+				if (post?.id) {
+					const updatedUser = await deepCopy(user);
+					updatedUser._count.posts++;
 					await setUser(updatedUser);
+					setLocalUser(updatedUser);
 					updatePopUp();
 					if (location.postOwnerId == null) {
 						navigate(`/${user.id}/${post.id}`);

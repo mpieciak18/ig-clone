@@ -20,7 +20,7 @@ const App = () => {
 	// Init loading state
 	const [isLoading, setIsLoading] = useState(true);
 
-	// Update user and loading states on mount
+	// Update user (with anything stored locally) and loading states on mount
 	useEffect(() => {
 		const localUser = getLocalUser();
 		if (localUser && !user && setUser) {

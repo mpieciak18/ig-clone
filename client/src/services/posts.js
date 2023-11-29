@@ -1,4 +1,5 @@
 import { getToken } from './localstor';
+import { compressFile } from './compress';
 
 // Retrieve single post by post id
 export const findSinglePost = async (id) => {

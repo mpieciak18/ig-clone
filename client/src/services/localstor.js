@@ -6,7 +6,6 @@ export const getLocalUser = () => {
 
 // Assign signed-in user's info to local storage
 export const setLocalUser = (user) => {
-	console.log(user);
 	localStorage.setItem('markstagramUser', JSON.stringify(user));
 };
 
