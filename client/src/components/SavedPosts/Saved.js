@@ -62,7 +62,7 @@ const Saved = () => {
 								<PostPreview
 									key={save.postId}
 									postId={save.postId}
-									postText={save.post.text}
+									postCaption={save.post.text}
 									postImage={save.post.image}
 									postDate={save.post.createdAt}
 									postOwnerId={save.post.userId}

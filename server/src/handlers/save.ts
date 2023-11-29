@@ -38,6 +38,18 @@ export const getSaves = async (req, res, next) => {
 			where: { userId: req.user.id },
 			take: req.body.limit,
 			orderBy: { createdAt: 'desc' },
+			include: {
+				post: {
+					include: {
+						_count: {
+							select: {
+								comments: true,
+								likes: true,
+							},
+						},
+					},
+				},
+			},
 		});
 	} catch (e) {
 		// DB errors are handled at top-level (server.ts) as 500 error

@@ -38,7 +38,7 @@ const Post = () => {
 	const [postComments, setPostComments] = useState(null);
 
 	// Init post text
-	const [postText, setPostText] = useState(null);
+	const [postCaption, setPostCaption] = useState(null);
 
 	// Init post date
 	const [postDate, setPostDate] = useState(null);
@@ -59,7 +59,7 @@ const Post = () => {
 		setPostComments(post._count.comments);
 		setPostDate(post.date);
 		setPostLikes(post._count.likes);
-		setPostText(post.text);
+		setPostCaption(post.caption);
 	};
 
 	// Update previous states on render & changes
@@ -111,7 +111,7 @@ const Post = () => {
 					postId={postId}
 					postOwnerId={postOwnerId}
 					postOwnerImage={postOwnerImage}
-					postText={postText}
+					postCaption={postCaption}
 					postOwnerName={postOwnerName}
 					commentsNum={postComments}
 				/>

@@ -12,7 +12,7 @@ const PostPreview = (props) => {
 	return (
 		<Link
 			className='single-post-box'
-			to={`/${post.user.id}/${post.id}`}
+			to={`/${post.userId}/${post.id}`}
 			onPointerDown={() => setOverlay('active')}
 			onPointerUp={() => setOverlay('inactive')}
 			onMouseOver={() => setOverlay('active')}
@@ -26,7 +26,7 @@ const PostPreview = (props) => {
 						src={LikeIcon}
 					/>
 					<div className='single-post-box-likes-number'>
-						{post.likes.length}
+						{post._count.likes}
 					</div>
 				</div>
 				<div className='single-post-box-comments'>
@@ -35,7 +35,7 @@ const PostPreview = (props) => {
 						src={CommentsIcon}
 					/>
 					<div className='single-post-box-comments-number'>
-						{post.comments.length}
+						{post._count.comments}
 					</div>
 				</div>
 			</div>

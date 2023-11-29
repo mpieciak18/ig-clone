@@ -78,6 +78,15 @@ export const getPosts = async (req, res, next) => {
 		posts = await prisma.post.findMany({
 			take: req.body.limit,
 			orderBy: { createdAt: 'desc' },
+			include: {
+				_count: {
+					select: {
+						comments: true,
+						likes: true,
+					},
+				},
+				user: true,
+			},
 		});
 	} catch (e) {
 		// DB errors are handled at top-level (server.ts) as 500 error
@@ -121,6 +130,14 @@ export const getUserPosts = async (req, res, next) => {
 			where: { userId: req.body.id },
 			take: req.body.limit,
 			orderBy: { createdAt: 'desc' },
+			include: {
+				_count: {
+					select: {
+						comments: true,
+						likes: true,
+					},
+				},
+			},
 		});
 	} catch (e) {
 		// DB errors are handled at top-level (server.ts) as 500 error

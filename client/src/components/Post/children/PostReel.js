@@ -12,18 +12,18 @@ const PostReel = (props) => {
 	const { post } = props;
 
 	// Init post likes count state
-	const [likesNum, setLikesNum] = useState(post.likes.length);
+	const [likesNum, setLikesNum] = useState(post._count.likes);
 
 	// Init post comments count state
-	const [commentsNum, setCommentsNum] = useState(post.comments.length);
+	const [commentsNum, setCommentsNum] = useState(post._count.comments);
 
 	// Set up ref for comment bar / comment button
 	const inputRef = useRef(null);
 
-	// Update previous states on render & changes
-	useEffect(() => {
-		updateStates();
-	}, []);
+	// // Update previous states on render & changes
+	// useEffect(() => {
+	// 	updateStates();
+	// }, []);
 
 	// Init linkCopied state for share button
 	const [linkCopied, setLinkCopied] = useState(false);

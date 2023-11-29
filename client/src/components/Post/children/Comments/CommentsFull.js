@@ -8,7 +8,7 @@ const CommentsFull = (props) => {
 		postId,
 		postOwnerId,
 		postOwnerImage,
-		postText,
+		postCaption,
 		postOwnerName,
 		commentsNum,
 	} = props;
@@ -70,7 +70,7 @@ const CommentsFull = (props) => {
 						>
 							{postOwnerName}
 						</Link>
-						<div className='post-comment-text'>{postText}</div>
+						<div className='post-comment-text'>{postCaption}</div>
 					</div>
 				</div>
 				<div className='post-comment-right'>...</div>

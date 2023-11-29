@@ -67,7 +67,13 @@ const Profile = () => {
 					{posts ? (
 						<div id='user-posts'>
 							{posts.map((post) => {
-								return <PostPreview post={post} user={user} />;
+								return (
+									<PostPreview
+										key={post.id}
+										post={post}
+										user={user}
+									/>
+								);
 							})}
 						</div>
 					) : (
