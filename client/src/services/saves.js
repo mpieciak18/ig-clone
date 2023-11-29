@@ -63,7 +63,7 @@ export const saveExists = async (id) => {
 		import.meta.env.VITE_API_URL + '/api/save/post',
 		{
 			method: 'POST',
-			body: JSON.stringify({ id: limit(id) }),
+			body: JSON.stringify({ id: Number(id) }),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',

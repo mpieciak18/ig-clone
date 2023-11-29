@@ -73,7 +73,7 @@ export const findUser = async (id) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/user/single',
 		{
-			body: JSON.stringify({ id: limit(id) }),
+			body: JSON.stringify({ id: Number(id) }),
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${getToken()}`,

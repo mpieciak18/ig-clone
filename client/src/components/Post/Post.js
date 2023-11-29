@@ -56,9 +56,9 @@ const Post = () => {
 	const updatePostStates = async () => {
 		const post = await findSinglePost(postId);
 		setPostImage(post.image);
-		setPostComments(post.comments);
+		setPostComments(post._count.comments);
 		setPostDate(post.date);
-		setPostLikes(post.likes);
+		setPostLikes(post._count.likes);
 		setPostText(post.text);
 	};
 
