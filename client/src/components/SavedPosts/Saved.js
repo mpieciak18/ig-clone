@@ -13,7 +13,7 @@ const Saved = () => {
 	const [savesNumber, setSavesNumber] = useState(21);
 
 	// Init savesArr state
-	const [savesArr, setSavesArr] = useState(null);
+	const [savesArr, setSavesArr] = useState([]);
 
 	// Init all loaded state
 	const [allLoaded, setAllLoaded] = useState(false);
@@ -61,13 +61,7 @@ const Saved = () => {
 							return (
 								<PostPreview
 									key={save.postId}
-									postId={save.postId}
-									postCaption={save.post.text}
-									postImage={save.post.image}
-									postDate={save.post.createdAt}
-									postOwnerId={save.post.userId}
-									postLikes={save.post.likes}
-									postComments={save.post.comments}
+									post={save.post}
 								/>
 							);
 						})}
