@@ -75,7 +75,7 @@ const CommentsFull = (props) => {
 				</div>
 				<div className='post-comment-right'>...</div>
 			</div>
-			{commentsArr.map(async (comment) => (
+			{commentsArr.map((comment) => (
 				<div className='post-comment' key={comment.id}>
 					<div className='post-comment-left'>
 						<Link
