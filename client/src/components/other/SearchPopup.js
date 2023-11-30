@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { searchUsers } from '../../services/users.js';
-import { useAuth } from '../../contexts/AuthContext.js';
 import { usePopUp } from '../../contexts/PopUpContext.js';
 
 const SearchPopup = (props) => {
-	const { user } = useAuth();
 	const { updatePopUp } = usePopUp();
 	const { searchVal } = props;
 
