@@ -57,7 +57,7 @@ const Post = () => {
 		const post = await findSinglePost(postId);
 		setPostImage(post.image);
 		setPostComments(post._count.comments);
-		setPostDate(post.date);
+		setPostDate(post.createdAt);
 		setPostLikes(post._count.likes);
 		setPostCaption(post.caption);
 	};
