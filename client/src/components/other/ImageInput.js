@@ -11,7 +11,7 @@ const ImageInput = (props) => {
 
 	const [overlayClass, setOverlayClass] = useState('inactive');
 
-	const maxFileSize = 40 * 1024 * 1024; // 20 MB
+	const maxFileSize = 20 * 1024 * 1024; // 10 MB
 
 	// Returns true if passed file is an image
 	const isImage = (file) => {
