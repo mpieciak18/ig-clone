@@ -17,7 +17,8 @@ const Post = () => {
 	const { user } = useAuth();
 	const { popUpState, updatePopUp } = usePopUp();
 
-	const { postOwnerId, postId } = useParams();
+	const postOwnerId = Number(useParams().postOwnerId);
+	const postId = Number(useParams().postId);
 
 	// Init post owner name
 	const [postOwnerName, setPostOwnerName] = useState(null);

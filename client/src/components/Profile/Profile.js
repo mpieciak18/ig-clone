@@ -12,7 +12,7 @@ const Profile = () => {
 	const { user } = useAuth();
 
 	// Get other user id from url parameters
-	const { otherUserId } = useParams();
+	const otherUserId = Number(useParams().otherUserId);
 
 	// Init postsNumber state
 	const [postsNumber, setPostsNumber] = useState(21);

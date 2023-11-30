@@ -10,7 +10,7 @@ const Conversation = () => {
 	const navigate = useNavigate();
 
 	// Grab other user's id from url parameters
-	const { otherUserId } = useParams();
+	const otherUserId = Number(useParams().otherUserId);
 
 	// Init other user state
 	const [otherUser, setOtherUser] = useState(null);
