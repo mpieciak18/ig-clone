@@ -22,7 +22,11 @@ const SearchPopup = (props) => {
 	// Update results when value changes
 	useEffect(() => {
 		if (searchVal != null) {
-			searchUsers(searchVal).then(setSearchedUsers);
+			const doSearch = setTimeout(
+				() => searchUsers(searchVal).then(setSearchedUsers),
+				2000
+			);
+			return () => clearTimeout(doSearch);
 		} else {
 			setSearchedUsers([]);
 		}
