@@ -19,7 +19,7 @@ const Notifications = () => {
 	const [notifsCount, setNotifsCount] = useState(0);
 
 	// Init notifications arr state
-	const [notifsArr, setNotifsArr] = useState(null);
+	const [notifsArr, setNotifsArr] = useState([]);
 
 	// Init all loaded state
 	const [allLoaded, setAllLoaded] = useState(false);
@@ -133,11 +133,9 @@ const Notifications = () => {
 				</div>
 				<div id='notifs-divider' />
 				<div id='notifs-list' className={buttonOne} onScroll={loadMore}>
-					{notifsArr.map(async (notif) => {
-						const otherUserId = notif.otherUserId;
-						const otherUser = notif.otherUser;
+					{notifsArr.map((notif) => {
 						const redirectToProfile = () => {
-							navigate(`/${otherUserId}`);
+							navigate(`/${notif.otherUserId}`);
 							updatePopUp();
 						};
 						let path;
@@ -149,14 +147,14 @@ const Notifications = () => {
 							path = `/${user.id}/${notif.postId}`;
 							text = 'commented on a post.';
 						} else if (notif.type == 'follow') {
-							path = `/${otherUserId}`;
+							path = `/${notif.otherUserId}`;
 							text = 'is following you.';
 						} else {
-							path = `/messages/${otherUserId}`;
+							path = `/messages/${notif.otherUserId}`;
 							text = 'messaged you.';
 						}
 						const redirectToPath = () => {
-							navigate(`/${path}`);
+							navigate(`${path}`);
 							updatePopUp();
 						};
 						const time = timeSince(notif.createdAt);
@@ -166,14 +164,14 @@ const Notifications = () => {
 									<img
 										className='notif-image'
 										onClick={redirectToProfile}
-										src={otherUser.image}
+										src={notif.otherUser.image}
 									/>
 									<div
 										className='notif-text'
 										onClick={redirectToPath}
 									>
 										<div className='notif-name'>
-											{otherUser.name}
+											{notif.otherUser.name}
 										</div>
 										<div className='notif-action'>
 											{text}
@@ -188,10 +186,6 @@ const Notifications = () => {
 					})}
 				</div>
 				{whichTab == 'new' && notifsArr?.length > 0 ? (
-					<div id='notifs-clear' className='message'>
-						No Unread Notifications
-					</div>
-				) : whichTab == 'new' ? (
 					<div
 						id='notifs-clear'
 						className='button'
@@ -199,7 +193,11 @@ const Notifications = () => {
 					>
 						Mark All Read
 					</div>
-				) : whichTab == 'old' && notifsArr?.length > 0 ? (
+				) : whichTab == 'new' ? (
+					<div id='notifs-clear' className='message'>
+						No Unread Notifications
+					</div>
+				) : whichTab == 'old' && notifsArr?.length == 0 ? (
 					<div id='notifs-clear' className='message'>
 						No Read Notifications
 					</div>

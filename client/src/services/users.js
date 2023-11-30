@@ -59,7 +59,6 @@ export const signInUser = async (email, password) => {
 	});
 	if (response.status == 200) {
 		const json = await response.json();
-		console.log(json);
 		const signedInUser = json.user;
 		signedInUser.token = json.token;
 		return signedInUser;
@@ -104,7 +103,6 @@ export const searchUsers = async (name) => {
 	);
 	if (response.status == 200) {
 		const json = await response.json();
-		console.log(json.users);
 		return json.users;
 	} else {
 		throw new Error();
@@ -118,7 +116,6 @@ export const updateUser = async (name, bio, image = null) => {
 	if (bio) body.append('bio', bio);
 	if (image) {
 		const compressedImage = await compressFile(image);
-		console.log(compressedImage);
 		body.append('file', compressedImage);
 	}
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/user', {

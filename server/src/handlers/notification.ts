@@ -88,6 +88,7 @@ export const getNotifsUnread = async (req, res, next) => {
 			where: { userId: req.user.id, read: false },
 			orderBy: { createdAt: 'desc' },
 			take: req.body.limit,
+			include: { otherUser: true },
 		});
 	} catch (e) {
 		// DB errors are handled at top-level (server.ts) as 500 error
@@ -115,6 +116,7 @@ export const getNotifsRead = async (req, res, next) => {
 			where: { userId: req.user.id, read: true },
 			orderBy: { createdAt: 'desc' },
 			take: req.body.limit,
+			include: { otherUser: true },
 		});
 	} catch (e) {
 		// DB errors are handled at top-level (server.ts) as 500 error

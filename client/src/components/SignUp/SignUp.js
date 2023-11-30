@@ -72,7 +72,6 @@ const SignUp = () => {
 		// Add new user to services/auth & return any errors
 		try {
 			const newUser = await createUser(username, name, email, password);
-			console.log(newUser);
 			if (newUser.notUnique) {
 				handleDups(newUser.notUnique);
 				throw new Error();
