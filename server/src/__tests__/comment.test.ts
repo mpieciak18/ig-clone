@@ -156,14 +156,14 @@ describe('comments', () => {
 		const response = await supertest(app)
 			.post('/api/comment/post')
 			.set('Authorization', `Bearer`)
-			.send({ id: comment.id, limit });
+			.send({ id: post.id, limit });
 		expect(response.status).toBe(401);
 	});
 	it('should get all comments from a post & return a 200 code + correct comment info', async () => {
 		const response = await supertest(app)
 			.post('/api/comment/post')
 			.set('Authorization', `Bearer ${token}`)
-			.send({ id: comment.id, limit });
+			.send({ id: post.id, limit });
 		expect(response.status).toBe(200);
 		expect(response.body.comments.length).toBeGreaterThan(0);
 		expect(response.body.comments.length).toBeLessThanOrEqual(limit);
