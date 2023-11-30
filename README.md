@@ -2,11 +2,11 @@
 
 "A personal recreation of Instagram. Sign up and start posting today!"
 
-This project is from the [the Odin Project](https://www.theodinproject.com) (specifically, from their [Full Stack Javascript](https://www.theodinproject.com/paths/full-stack-javascript) curriculum). 
+This project is from the [the Odin Project](https://www.theodinproject.com) (specifically, from their [Full Stack Javascript](https://www.theodinproject.com/paths/full-stack-javascript) curriculum).
 
 [Click here](https://www.theodinproject.com/lessons/node-path-javascript-javascript-final-project) to read more about the project specifications.
 
-![Live preview of the Markstagran app](./public/images/sample.gif)
+![Live preview of the Markstagran app](./client/public/images/sample.gif)
 
 ## Live App
 
@@ -33,11 +33,11 @@ This project is from the [the Odin Project](https://www.theodinproject.com) (spe
 1. Enjoy responsive styling tailored for both desktop and mobile.
 2. Create your own account and log in / log out whenever you please, facilitated by Google Firebase's Authentication.
 3. Add posts by uploading photos & adding captions, which are stored & retrieved from Google Firebase's Firestore & Storage.
-3. View a set number of posts on a given page (ie, home, profile, or saved), and load more by scrolling down the page.
-4. View individual post pages and scroll through its full list of comments.
-5. Comment on, like, and save posts along with clicking-to-copy URLs for sharing with others.
-6. Send other users private direct messages in a chat system that updates in real-time.
-7. Search for user profiles to view & users to direct message, thanks to Flux.js.
+4. View a set number of posts on a given page (ie, home, profile, or saved), and load more by scrolling down the page.
+5. View individual post pages and scroll through its full list of comments.
+6. Comment on, like, and save posts along with clicking-to-copy URLs for sharing with others.
+7. Send other users private direct messages in a chat system that updates in real-time.
+8. Search for user profiles to view & users to direct message, thanks to Flux.js.
 
 ## Instructions
 
@@ -49,7 +49,6 @@ This project is from the [the Odin Project](https://www.theodinproject.com) (spe
 6. Like, save, and comment on posts by using the buttons & input bar found on a post reel (found on the home page) and full post page. You can access a full post page by clicking on the image itself in a post reel or post preview (found in user profiles & saved posts page).
 
 ## Areas for Improvement
-
 
 1. There is no "loading" screen or styling when the app is busy loading posts, working on uploading a post, updating the page when logging in or out, etc. Adding something to give feedback to a user that the app is loading would be huge improvement in the UX.
 2. Right now, the app only supports uploading images. Supporting GIFs and videos would be a nice touch.
