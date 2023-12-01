@@ -47,7 +47,7 @@ export const getSaves = async (limit) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		}
+		},
 	);
 	if (response.status == 200) {
 		const json = await response.json();
@@ -68,7 +68,7 @@ export const saveExists = async (id) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		}
+		},
 	);
 	if (response.status == 200) {
 		const json = await response.json();

@@ -53,7 +53,7 @@ export const likeExists = async (id) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		}
+		},
 	);
 	if (response.status == 200) {
 		const json = await response.json();
@@ -77,7 +77,7 @@ export const getLikes = async (id, limit) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		}
+		},
 	);
 	if (response.status == 200) {
 		const json = await response.json();

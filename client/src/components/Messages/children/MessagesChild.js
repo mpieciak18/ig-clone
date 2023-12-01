@@ -46,7 +46,7 @@ export const MessagesChild = (props) => {
 			</div>
 			<div className='convo-row-right'>
 				<div className='convo-row-message'>
-					{sender}: "{message.message}"
+					{`${sender}: "${message.message}"`}
 				</div>
 				<div className='convo-row-time'>{time}</div>
 			</div>

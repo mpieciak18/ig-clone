@@ -64,36 +64,30 @@ const Likes = (props) => {
 				</div>
 				<div id='likes-divider' />
 				<div id='likes-list' onScroll={loadMore}>
-					{likesArr.length
-						? likesArr.map((like) => {
-								return (
-									<div className='like-row' key={like.id}>
-										<Link
-											className='like-row-left'
-											to={`/${like.user.id}`}
-										>
-											<img
-												className='like-image'
-												src={like.user.image}
-											/>
-											<div className='like-text'>
-												<div className='like-name'>
-													{like.user.name}
-												</div>
-												<div className='like-username'>
-													@{like.user.username}
-												</div>
-											</div>
-										</Link>
-										<div className='like-row-right'>
-											<FollowButton
-												otherUserId={like.user.id}
-											/>
-										</div>
+					{likesArr.map((like) => (
+						<div className='like-row' key={like.id}>
+							<Link
+								className='like-row-left'
+								to={`/${like.user.id}`}
+							>
+								<img
+									className='like-image'
+									src={like.user.image}
+								/>
+								<div className='like-text'>
+									<div className='like-name'>
+										{like.user.name}
 									</div>
-								);
-						  })
-						: null}
+									<div className='like-username'>
+										@{like.user.username}
+									</div>
+								</div>
+							</Link>
+							<div className='like-row-right'>
+								<FollowButton otherUserId={like.user.id} />
+							</div>
+						</div>
+					))}
 				</div>
 			</div>
 		</div>

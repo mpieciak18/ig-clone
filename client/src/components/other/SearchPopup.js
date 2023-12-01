@@ -15,7 +15,7 @@ const SearchPopup = (props) => {
 	const [searchedUsers, setSearchedUsers] = useState([]);
 
 	// Closes search
-	const hideSearch = (e) => {
+	const hideSearch = () => {
 		updatePopUp();
 	};
 
@@ -24,7 +24,7 @@ const SearchPopup = (props) => {
 		if (searchVal != null) {
 			const doSearch = setTimeout(
 				() => searchUsers(searchVal).then(setSearchedUsers),
-				2000
+				2000,
 			);
 			return () => clearTimeout(doSearch);
 		} else {

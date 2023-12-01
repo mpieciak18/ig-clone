@@ -13,7 +13,7 @@ export const findSinglePost = async (id) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		}
+		},
 	);
 	if (response.status == 200) {
 		const json = await response.json();
@@ -34,7 +34,7 @@ export const findPosts = async (limit) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		}
+		},
 	);
 	if (response.status == 200) {
 		const json = await response.json();
@@ -55,7 +55,7 @@ export const findPostsFromUser = async (id, limit) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		}
+		},
 	);
 	if (response.status == 200) {
 		const json = await response.json();

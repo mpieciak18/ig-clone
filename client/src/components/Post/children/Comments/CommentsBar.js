@@ -52,7 +52,7 @@ const CommentsBar = (props) => {
 					>
 						Post
 					</button>
-				</form>
+				</form>,
 			);
 		} else {
 			setForm(
@@ -68,7 +68,7 @@ const CommentsBar = (props) => {
 					>
 						Post
 					</button>
-				</form>
+				</form>,
 			);
 		}
 	}, [user]);
@@ -89,7 +89,7 @@ const CommentsBar = (props) => {
 					>
 						Post
 					</button>
-				</form>
+				</form>,
 			);
 		} else if (commentValue.length > 0) {
 			setForm(
@@ -108,7 +108,7 @@ const CommentsBar = (props) => {
 					>
 						Post
 					</button>
-				</form>
+				</form>,
 			);
 		} else {
 			setForm(
@@ -127,7 +127,7 @@ const CommentsBar = (props) => {
 					>
 						Post
 					</button>
-				</form>
+				</form>,
 			);
 		}
 	}, [commentValue, user]);

@@ -10,7 +10,7 @@ const Home = () => {
 	const [postsNumber, setPostsNumber] = useState(5);
 
 	// Init posts array state
-	const [postsArr, setPostsArr] = useState(null);
+	const [postsArr, setPostsArr] = useState([]);
 
 	// Init all loaded state
 	const [allLoaded, setAllLoaded] = useState(false);
@@ -49,11 +49,9 @@ const Home = () => {
 			<div id='home-container' onScroll={loadMore}>
 				<UserCard />
 				<div id='home-posts'>
-					{postsArr
-						? postsArr.map((post) => (
-								<PostReel key={post.id} post={post} />
-						  ))
-						: null}
+					{postsArr.map((post) => {
+						return <PostReel key={post.id} post={post} />;
+					})}
 				</div>
 			</div>
 		</div>

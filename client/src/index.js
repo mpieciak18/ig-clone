@@ -13,5 +13,5 @@ root.render(
 				<App />
 			</PopUpProvider>
 		</AuthProvider>
-	</React.StrictMode>
+	</React.StrictMode>,
 );

@@ -14,7 +14,7 @@ export const addNotification = async (type, userId, postId = null) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		}
+		},
 	);
 	if (response.status == 200) {
 		const json = await response.json();
@@ -35,7 +35,7 @@ export const getUnreadNotifications = async (limit) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		}
+		},
 	);
 	if (response.status == 200) {
 		const json = await response.json();
@@ -56,7 +56,7 @@ export const getReadNotifications = async (limit) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		}
+		},
 	);
 	if (response.status == 200) {
 		const json = await response.json();
@@ -75,7 +75,7 @@ export const readNotifications = async () => {
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
 			},
-		}
+		},
 	);
 	if (response.status == 200) {
 		const json = await response.json();

@@ -6,6 +6,8 @@ import {
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext.js';
+import { deepCopy } from '../../other/deepCopy.js';
+import { setLocalUser } from '../../services/localstor.js';
 
 const FollowButton = (props) => {
 	const { user, setUser } = useAuth();
@@ -73,7 +75,7 @@ const FollowButton = (props) => {
 	};
 
 	return user?.id == otherUserId ? (
-		<div className={`follow-button inactive`}>This is you.</div>
+		<div className={'follow-button inactive'}>This is you.</div>
 	) : (
 		<div
 			className={`follow-button ${followButtonClass}`}

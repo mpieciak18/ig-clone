@@ -46,7 +46,7 @@ const SignUp = () => {
 	// Update allPass when any of the input pass states change
 	useEffect(() => {
 		setAllPass(
-			usernamePasses && namePasses && passwordPasses && emailPasses
+			usernamePasses && namePasses && passwordPasses && emailPasses,
 		);
 	}, [usernamePasses, namePasses, passwordPasses, emailPasses]);
 

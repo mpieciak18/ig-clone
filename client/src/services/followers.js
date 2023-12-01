@@ -51,7 +51,7 @@ export const checkForFollow = async (id) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		}
+		},
 	);
 	if (response.status == 200) {
 		const json = await response.json();
@@ -72,7 +72,7 @@ export const getFollowing = async (id, limit) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		}
+		},
 	);
 	if (response.status == 200) {
 		const json = await response.json();
@@ -93,7 +93,7 @@ export const getFollowers = async (id, limit) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		}
+		},
 	);
 	if (response.status == 200) {
 		const json = await response.json();

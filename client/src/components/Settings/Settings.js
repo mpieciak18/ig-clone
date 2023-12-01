@@ -200,7 +200,7 @@ const Settings = () => {
 								</button>
 							</div>
 						</form>
-					</div>
+					</div>,
 				);
 			} else {
 				if (user == null) {

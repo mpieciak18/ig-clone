@@ -1,5 +1,5 @@
 import '../styles/PostReel.css';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CommentsBar } from './Comments/CommentsBar.js';
 import { CommentsPreview } from './Comments/CommentsPreview.js';
@@ -19,11 +19,6 @@ const PostReel = (props) => {
 
 	// Set up ref for comment bar / comment button
 	const inputRef = useRef(null);
-
-	// // Update previous states on render & changes
-	// useEffect(() => {
-	// 	updateStates();
-	// }, []);
 
 	// Init linkCopied state for share button
 	const [linkCopied, setLinkCopied] = useState(false);
@@ -63,15 +58,11 @@ const PostReel = (props) => {
 					setLinkCopied={setLinkCopied}
 				/>
 				<Link className='post-likes' to={`/${post.user.id}/${post.id}`}>
-					{(() => {
-						if (likesNum == 0) {
-							return `0 likes`;
-						} else if (likesNum == 1) {
-							return `1 like`;
-						} else {
-							return `${likesNum} likes`;
-						}
-					})()}
+					{likesNum == 0
+						? '0 likes'
+						: likesNum == 1
+							? '1 like'
+							: `${likesNum} likes`}
 				</Link>
 				<div className='post-text-parent'>
 					<Link className='post-text-name' to={`/${post.user.id}`}>
@@ -83,15 +74,11 @@ const PostReel = (props) => {
 					className='post-view-comments'
 					to={`/${post.user.id}/${post.id}`}
 				>
-					{(() => {
-						if (commentsNum == 0) {
-							return `No comments yet...`;
-						} else if (commentsNum == 1) {
-							return `View 1 comment...`;
-						} else {
-							return `View all ${commentsNum} comments...`;
-						}
-					})()}
+					{commentsNum == 0
+						? 'No comments yet...'
+						: commentsNum == 1
+							? 'View 1 comment...'
+							: `View all ${commentsNum} comments...`}
 				</Link>
 				<CommentsPreview
 					postId={post.id}

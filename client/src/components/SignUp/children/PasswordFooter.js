@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 const PasswordFooter = (props) => {
 	const { setPasswordPasses, password } = props;
 	const [footerText, setFooterText] = useState(
-		'Must contain >8 characters, 1+ uppercase letter, 1+ lowercase letter, and 1+ number.'
+		'Must contain >8 characters, 1+ uppercase letter, 1+ lowercase letter, and 1+ number.',
 	);
 	const [footerClass, setFooterClass] = useState('grey');
 
@@ -13,7 +13,7 @@ const PasswordFooter = (props) => {
 		if (password.length == 0) {
 			setPasswordPasses(false);
 			setFooterText(
-				'Must contain 8+ characters, 1+ uppercase letter, 1+ lowercase letter, and 1+ number.'
+				'Must contain 8+ characters, 1+ uppercase letter, 1+ lowercase letter, and 1+ number.',
 			);
 			setFooterClass('grey');
 			// Checks for minimum length of 8

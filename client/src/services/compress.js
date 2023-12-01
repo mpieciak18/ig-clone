@@ -27,7 +27,7 @@ export const compressFile = async (file) => {
 					0,
 					0,
 					canvas.width,
-					canvas.height
+					canvas.height,
 				);
 				const uint8Data = new Uint8Array(imageData.data.buffer);
 				const channels = 4; // RGBA
@@ -45,10 +45,10 @@ export const compressFile = async (file) => {
 										canvas.width,
 										canvas.height,
 										channels,
-										options
+										options,
 									),
 								],
-								{ type: 'image/webp' }
+								{ type: 'image/webp' },
 							);
 							webpModule.free();
 
@@ -56,7 +56,7 @@ export const compressFile = async (file) => {
 								resolve(webpBlob);
 							} else {
 								throw new Error(
-									'Image failed to convert to WebP'
+									'Image failed to convert to WebP',
 								);
 							}
 						} catch (error) {

@@ -7,7 +7,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { setLocalUser } from '../../services/localstor';
 
 const Login = () => {
-	const { user, setUser } = useAuth();
+	const { setUser } = useAuth();
 
 	const navigate = useNavigate();
 

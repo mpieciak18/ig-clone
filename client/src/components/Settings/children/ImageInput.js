@@ -62,13 +62,13 @@ const ImageInput = (props) => {
 				onMouseUp={() => setOverlayClass('inactive')}
 				onMouseOver={() => setOverlayClass('active')}
 				onMouseOut={() => setOverlayClass('inactive')}
-			/>
+			/>,
 		);
 	}, [inputRef]);
 
 	useEffect(() => {
 		setFilePreview(
-			<img id='settings-image-preview' src={filePreviewUrl} />
+			<img id='settings-image-preview' src={filePreviewUrl} />,
 		);
 	}, [filePreviewUrl]);
 

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 const UsernameFooter = (props) => {
 	const { setUsernamePasses, username, isUnique } = props;
 	const [footerText, setFooterText] = useState(
-		'Username must be 3-15 characters.'
+		'Username must be 3-15 characters.',
 	);
 	const [footerClass, setFooterClass] = useState('grey');
 

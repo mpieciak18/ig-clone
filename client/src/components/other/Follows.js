@@ -17,7 +17,7 @@ const Follows = (props) => {
 	const [usersCount, setUsersCount] = useState(20);
 
 	// Init following/follower users arr state
-	const [usersArr, setUsersArr] = useState(null);
+	const [usersArr, setUsersArr] = useState([]);
 
 	// Init all loaded state
 	const [allLoaded, setAllLoaded] = useState(false);
@@ -112,48 +112,41 @@ const Follows = (props) => {
 				</div>
 				<div id='follows-divider' />
 				<div id='follows-list' onScroll={loadMore}>
-					{usersArr?.length
-						? usersArr.map((otherUser) => {
-								const redirect = () => {
-									updatePopUp();
-									if (location.otherUserId == null) {
-										navigate(`/${otherUser.id}`);
-									} else {
-										navigate(`/${otherUser.id}`);
-										window.location.reload();
-									}
-								};
-								return (
-									<div
-										className='follow-row'
-										key={otherUser.id}
-									>
-										<div
-											className='follow-row-left'
-											onClick={redirect}
-										>
-											<img
-												className='follow-image'
-												src={otherUser.image}
-											/>
-											<div className='follow-text'>
-												<div className='follow-name'>
-													{otherUser.name}
-												</div>
-												<div className='follow-username'>
-													@{otherUser.username}
-												</div>
-											</div>
+					{usersArr.map((otherUser) => {
+						const redirect = () => {
+							updatePopUp();
+							if (location.otherUserId == null) {
+								navigate(`/${otherUser.id}`);
+							} else {
+								navigate(`/${otherUser.id}`);
+								window.location.reload();
+							}
+						};
+						return (
+							<div className='follow-row' key={otherUser.id}>
+								<div
+									className='follow-row-left'
+									onClick={redirect}
+								>
+									<img
+										className='follow-image'
+										src={otherUser.image}
+									/>
+									<div className='follow-text'>
+										<div className='follow-name'>
+											{otherUser.name}
 										</div>
-										<div className='follow-row-right'>
-											<FollowButton
-												otherUserId={otherUser.id}
-											/>
+										<div className='follow-username'>
+											@{otherUser.username}
 										</div>
 									</div>
-								);
-						  })
-						: null}
+								</div>
+								<div className='follow-row-right'>
+									<FollowButton otherUserId={otherUser.id} />
+								</div>
+							</div>
+						);
+					})}
 				</div>
 			</div>
 		</div>

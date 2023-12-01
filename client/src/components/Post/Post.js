@@ -128,10 +128,10 @@ const Post = () => {
 					<div id='beneath-buttons'>
 						<div id='likes-count' onClick={clickLikes}>
 							{postLikes == 0
-								? `0 likes`
+								? '0 likes'
 								: postLikes == 1
-								? `1 like`
-								: `${postLikes} likes`}
+									? '1 like'
+									: `${postLikes} likes`}
 						</div>
 					</div>
 				</div>

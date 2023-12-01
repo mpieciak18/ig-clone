@@ -15,7 +15,7 @@ export const addComment = async (postOwnerId, postId, message) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		}
+		},
 	);
 	if (response.status == 200) {
 		// add notification to recipient
@@ -40,11 +40,9 @@ export const removeComment = async (id) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		}
+		},
 	);
 	if (response.status == 200) {
-		// add notification to recipient
-		await addNotification('comment', postOwnerId, postId);
 		const json = await response.json();
 		return json.comment;
 	} else {
@@ -66,7 +64,7 @@ export const getComments = async (id, limit) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		}
+		},
 	);
 	if (response.status == 200) {
 		const json = await response.json();

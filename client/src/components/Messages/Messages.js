@@ -105,14 +105,9 @@ const Messages = () => {
 					</div>
 					<div id='convos-divider'></div>
 					<div id='convos-bottom'>
-						{convosArr?.length
-							? convosArr.map((convo) => (
-									<MessagesChild
-										key={convo.id}
-										convo={convo}
-									/>
-							  ))
-							: null}
+						{convosArr.map((convo) => (
+							<MessagesChild key={convo.id} convo={convo} />
+						))}
 					</div>
 				</div>
 			) : null}

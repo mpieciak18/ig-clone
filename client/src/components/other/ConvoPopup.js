@@ -27,7 +27,7 @@ const ConvoPopup = () => {
 	const [popup, setPopup] = useState(null);
 
 	// Closes search
-	const hideSearch = (e) => {
+	const hideSearch = () => {
 		updatePopUp();
 	};
 
@@ -107,7 +107,7 @@ const ConvoPopup = () => {
 					</div>
 					<div id='convo-popup-bottom'>{resultsComp}</div>
 				</div>
-			</div>
+			</div>,
 		);
 	}, [resultsComp]);
 
