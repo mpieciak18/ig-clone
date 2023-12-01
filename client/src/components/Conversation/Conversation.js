@@ -26,7 +26,7 @@ const Conversation = () => {
 
 	// Use onSnapshot to update messages array real-time
 	useEffect(() => {
-		if (otherUserId) {
+		if (otherUserId && !otherUser) {
 			findUser(otherUserId).then(setOtherUser);
 		}
 	}, []);
@@ -88,11 +88,13 @@ const Conversation = () => {
 					) : null}
 					<div id='convo-back-arrow-hidden'>« Go Back</div>
 				</div>
-				<ConvoMessages
-					otherUser={otherUser}
-					messagesArr={convo.messages}
-					loadMore={loadMore}
-				/>
+				{convo ? (
+					<ConvoMessages
+						otherUser={otherUser}
+						messagesArr={convo.messages}
+						loadMore={loadMore}
+					/>
+				) : null}
 				<form id='convo-message-bar' onSubmit={sendNewMessage}>
 					<input
 						type='text'

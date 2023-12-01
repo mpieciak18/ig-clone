@@ -13,7 +13,7 @@ export const sendMessage = async (message, id, recipientId) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		// add notification to recipient
@@ -36,13 +36,13 @@ export const getSingleConvo = async (id, limit) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
 		return json.conversation;
 	} else {
-		throw new Error();
+		return [];
 	}
 };
 
@@ -57,7 +57,7 @@ export const getConvos = async (limit) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
