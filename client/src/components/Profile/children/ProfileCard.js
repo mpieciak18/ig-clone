@@ -4,9 +4,11 @@ import { Follows } from '../../other/Follows.js';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext.js';
 import { usePopUp } from '../../../contexts/PopUpContext.js';
+import { useProfile } from '../../../contexts/ProfileContext.js';
 
 const ProfileCard = (props) => {
 	const { user } = useAuth();
+	const { otherUser, setOtherUser } = useProfile();
 	const { popUpState, updatePopUp } = usePopUp();
 	const { otherUserId } = props;
 
@@ -14,9 +16,6 @@ const ProfileCard = (props) => {
 
 	// Init profile image state
 	const [img, setImg] = useState(null);
-
-	// Init otherUser id/data state
-	const [otherUser, setOtherUser] = useState(null);
 
 	// Init state to determine if pop-up shows following or followers
 	const [followingVsFollower, setFollowingVsFollower] = useState('following');

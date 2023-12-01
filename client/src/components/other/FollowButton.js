@@ -8,9 +8,11 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext.js';
 import { deepCopy } from '../../other/deepCopy.js';
 import { setLocalUser } from '../../services/localstor.js';
+import { useProfile } from '../../contexts/ProfileContext.js';
 
 const FollowButton = (props) => {
 	const { user, setUser } = useAuth();
+	const { otherUser, setOtherUser } = useProfile();
 	const { otherUserId } = props;
 
 	const navigate = useNavigate();
@@ -56,21 +58,33 @@ const FollowButton = (props) => {
 		} else if (isUpdating == false && followingId == null) {
 			setFollowButtonClass('inactive');
 			setIsUpdating(true);
+			// Create follow
 			const newFollow = await addFollow(otherUserId);
 			setFollowingId(newFollow.id);
+			// Update signed-in user's stats
 			const updatedUser = await deepCopy(user);
 			updatedUser._count.givenFollows++;
 			await setUser(updatedUser);
 			setLocalUser(updatedUser);
+			// Update other user's states
+			const updatedOtherUser = await deepCopy(otherUser);
+			updatedOtherUser._count.givenFollows++;
+			await setOtherUser(updatedOtherUser);
 		} else if (isUpdating == false && followingId != null) {
 			setFollowButtonClass('inactive');
 			setIsUpdating(true);
+			// Delete follow
 			await removeFollow(followingId);
 			setFollowingId(null);
+			// Update signed-in user's stats
 			const updatedUser = await deepCopy(user);
 			updatedUser._count.givenFollows--;
 			await setUser(updatedUser);
 			setLocalUser(updatedUser);
+			// Update other user's states
+			const updatedOtherUser = await deepCopy(otherUser);
+			updatedOtherUser._count.givenFollows--;
+			await setOtherUser(updatedOtherUser);
 		}
 	};
 

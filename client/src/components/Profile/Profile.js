@@ -7,6 +7,7 @@ import { findPostsFromUser } from '../../services/posts.js';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { ProfileProvider } from '../../contexts/ProfileContext.js';
 
 const Profile = () => {
 	const { user } = useAuth();
@@ -58,29 +59,33 @@ const Profile = () => {
 	return (
 		<div id='profile'>
 			<Navbar />
-			<div id='profile-contents'>
-				<div id='profile-contents-left'>
-					<ProfileCard otherUserId={otherUserId} />
+			<ProfileProvider>
+				<div id='profile-contents'>
+					<div id='profile-contents-left'>
+						<ProfileCard otherUserId={otherUserId} />
+					</div>
+					<div id='profile-contents-right'>
+						<ProfileButtons otherUserId={otherUserId} />
+						{posts ? (
+							<div id='user-posts'>
+								{posts.map((post) => {
+									return (
+										<PostPreview
+											key={post.id}
+											post={post}
+											user={user}
+										/>
+									);
+								})}
+							</div>
+						) : (
+							<div id='user-posts-empty'>
+								This user has no posts.
+							</div>
+						)}
+					</div>
 				</div>
-				<div id='profile-contents-right'>
-					<ProfileButtons otherUserId={otherUserId} />
-					{posts ? (
-						<div id='user-posts'>
-							{posts.map((post) => {
-								return (
-									<PostPreview
-										key={post.id}
-										post={post}
-										user={user}
-									/>
-								);
-							})}
-						</div>
-					) : (
-						<div id='user-posts-empty'>This user has no posts.</div>
-					)}
-				</div>
-			</div>
+			</ProfileProvider>
 		</div>
 	);
 };
