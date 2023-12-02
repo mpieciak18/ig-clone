@@ -17,7 +17,7 @@ export const createUser = async (username, name, email, password) => {
 			body,
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
@@ -78,7 +78,7 @@ export const findUser = async (id) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
@@ -99,7 +99,7 @@ export const searchUsers = async (name) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
@@ -146,7 +146,7 @@ export const isUsernameUnique = async (username) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
@@ -168,7 +168,7 @@ export const isEmailUnique = async (email) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();

@@ -1,6 +1,10 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import './Conversation.css';
-import { sendMessage, getSingleConvo } from '../../services/messages.js';
+import {
+	sendMessage,
+	getSingleConvo,
+	createConvo,
+} from '../../services/messages.js';
 import { useEffect, useState } from 'react';
 import { ConvoMessages } from './children/ConvoMessages';
 import { Navbar } from '../other/Navbar';
@@ -55,10 +59,17 @@ const Conversation = () => {
 
 	// Add new message to specific convo in db
 	const sendNewMessage = async (e) => {
+		console.log('test');
 		e.preventDefault();
 		if (messageValue.length > 0) {
 			setMessageValue('');
-			await sendMessage(messageValue, convo.id, otherUser.id);
+			if (!convo?.id) {
+				const newConvo = await createConvo(otherUserId);
+				setConvo(newConvo);
+				await sendMessage(messageValue, newConvo.id, otherUserId);
+			} else {
+				await sendMessage(messageValue, convo.id, otherUserId);
+			}
 			const elem = document.getElementById('convo-messages');
 			elem.scrollTop = elem.scrollHeight;
 		}
