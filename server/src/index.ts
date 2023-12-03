@@ -15,8 +15,8 @@ import {
 const httpServer = createServer(app);
 const io = new SocketIOServer(httpServer, {
 	cors: {
-		origin: 'http://localhost:5173', // Replace with the origin of your client app
-		methods: ['GET', 'POST'], // Add other methods as per your needs
+		origin: process.env.CLIENT_URL,
+		methods: ['GET', 'POST'],
 		credentials: true,
 	},
 });
