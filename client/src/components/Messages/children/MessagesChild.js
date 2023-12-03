@@ -36,9 +36,9 @@ export const MessagesChild = (props) => {
 			</div>
 			<div className='convo-row-right'>
 				<div className='convo-row-message'>
-					{`${message.senderId == user.id ? 'You' : 'Them'}: "${
-						convo.messages[0].message
-					}"`}
+					{`${
+						convo.messages[0].senderId == user.id ? 'You' : 'Them'
+					}: "${convo.messages[0].message}"`}
 				</div>
 				<div className='convo-row-time'>
 					{timeSinceTrunc(convo.messages[0].createdAt)}

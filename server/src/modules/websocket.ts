@@ -13,7 +13,8 @@ export const createMessage = async (data, socket, user) => {
 		});
 
 		if (message) {
-			socket.emit('messageCreated', { message });
+			socket.emit('newMessage', message);
+			return message;
 		} else {
 			// Handle error: No message created
 			socket.emit('error', { message: 'Message creation failed.' });

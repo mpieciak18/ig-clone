@@ -7,11 +7,11 @@ import { PopUpProvider } from './contexts/PopUpContext.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-	<React.StrictMode>
-		<AuthProvider>
-			<PopUpProvider>
-				<App />
-			</PopUpProvider>
-		</AuthProvider>
-	</React.StrictMode>,
+	// <React.StrictMode>
+	<AuthProvider>
+		<PopUpProvider>
+			<App />
+		</PopUpProvider>
+	</AuthProvider>
+	// </React.StrictMode>
 );

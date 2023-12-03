@@ -13,7 +13,13 @@ import {
 
 // configure websockets
 const httpServer = createServer(app);
-const io = new SocketIOServer(httpServer);
+const io = new SocketIOServer(httpServer, {
+	cors: {
+		origin: 'http://localhost:5173', // Replace with the origin of your client app
+		methods: ['GET', 'POST'], // Add other methods as per your needs
+		credentials: true,
+	},
+});
 
 // validates an incoming message from a websocket
 io.use((socket, next) => {
@@ -30,21 +36,22 @@ io.use((socket, next) => {
 	}
 });
 
-//
 io.on('connection', (socket) => {
-	console.log('a user connected');
+	console.log('connected');
+	socket.on('joinConversation', ({ conversationId }) => {
+		console.log('a user connected');
+		socket.join(conversationId);
+	});
 
-	socket.on('sendMessage', (message) => {
+	socket.on('sendNewMessage', async (message) => {
 		const errors = handleInputErrors(message);
 		if (errors) {
 			socket.emit('inputError', errors);
 			return;
 		}
-
 		// @ts-ignore
-		await createMessage(data, socket, socket.decoded);
-
-		io.emit('newMessage', message);
+		const dbEntry = await createMessage(message, socket, socket.user);
+		io.to(message.id).emit('receiveNewMessage', dbEntry);
 	});
 
 	socket.on('disconnect', () => {
