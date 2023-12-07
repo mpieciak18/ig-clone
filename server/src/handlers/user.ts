@@ -4,7 +4,7 @@ import { deleteFileFromStorage } from '../config/gcloud';
 import { NextFunction, Request, Response } from 'express';
 import {
 	AuthReq,
-	ReqPostImgUpload,
+	MayHaveImage,
 	UserStatsCount,
 	UserUpdateData,
 } from '../types/types';
@@ -121,7 +121,7 @@ export const deleteUser = async (
 
 // Updates a user's account fields
 export const updateUser = async (
-	req: AuthReq & ReqPostImgUpload,
+	req: AuthReq & MayHaveImage,
 	res: Response,
 	next: NextFunction
 ) => {

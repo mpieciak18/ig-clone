@@ -2,10 +2,10 @@ import { validationResult } from 'express-validator';
 import { bucket, getUrl } from '../config/gcloud';
 import { randomUUID } from 'crypto';
 import { NextFunction, Response, Request } from 'express';
-import { AuthReq, ReqPostImgUpload } from '../types/types';
+import { AuthReq, MayHaveFile, MayHaveImage } from '../types/types';
 
 export const handleInputErrors = (
-	req: Request | AuthReq | (AuthReq & ReqPostImgUpload),
+	req: Request | AuthReq,
 	res: Response,
 	next: NextFunction
 ) => {
@@ -19,7 +19,7 @@ export const handleInputErrors = (
 };
 
 export const uploadImage = async (
-	req: AuthReq & ReqPostImgUpload,
+	req: AuthReq & MayHaveFile & MayHaveImage,
 	res: Response,
 	next: NextFunction
 ) => {

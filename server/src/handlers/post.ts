@@ -1,8 +1,23 @@
 import prisma from '../db';
 import { deleteFileFromStorage } from '../config/gcloud';
+import {
+	AuthReq,
+	HasCaption,
+	HasId,
+	HasLimit,
+	MayHaveImage,
+	PostStatsCount,
+	PostUpdateData,
+} from '../types/types';
+import { NextFunction, Response } from 'express';
+import { Post, User } from '@prisma/client';
 
 // Creates a post
-export const createPost = async (req, res, next) => {
+export const createPost = async (
+	req: AuthReq & HasCaption & MayHaveImage,
+	res: Response,
+	next: NextFunction
+) => {
 	// If no image url is passed from the upload middleware, handle it at the top-level (server.ts) as 500 error
 	if (!req.image) {
 		const e = new Error();
@@ -11,7 +26,7 @@ export const createPost = async (req, res, next) => {
 	}
 
 	// First, create post
-	let post;
+	let post: Post | undefined;
 	try {
 		post = await prisma.post.create({
 			data: {
@@ -38,10 +53,14 @@ export const createPost = async (req, res, next) => {
 };
 
 // Gets a post based on a single post's id (if it exists)
-export const getSinglePost = async (req, res, next) => {
+export const getSinglePost = async (
+	req: AuthReq & HasId,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, get post by id
 	// If no post is found, handle it at the top-level (server.ts) as 500 error
-	let post;
+	let post: (Post & PostStatsCount) | undefined;
 	try {
 		post = await prisma.post.findUnique({
 			where: { id: req.body.id },
@@ -70,10 +89,14 @@ export const getSinglePost = async (req, res, next) => {
 };
 
 // Gets all posts from a single user by id
-export const getPosts = async (req, res, next) => {
+export const getPosts = async (
+	req: AuthReq & HasLimit,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, get all posts with limit
 	// If no posts are found, handle it at the top-level (server.ts) as 500 error
-	let posts;
+	let posts: (Post & PostStatsCount)[] | undefined;
 	try {
 		posts = await prisma.post.findMany({
 			take: req.body.limit,
@@ -104,10 +127,14 @@ export const getPosts = async (req, res, next) => {
 };
 
 // Gets all posts from a single user by id
-export const getUserPosts = async (req, res, next) => {
+export const getUserPosts = async (
+	req: AuthReq & HasLimit & HasId,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, confirm if provided user exists
 	// If no user is found, handle it at the top-level (server.ts) as 500 error
-	let otherUser;
+	let otherUser: User | undefined;
 	try {
 		otherUser = await prisma.user.findUnique({
 			where: { id: req.body.id },
@@ -124,7 +151,7 @@ export const getUserPosts = async (req, res, next) => {
 	}
 	// Second, get posts by user id
 	// If no post is found, handle it at the top-level (server.ts) as 500 error
-	let posts;
+	let posts: (Post & PostStatsCount)[] | undefined;
 	try {
 		posts = await prisma.post.findMany({
 			where: { userId: req.body.id },
@@ -155,9 +182,13 @@ export const getUserPosts = async (req, res, next) => {
 };
 
 // Deletes a post
-export const deletePost = async (req, res, next) => {
+export const deletePost = async (
+	req: AuthReq & HasId,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, delete the post
-	let post;
+	let post: Post | undefined;
 	try {
 		post = await prisma.post.delete({
 			where: { id: req.body.id },
@@ -188,16 +219,20 @@ export const deletePost = async (req, res, next) => {
 };
 
 // Updates a post
-export const updatePost = async (req, res, next) => {
+export const updatePost = async (
+	req: AuthReq & HasId & HasCaption,
+	res: Response,
+	next: NextFunction
+) => {
 	// Format data needed for update
 	const keys = ['caption'];
-	const data = {};
+	const data: PostUpdateData = {};
 	keys.forEach((key) => {
 		if (req.body[key]) data[key] = req.body[key];
 	});
 
 	// Update post
-	let post;
+	let post: Post | undefined;
 	try {
 		post = await prisma.post.update({
 			where: { id: req.body.id },

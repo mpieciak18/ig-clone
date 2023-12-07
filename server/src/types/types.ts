@@ -18,6 +18,13 @@ export interface UserStatsCount {
 	};
 }
 
+export interface PostStatsCount {
+	_count: {
+		comments: number;
+		likes: number;
+	};
+}
+
 export interface PreAuth {
 	user: string | JwtPayload;
 }
@@ -34,11 +41,27 @@ export interface UserUpdateData {
 	image?: string;
 }
 
-export interface ReqPreImgUpload {
-	file?: Field;
-	path?: string;
+export interface PostUpdateData {
+	id?: number;
+	caption?: string;
 }
 
-export interface ReqPostImgUpload {
+export interface MayHaveFile {
+	file?: Field;
+}
+
+export interface MayHaveImage {
 	image?: string;
+}
+
+export interface HasId {
+	body: { id: number };
+}
+
+export interface HasLimit {
+	body: { id: number };
+}
+
+export interface HasCaption {
+	body: { caption: string };
 }
