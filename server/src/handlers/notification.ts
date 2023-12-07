@@ -1,9 +1,24 @@
+import { NextFunction, Response } from 'express';
 import prisma from '../db';
+import {
+	AuthReq,
+	HasId,
+	HasLimit,
+	HasType,
+	MayHavePostId,
+	NewNotificationData,
+	NotificationWithOtherUser,
+} from '../types/types';
+import { Notification, User } from '@prisma/client';
 
 // Creates a new notification
-export const createNotif = async (req, res, next) => {
+export const createNotif = async (
+	req: AuthReq & HasType & HasId & MayHavePostId,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, confirm other user exists
-	let otherUser;
+	let otherUser: User | undefined;
 	try {
 		otherUser = await prisma.user.findUnique({
 			where: { id: req.body.id },
@@ -22,8 +37,8 @@ export const createNotif = async (req, res, next) => {
 	}
 
 	// Second, create notification
-	let notification;
-	const data = {
+	let notification: Notification | undefined;
+	const data: NewNotificationData = {
 		userId: req.body.id,
 		otherUserId: req.user.id,
 		type: req.body.type,
@@ -53,9 +68,13 @@ export const createNotif = async (req, res, next) => {
 };
 
 // Deletes a notification
-export const deleteNotif = async (req, res, next) => {
+export const deleteNotif = async (
+	req: AuthReq & HasId,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, delete notification
-	let notification;
+	let notification: Notification | undefined;
 	try {
 		notification = await prisma.notification.delete({
 			where: { id: req.body.id },
@@ -78,11 +97,15 @@ export const deleteNotif = async (req, res, next) => {
 };
 
 // Gets the user's unread notifications
-export const getNotifsUnread = async (req, res, next) => {
+export const getNotifsUnread = async (
+	req: AuthReq & HasLimit,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, try to get unread notifications
 	// If nothing is return (as oppposed to an empty array),
 	// then handle it at the top-level (server.ts) as 500 error
-	let notifications;
+	let notifications: NotificationWithOtherUser[] | undefined;
 	try {
 		notifications = await prisma.notification.findMany({
 			where: { userId: req.user.id, read: false },
@@ -106,11 +129,15 @@ export const getNotifsUnread = async (req, res, next) => {
 };
 
 // Gets the user's read notifications
-export const getNotifsRead = async (req, res, next) => {
+export const getNotifsRead = async (
+	req: AuthReq & HasLimit,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, try to get read notifications
 	// If nothing is return (as oppposed to an empty array),
 	// then handle it at the top-level (server.ts) as 500 error
-	let notifications;
+	let notifications: NotificationWithOtherUser[] | undefined;
 	try {
 		notifications = await prisma.notification.findMany({
 			where: { userId: req.user.id, read: true },
@@ -134,9 +161,13 @@ export const getNotifsRead = async (req, res, next) => {
 };
 
 // Updates all notifications (as read)
-export const updateNotifsRead = async (req, res, next) => {
+export const updateNotifsRead = async (
+	req: AuthReq,
+	res: Response,
+	next: NextFunction
+) => {
 	// Update notification
-	let response;
+	let response: { count: number } | undefined;
 	try {
 		response = await prisma.notification.updateMany({
 			data: { read: true },

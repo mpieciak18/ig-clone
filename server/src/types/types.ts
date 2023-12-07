@@ -1,6 +1,6 @@
 import { JwtPayload } from 'jsonwebtoken';
 import { Request } from 'express';
-import { User } from '@prisma/client';
+import { Notification, User } from '@prisma/client';
 import { Field } from 'multer';
 
 export interface NewUserBody {
@@ -46,6 +46,14 @@ export interface PostUpdateData {
 	caption?: string;
 }
 
+export interface NewNotificationData {
+	userId: number;
+	otherUserId: number;
+	type: string;
+	read: boolean;
+	postId?: number;
+}
+
 export interface MayHaveFile {
 	file?: Field;
 }
@@ -62,6 +70,17 @@ export interface HasLimit {
 	body: { id: number };
 }
 
+export interface MayHavePostId {
+	body: { postId?: number };
+}
+
 export interface HasCaption {
 	body: { caption: string };
+}
+export interface HasType {
+	body: { type: string };
+}
+
+export interface NotificationWithOtherUser extends Notification {
+	otherUser: User;
 }
