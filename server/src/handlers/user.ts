@@ -1,33 +1,47 @@
 import prisma from '../db';
 import { comparePasswords, createJwt, hashPassword } from '../modules/auth';
 import { deleteFileFromStorage } from '../config/gcloud';
+import { NextFunction, Request, Response } from 'express';
+import {
+	AuthReq,
+	ReqPostImgUpload,
+	UserStatsCount,
+	UserUpdateData,
+} from '../types/types';
+import { NewUserBody } from '../types/types';
+import { User } from '@prisma/client';
 
 // Creates a new user in the database and returns a signed JWT to the client.
 // Any error is assumed to be related to user input and is returned to the client as such.
-export const createNewUser = async (req, res, next) => {
-	const data = req.body;
+export const createNewUser = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	const data: NewUserBody = req.body;
 	data.password = await hashPassword(req.body.password);
 	try {
-		const user = await prisma.user.create({
+		const userData: User = await prisma.user.create({
 			data: data,
 		});
-		const token = await createJwt(user);
-		// @ts-ignore
-		user._count = {
-			posts: 0,
-			receivedFollows: 0,
-			givenFollows: 0,
+		const token: string = await createJwt(userData);
+		const user: User & UserStatsCount = {
+			...userData,
+			_count: {
+				posts: 0,
+				receivedFollows: 0,
+				givenFollows: 0,
+			},
 		};
 		res.json({ token, user });
 	} catch (e) {
 		// Checks if error is a 'unique constraint failure'
 		if (e.code == 'P2002') {
-			const notUnique = [];
+			const notUnique: string[] = [];
 			if (e.meta?.target) {
-				e.meta.target.forEach((field) => notUnique.push(field));
+				e.meta.target.forEach((field: string) => notUnique.push(field));
 			}
-			res.status(400);
-			res.json({ notUnique });
+			res.status(400).json({ notUnique });
 		} else {
 			e.type = 'input';
 			next(e);
@@ -38,9 +52,13 @@ export const createNewUser = async (req, res, next) => {
 // Verifies sign-in attempt by checking if username exists and if passwords match.
 // If both conditions don't pass, then an error message is returned to the client.
 // Otherwise, a signed JWT is returned back to the client.
-export const signIn = async (req, res, next) => {
+export const signIn = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, find user in database by username.
-	const user = await prisma.user.findUnique({
+	const user: User & UserStatsCount = await prisma.user.findUnique({
 		where: {
 			email: req.body.email,
 		},
@@ -55,27 +73,32 @@ export const signIn = async (req, res, next) => {
 		},
 	});
 	if (!user) {
-		res.status(401);
-		res.json({ message: 'Invalid Username or Password' });
+		res.status(401).json({ message: 'Invalid Username or Password' });
 		return;
 	}
 	// Second, compare passwords (ie, user input vs database value).
-	const isValid = await comparePasswords(req.body.password, user.password);
+	const isValid: boolean = await comparePasswords(
+		req.body.password,
+		user.password
+	);
 	if (!isValid) {
-		res.status(401);
-		res.json({ message: 'Invalid Username or Password' });
+		res.status(401).json({ message: 'Invalid Username or Password' });
 		return;
 	}
 	// Third, return auth token to client.
-	const token = await createJwt(user);
+	const token: string = await createJwt(user);
 	res.json({ token, user });
 };
 
 // Deletes a user's account from the database
 // NOTE: Currently only used for testing purposes
-export const deleteUser = async (req, res, next) => {
+export const deleteUser = async (
+	req: AuthReq,
+	res: Response,
+	next: NextFunction
+) => {
 	// Delete user
-	let user;
+	let user: User | undefined;
 	try {
 		user = await prisma.user.delete({ where: { id: req.user.id } });
 	} catch (e) {
@@ -97,25 +120,27 @@ export const deleteUser = async (req, res, next) => {
 };
 
 // Updates a user's account fields
-export const updateUser = async (req, res, next) => {
+export const updateUser = async (
+	req: AuthReq & ReqPostImgUpload,
+	res: Response,
+	next: NextFunction
+) => {
 	// Format data needed for update
 	const keys = ['email', 'username', 'name', 'bio'];
-	const data = {};
+	const data: UserUpdateData = {};
 	keys.forEach((key) => {
 		if (req.body[key]) data[key] = req.body[key];
 	});
 	if (req.body.password) {
-		// @ts-ignore
 		data.password = await hashPassword(req.body.password);
 	}
 	// If an image was uploaded, add it to the data
 	// Also, get the user's old image
-	let oldImage;
+	let oldImage: string | undefined;
 	if (req.image) {
 		try {
-			// @ts-ignore
 			data.image = req.image;
-			const oldData = await prisma.user.findUnique({
+			const oldData: { image?: string } = await prisma.user.findUnique({
 				where: { id: req.user.id },
 				select: {
 					image: true,
@@ -128,7 +153,7 @@ export const updateUser = async (req, res, next) => {
 	}
 
 	// Update user
-	let user;
+	let user: (User & UserStatsCount) | undefined;
 	try {
 		user = await prisma.user.update({
 			where: { id: req.user.id },
@@ -147,11 +172,9 @@ export const updateUser = async (req, res, next) => {
 		// Checks if there's a 'unique constraint failure' & handles it as a 401 error
 		if (e.code == 'P2002') {
 			if (e.meta?.target?.includes('email')) {
-				res.status(400);
-				res.json({ message: 'email in use' });
+				res.status(400).json({ message: 'email in use' });
 			} else if (e.meta?.target?.includes('username')) {
-				res.status(400);
-				res.json({ message: 'username in use' });
+				res.status(400).json({ message: 'username in use' });
 			} else {
 				next(e);
 			}
@@ -183,8 +206,12 @@ export const updateUser = async (req, res, next) => {
 };
 
 // Attempts to find user by id
-export const getSingleUser = async (req, res, next) => {
-	let user;
+export const getSingleUser = async (
+	req: AuthReq,
+	res: Response,
+	next: NextFunction
+) => {
+	let user: (User & UserStatsCount) | undefined;
 	// First, find user in database by id.
 	try {
 		user = await prisma.user.findUnique({
@@ -216,8 +243,12 @@ export const getSingleUser = async (req, res, next) => {
 };
 
 // Attempts to find user(s) by name or username
-export const getUsersByName = async (req, res, next) => {
-	let users;
+export const getUsersByName = async (
+	req: AuthReq,
+	res: Response,
+	next: NextFunction
+) => {
+	let users: User[] | undefined;
 	// First, search users by name in database
 	try {
 		users = await prisma.user.findMany({
@@ -255,8 +286,12 @@ export const getUsersByName = async (req, res, next) => {
 };
 
 // Checks if an email is unique (ie, not taken by another user)
-export const isEmailUnique = async (req, res, next) => {
-	let user;
+export const isEmailUnique = async (
+	req: AuthReq,
+	res: Response,
+	next: NextFunction
+) => {
+	let user: User | undefined;
 	let isEmailUnique = false;
 	// First, search for a user by email
 	try {
@@ -278,8 +313,12 @@ export const isEmailUnique = async (req, res, next) => {
 };
 
 // Checks if an username is unique (ie, not taken by another user)
-export const isUsernameUnique = async (req, res, next) => {
-	let user;
+export const isUsernameUnique = async (
+	req: AuthReq,
+	res: Response,
+	next: NextFunction
+) => {
+	let user: User | undefined;
 	let isUsernameUnique = false;
 	// First, search for a user by username
 	try {

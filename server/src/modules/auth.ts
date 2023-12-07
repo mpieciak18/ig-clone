@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
+import { NextFunction, Request, Response } from 'express';
+import { PreAuth } from '../types/types';
 
 // Receives a user object, passes it along with the jwt_secret to the 'jwt' libary,
 // and returns a signed JWT token.
@@ -16,18 +18,20 @@ export const createJwt = async (user: { id: any; username: any }) => {
 // Validates a JWT token sent from the client and sends the verified token back.
 // If there's no bearer inside the headers, no token inside the bearer, or the JWT token is unverified,
 // then an error is sent back to the client instead.
-export const protect = async (req, res, next) => {
-	const bearer = req.headers.authorization;
+export const protect = async (
+	req: Request & PreAuth,
+	res: Response,
+	next: NextFunction
+) => {
+	const bearer: string = req.headers.authorization;
 	if (!bearer) {
-		res.status(401);
-		res.json({ message: 'Not Authorized' });
+		res.status(401).json({ message: 'Not Authorized' });
 		return;
 	}
 
 	const [, token] = bearer.split(' ');
 	if (!token) {
-		res.status(401);
-		res.json({ message: 'Invalid Token' });
+		res.status(401).json({ message: 'Invalid Token' });
 		return;
 	}
 
@@ -36,8 +40,7 @@ export const protect = async (req, res, next) => {
 		req.user = user;
 		next();
 	} catch (e) {
-		res.status(401);
-		res.json({ message: 'Token Unverifiable' });
+		res.status(401).json({ message: 'Token Unverifiable' });
 		return;
 	}
 };
