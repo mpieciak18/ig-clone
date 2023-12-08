@@ -11,6 +11,7 @@ import {
 	User,
 } from '@prisma/client';
 import { Field } from 'multer';
+import { Socket } from 'socket.io';
 
 export interface NewUserBody {
 	email: string;
@@ -117,4 +118,17 @@ export interface UserConversation extends Conversation {
 
 export interface SyncErr extends Error {
 	type?: string;
+}
+
+export interface SocketMessage {
+	id: string;
+	message: string;
+}
+
+export interface SocketMessageErr {
+	message: string;
+}
+
+export interface SocketWithUser extends Socket {
+	user: User;
 }

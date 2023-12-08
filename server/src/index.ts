@@ -4,12 +4,16 @@ import { config } from './config/index';
 import app from './server';
 // imports for websockets
 import { createServer } from 'http';
-import { Server as SocketIOServer } from 'socket.io';
+import { Socket, Server as SocketIOServer } from 'socket.io';
 import {
 	handleInputErrors,
 	retrieveUserFromToken,
 	createMessage,
 } from './modules/websocket';
+import { ExtendedError } from 'socket.io/dist/namespace';
+import { JwtPayload } from 'jsonwebtoken';
+import { SocketMessage, SocketMessageErr, SocketWithUser } from './types/types';
+import { Message } from '@prisma/client';
 
 // configure websockets
 const httpServer = createServer(app);
@@ -22,12 +26,12 @@ const io = new SocketIOServer(httpServer, {
 });
 
 // validates an incoming message from a websocket
-io.use((socket, next) => {
+io.use((socket: Socket, next: (err?: ExtendedError) => void) => {
 	const token = socket.handshake.auth.token;
 
 	// Verify token
 	try {
-		const user = retrieveUserFromToken(token);
+		const user: string | JwtPayload = retrieveUserFromToken(token);
 		// @ts-ignore
 		socket.user = user;
 		next();
@@ -36,21 +40,25 @@ io.use((socket, next) => {
 	}
 });
 
-io.on('connection', (socket) => {
+io.on('connection', (socket: SocketWithUser) => {
 	console.log('connected');
 	socket.on('joinConversation', ({ conversationId }) => {
 		console.log('a user connected');
 		socket.join(conversationId);
 	});
 
-	socket.on('sendNewMessage', async (message) => {
-		const errors = handleInputErrors(message);
+	socket.on('sendNewMessage', async (message: SocketMessage) => {
+		const errors: SocketMessageErr[] | null = handleInputErrors(message);
 		if (errors) {
 			socket.emit('inputError', errors);
 			return;
 		}
 		// @ts-ignore
-		const dbEntry = await createMessage(message, socket, socket.user);
+		const dbEntry: Message = await createMessage(
+			message,
+			socket,
+			socket.user
+		);
 		io.to(message.id).emit('receiveNewMessage', dbEntry);
 	});
 
