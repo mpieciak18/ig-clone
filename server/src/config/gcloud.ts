@@ -1,6 +1,7 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getDownloadURL, getStorage } from 'firebase-admin/storage';
 import serviceAccount from './gcloudKey.json';
+import { Bucket, File } from '@google-cloud/storage';
 
 initializeApp({
 	// @ts-ignore
@@ -8,14 +9,14 @@ initializeApp({
 	storageBucket: process.env.APP_URL,
 });
 
-export const bucket = getStorage().bucket();
+export const bucket: Bucket = getStorage().bucket();
 
-export const getUrl = async (ref) => {
+export const getUrl = async (ref: File): Promise<string> => {
 	const url = await getDownloadURL(ref);
 	return url;
 };
 
-export const deleteFileFromStorage = async (url) => {
+export const deleteFileFromStorage = async (url: string): Promise<void> => {
 	try {
 		// Assumes the URL structure is like : `https://firebasestorage.googleapis.com/v0/b/{appName}/o/{fileName}?alt={token}`
 		const fileName = url
