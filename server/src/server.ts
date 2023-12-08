@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import router from './router';
 import morgan from 'morgan';
 import cors from 'cors';
@@ -6,6 +6,7 @@ import { protect } from './modules/auth';
 import { signIn, createNewUser } from './handlers/user';
 import { handleInputErrors } from './modules/middleware';
 import { body } from 'express-validator';
+import { SyncErr } from './types/types';
 
 // init express
 const app = express();
@@ -42,7 +43,7 @@ app.post(
 );
 
 // synchronous error handler
-app.use((err, req, res, next) => {
+app.use((err: SyncErr, req: Request, res: Response, next: NextFunction) => {
 	if (err.type === 'auth') {
 		res.status(401);
 		res.json({ message: 'unauthorized' });

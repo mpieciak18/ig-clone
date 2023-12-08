@@ -1,5 +1,5 @@
 import { JwtPayload } from 'jsonwebtoken';
-import { Request } from 'express';
+import { Errback, Request } from 'express';
 import {
 	Comment,
 	Conversation,
@@ -113,4 +113,8 @@ export interface LikeWithUser extends Like {
 export interface UserConversation extends Conversation {
 	users: User[];
 	messages: Message[];
+}
+
+export interface SyncErr extends Error {
+	type?: string;
 }

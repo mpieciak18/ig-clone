@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { NextFunction, Router, Response } from 'express';
 import { body } from 'express-validator';
 import {
 	deleteUser,
@@ -48,6 +48,7 @@ import {
 	getConversation,
 } from './handlers/conversation';
 import { createMessage, deleteMessage, getMessages } from './handlers/message';
+import { SyncErr } from './types/types';
 
 // export const upload = multer({
 // 	storage: multer.memoryStorage(),
@@ -336,7 +337,7 @@ router.delete('/message', body('id').isInt(), handleInputErrors, deleteMessage);
 
 // synchronous error handler
 // @ts-ignore
-router.use((err, req, res, next) => {
+router.use((err: SyncErr, req: Request, res: Response, next: NextFunction) => {
 	if (err.type === 'auth') {
 		res.status(401);
 		res.json({ message: 'unauthorized' });
