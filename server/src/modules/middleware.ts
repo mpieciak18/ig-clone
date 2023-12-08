@@ -8,7 +8,7 @@ export const handleInputErrors = (
 	req: Request | AuthReq,
 	res: Response,
 	next: NextFunction
-) => {
+): void => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		res.status(400);
@@ -22,7 +22,7 @@ export const uploadImage = async (
 	req: AuthReq & MayHaveFile & MayHaveImage,
 	res: Response,
 	next: NextFunction
-) => {
+): Promise<void> => {
 	try {
 		if (!req.file && req.path == '/user') {
 			next();
