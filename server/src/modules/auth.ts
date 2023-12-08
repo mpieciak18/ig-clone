@@ -5,7 +5,10 @@ import { PreAuth } from '../types/types';
 
 // Receives a user object, passes it along with the jwt_secret to the 'jwt' libary,
 // and returns a signed JWT token.
-export const createJwt = async (user: { id: any; username: any }) => {
+export const createJwt = async (user: {
+	id: any;
+	username: any;
+}): Promise<string> => {
 	const token = jwt.sign(
 		{
 			id: user.id,
@@ -22,7 +25,7 @@ export const protect = async (
 	req: Request & PreAuth,
 	res: Response,
 	next: NextFunction
-) => {
+): Promise<void> => {
 	const bearer: string = req.headers.authorization;
 	if (!bearer) {
 		res.status(401).json({ message: 'Not Authorized' });
@@ -47,13 +50,16 @@ export const protect = async (
 
 // Compares a password string (e.g., user input) to a password hash (e.g., database value)
 // and returns a 'salt' if it passes or an error if it doesn't pass.
-export const comparePasswords = async (password: string, hash: string) => {
-	const result: boolean = await bcrypt.compare(password, hash);
+export const comparePasswords = async (
+	password: string,
+	hash: string
+): Promise<boolean> => {
+	const result = await bcrypt.compare(password, hash);
 	return result;
 };
 
 // Uses bcrypt to create a hash of a password (e.g., to then be stored in the database).
-export const hashPassword = async (password: string) => {
-	const result: string = await bcrypt.hash(password, 5);
+export const hashPassword = async (password: string): Promise<string> => {
+	const result = await bcrypt.hash(password, 5);
 	return result;
 };
