@@ -1,9 +1,22 @@
+import { NextFunction, Response } from 'express';
 import prisma from '../db';
+import {
+	AuthReq,
+	CommentWithOtherUser,
+	HasId,
+	HasLimit,
+	HasMessage,
+} from '../types/types';
+import { Comment } from '@prisma/client';
 
 // Creates a comment
-export const createComment = async (req, res, next) => {
+export const createComment = async (
+	req: AuthReq & HasId & HasMessage,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, attempt to create comment
-	let comment;
+	let comment: Comment | undefined;
 	try {
 		comment = await prisma.comment.create({
 			data: {
@@ -30,10 +43,14 @@ export const createComment = async (req, res, next) => {
 };
 
 // Gets (limited number of) comments from post
-export const getComments = async (req, res, next) => {
+export const getComments = async (
+	req: AuthReq & HasId & HasLimit,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, get all comments from post with limit
 	// If no comments are found, handle it at the top-level (server.ts) as 500 error
-	let comments;
+	let comments: CommentWithOtherUser[] | undefined;
 	try {
 		comments = await prisma.comment.findMany({
 			where: { postId: req.body.id },
@@ -57,10 +74,14 @@ export const getComments = async (req, res, next) => {
 };
 
 // Gets a single comment by id
-export const getSingleComment = async (req, res, next) => {
+export const getSingleComment = async (
+	req: AuthReq & HasId,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, get commend by id
 	// If no comment is found, handle it at the top-level (server.ts) as 500 error
-	let comment;
+	let comment: Comment | undefined;
 	try {
 		comment = await prisma.comment.findUnique({
 			where: { id: req.body.id },
@@ -81,9 +102,13 @@ export const getSingleComment = async (req, res, next) => {
 };
 
 // Deletes a comment
-export const deleteComment = async (req, res, next) => {
+export const deleteComment = async (
+	req: AuthReq & HasId,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, attempt to delete the comment
-	let comment;
+	let comment: Comment | undefined;
 	try {
 		comment = await prisma.comment.delete({
 			where: { id: req.body.id },
@@ -106,9 +131,13 @@ export const deleteComment = async (req, res, next) => {
 };
 
 // Updates a comment
-export const updateComment = async (req, res, next) => {
+export const updateComment = async (
+	req: AuthReq & HasId & HasMessage,
+	res: Response,
+	next: NextFunction
+) => {
 	// Attempt to update comment
-	let comment;
+	let comment: Comment | undefined;
 	try {
 		comment = await prisma.comment.update({
 			where: { id: req.body.id },
