@@ -1,6 +1,6 @@
 import { JwtPayload } from 'jsonwebtoken';
 import { Request } from 'express';
-import { Comment, Like, Notification, User } from '@prisma/client';
+import { Comment, Like, Notification, Post, Save, User } from '@prisma/client';
 import { Field } from 'multer';
 
 export interface NewUserBody {
@@ -23,6 +23,10 @@ export interface PostStatsCount {
 		comments: number;
 		likes: number;
 	};
+}
+
+export interface SaveFromPost extends Save {
+	post: Post & PostStatsCount;
 }
 
 export interface PreAuth {

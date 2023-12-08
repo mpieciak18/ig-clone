@@ -1,9 +1,16 @@
+import { Save } from '@prisma/client';
 import prisma from '../db';
+import { AuthReq, HasId, HasLimit, SaveFromPost } from '../types/types';
+import { Response, NextFunction } from 'express';
 
 // Creates a save
-export const createSave = async (req, res, next) => {
+export const createSave = async (
+	req: AuthReq & HasId,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, attempt to create save
-	let save;
+	let save: Save | undefined;
 	try {
 		save = await prisma.save.create({
 			data: {
@@ -28,11 +35,15 @@ export const createSave = async (req, res, next) => {
 	res.json({ save });
 };
 
-// Gets (limited number of) saves from post
-export const getSaves = async (req, res, next) => {
+// Gets (limited number of) saves for user
+export const getSaves = async (
+	req: AuthReq & HasLimit,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, get all saves from user with limit
 	// If no saves are found, handle it at the top-level (server.ts) as 500 error
-	let saves;
+	let saves: SaveFromPost[] | undefined;
 	try {
 		saves = await prisma.save.findMany({
 			where: { userId: req.user.id },
@@ -67,9 +78,13 @@ export const getSaves = async (req, res, next) => {
 };
 
 // Deletes a save
-export const deleteSave = async (req, res, next) => {
+export const deleteSave = async (
+	req: AuthReq & HasId,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, attempt to delete the save
-	let save;
+	let save: Save | undefined;
 	try {
 		save = await prisma.save.delete({
 			where: { id: req.body.id },
@@ -92,9 +107,13 @@ export const deleteSave = async (req, res, next) => {
 };
 
 // Gets save based on user id & post id
-export const getSavePost = async (req, res, next) => {
+export const getSavePost = async (
+	req: AuthReq & HasId,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, get save for post based on user id & post id
-	let save;
+	let save: Save | undefined;
 	try {
 		save = await prisma.save.findFirst({
 			where: { postId: req.body.id, userId: req.user.id },
