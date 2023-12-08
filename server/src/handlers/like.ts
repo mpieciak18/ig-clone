@@ -1,9 +1,16 @@
+import { Like } from '@prisma/client';
 import prisma from '../db';
+import { AuthReq, HasId, HasLimit, LikeWithUser } from '../types/types';
+import { Response, NextFunction } from 'express';
 
 // Creates a like
-export const createLike = async (req, res, next) => {
+export const createLike = async (
+	req: AuthReq & HasId,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, attempt to create like
-	let like;
+	let like: Like | undefined;
 	try {
 		like = await prisma.like.create({
 			data: {
@@ -29,10 +36,14 @@ export const createLike = async (req, res, next) => {
 };
 
 // Gets (limited number of) likes from post
-export const getLikes = async (req, res, next) => {
+export const getLikes = async (
+	req: AuthReq & HasId & HasLimit,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, get all likes from post with limit
 	// If no likes are found, handle it at the top-level (server.ts) as 500 error
-	let likes;
+	let likes: LikeWithUser[] | undefined;
 	try {
 		likes = await prisma.like.findMany({
 			where: { postId: req.body.id },
@@ -58,9 +69,13 @@ export const getLikes = async (req, res, next) => {
 };
 
 // Deletes a like
-export const deleteLike = async (req, res, next) => {
+export const deleteLike = async (
+	req: AuthReq & HasId,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, attempt to delete the like
-	let like;
+	let like: Like | undefined;
 	try {
 		like = await prisma.like.delete({
 			where: { id: req.body.id },
@@ -83,9 +98,13 @@ export const deleteLike = async (req, res, next) => {
 };
 
 // Gets like from signed-in user (if it exists for a post)
-export const getLikeUser = async (req, res, next) => {
+export const getLikeUser = async (
+	req: AuthReq & HasId,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, get like from post based on user id
-	let like;
+	let like: Like | undefined;
 	try {
 		like = await prisma.like.findFirst({
 			where: { postId: req.body.id, userId: req.user.id },

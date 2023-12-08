@@ -2,7 +2,7 @@ import { NextFunction, Response } from 'express';
 import prisma from '../db';
 import {
 	AuthReq,
-	CommentWithOtherUser,
+	CommentWithUser,
 	HasId,
 	HasLimit,
 	HasMessage,
@@ -50,7 +50,7 @@ export const getComments = async (
 ) => {
 	// First, get all comments from post with limit
 	// If no comments are found, handle it at the top-level (server.ts) as 500 error
-	let comments: CommentWithOtherUser[] | undefined;
+	let comments: CommentWithUser[] | undefined;
 	try {
 		comments = await prisma.comment.findMany({
 			where: { postId: req.body.id },
