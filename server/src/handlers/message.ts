@@ -1,9 +1,16 @@
+import { NextFunction, Response } from 'express';
 import prisma from '../db';
+import { AuthReq, HasId, HasMessage } from '../types/types';
+import { Message } from '@prisma/client';
 
 // Creates a message
-export const createMessage = async (req, res, next) => {
+export const createMessage = async (
+	req: AuthReq & HasId & HasMessage,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, attempt to create message
-	let message;
+	let message: Message | undefined;
 	try {
 		message = await prisma.message.create({
 			data: {
@@ -30,10 +37,14 @@ export const createMessage = async (req, res, next) => {
 };
 
 // Gets messages from user
-export const getMessages = async (req, res, next) => {
+export const getMessages = async (
+	req: AuthReq & HasId,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, get all messages from user
 	// If no messages are found, handle it at the top-level (server.ts) as 500 error
-	let messages;
+	let messages: Message[] | undefined;
 	try {
 		messages = await prisma.message.findMany({
 			where: {
@@ -56,9 +67,13 @@ export const getMessages = async (req, res, next) => {
 };
 
 // Deletes a message
-export const deleteMessage = async (req, res, next) => {
+export const deleteMessage = async (
+	req: AuthReq & HasId,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, attempt to delete the message
-	let message;
+	let message: Message | undefined;
 	try {
 		message = await prisma.message.delete({
 			where: { id: req.body.id },
