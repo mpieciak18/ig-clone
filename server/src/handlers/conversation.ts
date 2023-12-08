@@ -1,9 +1,15 @@
+import { NextFunction, Response } from 'express';
 import prisma from '../db';
+import { AuthReq, HasId, HasLimit, UserConversation } from '../types/types';
 
 // Creates a conversation
-export const createConversation = async (req, res, next) => {
+export const createConversation = async (
+	req: AuthReq & HasId,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, attempt to create conversation
-	let conversation;
+	let conversation: UserConversation | undefined;
 	try {
 		conversation = await prisma.conversation.create({
 			data: {
@@ -34,10 +40,14 @@ export const createConversation = async (req, res, next) => {
 };
 
 // Attempts to get a conversation by the other user's id
-export const getConversation = async (req, res, next) => {
+export const getConversation = async (
+	req: AuthReq & HasId & HasLimit,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, try to get single conversation by other user id
 	// If no conversations are found, handle it at the top-level (server.ts) as 500 error
-	let conversation;
+	let conversation: UserConversation | undefined;
 	try {
 		conversation = await prisma.conversation.findFirst({
 			where: {
@@ -82,10 +92,14 @@ export const getConversation = async (req, res, next) => {
 };
 
 // Gets conversations from user
-export const getConversations = async (req, res, next) => {
+export const getConversations = async (
+	req: AuthReq & HasLimit,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, get all conversations from user
 	// If no conversations are found, handle it at the top-level (server.ts) as 500 error
-	let conversations;
+	let conversations: UserConversation[] | undefined;
 	try {
 		conversations = await prisma.conversation.findMany({
 			where: {
@@ -117,9 +131,13 @@ export const getConversations = async (req, res, next) => {
 };
 
 // Deletes a conversation
-export const deleteConversation = async (req, res, next) => {
+export const deleteConversation = async (
+	req: AuthReq & HasId,
+	res: Response,
+	next: NextFunction
+) => {
 	// First, attempt to delete the conversation
-	let conversation;
+	let conversation: UserConversation | undefined;
 	try {
 		conversation = await prisma.conversation.delete({
 			where: { id: req.body.id },

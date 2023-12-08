@@ -1,6 +1,15 @@
 import { JwtPayload } from 'jsonwebtoken';
 import { Request } from 'express';
-import { Comment, Like, Notification, Post, Save, User } from '@prisma/client';
+import {
+	Comment,
+	Conversation,
+	Like,
+	Message,
+	Notification,
+	Post,
+	Save,
+	User,
+} from '@prisma/client';
 import { Field } from 'multer';
 
 export interface NewUserBody {
@@ -99,4 +108,9 @@ export interface CommentWithUser extends Comment {
 
 export interface LikeWithUser extends Like {
 	user: User;
+}
+
+export interface UserConversation extends Conversation {
+	users: User[];
+	messages: Message[];
 }
