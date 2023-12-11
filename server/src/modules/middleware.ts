@@ -1,8 +1,8 @@
 import { validationResult } from 'express-validator';
-import { bucket, getUrl } from '../config/gcloud';
+import { bucket, getUrl } from '../config/gcloud.js';
 import { randomUUID } from 'crypto';
 import { NextFunction, Response, Request } from 'express';
-import { AuthReq, MayHaveFile, MayHaveImage } from '../types/types';
+import { AuthReq, MayHaveFile, MayHaveImage } from '../types/types.js';
 
 export const handleInputErrors = (
 	req: Request | AuthReq,
@@ -19,7 +19,7 @@ export const handleInputErrors = (
 };
 
 export const uploadImage = async (
-	req: AuthReq & MayHaveFile & MayHaveImage,
+	req: Request,
 	res: Response,
 	next: NextFunction
 ): Promise<void> => {
@@ -34,12 +34,12 @@ export const uploadImage = async (
 		const fileName: string = randomUUID();
 		try {
 			const fileRef = bucket.file(fileName);
-			await fileRef.save(req.file.buffer, {
-				contentType: req.file.mimetype,
+			await fileRef.save((req as Request & MayHaveFile).file.buffer, {
+				contentType: (req as Request & MayHaveFile).file.mimetype,
 			});
 			const image: string = await getUrl(fileRef);
-			req.image = image;
-			delete req.file;
+			(req as Request & MayHaveImage).image = image;
+			delete (req as AuthReq).file;
 			next();
 			return;
 		} catch (err) {

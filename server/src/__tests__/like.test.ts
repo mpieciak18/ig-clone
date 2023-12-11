@@ -1,11 +1,12 @@
 import supertest from 'supertest';
-import app from '../server';
+import app from '../server.js';
 import { it, describe, expect } from 'vitest';
+import { Like, Post } from '@prisma/client';
 
 const urlPattern = /^(http|https):\/\/[^ "]+$/;
 
 describe('likes', () => {
-	let token;
+	let token: string;
 	const user = {
 		email: 'test66@test66.com',
 		username: 'test66',
@@ -15,7 +16,7 @@ describe('likes', () => {
 		image: 'https://firebasestorage.googleapis.com/v0/b/ig-clone-5b7ab.appspot.com/o/lsNWDlodVDUB7RmeRY9qZDe1S3k2%2FScreenshot%202023-04-14%20at%2017-10-51%20Markstagram.png?alt=media&token=7a1080c3-c648-4ef4-b5e4-f6da3760182d',
 		id: undefined,
 	};
-	let token2;
+	let token2: string;
 	const user2 = {
 		email: 'test654@test654.com',
 		username: 'test654',
@@ -26,9 +27,9 @@ describe('likes', () => {
 		id: undefined,
 	};
 	const caption = 'testing, 1, 2, 3';
-	let post;
+	let post: Post;
 	const limit = 10;
-	let like;
+	let like: Like;
 	it('should create users, get web tokens, user ids, & a 200 status', async () => {
 		const response = await supertest(app)
 			.post('/create_new_user')

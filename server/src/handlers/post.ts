@@ -1,68 +1,51 @@
-import prisma from '../db';
-import { deleteFileFromStorage } from '../config/gcloud';
-import {
-	AuthReq,
-	HasCaption,
-	HasId,
-	HasLimit,
-	MayHaveImage,
-	PostStatsCount,
-	PostUpdateData,
-} from '../types/types';
-import { NextFunction, Response } from 'express';
-import { Post, User } from '@prisma/client';
+import prisma from '../db.js';
+import { deleteFileFromStorage } from '../config/gcloud.js';
+import { AuthReq, MayHaveImage, PostUpdateData } from '../types/types.js';
+import { NextFunction, Response, Request } from 'express';
 
 // Creates a post
 export const createPost = async (
-	req: AuthReq & HasCaption & MayHaveImage,
+	req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
-	// If no image url is passed from the upload middleware, handle it at the top-level (server.ts) as 500 error
-	if (!req.image) {
+	// If no image url is passed from the upload middleware, handle it at the top-level (server.js) as 500 error
+	if (!(req as Request & MayHaveImage).image) {
 		const e = new Error();
 		next(e);
 		return;
 	}
 
-	// First, create post
-	let post: Post | undefined;
 	try {
-		post = await prisma.post.create({
+		// First, create post
+		const post = await prisma.post.create({
 			data: {
-				image: req.image,
+				image: (req as Request & MayHaveImage).image,
 				caption: req.body.caption,
-				userId: req.user.id,
+				userId: (req as AuthReq).user.id,
 			},
 		});
+		// If no post is created, handle it at the top-level (server.js) as 500 error
+		if (!post) throw new Error();
+		// Second, send post data back to client
+		res.json({ post });
 	} catch (e) {
-		// DB errors are handled at top-level (server.ts) as 500 error
+		// DB errors are handled at top-level (server.js) as 500 error
 		next(e);
 		return;
 	}
-
-	// If no post is created, handle it at the top-level (server.ts) as 500 error
-	if (!post) {
-		const e = new Error();
-		next(e);
-		return;
-	}
-
-	// Second, send post data back to client
-	res.json({ post });
 };
 
 // Gets a post based on a single post's id (if it exists)
 export const getSinglePost = async (
-	req: AuthReq & HasId,
+	req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
-	// First, get post by id
-	// If no post is found, handle it at the top-level (server.ts) as 500 error
-	let post: (Post & PostStatsCount) | undefined;
 	try {
-		post = await prisma.post.findUnique({
+		// First, get post by id
+		// If no post is found, handle it at the top-level (server.js) as 500 error
+		const post = await prisma.post.findUnique({
 			where: { id: req.body.id },
 			include: {
 				_count: {
@@ -73,32 +56,26 @@ export const getSinglePost = async (
 				},
 			},
 		});
+		if (!post) throw new Error();
+		// Second, return data back to client
+		res.json({ post });
 	} catch (e) {
-		// DB errors are handled at top-level (server.ts) as 500 error
+		// DB errors are handled at top-level (server.js) as 500 error
 		next(e);
 		return;
 	}
-	if (!post) {
-		const e = new Error();
-		next(e);
-		return;
-	}
-
-	// Second, return data back to client
-	res.json({ post });
 };
 
 // Gets all posts from a single user by id
 export const getPosts = async (
-	req: AuthReq & HasLimit,
+	req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
-	// First, get all posts with limit
-	// If no posts are found, handle it at the top-level (server.ts) as 500 error
-	let posts: (Post & PostStatsCount)[] | undefined;
 	try {
-		posts = await prisma.post.findMany({
+		// First, get all posts with limit
+		// If no posts are found, handle it at the top-level (server.js) as 500 error
+		const posts = await prisma.post.findMany({
 			take: req.body.limit,
 			orderBy: { createdAt: 'desc' },
 			include: {
@@ -111,49 +88,39 @@ export const getPosts = async (
 				user: true,
 			},
 		});
+		if (!posts) throw new Error();
+		// Second, return data back to client
+		res.json({ posts });
 	} catch (e) {
-		// DB errors are handled at top-level (server.ts) as 500 error
+		// DB errors are handled at top-level (server.js) as 500 error
 		next(e);
 		return;
 	}
-	if (!posts) {
-		const e = new Error();
-		next(e);
-		return;
-	}
-
-	// Second, return data back to client
-	res.json({ posts });
 };
 
 // Gets all posts from a single user by id
 export const getUserPosts = async (
-	req: AuthReq & HasLimit & HasId,
+	req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
-	// First, confirm if provided user exists
-	// If no user is found, handle it at the top-level (server.ts) as 500 error
-	let otherUser: User | undefined;
 	try {
-		otherUser = await prisma.user.findUnique({
+		// First, confirm if provided user exists
+		// If no user is found, handle it at the top-level (server.js) as 500 error
+		const otherUser = await prisma.user.findUnique({
 			where: { id: req.body.id },
 		});
+		if (!otherUser) throw new Error();
 	} catch (e) {
-		// DB errors are handled at top-level (server.ts) as 500 error
+		// DB errors are handled at top-level (server.js) as 500 error
 		next(e);
 		return;
 	}
-	if (!otherUser) {
-		const e = new Error();
-		next(e);
-		return;
-	}
-	// Second, get posts by user id
-	// If no post is found, handle it at the top-level (server.ts) as 500 error
-	let posts: (Post & PostStatsCount)[] | undefined;
+
 	try {
-		posts = await prisma.post.findMany({
+		// Second, get posts by user id
+		// If no post is found, handle it at the top-level (server.js) as 500 error
+		const posts = await prisma.post.findMany({
 			where: { userId: req.body.id },
 			take: req.body.limit,
 			orderBy: { createdAt: 'desc' },
@@ -166,61 +133,43 @@ export const getUserPosts = async (
 				},
 			},
 		});
+		if (!posts) throw new Error();
+		// Second, return data back to client
+		res.json({ posts });
 	} catch (e) {
-		// DB errors are handled at top-level (server.ts) as 500 error
+		// DB errors are handled at top-level (server.js) as 500 error
 		next(e);
 		return;
 	}
-	if (!posts) {
-		const e = new Error();
-		next(e);
-		return;
-	}
-
-	// Second, return data back to client
-	res.json({ posts });
 };
 
 // Deletes a post
 export const deletePost = async (
-	req: AuthReq & HasId,
+	req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
-	// First, delete the post
-	let post: Post | undefined;
 	try {
-		post = await prisma.post.delete({
+		// First, delete the post
+		const post = await prisma.post.delete({
 			where: { id: req.body.id },
 		});
-	} catch (e) {
-		// DB errors are handled at top-level (server.ts) as 500 error
-		next(e);
-		return;
-	}
-
-	// If no post is found-and-deleted, handle it at the top-level (server.ts) as 500 error
-	if (!post) {
-		const e = new Error();
-		next(e);
-		return;
-	}
-
-	// Second, delete file of deleted post from storage
-	try {
+		// If no post is found-and-deleted, handle it at the top-level (server.js) as 500 error
+		if (!post) throw new Error();
+		// Second, delete file of deleted post from storage
 		await deleteFileFromStorage(post.image);
+		// Finally, send deleted follow data back to client
+		res.json({ post });
 	} catch (e) {
+		// DB errors are handled at top-level (server.js) as 500 error
 		next(e);
 		return;
 	}
-
-	// Finally, send deleted follow data back to client
-	res.json({ post });
 };
 
 // Updates a post
 export const updatePost = async (
-	req: AuthReq & HasId & HasCaption,
+	req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
@@ -228,30 +177,24 @@ export const updatePost = async (
 	const keys = ['caption'];
 	const data: PostUpdateData = {};
 	keys.forEach((key) => {
+		// @ts-ignore
 		if (req.body[key]) data[key] = req.body[key];
 	});
 
-	// Update post
-	let post: Post | undefined;
 	try {
-		post = await prisma.post.update({
+		// Update post
+		const post = await prisma.post.update({
 			where: { id: req.body.id },
 			data,
 		});
+		// While the previous try/catch (along with the 'protect' middleware) should catch all errors,
+		// this is added as an extra step of error handling (in case the update 'runs' but nothing is returned).
+		if (!post) throw new Error();
+		// Return updated user data
+		res.json({ post });
 	} catch (e) {
 		// If error, handle it as a 500 error
 		next(e);
 		return;
 	}
-
-	// While the previous try/catch (along with the 'protect' middleware) should catch all errors,
-	// this is added as an extra step of error handling (in case the update 'runs' but nothing is returned).
-	if (!post) {
-		const e = new Error();
-		next(e);
-		return;
-	}
-
-	// Return updated user data
-	res.json({ post });
 };

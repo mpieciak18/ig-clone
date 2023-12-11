@@ -1,11 +1,13 @@
 import supertest from 'supertest';
-import app from '../server';
+import app from '../server.js';
 import { it, describe, expect } from 'vitest';
+import { Conversation } from '@prisma/client';
+import { HasUsers } from '../types/types.js';
 
 describe('conversations', () => {
-	let token;
-	let otherToken;
-	let conversation;
+	let token: string;
+	let otherToken: string;
+	let conversation: Conversation & HasUsers;
 	const user = {
 		email: 'test88@test88.com',
 		username: 'test88',

@@ -1,15 +1,17 @@
-import app from '../server';
+import app from '../server.js';
 import supertest from 'supertest';
 import jwt from 'jsonwebtoken';
-import { comparePasswords } from '../modules/auth';
+import { comparePasswords } from '../modules/auth.js';
 import { it, describe, expect } from 'vitest';
-import { deleteFileFromStorage } from '../config/gcloud';
+import { deleteFileFromStorage } from '../config/gcloud.js';
+import { User } from '@prisma/client';
+import { UserStatsCount } from '../types/types.js';
 
 const urlPattern = /^(http|https):\/\/[^ "]+$/;
 
 describe('/create_new_user, /sign_in, & /api/user', () => {
-	let token;
-	let otherToken;
+	let token: string;
+	let otherToken: string;
 	const initUser = {
 		email: 'test11@test11.com',
 		username: 'test11',
@@ -22,8 +24,8 @@ describe('/create_new_user, /sign_in, & /api/user', () => {
 		password: '123_abc',
 		name: 'Tester',
 	};
-	let user;
-	let otherUser;
+	let user: User & UserStatsCount;
+	let otherUser: User & UserStatsCount;
 	const newUser = {
 		email: 'test12345@test12345.com',
 		username: 'test12345',
@@ -385,7 +387,7 @@ describe('/create_new_user, /sign_in, & /api/user', () => {
 			{
 				username: 'fake_user',
 			},
-			process.env.JWT_SECRET
+			process.env.JWT_SECRET ?? ''
 		);
 		const response = await supertest(app)
 			.delete('/api/user')
@@ -411,6 +413,8 @@ describe('/create_new_user, /sign_in, & /api/user', () => {
 		const delUser2 = response2.body.user;
 		expect(response2.status).toBe(200);
 		expect(delUser2.id).toEqual(otherUser.id);
-		await deleteFileFromStorage(user.image);
+		if (user.image && typeof user.image == 'string') {
+			await deleteFileFromStorage(user.image);
+		}
 	});
 });

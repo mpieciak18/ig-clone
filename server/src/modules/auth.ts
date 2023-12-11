@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import { NextFunction, Request, Response } from 'express';
-import { PreAuth } from '../types/types';
+import { PreAuth } from '../types/types.js';
 
 // Receives a user object, passes it along with the jwt_secret to the 'jwt' libary,
 // and returns a signed JWT token.
@@ -14,7 +14,7 @@ export const createJwt = async (user: {
 			id: user.id,
 			username: user.username,
 		},
-		process.env.JWT_SECRET
+		process.env.JWT_SECRET ?? ''
 	);
 	return token;
 };
@@ -22,11 +22,11 @@ export const createJwt = async (user: {
 // If there's no bearer inside the headers, no token inside the bearer, or the JWT token is unverified,
 // then an error is sent back to the client instead.
 export const protect = async (
-	req: Request & PreAuth,
+	req: Request,
 	res: Response,
 	next: NextFunction
 ): Promise<void> => {
-	const bearer: string = req.headers.authorization;
+	const bearer = req.headers.authorization;
 	if (!bearer) {
 		res.status(401).json({ message: 'Not Authorized' });
 		return;
@@ -39,8 +39,8 @@ export const protect = async (
 	}
 
 	try {
-		const user = jwt.verify(token, process.env.JWT_SECRET);
-		req.user = user;
+		const user = jwt.verify(token, process.env.JWT_SECRET ?? '');
+		(req as Request & PreAuth).user = user;
 		next();
 	} catch (e) {
 		res.status(401).json({ message: 'Token Unverifiable' });

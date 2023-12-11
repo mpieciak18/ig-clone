@@ -1,11 +1,12 @@
 import supertest from 'supertest';
-import app from '../server';
+import app from '../server.js';
 import { it, describe, expect } from 'vitest';
+import { Post, Save } from '@prisma/client';
 
 const urlPattern = /^(http|https):\/\/[^ "]+$/;
 
 describe('saves', () => {
-	let token;
+	let token: string;
 	const user = {
 		email: 'test77@test77.com',
 		username: 'test77',
@@ -16,9 +17,9 @@ describe('saves', () => {
 		id: undefined,
 	};
 	const caption = 'testing, 1, 2, 3';
-	let post;
+	let post: Post;
 	const limit = 10;
-	let save;
+	let save: Save;
 	it('should create user, get web token, user id, & a 200 status', async () => {
 		const response = await supertest(app)
 			.post('/create_new_user')

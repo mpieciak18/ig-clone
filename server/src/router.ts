@@ -7,22 +7,22 @@ import {
 	getUsersByName,
 	isEmailUnique,
 	isUsernameUnique,
-} from './handlers/user';
-import { handleInputErrors, uploadImage } from './modules/middleware';
+} from './handlers/user.js';
+import { handleInputErrors, uploadImage } from './modules/middleware.js';
 import {
 	createNotif,
 	getNotifsRead,
 	getNotifsUnread,
 	updateNotifsRead,
 	deleteNotif,
-} from './handlers/notification';
+} from './handlers/notification.js';
 import {
 	createFollow,
 	deleteFollow,
 	findFollow,
 	getGivenFollows,
 	getReceivedFollows,
-} from './handlers/follow';
+} from './handlers/follow.js';
 import {
 	createPost,
 	getPosts,
@@ -30,7 +30,7 @@ import {
 	getUserPosts,
 	deletePost,
 	updatePost,
-} from './handlers/post';
+} from './handlers/post.js';
 import multer from 'multer';
 import {
 	createComment,
@@ -38,17 +38,31 @@ import {
 	updateComment,
 	getComments,
 	getSingleComment,
-} from './handlers/comment';
-import { createLike, deleteLike, getLikes, getLikeUser } from './handlers/like';
-import { getSavePost, createSave, deleteSave, getSaves } from './handlers/save';
+} from './handlers/comment.js';
+import {
+	createLike,
+	deleteLike,
+	getLikes,
+	getLikeUser,
+} from './handlers/like.js';
+import {
+	getSavePost,
+	createSave,
+	deleteSave,
+	getSaves,
+} from './handlers/save.js';
 import {
 	createConversation,
 	deleteConversation,
 	getConversations,
 	getConversation,
-} from './handlers/conversation';
-import { createMessage, deleteMessage, getMessages } from './handlers/message';
-import { SyncErr } from './types/types';
+} from './handlers/conversation.js';
+import {
+	createMessage,
+	deleteMessage,
+	getMessages,
+} from './handlers/message.js';
+import { SyncErr } from './types/types.js';
 
 // export const upload = multer({
 // 	storage: multer.memoryStorage(),

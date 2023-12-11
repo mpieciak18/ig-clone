@@ -1,5 +1,5 @@
 import { JwtPayload } from 'jsonwebtoken';
-import { Errback, Request } from 'express';
+import { Request } from 'express';
 import {
 	Comment,
 	Conversation,
@@ -53,6 +53,7 @@ export interface UserUpdateData {
 	password?: string;
 	name?: string;
 	image?: string;
+	bio?: string;
 }
 
 export interface PostUpdateData {
@@ -69,11 +70,11 @@ export interface NewNotificationData {
 }
 
 export interface MayHaveFile {
-	file?: Field;
+	file: Field;
 }
 
 export interface MayHaveImage {
-	image?: string;
+	image: string;
 }
 
 export interface HasId {
@@ -131,4 +132,8 @@ export interface SocketMessageErr {
 
 export interface SocketWithUser extends Socket {
 	user: User;
+}
+
+export interface HasUsers {
+	users: User[];
 }

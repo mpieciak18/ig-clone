@@ -1,6 +1,6 @@
-import { localConfig } from './local';
-import { testingConfig } from './testing';
-import { prodConfig } from './prod';
+import { localConfig } from './local.js';
+import { testingConfig } from './testing.js';
+import { prodConfig } from './prod.js';
 import merge from 'lodash.merge';
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';

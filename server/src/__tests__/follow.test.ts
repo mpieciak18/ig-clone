@@ -1,11 +1,12 @@
 import supertest from 'supertest';
-import app from '../server';
+import app from '../server.js';
 import { it, describe, expect } from 'vitest';
+import { Follow } from '@prisma/client';
 
 describe('POST /api/follow & DELETE /api/follow', () => {
-	let token;
-	let otherToken;
-	let follow;
+	let token: string;
+	let otherToken: string;
+	let follow: Follow;
 	const user = {
 		email: 'test33@test33.com',
 		username: 'test33',

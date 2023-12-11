@@ -1,7 +1,7 @@
 import { Message } from '@prisma/client';
-import prisma from '../db';
+import prisma from '../db.js';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { SocketMessage, SocketMessageErr } from '../types/types';
+import { SocketMessage, SocketMessageErr } from '../types/types.js';
 import { Socket } from 'socket.io';
 
 // Middleware for creating new messages from websocket
@@ -9,7 +9,7 @@ export const createMessage = async (
 	data: SocketMessage,
 	socket: Socket,
 	user: JwtPayload
-): Promise<Message | Error> => {
+): Promise<Message | Error | undefined> => {
 	try {
 		const message: Message = await prisma.message.create({
 			data: {
@@ -64,7 +64,7 @@ export const retrieveUserFromToken = (
 	try {
 		const user: string | JwtPayload = jwt.verify(
 			token,
-			process.env.JWT_SECRET
+			process.env.JWT_SECRET ?? ''
 		);
 		return user;
 	} catch (e) {

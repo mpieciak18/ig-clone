@@ -1,13 +1,14 @@
 import supertest from 'supertest';
-import app from '../server';
+import app from '../server.js';
 import { it, describe, expect } from 'vitest';
+import { Notification, Post } from '@prisma/client';
 
 const urlPattern = /^(http|https):\/\/[^ "]+$/;
 
 describe('/api/notification', () => {
-	let token;
-	let otherToken;
-	let notification;
+	let token: string;
+	let otherToken: string;
+	let notification: Notification;
 	const user = {
 		email: 'test888@test3888.com',
 		username: 'test3888',
@@ -22,7 +23,7 @@ describe('/api/notification', () => {
 		name: 'TESTER',
 		id: undefined,
 	};
-	let post;
+	let post: Post;
 	it('should create both users + a post, get web tokens, user ids, & a 200 statuses', async () => {
 		const response = await supertest(app)
 			.post('/create_new_user')

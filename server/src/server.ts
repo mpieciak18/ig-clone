@@ -1,12 +1,12 @@
 import express, { NextFunction, Request, Response } from 'express';
-import router from './router';
+import router from './router.js';
 import morgan from 'morgan';
 import cors from 'cors';
-import { protect } from './modules/auth';
-import { signIn, createNewUser } from './handlers/user';
-import { handleInputErrors } from './modules/middleware';
+import { protect } from './modules/auth.js';
+import { signIn, createNewUser } from './handlers/user.js';
+import { handleInputErrors } from './modules/middleware.js';
 import { body } from 'express-validator';
-import { SyncErr } from './types/types';
+import { SyncErr } from './types/types.js';
 
 // init express
 const app = express();

@@ -1,14 +1,15 @@
 import supertest from 'supertest';
-import app from '../server';
+import app from '../server.js';
 // import { Blob } from 'node-fetch';
 // import fs from 'fs/promises';
 // import FormData from 'form-data';
 import { it, describe, expect } from 'vitest';
+import { Post } from '@prisma/client';
 
 const urlPattern = /^(http|https):\/\/[^ "]+$/;
 
 describe('POST /api/post & DELETE /api/post', () => {
-	let token;
+	let token: string;
 	const user = {
 		email: 'test44@test44.com',
 		username: 'test44',
@@ -21,7 +22,7 @@ describe('POST /api/post & DELETE /api/post', () => {
 	const caption = 'this is a test';
 	const updatedCap = 'this is an updated caption';
 	const limit = 10;
-	let post;
+	let post: Post;
 	it('should create user, get web token, user id, & a 200 status', async () => {
 		const response = await supertest(app)
 			.post('/create_new_user')

@@ -1,11 +1,12 @@
 import supertest from 'supertest';
-import app from '../server';
+import app from '../server.js';
 import { it, describe, expect } from 'vitest';
+import { Comment, Post } from '@prisma/client';
 
 const urlPattern = /^(http|https):\/\/[^ "]+$/;
 
 describe('comments', () => {
-	let token;
+	let token: string;
 	const user = {
 		email: 'test55@test55.com',
 		username: 'test55',
@@ -16,11 +17,11 @@ describe('comments', () => {
 		id: undefined,
 	};
 	const caption = 'testing, 1, 2, 3';
-	let post;
+	let post: Post;
 	const message = 'this is a test';
 	const updatedMessage = 'this is an updated message';
 	const limit = 10;
-	let comment;
+	let comment: Comment;
 	it('should create user, get web token, user id, & a 200 status', async () => {
 		const response = await supertest(app)
 			.post('/create_new_user')

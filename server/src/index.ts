@@ -1,19 +1,16 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
-import { config } from './config/index';
-import app from './server';
+import { config } from './config/index.js';
+import app from './server.js';
 // imports for websockets
 import { createServer } from 'http';
-import { Socket, Server as SocketIOServer } from 'socket.io';
+import { Server as SocketIOServer } from 'socket.io';
 import {
 	handleInputErrors,
 	retrieveUserFromToken,
 	createMessage,
-} from './modules/websocket';
-import { ExtendedError } from 'socket.io/dist/namespace';
-import { JwtPayload } from 'jsonwebtoken';
-import { SocketMessage, SocketMessageErr, SocketWithUser } from './types/types';
-import { Message } from '@prisma/client';
+} from './modules/websocket.js';
+import { SocketMessage } from './types/types.js';
 
 // configure websockets
 const httpServer = createServer(app);
@@ -26,21 +23,21 @@ const io = new SocketIOServer(httpServer, {
 });
 
 // validates an incoming message from a websocket
-io.use((socket: Socket, next: (err?: ExtendedError) => void) => {
+io.use((socket, next) => {
 	const token = socket.handshake.auth.token;
 
 	// Verify token
 	try {
-		const user: string | JwtPayload = retrieveUserFromToken(token);
-		// @ts-ignore
-		socket.user = user;
+		const user = retrieveUserFromToken(token);
+		(socket as any).user = user;
 		next();
 	} catch (e) {
+		//@ts-ignore
 		next(e);
 	}
 });
 
-io.on('connection', (socket: SocketWithUser) => {
+io.on('connection', (socket) => {
 	console.log('connected');
 	socket.on('joinConversation', ({ conversationId }) => {
 		console.log('a user connected');
@@ -48,16 +45,16 @@ io.on('connection', (socket: SocketWithUser) => {
 	});
 
 	socket.on('sendNewMessage', async (message: SocketMessage) => {
-		const errors: SocketMessageErr[] | null = handleInputErrors(message);
+		const errors = handleInputErrors(message);
 		if (errors) {
 			socket.emit('inputError', errors);
 			return;
 		}
-		// @ts-ignore
-		const dbEntry: Message = await createMessage(
+		// const newSocket = socket as SocketWithUser;
+		const dbEntry = await createMessage(
 			message,
 			socket,
-			socket.user
+			(socket as any).user
 		);
 		io.to(message.id).emit('receiveNewMessage', dbEntry);
 	});
