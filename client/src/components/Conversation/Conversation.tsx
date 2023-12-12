@@ -2,11 +2,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './Conversation.css';
 import { getSingleConvo, createConvo } from '../../services/messages.js';
 import { useEffect, useState } from 'react';
-import { ConvoMessages } from './children/ConvoMessages';
-import { Navbar } from '../other/Navbar';
-import { findUser } from '../../services/users';
+import { ConvoMessages } from './children/ConvoMessages.js';
+import { Navbar } from '../other/Navbar.js';
+import { findUser } from '../../services/users.js';
 import io from 'socket.io-client';
-import { getToken } from '../../services/localstor';
+import { getToken } from '../../services/localstor.js';
 
 const Conversation = () => {
 	const navigate = useNavigate();

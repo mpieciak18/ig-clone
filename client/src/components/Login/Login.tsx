@@ -3,8 +3,8 @@ import Logo from '../../assets/images/ig-logo-2.png';
 import { signInUser } from '../../services/users.js';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
-import { setLocalUser } from '../../services/localstor';
+import { useAuth } from '../../contexts/AuthContext.js';
+import { setLocalUser } from '../../services/localstor.js';
 
 const Login = () => {
 	const { setUser } = useAuth();

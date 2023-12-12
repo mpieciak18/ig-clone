@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import { Navbar } from '../other/Navbar.js';
 import MessageSolid from '../../assets/images/dm.png';
 import { ConvoPopup } from '../other/ConvoPopup.js';
-import { useAuth } from '../../contexts/AuthContext';
-import { usePopUp } from '../../contexts/PopUpContext';
-import { MessagesChild } from './children/MessagesChild';
+import { useAuth } from '../../contexts/AuthContext.js';
+import { usePopUp } from '../../contexts/PopUpContext.js';
+import { MessagesChild } from './children/MessagesChild.js';
 
 const Messages = () => {
 	const { user } = useAuth();
