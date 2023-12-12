@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from 'react';
+import { User } from 'shared';
 
-const AuthContext = createContext();
+const AuthContext = createContext<User | undefined>(undefined);
 
 export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null);

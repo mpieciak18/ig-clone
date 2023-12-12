@@ -35,35 +35,26 @@ const App = () => {
 	return isLoading == false && user ? (
 		<HashRouter>
 			<Routes>
-				<Route exact path='/' element={<Home />} />
-				<Route exact path='/messages' element={<Messages />} />
-				<Route exact path='/:postOwnerId/:postId' element={<Post />} />
-				<Route exact path='/:otherUserId' element={<Profile />} />
+				<Route path='/' element={<Home />} />
+				<Route path='/messages' element={<Messages />} />
+				<Route path='/:postOwnerId/:postId' element={<Post />} />
+				<Route path='/:otherUserId' element={<Profile />} />
 				<Route
-					exact
 					path='/messages/:otherUserId'
 					element={<Conversation />}
 				/>
-				<Route exact path='/saved' element={<Saved />} />
-				<Route exact path='/settings' element={<Settings />} />
-				<Route
-					exact
-					path='/signup'
-					element={<Navigate to='/' replace />}
-				/>
-				<Route
-					exact
-					path='/login'
-					element={<Navigate to='/' replace />}
-				/>
+				<Route path='/saved' element={<Saved />} />
+				<Route path='/settings' element={<Settings />} />
+				<Route path='/signup' element={<Navigate to='/' replace />} />
+				<Route path='/login' element={<Navigate to='/' replace />} />
 			</Routes>
 		</HashRouter>
 	) : isLoading == false && !user ? (
 		<HashRouter>
 			<Routes>
-				<Route exact path='/signup' element={<SignUp />} />
-				<Route exact path='/login' element={<Login />} />
-				<Route exact path='*' element={<HomeLoggedOut />} />
+				<Route path='/signup' element={<SignUp />} />
+				<Route path='/login' element={<Login />} />
+				<Route path='*' element={<HomeLoggedOut />} />
 			</Routes>
 		</HashRouter>
 	) : null;

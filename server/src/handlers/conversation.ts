@@ -1,6 +1,7 @@
 import { NextFunction, Response, Request } from 'express';
 import prisma from '../db.js';
 import { AuthReq } from '../types/types.js';
+import { Conversation } from '@prisma/client';
 
 // Creates a conversation
 export const createConversation = async (
