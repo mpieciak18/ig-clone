@@ -1,9 +1,10 @@
-import { createContext, useContext, useState } from 'react';
+import { PropsWithChildren, createContext, useContext, useState } from 'react';
+import { User } from 'shared';
 
-const ProfileContext = createContext();
+const ProfileContext = createContext<User | null | undefined>(undefined);
 
-export const ProfileProvider = ({ children }) => {
-	const [otherUser, setOtherUser] = useState(null);
+export const ProfileProvider = ({ children }: PropsWithChildren) => {
+	const [otherUser, setOtherUser] = useState<User | null>(null);
 
 	return (
 		<ProfileContext.Provider value={{ otherUser, setOtherUser }}>

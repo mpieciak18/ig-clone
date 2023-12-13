@@ -1,10 +1,10 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, PropsWithChildren } from 'react';
 import { User } from 'shared';
 
-const AuthContext = createContext<User | undefined>(undefined);
+const AuthContext = createContext<User | null | undefined>(undefined);
 
-export const AuthProvider = ({ children }) => {
-	const [user, setUser] = useState(null);
+export const AuthProvider = ({ children }: PropsWithChildren) => {
+	const [user, setUser] = useState<User | null>(null);
 
 	return (
 		<AuthContext.Provider value={{ user, setUser }}>

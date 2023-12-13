@@ -1,9 +1,24 @@
-import { createContext, useContext, useState } from 'react';
+import { PropsWithChildren, createContext, useContext, useState } from 'react';
 
-const PopUpContext = createContext();
+interface PopUpType {
+	newPostOn: boolean;
+	followsOn: boolean;
+	notifsOn: boolean;
+	likesOn: boolean;
+	searchOn: boolean;
+	convosOn: boolean;
+	settingsOn: boolean;
+}
 
-export const PopUpProvider = ({ children }) => {
-	const [popUpState, setPopUpState] = useState({
+interface PopUpContextType {
+	popUpState: PopUpType;
+	updatePopUp: (popUp?: string | null) => void;
+}
+
+const PopUpContext = createContext<PopUpContextType | undefined>(undefined);
+
+export const PopUpProvider = ({ children }: PropsWithChildren) => {
+	const [popUpState, setPopUpState] = useState<PopUpType>({
 		newPostOn: false,
 		followsOn: false,
 		notifsOn: false,
@@ -13,12 +28,26 @@ export const PopUpProvider = ({ children }) => {
 		settingsOn: false,
 	});
 
+	// Checks if the key passed to the potentially new popUp state is in fact in PopUpType
+	const isKeyOfPopUpType = (key: string): key is keyof PopUpType => {
+		return key in popUpState;
+	};
+
 	// Updates pop-ups state. If a popUpState property is passed, then said property is set to true
-	const updatePopUp = (popUp = null) => {
-		const newState = {};
+	const updatePopUp = (popUp: string | null = null) => {
+		const newState: PopUpType = {
+			newPostOn: false,
+			followsOn: false,
+			notifsOn: false,
+			likesOn: false,
+			searchOn: false,
+			convosOn: false,
+			settingsOn: false,
+		};
 		for (const key of Object.keys(popUpState)) {
-			if (key == popUp) newState[key] = true;
-			else newState[key] = false;
+			if (isKeyOfPopUpType(key)) {
+				newState[key] = key === popUp;
+			}
 		}
 		setPopUpState(newState);
 	};
