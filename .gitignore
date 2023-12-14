@@ -26,3 +26,7 @@ yarn-error.log*
 
 #api
 */src/firebase/api.js
+
+#packages built from other folders
+**/types/.prisma/
+**/types/@prisma/
