@@ -9,7 +9,8 @@
 		"build": "npx tsc -p tsconfig.json",
 		"startdev": "CLIENT_URL=http://localhost:5173 node dist/index.js",
 		"startbuilt": "CLIENT_URL=http://localhost:4173 node dist/index.js",
-		"prisma:generate": "prisma generate && ./scripts/copyPrismaTypes.sh"
+		"prisma:generate": "prisma generate && node ./scripts/copyPrismaTypes.js",
+		"postinstall": "npm run prisma:generate"
 	},
 	"keywords": [],
 	"author": "",
