@@ -1,11 +1,13 @@
 import { createContext, useContext, useState, PropsWithChildren } from 'react';
 import { User, UserStatsCount } from 'shared';
 
+export interface UserContext extends User, UserStatsCount {
+	token: string;
+}
+
 interface AuthContextType {
-	user: (User & UserStatsCount) | null;
-	setUser: React.Dispatch<
-		React.SetStateAction<(User & UserStatsCount) | null>
-	>;
+	user: UserContext | null;
+	setUser: React.Dispatch<React.SetStateAction<UserContext | null>>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -14,7 +16,7 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
-	const [user, setUser] = useState<(User & UserStatsCount) | null>(null);
+	const [user, setUser] = useState<UserContext | null>(null);
 
 	return (
 		<AuthContext.Provider value={{ user, setUser }}>

@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 
-const EmailFooter = (props) => {
+const EmailFooter = (props: {
+	setEmailPasses: React.Dispatch<React.SetStateAction<boolean>>;
+	email: string;
+	isUnique: boolean;
+}) => {
 	const { setEmailPasses, email, isUnique } = props;
 	const [footerText, setFooterText] = useState(
-		'Email address must be valid.',
+		'Email address must be valid.'
 	);
 	const [footerClass, setFooterClass] = useState('grey');
 

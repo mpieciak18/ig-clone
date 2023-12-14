@@ -1,8 +1,18 @@
 import { getToken } from './localstor';
 import { compressFile } from './compress';
+import { UserContext } from '../contexts/AuthContext';
+
+interface NotUnique {
+	notUnique: string[];
+}
 
 // Register new user
-export const createUser = async (username, name, email, password) => {
+export const createUser = async (
+	username: string,
+	name: string,
+	email: string,
+	password: string
+): Promise<UserContext | NotUnique> => {
 	const body = JSON.stringify({
 		email,
 		username,
@@ -39,7 +49,8 @@ export const createUser = async (username, name, email, password) => {
 			// res.status(400);
 			// res.json({ notUnique });
 			// ...
-			return json.notUnique;
+			const result: NotUnique = json;
+			return result;
 		}
 	} else {
 		throw new Error();

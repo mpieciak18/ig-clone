@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 
-const NameFooter = (props) => {
+const NameFooter = (props: {
+	setNamePasses: React.Dispatch<React.SetStateAction<boolean>>;
+	name: string;
+}) => {
 	const { setNamePasses, name } = props;
 	const [footerText, setFooterText] = useState(
-		'Name must contain letters & spaces only.',
+		'Name must contain letters & spaces only.'
 	);
 	const [footerClass, setFooterClass] = useState('grey');
 
@@ -19,7 +22,7 @@ const NameFooter = (props) => {
 		else if (name.match(/^[a-zA-Z\s]*$/) == null) {
 			setNamePasses(false);
 			setFooterText(
-				'Name cannot contain any symbols or special characters!',
+				'Name cannot contain any symbols or special characters!'
 			);
 			setFooterClass('red');
 		}

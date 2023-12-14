@@ -20,24 +20,34 @@ const SignUp = () => {
 	const [username, setUsername] = useState('');
 	const [usernameUnique, setUsernameUnique] = useState(true);
 	const [usernamePasses, setUsernamePasses] = useState(false);
-	const updateUsername = (e) => setUsername(e.target.value);
+	const updateUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setUsername(e.target.value);
+	};
 
 	const [name, setName] = useState('');
 	const [namePasses, setNamePasses] = useState(false);
-	const updateName = (e) => setName(e.target.value);
+	const updateName = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setName(e.target.value);
+	};
 
 	const [email, setEmail] = useState('');
 	const [emailUnique, setEmailUnique] = useState(true);
 	const [emailPasses, setEmailPasses] = useState(false);
-	const updateEmail = (e) => setEmail(e.target.value);
+	const updateEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setEmail(e.target.value);
+	};
 
 	const [password, setPassword] = useState('');
 	const [passwordPasses, setPasswordPasses] = useState(false);
-	const updatePassword = (e) => setPassword(e.target.value);
+	const updatePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setPassword(e.target.value);
+	};
 
 	const [allPass, setAllPass] = useState(false);
 
-	const [signUpButtonType, setSignUpButtonType] = useState('button');
+	const [signUpButtonType, setSignUpButtonType] = useState<
+		'button' | 'submit'
+	>('button');
 
 	const [signUpButtonClass, setSignUpButtonClass] = useState('inactive');
 
@@ -46,7 +56,7 @@ const SignUp = () => {
 	// Update allPass when any of the input pass states change
 	useEffect(() => {
 		setAllPass(
-			usernamePasses && namePasses && passwordPasses && emailPasses,
+			usernamePasses && namePasses && passwordPasses && emailPasses
 		);
 	}, [usernamePasses, namePasses, passwordPasses, emailPasses]);
 
@@ -62,23 +72,25 @@ const SignUp = () => {
 	}, [allPass]);
 
 	// Hanldes any fields failed due to duplicates during sign-up
-	const handleDups = (dups) => {
+	const handleDups = (dups: string[]) => {
 		setEmailUnique(dups.includes('email'));
 		setUsernameUnique(dups.includes('username'));
 	};
 
-	const newSignUp = async (e) => {
+	const newSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		// Add new user to services/auth & return any errors
 		try {
 			const newUser = await createUser(username, name, email, password);
-			if (newUser.notUnique) {
+			// if (newUser.notUnique) {
+			if ('notUnique' in newUser) {
 				handleDups(newUser.notUnique);
 				throw new Error();
+			} else {
+				await setUser(newUser);
+				setLocalUser(newUser);
+				navigate('/settings', { state: { newSignUp: true } });
 			}
-			await setUser(newUser);
-			setLocalUser(newUser);
-			navigate('/settings', { state: { newSignUp: true } });
 		} catch {
 			setErrorClass('active');
 			setTimeout(() => {
