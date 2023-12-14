@@ -58,7 +58,10 @@ export const createUser = async (
 };
 
 // Sign in user
-export const signInUser = async (email, password) => {
+export const signInUser = async (
+	email: string,
+	password: string
+): Promise<UserContext> => {
 	const body = JSON.stringify({
 		email,
 		password,
@@ -70,8 +73,7 @@ export const signInUser = async (email, password) => {
 	});
 	if (response.status == 200) {
 		const json = await response.json();
-		const signedInUser = json.user;
-		signedInUser.token = json.token;
+		const signedInUser = { ...json.user, token: json.token } as UserContext;
 		return signedInUser;
 	} else {
 		throw new Error();

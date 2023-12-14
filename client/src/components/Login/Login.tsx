@@ -12,16 +12,17 @@ const Login = () => {
 	const navigate = useNavigate();
 
 	const [email, setEmail] = useState('');
-
-	const updateEmail = (e) => setEmail(e.target.value);
+	const updateEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setEmail(e.target.value);
+	};
 
 	const [password, setPassword] = useState('');
-
-	const updatePassword = (e) => setPassword(e.target.value);
-
+	const updatePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setPassword(e.target.value);
+	};
 	const [errorClass, setErrorClass] = useState('inactive');
 
-	const newLogin = async (e) => {
+	const newLogin = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
 			const signedInUser = await signInUser(email, password);
