@@ -28,8 +28,8 @@ async function copyPrismaTypes() {
 			serverPath,
 			'node_modules/@prisma'
 		);
-		const prismaClientDest = path.join(sharedTypesPath, '@prisma');
-		await copyDirectory(prismaAtClientSource, prismaClientDest);
+		const prismaAtClientDest = path.join(sharedTypesPath, '@prisma');
+		await copyDirectory(prismaAtClientSource, prismaAtClientDest);
 
 		// Copy node_modules/.prisma
 		const prismaDotClientSource = path.join(
@@ -53,14 +53,11 @@ async function copyPrismaTypes() {
 
 		// Update import statement in @prisma/client/index.d.ts
 		const indexFilePath2 = path.join(
-			prismaAtClientSource,
+			prismaAtClientDest,
 			'client/index.d.ts'
 		);
 		let content2 = await fs.readFile(indexFilePath2, 'utf8');
-		content2 = content2.replace(
-			/.prisma\/client/g,
-			'../../.prisma/client/'
-		);
+		content2 = content2.replace(/.prisma\/client/g, '../../.prisma/client');
 		await fs.writeFile(indexFilePath2, content2);
 
 		console.log('Prisma types copied and modified successfully!');
