@@ -1,10 +1,20 @@
 import { createContext, useContext, useState, PropsWithChildren } from 'react';
-import { User } from 'shared';
+import { User, UserStatsCount } from 'shared';
 
-const AuthContext = createContext<User | null | undefined>(undefined);
+interface AuthContextType {
+	user: (User & UserStatsCount) | null;
+	setUser: React.Dispatch<
+		React.SetStateAction<(User & UserStatsCount) | null>
+	>;
+}
+
+const AuthContext = createContext<AuthContextType>({
+	user: null,
+	setUser: () => null,
+});
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
-	const [user, setUser] = useState<User | null>(null);
+	const [user, setUser] = useState<(User & UserStatsCount) | null>(null);
 
 	return (
 		<AuthContext.Provider value={{ user, setUser }}>

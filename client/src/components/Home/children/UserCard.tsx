@@ -11,7 +11,7 @@ const UserCard = () => {
 	const navigate = useNavigate();
 
 	// Init state for user's profile image
-	const [userImage, setUserImage] = useState(null);
+	const [userImage, setUserImage] = useState<string | undefined>(undefined);
 
 	// Init state to determine if pop-up shows following or followers
 	const [followingVsFollower, setFollowingVsFollower] = useState('following');
@@ -29,7 +29,7 @@ const UserCard = () => {
 	};
 
 	// Redirect to user's profile
-	const redirectToProfile = () => navigate(`/${user.id}`);
+	const redirectToProfile = () => navigate(`/${user?.id}`);
 
 	// Redirect to sign-up
 	const redirectToSignup = () => navigate('/signup');
@@ -39,7 +39,7 @@ const UserCard = () => {
 
 	// Update user card state or user image state when user prop changes
 	useEffect(() => {
-		if (user) {
+		if (user?.image) {
 			setUserImage(user.image);
 		}
 	}, [user]);
