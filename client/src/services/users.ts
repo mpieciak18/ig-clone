@@ -123,13 +123,18 @@ export const searchUsers = async (name) => {
 };
 
 // Updates the user's name, bio, and/or image
-export const updateUser = async (name, bio, image = null) => {
+export const updateUser = async (
+	name: string | null,
+	bio: string | null,
+	image: File | null
+): Promise<UserContext> => {
 	const body = new FormData();
 	if (name) body.append('name', name);
 	if (bio) body.append('bio', bio);
 	if (image) {
-		const compressedImage = await compressFile(image);
-		body.append('file', compressedImage);
+		await compressFile(image).then((newImage) => {
+			body.append('file', newImage);
+		});
 	}
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/user', {
 		body,
@@ -140,8 +145,7 @@ export const updateUser = async (name, bio, image = null) => {
 	});
 	if (response.status == 200) {
 		const json = await response.json();
-		const updatedUser = json.user;
-		updatedUser.token = getToken();
+		const updatedUser = { ...json.user, token: json.token } as UserContext;
 		return updatedUser;
 	} else {
 		throw new Error();

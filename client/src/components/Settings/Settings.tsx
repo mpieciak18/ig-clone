@@ -13,36 +13,20 @@ const Settings = () => {
 
 	const location = useLocation();
 
-	// Track initial mounting status
-	const isInitMount = useRef(true);
-
-	// Store pathname to variable
-	const path = location.pathname;
-
 	// Store (potential) state from previous page to variable
 	const [prevState, setPrevState] = useState(null);
 
 	// Init useNavigate function
 	const navigate = useNavigate();
 
-	// Redirect to signup page (if not signed in)
-	const redirectToSignUp = () =>
-		navigate('/signup', { state: { path: path } });
-
 	// Redirect to own profile page
-	const redirectToProfile = () => navigate(`/${user.id}`);
-
-	// Init user loaded state
-	const [userLoaded, setUserLoaded] = useState(null);
-
-	// Init settings component state
-	const [settings, setSettings] = useState(null);
+	const redirectToProfile = () => navigate(`/${user?.id}`);
 
 	// Init file state
-	const [file, setFile] = useState(null);
+	const [file, setFile] = useState<File | null>(null);
 
 	// Init ref for ImageInput component
-	const inputRef = useRef();
+	const inputRef = useRef<HTMLInputElement | null>(null);
 
 	// Init error message class state
 	const [errorClass, setErrorClass] = useState('inactive');
@@ -54,27 +38,31 @@ const Settings = () => {
 	const [namePasses, setNamePasses] = useState(true);
 
 	// Init name field value state
-	const [name, setName] = useState(null);
+	const [name, setName] = useState<string | null>(null);
 
 	// Init bio field value state
-	const [bio, setBio] = useState(null);
+	const [bio, setBio] = useState<string | null>(null);
 
 	// OnChange event handler for for name field on form
-	const updateName = (e) => {
+	const updateName = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setName(e.target.value);
 	};
 
 	// OnChange event handler for for bio field on form
-	const updateBio = (e) => setBio(e.target.value);
+	const updateBio = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+		setBio(e.target.value);
+	};
 
 	// Init form button type state
-	const [button, setButton] = useState('submit');
+	const [button, setButton] = useState<'button' | 'submit'>('submit');
 
 	// Init form buttonc class state
-	const [buttonClass, setButtonClass] = useState('active');
+	const [buttonClass, setButtonClass] = useState<'active' | 'inactive'>(
+		'active'
+	);
 
 	// Updates user's settings with form values
-	const updateSettings = async (e) => {
+	const updateSettings = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		// Check validation first
 		if (namePasses == true) {
@@ -82,7 +70,7 @@ const Settings = () => {
 				const updatedUser = await updateUser(name, bio, file);
 				setUser(updatedUser);
 				setLocalUser(updatedUser);
-				navigate(`/${user.id}`);
+				navigate(`/${user?.id}`);
 			} catch {
 				setErrorClass('active');
 				setTimeout(() => {
@@ -91,19 +79,6 @@ const Settings = () => {
 			}
 		}
 	};
-
-	// Wait 2 seconds & update userLoaded, name, & bio states upon render & user prop change
-	useEffect(() => {
-		setTimeout(async () => {
-			if (user != null) {
-				await setName(user.name);
-				await setBio(user.bio);
-				setUserLoaded(true);
-			} else {
-				setUserLoaded(false);
-			}
-		}, 2000);
-	}, [user]);
 
 	// Update prev state upon render
 	useEffect(() => {
@@ -120,100 +95,6 @@ const Settings = () => {
 		}
 	}, [prevState]);
 
-	// Update settings component state (or trigger redirect) upon render & when user prop changes
-	useEffect(() => {
-		if (isInitMount.current) {
-			isInitMount.current = false;
-		} else {
-			if (userLoaded == true) {
-				setSettings(
-					<div id='settings-parent'>
-						<div id='settings-welcome' className={welcomeClass}>
-							<p>You've successfully registered!</p>
-							<p>Please update your bio and image.</p>
-						</div>
-						<form id='settings-form' onSubmit={updateSettings}>
-							<div id='settings-error' className={errorClass}>
-								<p>There was an error!</p>
-								<p>Please try again.</p>
-							</div>
-							<div id='settings-header'>
-								<div id='settings-title'>Settings</div>
-							</div>
-							<div id='settings-image-section'>
-								<label
-									id='settings-image-footer'
-									htmlFor='image'
-								>
-									File size limit: 5 mb
-								</label>
-								<ImageInput
-									setFile={setFile}
-									setErrorClass={setErrorClass}
-									inputRef={inputRef}
-									name='image'
-								/>
-							</div>
-							<div id='settings-name-section'>
-								<label id='settings-name-label' htmlFor='name'>
-									Your Name:
-								</label>
-								<input
-									id='settings-name-input'
-									name='name'
-									type='text'
-									value={name}
-									onChange={updateName}
-								></input>
-								<NameFooter
-									setNamePasses={setNamePasses}
-									name={name}
-								/>
-							</div>
-							<div id='settings-bio-section'>
-								<label id='settings-bio-label' htmlFor='bio'>
-									Your Bio:
-								</label>
-								<textarea
-									id='settings-bio-input'
-									name='bio'
-									type='text'
-									value={bio}
-									maxLength='150'
-									onChange={updateBio}
-								/>
-							</div>
-							<div id='settings-buttons-section'>
-								<button
-									id='settings-button-submit'
-									type={button}
-									className={buttonClass}
-								>
-									Update Settings
-								</button>
-								<button
-									id='settings-button-back'
-									type='button'
-									onClick={redirectToProfile}
-								>
-									Back to Profile
-								</button>
-							</div>
-						</form>
-					</div>,
-				);
-			} else {
-				if (user == null) {
-					redirectToSignUp();
-				} else {
-					setName(user.name);
-					setBio(user.bio);
-					setUserLoaded(true);
-				}
-			}
-		}
-	}, [userLoaded, bio, name, button, buttonClass, file, welcomeClass]);
-
 	useEffect(() => {
 		if (namePasses == true) {
 			setButton('submit');
@@ -227,7 +108,78 @@ const Settings = () => {
 	return (
 		<div id='settings' className='page'>
 			<Navbar />
-			{settings}
+			{user != null ? (
+				<div id='settings-parent'>
+					<div id='settings-welcome' className={welcomeClass}>
+						<p>You've successfully registered!</p>
+						<p>Please update your bio and image.</p>
+					</div>
+					<form id='settings-form' onSubmit={updateSettings}>
+						<div id='settings-error' className={errorClass}>
+							<p>There was an error!</p>
+							<p>Please try again.</p>
+						</div>
+						<div id='settings-header'>
+							<div id='settings-title'>Settings</div>
+						</div>
+						<div id='settings-image-section'>
+							<label id='settings-image-footer' htmlFor='image'>
+								File size limit: 5 mb
+							</label>
+							<ImageInput
+								setFile={setFile}
+								setErrorClass={setErrorClass}
+								inputRef={inputRef}
+								// name='image'
+							/>
+						</div>
+						<div id='settings-name-section'>
+							<label id='settings-name-label' htmlFor='name'>
+								Your Name:
+							</label>
+							<input
+								id='settings-name-input'
+								name='name'
+								type='text'
+								value={user.name}
+								onChange={updateName}
+							></input>
+							<NameFooter
+								setNamePasses={setNamePasses}
+								name={name}
+							/>
+						</div>
+						<div id='settings-bio-section'>
+							<label id='settings-bio-label' htmlFor='bio'>
+								Your Bio:
+							</label>
+							<textarea
+								id='settings-bio-input'
+								name='bio'
+								value={user.bio ? user.bio : ''}
+								maxLength={150}
+								onChange={updateBio}
+							/>
+						</div>
+						<div id='settings-buttons-section'>
+							<button
+								id='settings-button-submit'
+								type={button}
+								className={buttonClass}
+							>
+								Update Settings
+							</button>
+							<button
+								id='settings-button-back'
+								type='button'
+								onClick={redirectToProfile}
+							>
+								Back to Profile
+							</button>
+						</div>
+					</form>
+				</div>
+			) : null}
 		</div>
 	);
 };

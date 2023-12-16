@@ -1,22 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../../contexts/AuthContext.js';
 
-const ImageInput = (props) => {
+const ImageInput = (props: {
+	setFile: React.Dispatch<React.SetStateAction<File | null>>;
+	setErrorClass: React.Dispatch<React.SetStateAction<string>>;
+	inputRef: React.MutableRefObject<HTMLInputElement | null>;
+}) => {
 	const { user } = useAuth();
 	const { setFile, setErrorClass, inputRef } = props;
 
-	const [filePreviewUrl, setFilePreviewUrl] = useState(null);
-
-	const [filePreview, setFilePreview] = useState(null);
-
-	const [imageInput, setImageInput] = useState(null);
+	const [filePreviewUrl, setFilePreviewUrl] = useState<string | undefined>(
+		undefined
+	);
 
 	const [overlayClass, setOverlayClass] = useState('inactive');
 
 	const maxFileSize = 10 * 1024 * 1024; // 5 MB
 
 	// Returns true if passed file is an image
-	const isImage = (file) => {
+	const isImage = (file: File) => {
 		const validTypes = ['image/png', 'image/jpg', 'image/jpeg'];
 		if (validTypes.includes(file.type)) {
 			return true;
@@ -27,31 +29,44 @@ const ImageInput = (props) => {
 
 	// Runs when user selects image to upload
 	const validateImage = async () => {
-		if (
-			inputRef.current.files[0].size > maxFileSize ||
-			isImage(inputRef.current.files[0]) == false
-		) {
-			inputRef.current.value = '';
+		try {
+			if (!inputRef.current?.files) {
+				throw new Error();
+			} else if (
+				inputRef.current.files[0].size > maxFileSize ||
+				isImage(inputRef.current.files[0]) == false
+			) {
+				throw new Error();
+			} else {
+				setFile(inputRef.current.files[0]);
+				setFilePreviewUrl(
+					URL.createObjectURL(inputRef.current.files[0])
+				);
+			}
+		} catch (e) {
+			if (inputRef?.current) inputRef.current.value = '';
 			setFile(null);
-			setFilePreviewUrl(user.image);
+			setFilePreviewUrl(user?.image ? user.image : undefined);
 			setErrorClass('active');
 			setTimeout(() => {
 				setErrorClass('inactive');
 			}, 2000);
-		} else {
-			setFile(inputRef.current.files[0]);
-			setFilePreviewUrl(URL.createObjectURL(inputRef.current.files[0]));
 		}
 	};
 
 	useEffect(() => {
-		if (user != null) {
-			setFilePreviewUrl(user.image);
-		}
+		setFilePreviewUrl(user?.image ? user.image : undefined);
 	}, [user]);
 
-	useEffect(() => {
-		setImageInput(
+	return (
+		<div
+			id='settings-image-input-parent'
+			onPointerDown={() => setOverlayClass('active')}
+			onPointerUp={() => setOverlayClass('inactive')}
+			onMouseOver={() => setOverlayClass('active')}
+			onMouseOut={() => setOverlayClass('inactive')}
+		>
+			{/* Image Input */}
 			<input
 				ref={inputRef}
 				type='file'
@@ -62,26 +77,9 @@ const ImageInput = (props) => {
 				onMouseUp={() => setOverlayClass('inactive')}
 				onMouseOver={() => setOverlayClass('active')}
 				onMouseOut={() => setOverlayClass('inactive')}
-			/>,
-		);
-	}, [inputRef]);
-
-	useEffect(() => {
-		setFilePreview(
+			/>
+			{/* File Preview */}
 			<img id='settings-image-preview' src={filePreviewUrl} />,
-		);
-	}, [filePreviewUrl]);
-
-	return (
-		<div
-			id='settings-image-input-parent'
-			onPointerDown={() => setOverlayClass('active')}
-			onPointerUp={() => setOverlayClass('inactive')}
-			onMouseOver={() => setOverlayClass('active')}
-			onMouseOut={() => setOverlayClass('inactive')}
-		>
-			{imageInput}
-			{filePreview}
 			<div id='settings-image-overlay' className={overlayClass} />
 		</div>
 	);

@@ -1,16 +1,24 @@
 import { useState, useEffect } from 'react';
 
-const NameFooter = (props) => {
+const NameFooter = (props: {
+	name: string | null;
+	setNamePasses: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
 	const { setNamePasses, name } = props;
 	const [footerText, setFooterText] = useState(
-		'Name must contain letters & spaces only.',
+		'Name must contain letters & spaces only.'
 	);
 	const [footerClass, setFooterClass] = useState('grey');
 
 	// Update name footer text, className, and namePasses state upon username change
 	useEffect(() => {
-		// Check if no name is entered
-		if (name.match(/^.{0,0}$/) != null) {
+		// Check if name is undefined
+		if (name === null) {
+			setFooterText('Name must contain letters & spaces only.');
+			setFooterClass('grey');
+		}
+		// Check if no name is entered (ie, entered then backspaced)
+		else if (name.match(/^.{0,0}$/) != null) {
 			setNamePasses(false);
 			setFooterText('Name must contain letters & spaces only.');
 			setFooterClass('grey');
