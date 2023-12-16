@@ -10,7 +10,7 @@ import { deepCopy } from '../../other/deepCopy.js';
 import { setLocalUser } from '../../services/localstor.js';
 import { useProfile } from '../../contexts/ProfileContext.js';
 
-const FollowButton = (props) => {
+const FollowButton = (props: { otherUserId: number }) => {
 	const { user, setUser } = useAuth();
 	const { otherUser, setOtherUser } = useProfile();
 	const { otherUserId } = props;

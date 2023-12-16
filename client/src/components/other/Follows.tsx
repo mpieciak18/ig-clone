@@ -4,8 +4,11 @@ import { FollowButton } from './FollowButton.js';
 import './other.css';
 import { useEffect, useState } from 'react';
 import { usePopUp } from '../../contexts/PopUpContext.js';
+import { Follow, HasOtherUser } from 'shared';
 
-const Follows = (props) => {
+interface FollowRecord extends Follow, HasOtherUser {}
+
+const Follows = (props: { otherUserId: number; initTab: string }) => {
 	const { otherUserId, initTab } = props;
 	const { updatePopUp } = usePopUp();
 
@@ -14,10 +17,10 @@ const Follows = (props) => {
 	const location = useParams();
 
 	// Init following/follower users count
-	const [usersCount, setUsersCount] = useState(20);
+	const [followsCount, setFollowsCount] = useState(20);
 
 	// Init following/follower users arr state
-	const [usersArr, setUsersArr] = useState([]);
+	const [followsArr, setFollowsArr] = useState<FollowRecord[]>([]);
 
 	// Init all loaded state
 	const [allLoaded, setAllLoaded] = useState(false);
@@ -26,51 +29,55 @@ const Follows = (props) => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	// Init whichTab state
-	const [whichTab, setWhichTab] = useState(null);
+	const [whichTab, setWhichTab] = useState(initTab);
 
 	// Init followers & following buttons classes
-	const [buttonOne, setButtonOne] = useState(null);
-	const [buttonTwo, setButtonTwo] = useState(null);
+	const [buttonOne, setButtonOne] = useState(
+		whichTab === 'following' ? 'active' : 'inactive'
+	);
+	const [buttonTwo, setButtonTwo] = useState(
+		whichTab !== 'following' ? 'active' : 'inactive'
+	);
 
 	// Change whichTab upon render & initTab prop change
 	useEffect(() => {
 		setWhichTab(initTab);
 	}, [initTab]);
 
-	// Change usersArr, allLoaded, and button states when whichTab changes
+	// Change followsArr, allLoaded, and button states when whichTab changes
 	useEffect(() => {
 		setAllLoaded(false);
 		if (whichTab == 'following') {
 			setButtonOne('active');
 			setButtonTwo('inactive');
-			getFollowing(otherUserId, usersCount).then(setUsersArr);
+			getFollowing(otherUserId, followsCount).then(setFollowsArr);
 		} else {
 			setButtonOne('inactive');
 			setButtonTwo('active');
-			getFollowers(otherUserId, usersCount).then(setUsersArr);
+			getFollowers(otherUserId, followsCount).then(setFollowsArr);
 		}
 	}, [whichTab]);
 
 	// Load more follows/followers when user reaches bottom of pop-up
-	const loadMore = async (e) => {
+	const loadMore = async (e: React.UIEvent<HTMLDivElement>) => {
 		if (allLoaded == false && isLoading == false) {
-			const elem = e.target;
+			const elem = e.target as HTMLDivElement;
 			if (
 				Math.ceil(elem.scrollHeight - elem.scrollTop) ==
 				elem.clientHeight
 			) {
 				setIsLoading(true);
-				const newCount = usersCount + 20;
-				setUsersCount(newCount);
-				let newUsersArr;
+				const newCount = followsCount + 20;
+				setFollowsCount(newCount);
+				let newFollowsArr;
 				if (whichTab == 'following') {
-					newUsersArr = await getFollowing(otherUserId, newCount);
-					setUsersArr(newUsersArr);
+					newFollowsArr = await getFollowing(otherUserId, newCount);
+					setFollowsArr(newFollowsArr);
 				} else {
-					newUsersArr = await getFollowers(otherUserId, newCount);
-					setUsersArr(newUsersArr);
+					newFollowsArr = await getFollowers(otherUserId, newCount);
+					setFollowsArr(newFollowsArr);
 				}
-				if (newUsersArr.length < newCount) {
+				if (newFollowsArr.length < newCount) {
 					setAllLoaded(true);
 				}
 				setIsLoading(false);
@@ -112,37 +119,43 @@ const Follows = (props) => {
 				</div>
 				<div id='follows-divider' />
 				<div id='follows-list' onScroll={loadMore}>
-					{usersArr.map((otherUser) => {
+					{followsArr.map((follow) => {
 						const redirect = () => {
 							updatePopUp();
 							if (location.otherUserId == null) {
-								navigate(`/${otherUser.id}`);
+								navigate(`/${follow.otherUser.id}`);
 							} else {
-								navigate(`/${otherUser.id}`);
+								navigate(`/${follow.otherUser.id}`);
 								window.location.reload();
 							}
 						};
 						return (
-							<div className='follow-row' key={otherUser.id}>
+							<div className='follow-row' key={follow.id}>
 								<div
 									className='follow-row-left'
 									onClick={redirect}
 								>
 									<img
 										className='follow-image'
-										src={otherUser.image}
+										src={
+											follow.otherUser.image
+												? follow.otherUser.image
+												: undefined
+										}
 									/>
 									<div className='follow-text'>
 										<div className='follow-name'>
-											{otherUser.name}
+											{follow.otherUser.name}
 										</div>
 										<div className='follow-username'>
-											@{otherUser.username}
+											@{follow.otherUser.username}
 										</div>
 									</div>
 								</div>
 								<div className='follow-row-right'>
-									<FollowButton otherUserId={otherUser.id} />
+									<FollowButton
+										otherUserId={follow.otherUser.id}
+									/>
 								</div>
 							</div>
 						);

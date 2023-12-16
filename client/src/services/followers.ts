@@ -1,5 +1,6 @@
 import { addNotification } from './notifications.js';
 import { getToken } from './localstor.js';
+import { Follow, HasOtherUser } from 'shared';
 
 // Add new follow
 export const addFollow = async (id) => {
@@ -51,7 +52,7 @@ export const checkForFollow = async (id) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
@@ -61,8 +62,10 @@ export const checkForFollow = async (id) => {
 	}
 };
 
+interface FollowRecord extends Follow, HasOtherUser {}
+
 // Return array of users that signed-in user follows
-export const getFollowing = async (id, limit) => {
+export const getFollowing = async (id: number, limit: number) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/follow/given',
 		{
@@ -72,18 +75,18 @@ export const getFollowing = async (id, limit) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
-		return json.follows;
+		return json.follows as FollowRecord[];
 	} else {
 		throw new Error();
 	}
 };
 
 // Return array of users that signed-in user is followed by
-export const getFollowers = async (id, limit) => {
+export const getFollowers = async (id: number, limit: number) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/follow/received',
 		{
@@ -93,11 +96,11 @@ export const getFollowers = async (id, limit) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
-		return json.follows;
+		return json.follows as FollowRecord[];
 	} else {
 		throw new Error();
 	}

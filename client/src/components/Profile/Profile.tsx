@@ -6,12 +6,12 @@ import { ProfileButtons } from './children/ProfileButtons.js';
 import { findPostsFromUser } from '../../services/posts.js';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
 import { ProfileProvider } from '../../contexts/ProfileContext.js';
+import { Post, PostStatsCount } from 'shared';
+
+interface PostRecord extends Post, PostStatsCount {}
 
 const Profile = () => {
-	const { user } = useAuth();
-
 	// Get other user id from url parameters
 	const otherUserId = Number(useParams().otherUserId);
 
@@ -19,7 +19,7 @@ const Profile = () => {
 	const [postsNumber, setPostsNumber] = useState(21);
 
 	// Init posts component state
-	const [posts, setPosts] = useState(null);
+	const [posts, setPosts] = useState<PostRecord[]>([]);
 
 	// Init all loaded state
 	const [allLoaded, setAllLoaded] = useState(false);
@@ -27,13 +27,13 @@ const Profile = () => {
 	// Update posts state when postsNumber state changes
 	useEffect(() => {
 		findPostsFromUser(otherUserId, postsNumber).then((newPosts) => {
-			if (newPosts != null) {
+			if (newPosts.length > 0) {
 				setPosts(newPosts);
 				if (newPosts.length < postsNumber) {
 					setAllLoaded(true);
 				}
 			} else {
-				setPosts(null);
+				setPosts([]);
 			}
 		});
 	}, [postsNumber]);
@@ -66,14 +66,13 @@ const Profile = () => {
 					</div>
 					<div id='profile-contents-right'>
 						<ProfileButtons otherUserId={otherUserId} />
-						{posts ? (
+						{posts.length > 0 ? (
 							<div id='user-posts'>
 								{posts.map((post) => {
 									return (
 										<PostPreview
 											key={post.id}
 											post={post}
-											user={user}
 										/>
 									);
 								})}

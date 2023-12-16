@@ -1,5 +1,6 @@
 import { getToken } from './localstor';
 import { compressFile } from './compress';
+import { Post, PostStatsCount } from 'shared';
 
 // Retrieve single post by post id
 export const findSinglePost = async (id) => {
@@ -13,7 +14,7 @@ export const findSinglePost = async (id) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
@@ -34,7 +35,7 @@ export const findPosts = async (limit) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
@@ -44,8 +45,10 @@ export const findPosts = async (limit) => {
 	}
 };
 
+interface PostRecord extends Post, PostStatsCount {}
+
 // Retrieve all posts from user
-export const findPostsFromUser = async (id, limit) => {
+export const findPostsFromUser = async (id: number, limit: number) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/post/user',
 		{
@@ -55,11 +58,12 @@ export const findPostsFromUser = async (id, limit) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
-		return json.posts;
+		// const result: Post[] = json.posts
+		return json.posts as PostRecord[];
 	} else {
 		throw new Error();
 	}

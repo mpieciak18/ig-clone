@@ -1,6 +1,7 @@
 import { getToken } from './localstor';
 import { compressFile } from './compress';
 import { UserContext } from '../contexts/AuthContext';
+import { User, UserStatsCount } from 'shared';
 
 interface NotUnique {
 	notUnique: string[];
@@ -81,7 +82,7 @@ export const signInUser = async (
 };
 
 // Retrieve user
-export const findUser = async (id) => {
+export const findUser = async (id: number) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/user/single',
 		{
@@ -95,7 +96,7 @@ export const findUser = async (id) => {
 	);
 	if (response.status == 200) {
 		const json = await response.json();
-		return json.user;
+		return json.user as User & UserStatsCount;
 	} else {
 		throw new Error();
 	}

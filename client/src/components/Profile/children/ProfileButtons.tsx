@@ -6,7 +6,7 @@ import MessageSolid from '../../../assets/images/dm-solid.png';
 import { useAuth } from '../../../contexts/AuthContext.js';
 import { removeLocalUser } from '../../../services/localstor.js';
 
-const ProfileButtons = (props) => {
+const ProfileButtons = (props: { otherUserId: number }) => {
 	const { user, setUser } = useAuth();
 	const { otherUserId } = props;
 

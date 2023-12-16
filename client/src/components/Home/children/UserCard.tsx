@@ -72,11 +72,7 @@ const UserCard = () => {
 				</div>
 			</div>
 			{popUpState.followsOn ? (
-				<Follows
-					user={user}
-					otherUserId={user.id}
-					initTab={followingVsFollower}
-				/>
+				<Follows otherUserId={user.id} initTab={followingVsFollower} />
 			) : null}
 		</div>
 	) : (

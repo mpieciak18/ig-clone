@@ -6,7 +6,7 @@ import { useAuth } from '../../../contexts/AuthContext.js';
 import { usePopUp } from '../../../contexts/PopUpContext.js';
 import { useProfile } from '../../../contexts/ProfileContext.js';
 
-const ProfileCard = (props) => {
+const ProfileCard = (props: { otherUserId: number }) => {
 	const { user } = useAuth();
 	const { otherUser, setOtherUser } = useProfile();
 	const { popUpState, updatePopUp } = usePopUp();
@@ -15,7 +15,7 @@ const ProfileCard = (props) => {
 	const navigate = useNavigate();
 
 	// Init profile image state
-	const [img, setImg] = useState(null);
+	const [img, setImg] = useState<string | undefined>(undefined);
 
 	// Init state to determine if pop-up shows following or followers
 	const [followingVsFollower, setFollowingVsFollower] = useState('following');
@@ -43,7 +43,7 @@ const ProfileCard = (props) => {
 	// Update img, otherUser, & otherUserFollowers states on render
 	useEffect(() => {
 		findUser(otherUserId).then((newUser) => {
-			setImg(newUser.image);
+			setImg(newUser?.image ? newUser.image : undefined);
 			setOtherUser(newUser);
 		});
 	}, []);
@@ -51,9 +51,9 @@ const ProfileCard = (props) => {
 	// Update follows state if followsOn state changes
 	useEffect(() => {
 		const body = document.querySelector('body');
-		if (popUpState?.followsOn) {
+		if (popUpState?.followsOn && body) {
 			body.style.overflow = 'hidden';
-		} else {
+		} else if (body) {
 			body.style.overflow = 'auto';
 		}
 	}, [popUpState]);
