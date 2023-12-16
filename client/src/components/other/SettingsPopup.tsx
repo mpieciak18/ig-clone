@@ -5,7 +5,7 @@ import { removeLocalUser } from '../../services/localstor.js';
 
 const SettingsPopup = () => {
 	const { user, setUser } = useAuth();
-	const { updatePopUp } = usePopUp();
+	const { popUpState, updatePopUp } = usePopUp();
 	const navigate = useNavigate();
 
 	// Logout user
@@ -15,12 +15,18 @@ const SettingsPopup = () => {
 		navigate('/');
 	};
 
+	// Handles click for opening / closing pop-up
+	const handleClick = () => {
+		if (popUpState.settingsOn) updatePopUp(null);
+		else updatePopUp('settingsOn');
+	};
+
 	return (
-		<div id='settings-popup' onClick={updatePopUp}>
+		<div id='settings-popup' onClick={handleClick}>
 			<div
 				id='settings-profile'
 				className='settings-popup-button'
-				onClick={() => navigate(`/${user.id}`)}
+				onClick={() => navigate(`/${user?.id}`)}
 			>
 				View Profile
 			</div>

@@ -35,7 +35,9 @@ const Navbar = () => {
 	// Init search bar value
 	const [searchVal, setSearchVal] = useState('');
 
-	const updateSearchVal = (e) => setSearchVal(e.target.value);
+	const updateSearchVal = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchVal(e.target.value);
+	};
 
 	// Update popUpState.searchOn
 	const clickSearch = () => updatePopUp('searchOn');
