@@ -112,8 +112,12 @@ export const getGivenFollows = async (
 				receiver: true,
 			},
 		});
+		const modifiedResults = givenFollows.map((item) => {
+			const { receiver, ...rest } = item;
+			return { ...rest, otherUser: receiver };
+		});
 		// Third, return given follows back to client
-		res.json({ follows: givenFollows });
+		res.json({ follows: modifiedResults });
 	} catch (e) {
 		// DB errors are handled at top-level (server.js) as 500 error
 		next(e);
@@ -139,11 +143,15 @@ export const getReceivedFollows = async (
 			where: { receiverId: req.body.id },
 			take: req.body.limit,
 			include: {
-				giver: true,
+				giver: {},
 			},
 		});
+		const modifiedResults = receivedFollows.map((item) => {
+			const { giver, ...rest } = item;
+			return { ...rest, otherUser: giver };
+		});
 		// Third, return given follows back to client
-		res.json({ follows: receivedFollows });
+		res.json({ follows: modifiedResults });
 	} catch (e) {
 		// DB errors are handled at top-level (server.js) as 500 error
 		next(e);

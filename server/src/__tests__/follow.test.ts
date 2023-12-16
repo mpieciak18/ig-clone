@@ -143,7 +143,7 @@ describe('POST /api/follow & DELETE /api/follow', () => {
 		expect(response.status).toBe(200);
 		expect(response.body.follows.length).toBeGreaterThan(0);
 		expect(response.body.follows[0].giverId).toBe(user.id);
-		expect(response.body.follows[0].receiver.id).toBe(otherUser.id);
+		expect(response.body.follows[0].otherUser.id).toBe(otherUser.id);
 		expect(response.body.follows[0].receiverId).toBe(otherUser.id);
 		const response2 = await supertest(app)
 			.post('/api/follow/given')
@@ -183,7 +183,7 @@ describe('POST /api/follow & DELETE /api/follow', () => {
 		expect(response.body.follows.length).toBeGreaterThan(0);
 		expect(response.body.follows[0].receiverId).toBe(otherUser.id);
 		expect(response.body.follows[0].giverId).toBe(user.id);
-		expect(response.body.follows[0].giver.id).toBe(user.id);
+		expect(response.body.follows[0].otherUser.id).toBe(user.id);
 		const response2 = await supertest(app)
 			.post('/api/follow/received')
 			.set('Authorization', `Bearer ${token}`)
