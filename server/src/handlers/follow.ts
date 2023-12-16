@@ -108,6 +108,9 @@ export const getGivenFollows = async (
 		const givenFollows = await prisma.follow.findMany({
 			where: { giverId: req.body.id },
 			take: req.body.limit,
+			include: {
+				receiver: true,
+			},
 		});
 		// Third, return given follows back to client
 		res.json({ follows: givenFollows });
@@ -135,6 +138,9 @@ export const getReceivedFollows = async (
 		const receivedFollows = await prisma.follow.findMany({
 			where: { receiverId: req.body.id },
 			take: req.body.limit,
+			include: {
+				giver: true,
+			},
 		});
 		// Third, return given follows back to client
 		res.json({ follows: receivedFollows });
