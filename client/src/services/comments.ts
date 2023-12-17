@@ -1,5 +1,6 @@
 import { addNotification } from './notifications.js';
 import { getToken } from './localstor.js';
+import { Comment, User } from 'shared';
 
 // Create new comment & return comment ID
 export const addComment = async (postOwnerId, postId, message) => {
@@ -15,7 +16,7 @@ export const addComment = async (postOwnerId, postId, message) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		// add notification to recipient
@@ -40,7 +41,7 @@ export const removeComment = async (id) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
@@ -50,8 +51,12 @@ export const removeComment = async (id) => {
 	}
 };
 
+interface CommentRecord extends Comment {
+	user: User;
+}
+
 // Get comments
-export const getComments = async (id, limit) => {
+export const getComments = async (id: number, limit: number) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/comment/post',
 		{
@@ -64,11 +69,11 @@ export const getComments = async (id, limit) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
-		return json.comments;
+		return json.comments as CommentRecord[];
 	} else {
 		throw new Error();
 	}

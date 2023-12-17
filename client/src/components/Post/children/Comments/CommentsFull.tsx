@@ -2,16 +2,17 @@ import { getComments } from '../../../../services/comments.js';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { timeSinceTrunc } from '../../../../other/timeSinceTrunc.js';
+import { Comment, Post, PostStatsCount, User } from 'shared';
 
-const CommentsFull = (props) => {
-	const {
-		postId,
-		postOwnerId,
-		postOwnerImage,
-		postCaption,
-		postOwnerName,
-		commentsNum,
-	} = props;
+interface PostRecord extends Post, PostStatsCount {
+	user: User;
+}
+interface CommentRecord extends Comment {
+	user: User;
+}
+
+const CommentsFull = (props: { post: PostRecord; commentsNum: number }) => {
+	const { post, commentsNum } = props;
 
 	// Init comment quantity (ie, how many comments are rendered) state
 	const [commentQuantity, setCommentQuantity] = useState(10);
@@ -20,12 +21,12 @@ const CommentsFull = (props) => {
 	const [allLoaded, setAllLoaded] = useState(false);
 
 	// Init comments array state
-	const [commentsArr, setCommentsArr] = useState([]);
+	const [commentsArr, setCommentsArr] = useState<CommentRecord[]>([]);
 
 	// Update commentsArr when commentsNum (total comments on a post) or commentQuantity (how many are rendered) changes
 	// E.g., user submits new comment on a post OR scrolls to load more
 	useEffect(() => {
-		getComments(postId, commentQuantity)
+		getComments(post.id, commentQuantity)
 			.then((array) => {
 				setCommentsArr(array);
 				if (array.length < commentQuantity) {
@@ -36,8 +37,8 @@ const CommentsFull = (props) => {
 	}, [commentsNum, commentQuantity]);
 
 	// Load more comments on scroll
-	const loadMore = (e) => {
-		const elem = e.target;
+	const loadMore = (e: React.UIEvent<HTMLDivElement>) => {
+		const elem = e.target as HTMLDivElement;
 		if (
 			Math.ceil(elem.scrollHeight - elem.scrollTop) ==
 				elem.clientHeight &&
@@ -50,7 +51,7 @@ const CommentsFull = (props) => {
 
 	// Update comments arr state on init render
 	useEffect(() => {
-		getComments(postId, 10)
+		getComments(post.id, 10)
 			.then(setCommentsArr)
 			.catch(() => setCommentsArr([]));
 	}, []);
@@ -60,17 +61,19 @@ const CommentsFull = (props) => {
 		<div id='comments-grid' onScroll={loadMore}>
 			<div className='post-comment'>
 				<div className='post-comment-left' key={'first-comment'}>
-					<Link to={`/${postOwnerId}`} className='post-comment-icon'>
-						<img src={postOwnerImage} />
+					<Link to={`/${post.user.id}`} className='post-comment-icon'>
+						<img
+							src={post.user.image ? post.user.image : undefined}
+						/>
 					</Link>
 					<div className='post-comment-text'>
 						<Link
-							to={`/${postOwnerId}`}
+							to={`/${post.user.id}`}
 							className='post-comment-name'
 						>
-							{postOwnerName}
+							{post.user.name}
 						</Link>
-						<div className='post-comment-text'>{postCaption}</div>
+						<div className='post-comment-text'>{post.caption}</div>
 					</div>
 				</div>
 				<div className='post-comment-right'>...</div>
@@ -82,11 +85,17 @@ const CommentsFull = (props) => {
 							to={`/${comment.userId}`}
 							className='post-comment-icon'
 						>
-							<img src={comment.user.image} />
+							<img
+								src={
+									comment.user.image
+										? comment.user.image
+										: undefined
+								}
+							/>
 						</Link>
 						<div className='post-comment-text'>
 							<Link
-								to={`/${comment.userId}`}
+								to={`/${comment.user.id}`}
 								className='post-comment-name'
 							>
 								{comment.user.name}

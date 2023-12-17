@@ -4,7 +4,14 @@ import { SaveButton } from './PostButtons/SaveButton.js';
 import { CommentButton } from './PostButtons/CommentButton.js';
 import { ShareButton } from './PostButtons/ShareButton.js';
 
-const PostButtons = (props) => {
+const PostButtons = (props: {
+	postId: number;
+	postOwnerId: number;
+	inputRef: React.MutableRefObject<HTMLInputElement | null>;
+	likesNum: number | undefined;
+	setLikesNum: React.Dispatch<React.SetStateAction<number | undefined>>;
+	setLinkCopied: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
 	const {
 		postId,
 		postOwnerId,

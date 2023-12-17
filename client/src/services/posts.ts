@@ -1,9 +1,13 @@
 import { getToken } from './localstor';
 import { compressFile } from './compress';
-import { Post, PostStatsCount } from 'shared';
+import { Post, PostStatsCount, User } from 'shared';
+
+interface PostRecord extends Post, PostStatsCount {
+	user: User;
+}
 
 // Retrieve single post by post id
-export const findSinglePost = async (id) => {
+export const findSinglePost = async (id: number) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/post/single',
 		{
@@ -18,7 +22,7 @@ export const findSinglePost = async (id) => {
 	);
 	if (response.status == 200) {
 		const json = await response.json();
-		return json.post;
+		return json.post as PostRecord;
 	} else {
 		throw new Error();
 	}

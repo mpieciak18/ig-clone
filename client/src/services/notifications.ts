@@ -1,10 +1,20 @@
 import { getToken } from './localstor';
 
+interface newNotifBody {
+	type: string;
+	id: number;
+	postId?: number;
+}
+
 // Add new notification to other user when logged-in user performs a trigger
 // Triggers/types include new like, new comment, new follow, and new message
-export const addNotification = async (type, userId, postId = null) => {
-	const body = { id: userId, type };
-	if (postId) body.postId = postId;
+export const addNotification = async (
+	type: string,
+	userId: number,
+	postId: number | null = null
+) => {
+	const body: newNotifBody = { id: userId, type };
+	if (postId !== null) body.postId = postId;
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/notification',
 		{
@@ -14,11 +24,11 @@ export const addNotification = async (type, userId, postId = null) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
-		return json.notification;
+		return json.notification as Notification;
 	} else {
 		throw new Error();
 	}
@@ -35,7 +45,7 @@ export const getUnreadNotifications = async (limit) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
@@ -56,7 +66,7 @@ export const getReadNotifications = async (limit) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
@@ -75,7 +85,7 @@ export const readNotifications = async () => {
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();

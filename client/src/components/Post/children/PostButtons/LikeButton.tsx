@@ -4,11 +4,17 @@ import LikeSolid from '../../../../assets/images/like-solid.png';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../../contexts/AuthContext.js';
 
-const LikeButton = (props) => {
+const LikeButton = (props: {
+	postId: number;
+	postOwnerId: number;
+	redirect: () => void;
+	setLikesNum: React.Dispatch<React.SetStateAction<number | undefined>>;
+	likesNum: number | undefined;
+}) => {
 	const { user } = useAuth();
 	const { postId, postOwnerId, redirect, setLikesNum, likesNum } = props;
 
-	const [likeId, setLikeId] = useState(null);
+	const [likeId, setLikeId] = useState<number | null>(null);
 
 	const [isUpdating, setIsUpdating] = useState(false);
 
@@ -37,12 +43,12 @@ const LikeButton = (props) => {
 			const id = await addLike(postId, postOwnerId);
 			setLikeId(id);
 			setImg(LikeSolid);
-			setLikesNum(likesNum + 1);
+			if (likesNum) setLikesNum(likesNum + 1);
 		} else {
 			await removeLike(likeId);
 			setLikeId(null);
 			setImg(LikeHollow);
-			setLikesNum(likesNum - 1);
+			if (likesNum) setLikesNum(likesNum - 1);
 		}
 		// enable like button once everything is done
 		setIsUpdating(false);

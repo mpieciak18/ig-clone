@@ -3,7 +3,6 @@ import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
 import { findSinglePost } from '../../services/posts.js';
 import { Navbar } from '../other/Navbar.js';
 import { useEffect, useState, useRef } from 'react';
-import { findUser } from '../../services/users';
 import { Likes } from './children/Likes';
 import { PostButtons } from './children/PostButtons';
 import { timeSince } from '../../other/timeSince';
@@ -12,6 +11,11 @@ import { CommentsFull } from './children/Comments/CommentsFull';
 import { LinkCopied } from './children/LinkCopied';
 import { useAuth } from '../../contexts/AuthContext';
 import { usePopUp } from '../../contexts/PopUpContext';
+import { Post, PostStatsCount, User } from 'shared';
+
+interface PostRecord extends Post, PostStatsCount {
+	user: User;
+}
 
 const Post = () => {
 	const { user } = useAuth();
@@ -20,55 +24,25 @@ const Post = () => {
 	const postOwnerId = Number(useParams().postOwnerId);
 	const postId = Number(useParams().postId);
 
-	// Init post owner name
-	const [postOwnerName, setPostOwnerName] = useState(null);
+	// Init post db entry state
+	const [post, setPost] = useState<PostRecord>();
 
-	// Init post owner username
-	const [postOwnerUsername, setPostOwnerUsername] = useState(null);
+	// Init comments num state
+	const [commentsNum, setCommentsNum] = useState<number>();
 
-	// Init post owner image state
-	const [postOwnerImage, setPostOwnerImage] = useState(null);
-
-	// Init post image state
-	const [postImage, setPostImage] = useState(null);
-
-	// Init post likes count state
-	const [postLikes, setPostLikes] = useState(null);
-
-	// Init post comments count state
-	const [postComments, setPostComments] = useState(null);
-
-	// Init post text
-	const [postCaption, setPostCaption] = useState(null);
-
-	// Init post date
-	const [postDate, setPostDate] = useState(null);
+	// Init comments num state
+	const [likesNum, setLikesNum] = useState<number>();
 
 	// Set up ref for comment bar / comment button
-	const inputRef = useRef(null);
+	const inputRef = useRef<HTMLInputElement>(null);
 
-	const updatePostOwnerStates = async () => {
-		const pOwner = await findUser(postOwnerId);
-		setPostOwnerName(pOwner.name);
-		setPostOwnerUsername(pOwner.username);
-		setPostOwnerImage(pOwner.image);
-	};
-
-	const updatePostStates = async () => {
-		const post = await findSinglePost(postId);
-		setPostImage(post.image);
-		setPostComments(post._count.comments);
-		setPostDate(post.createdAt);
-		setPostLikes(post._count.likes);
-		setPostCaption(post.caption);
-	};
-
-	// Update previous states on render & changes
+	// Update post state on render
 	useEffect(() => {
-		// Update post owner states
-		updatePostOwnerStates();
-		// Update post states
-		updatePostStates();
+		findSinglePost(postId).then((post) => {
+			setPost(post);
+			setCommentsNum(post._count.comments);
+			setLikesNum(post._count.likes);
+		});
 	}, []);
 
 	// Init linkCopied state for share button
@@ -89,62 +63,64 @@ const Post = () => {
 		<div id='post' className='page'>
 			<Navbar />
 			{popUpState.likesOn && user ? <Likes postId={postId} /> : null}
-			<div id='single-post-page'>
-				<LinkCopied linkCopied={linkCopied} />
-				<div id='content-grid'>
-					<img id='post-image' src={postImage} />
-				</div>
-				<div id='user-grid'>
-					<div id='user-grid-child'>
-						<Link id='user-link' to={`/${postOwnerId}`}>
-							<img id='user-avatar' src={postOwnerImage} />
-							<div id='user-name-parent'>
-								<div id='user-name'>{postOwnerName}</div>
-								<div id='user-username'>
-									@{postOwnerUsername}
-								</div>
-							</div>
-						</Link>
-						<div id='date'>{timeSince(postDate)}</div>
+			{post && commentsNum && likesNum ? (
+				<div id='single-post-page'>
+					<LinkCopied linkCopied={linkCopied} />
+					<div id='content-grid'>
+						<img id='post-image' src={post.image} />
 					</div>
-				</div>
-				<CommentsFull
-					postId={postId}
-					postOwnerId={postOwnerId}
-					postOwnerImage={postOwnerImage}
-					postCaption={postCaption}
-					postOwnerName={postOwnerName}
-					commentsNum={postComments}
-				/>
-				<div id='buttons-grid'>
-					<PostButtons
-						postId={postId}
-						postOwnerId={postOwnerId}
-						inputRef={inputRef}
-						likesNum={postLikes}
-						setLikesNum={setPostLikes}
-						setLinkCopied={setLinkCopied}
-					/>
-					<div id='beneath-buttons'>
-						<div id='likes-count' onClick={clickLikes}>
-							{postLikes == 0
-								? '0 likes'
-								: postLikes == 1
-									? '1 like'
-									: `${postLikes} likes`}
+					<div id='user-grid'>
+						<div id='user-grid-child'>
+							<Link id='user-link' to={`/${postOwnerId}`}>
+								<img
+									id='user-avatar'
+									src={
+										post.user.image
+											? post.user.image
+											: undefined
+									}
+								/>
+								<div id='user-name-parent'>
+									<div id='user-name'>{post.user.name}</div>
+									<div id='user-username'>
+										@{post.user.username}
+									</div>
+								</div>
+							</Link>
+							<div id='date'>{timeSince(post.createdAt)}</div>
 						</div>
 					</div>
+					<CommentsFull post={post} commentsNum={commentsNum} />
+					<div id='buttons-grid'>
+						<PostButtons
+							postId={postId}
+							postOwnerId={postOwnerId}
+							inputRef={inputRef}
+							likesNum={likesNum}
+							setLikesNum={setLikesNum}
+							setLinkCopied={setLinkCopied}
+						/>
+						<div id='beneath-buttons'>
+							<div id='likes-count' onClick={clickLikes}>
+								{likesNum == 0
+									? '0 likes'
+									: likesNum == 1
+									? '1 like'
+									: `${likesNum} likes`}
+							</div>
+						</div>
+					</div>
+					<div id='comment-bar-grid'>
+						<CommentsBar
+							postId={postId}
+							postOwnerId={postOwnerId}
+							commentsNum={commentsNum}
+							setCommentsNum={setCommentsNum}
+							inputRef={inputRef}
+						/>
+					</div>
 				</div>
-				<div id='comment-bar-grid'>
-					<CommentsBar
-						postId={postId}
-						postOwnerId={postOwnerId}
-						commentsNum={postComments}
-						setCommentsNum={setPostComments}
-						inputRef={inputRef}
-					/>
-				</div>
-			</div>
+			) : null}
 		</div>
 	);
 };

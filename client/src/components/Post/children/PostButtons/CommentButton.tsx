@@ -3,7 +3,10 @@ import CommentSolid from '../../../../assets/images/messages-solid.png';
 import { useState } from 'react';
 import { useAuth } from '../../../../contexts/AuthContext';
 
-const CommentButton = (props) => {
+const CommentButton = (props: {
+	redirect: () => void;
+	inputRef: React.MutableRefObject<HTMLInputElement | null>;
+}) => {
 	const { user } = useAuth();
 	const { redirect, inputRef } = props;
 
@@ -11,7 +14,7 @@ const CommentButton = (props) => {
 
 	// Runs when comment button is clicked and sets focus on ref (which is the comment input bar on the post)
 	const commentButtonFunction = () => {
-		if (user != null) {
+		if (user && inputRef.current) {
 			inputRef.current.focus();
 		} else {
 			redirect();

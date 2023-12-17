@@ -2,10 +2,10 @@ import { addNotification } from './notifications.js';
 import { getToken } from './localstor.js';
 
 // Add like to post and return the like id
-export const addLike = async (postId, postOwnerId) => {
+export const addLike = async (postId: number, postOwnerId: number) => {
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/like', {
 		method: 'POST',
-		body: JSON.stringify({ id: Number(postId) }),
+		body: JSON.stringify({ id: postId }),
 		headers: {
 			Authorization: `Bearer ${getToken()}`,
 			'Content-Type': 'application/json',
@@ -16,7 +16,7 @@ export const addLike = async (postId, postOwnerId) => {
 		if (json.like?.id) {
 			// add notification to recipient
 			await addNotification('like', postOwnerId, postId);
-			return json.like.id;
+			return json.like.id as number;
 		} else {
 			return null;
 		}
@@ -26,7 +26,7 @@ export const addLike = async (postId, postOwnerId) => {
 };
 
 // Remove like from post
-export const removeLike = async (id) => {
+export const removeLike = async (id: number) => {
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/like', {
 		method: 'DELETE',
 		body: JSON.stringify({ id: Number(id) }),
@@ -43,7 +43,7 @@ export const removeLike = async (id) => {
 };
 
 // Check if user already liked post
-export const likeExists = async (id) => {
+export const likeExists = async (id: number): Promise<number | null> => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/like/user',
 		{
@@ -53,7 +53,7 @@ export const likeExists = async (id) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
@@ -77,7 +77,7 @@ export const getLikes = async (id, limit) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
