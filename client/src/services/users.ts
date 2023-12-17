@@ -154,45 +154,45 @@ export const updateUser = async (
 };
 
 // Query for username & return true if it is not taken
-export const isUsernameUnique = async (username) => {
-	const response = await fetch(
-		import.meta.env.VITE_API_URL + '/api/user/is-username-unique',
-		{
-			body: JSON.stringify({ username }),
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${getToken()}`,
-				'Content-Type': 'application/json',
-			},
-		}
-	);
-	if (response.status == 200) {
-		const json = await response.json();
-		const { isUsernameUnique } = json;
-		return isUsernameUnique;
-	} else {
-		throw new Error();
-	}
-};
+// export const isUsernameUnique = async (username) => {
+// 	const response = await fetch(
+// 		import.meta.env.VITE_API_URL + '/api/user/is-username-unique',
+// 		{
+// 			body: JSON.stringify({ username }),
+// 			method: 'POST',
+// 			headers: {
+// 				Authorization: `Bearer ${getToken()}`,
+// 				'Content-Type': 'application/json',
+// 			},
+// 		}
+// 	);
+// 	if (response.status == 200) {
+// 		const json = await response.json();
+// 		const { isUsernameUnique } = json;
+// 		return isUsernameUnique;
+// 	} else {
+// 		throw new Error();
+// 	}
+// };
 
 // Query for email & return true if it is not taken
-export const isEmailUnique = async (email) => {
-	const response = await fetch(
-		import.meta.env.VITE_API_URL + '/api/user/is-email-unique',
-		{
-			body: JSON.stringify({ email }),
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${getToken()}`,
-				'Content-Type': 'application/json',
-			},
-		}
-	);
-	if (response.status == 200) {
-		const json = await response.json();
-		const { isEmailUnique } = json;
-		return isEmailUnique;
-	} else {
-		throw new Error();
-	}
-};
+// export const isEmailUnique = async (email) => {
+// 	const response = await fetch(
+// 		import.meta.env.VITE_API_URL + '/api/user/is-email-unique',
+// 		{
+// 			body: JSON.stringify({ email }),
+// 			method: 'POST',
+// 			headers: {
+// 				Authorization: `Bearer ${getToken()}`,
+// 				'Content-Type': 'application/json',
+// 			},
+// 		}
+// 	);
+// 	if (response.status == 200) {
+// 		const json = await response.json();
+// 		const { isEmailUnique } = json;
+// 		return isEmailUnique;
+// 	} else {
+// 		throw new Error();
+// 	}
+// };
