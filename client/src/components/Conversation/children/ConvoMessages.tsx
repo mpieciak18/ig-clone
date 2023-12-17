@@ -1,42 +1,37 @@
 import { useState, useEffect, useRef } from 'react';
 import { timeSince } from '../../../other/timeSince.js';
 import { useAuth } from '../../../contexts/AuthContext.js';
+import { Message, User, UserStatsCount } from 'shared';
 
-const ConvoMessages = (props) => {
+const ConvoMessages = (props: {
+	otherUser: User & UserStatsCount;
+	messages: Message[];
+	loadMore: (e: React.UIEvent<HTMLDivElement>) => void;
+}) => {
 	const { user } = useAuth();
 
-	const { otherUser, messagesArr, loadMore } = props;
-
-	const [otherUserImg, setOtherUserImg] = useState(null);
-
-	const [otherUserName, setOtherUserName] = useState(null);
+	const { otherUser, messages, loadMore } = props;
 
 	const [isInit, setIsInit] = useState(false);
 
-	const ref = useRef();
-
-	// Update image source on render
-	useEffect(() => {
-		if (otherUser != null) {
-			setOtherUserImg(otherUser.image);
-			setOtherUserName(otherUser.name);
-		}
-	}, [otherUser]);
+	const ref = useRef<HTMLDivElement>(null);
 
 	// Scroll down when messages changes
 	useEffect(() => {
-		if (isInit == false && messagesArr) {
+		if (isInit == false && messages) {
 			const elem = document.getElementById('convo-messages');
-			elem.scrollTop = elem.scrollHeight;
-			setIsInit(true);
+			if (elem !== null) {
+				elem.scrollTop = elem.scrollHeight;
+				setIsInit(true);
+			}
 		}
-	}, [messagesArr]);
+	}, [messages]);
 
-	// Update messages state when messagesArr changes
+	// Update messages state when messages changes
 	const generateMessages = () => {
-		return messagesArr.toReversed().map((message, i) => {
+		return messages.toReversed().map((message, i) => {
 			let sender;
-			if (user.id == message.senderId) {
+			if (user?.id == message.senderId) {
 				sender = 'self';
 			} else {
 				sender = 'other';
@@ -48,7 +43,7 @@ const ConvoMessages = (props) => {
 
 			if (i == 0) {
 				senderChange = true;
-			} else if (messagesArr[i - 1].senderId != message.senderId) {
+			} else if (messages[i - 1].senderId != message.senderId) {
 				senderChange = true;
 			}
 
@@ -64,12 +59,13 @@ const ConvoMessages = (props) => {
 					icon = (
 						<img
 							className='message-block-icon'
-							src={otherUserImg}
+							src={otherUser.image ? otherUser.image : undefined}
 						/>
 					);
 					name = (
 						<div className='message-name'>
-							{otherUserName}, {timeSince(message.createdAt)}:
+							{otherUser.username}, {timeSince(message.createdAt)}
+							:
 						</div>
 					);
 				}
@@ -98,7 +94,7 @@ const ConvoMessages = (props) => {
 
 	return (
 		<div id='convo-messages' onScroll={loadMore} ref={ref}>
-			{messagesArr?.length > 0 ? generateMessages() : null}
+			{messages?.length > 0 ? generateMessages() : null}
 		</div>
 	);
 };

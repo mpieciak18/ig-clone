@@ -5,20 +5,25 @@ import { useEffect, useState } from 'react';
 import { ConvoMessages } from './children/ConvoMessages.js';
 import { Navbar } from '../other/Navbar.js';
 import { findUser } from '../../services/users.js';
-import io from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import { getToken } from '../../services/localstor.js';
+import { Conversation, HasUsers, Message, User, UserStatsCount } from 'shared';
+
+interface ConvoRecord extends Conversation, HasUsers {
+	messages: Message[];
+}
 
 const Conversation = () => {
 	const navigate = useNavigate();
 
 	// Socket state
-	const [socket, setSocket] = useState();
+	const [socket, setSocket] = useState<Socket>();
 
 	// Grab other user's id from url parameters
 	const otherUserId = Number(useParams().otherUserId);
 
 	// Init other user state
-	const [otherUser, setOtherUser] = useState(null);
+	const [otherUser, setOtherUser] = useState<User & UserStatsCount>();
 
 	// Init messages number state
 	const [messagesNumber, setMessagesNumber] = useState(10);
@@ -27,12 +32,12 @@ const Conversation = () => {
 	const [diffMessNumber, setDiffMessNumber] = useState(0);
 
 	// Init convo db record array state
-	const [convo, setConvo] = useState(null);
+	const [convo, setConvo] = useState<ConvoRecord | null>(null);
 
 	// Set initial message input value & reset it on submission
 	const [messageValue, setMessageValue] = useState('');
 
-	const initSocket = async () => {
+	const initSocket = async (): Promise<Socket> => {
 		return new Promise((resolve, reject) => {
 			const socket = io(import.meta.env.VITE_API_URL, {
 				auth: {
@@ -81,17 +86,16 @@ const Conversation = () => {
 			// Establish WebSocket connection
 			socket.emit('joinConversation', { conversationId: convo.id });
 			socket.on('receiveNewMessage', (newMessage) => {
-				setConvo((convo) => ({
-					...convo,
-					messages: [newMessage, ...convo.messages],
-				}));
+				const newConvo = { ...convo };
+				newConvo.messages = [newMessage, ...newConvo.messages];
+				setConvo(newConvo);
 			});
 			// Disconnect from WebSocket on unmount
 			return () => {
 				socket.disconnect();
 				socket.off('sendNewMessage');
 				socket.off('receiveNewMessage');
-				setSocket();
+				setSocket(undefined);
 			};
 		}
 	}, [convo?.id, socket]);
@@ -100,13 +104,13 @@ const Conversation = () => {
 	useEffect(() => {
 		if (diffMessNumber > 0) {
 			const elem = document.getElementById('convo-messages');
-			elem.scrollTop = elem.scrollHeight;
+			if (elem !== null) elem.scrollTop = elem.scrollHeight;
 		}
 	}, [convo?.messages]);
 
 	// Load more messages when user reaches bottom of messages component
-	const loadMore = (e) => {
-		const elem = e.target;
+	const loadMore = (e: React.UIEvent<HTMLDivElement>) => {
+		const elem = e.target as HTMLDivElement;
 		if (elem.scrollTop == 0) {
 			const newMessagesNumber = messagesNumber + diffMessNumber + 10;
 			setDiffMessNumber(0);
@@ -115,13 +119,13 @@ const Conversation = () => {
 	};
 
 	// Updates message state / field
-	const updateMessage = (e) => {
+	const updateMessage = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const val = e.target.value;
 		setMessageValue(val);
 	};
 
 	// Add new message to specific convo in db
-	const sendMessage = async (e) => {
+	const sendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (messageValue.length > 0) {
 			setMessageValue('');
@@ -131,10 +135,12 @@ const Conversation = () => {
 				setConvo(newConvo);
 				id = newConvo.id;
 			}
-			socket.emit('sendNewMessage', {
-				id,
-				message: messageValue,
-			});
+			if (socket) {
+				socket.emit('sendNewMessage', {
+					id,
+					message: messageValue,
+				});
+			}
 			setDiffMessNumber(diffMessNumber + 1);
 		}
 	};
@@ -163,10 +169,10 @@ const Conversation = () => {
 					) : null}
 					<div id='convo-back-arrow-hidden'>« Go Back</div>
 				</div>
-				{convo ? (
+				{convo && otherUser ? (
 					<ConvoMessages
 						otherUser={otherUser}
-						messagesArr={convo.messages}
+						messages={convo.messages}
 						loadMore={loadMore}
 					/>
 				) : null}
@@ -179,10 +185,10 @@ const Conversation = () => {
 						onChange={updateMessage}
 					/>
 					<button
-						type={messageValue.length > 0 ? 'active' : 'inactive'}
+						type={messageValue.length > 0 ? 'submit' : 'button'}
 						id='convo-message-button'
 						className={
-							messageValue.length > 0 ? 'submit' : 'button'
+							messageValue.length > 0 ? 'active' : 'inactive'
 						}
 					>
 						Send
