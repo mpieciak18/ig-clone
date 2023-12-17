@@ -1,5 +1,6 @@
 import { addNotification } from './notifications.js';
 import { getToken } from './localstor.js';
+import { Conversation, HasMessage, HasUsers, Message, User } from 'shared';
 
 // Send message from logged-in user to other user
 // NOTE: user A's ID is the convo ID for user B & vice-versa
@@ -67,8 +68,12 @@ export const getSingleConvo = async (id, limit) => {
 	}
 };
 
+interface ConvoRecord extends Conversation, HasUsers {
+	messages: Message[];
+}
+
 // Get all of user's conversations
-export const getConvos = async (limit) => {
+export const getConvos = async (limit: number) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/conversation/user',
 		{
@@ -82,7 +87,7 @@ export const getConvos = async (limit) => {
 	);
 	if (response.status == 200) {
 		const json = await response.json();
-		return json.conversations;
+		return json.conversations as ConvoRecord[];
 	} else {
 		throw new Error();
 	}

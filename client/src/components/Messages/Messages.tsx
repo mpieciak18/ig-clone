@@ -7,66 +7,41 @@ import { ConvoPopup } from '../other/ConvoPopup.js';
 import { useAuth } from '../../contexts/AuthContext.js';
 import { usePopUp } from '../../contexts/PopUpContext.js';
 import { MessagesChild } from './children/MessagesChild.js';
+import { Conversation, HasUsers, Message } from 'shared';
+
+interface ConvoRecord extends Conversation, HasUsers {
+	messages: Message[];
+}
 
 const Messages = () => {
 	const { user } = useAuth();
 	const { popUpState, updatePopUp } = usePopUp();
 
-	// Init user image state
-	const [userImage, setUserImage] = useState(null);
-
 	// Init convos count state
 	const [convosCount, setConvosCount] = useState(20);
 
 	// Init convos arr state
-	const [convosArr, setConvosArr] = useState([]);
+	const [convos, setConvos] = useState<ConvoRecord[]>([]);
 
 	// Init all convos loaded state
 	const [allLoaded, setAllLoaded] = useState(false);
 
-	// Init search popup
-	const [searchPopUp, setSearchPopUp] = useState(null);
-
-	// Update search pop up state when popUpState changes
-	useEffect(() => {
-		if (popUpState.convosOn == true) {
-			setSearchPopUp(<ConvoPopup />);
-			// disableBodyScroll(document.getElementById('convo-popup-bottom'));
-		} else {
-			setSearchPopUp(null);
-			// clearAllBodyScrollLocks();
-		}
-	}, [popUpState.convosOn]);
-
 	// Open search pop-up on click
 	const openPopup = () => updatePopUp('convosOn');
 
-	// Update userImage state when user changes
+	// Update convos state when convosCount or user changes
 	useEffect(() => {
-		if (user != null) {
-			setUserImage(user.image);
-		} else {
-			setUserImage(null);
-		}
-	}, [user]);
-
-	// Update convosArr state when convosCount or user changes
-	useEffect(() => {
-		if (user != null) {
-			getConvos(convosCount).then((newConvosArr) => {
-				if (newConvosArr != null) {
-					setConvosArr(newConvosArr);
-					if (newConvosArr.length < convosCount) {
-						setAllLoaded('true');
-					}
-				} else {
-					setConvosArr(null);
+		getConvos(convosCount).then((newConvos) => {
+			if (newConvos != null) {
+				setConvos(newConvos);
+				if (newConvos.length < convosCount) {
+					setAllLoaded(true);
 				}
-			});
-		} else {
-			setConvosArr([]);
-		}
-	}, [convosCount, user]);
+			} else {
+				setConvos([]);
+			}
+		});
+	}, [convosCount]);
 
 	// Load-more function that updates the convos component
 	const loadMore = () => {
@@ -91,9 +66,12 @@ const Messages = () => {
 			<Navbar />
 			{user ? (
 				<div id='convos'>
-					{searchPopUp}
+					{popUpState.convosOn ? <ConvoPopup /> : null}
 					<div id='convos-top'>
-						<img id='convos-user-icon' src={userImage} />
+						<img
+							id='convos-user-icon'
+							src={user.image ? user.image : undefined}
+						/>
 						<div id='convos-title'>Messages</div>
 						<div id='convos-message-icon-container'>
 							<img
@@ -105,7 +83,7 @@ const Messages = () => {
 					</div>
 					<div id='convos-divider'></div>
 					<div id='convos-bottom'>
-						{convosArr.map((convo) => (
+						{convos.map((convo) => (
 							<MessagesChild key={convo.id} convo={convo} />
 						))}
 					</div>

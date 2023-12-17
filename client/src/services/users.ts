@@ -103,7 +103,7 @@ export const findUser = async (id: number) => {
 };
 
 // Searches users by name
-export const searchUsers = async (name) => {
+export const searchUsers = async (name: string) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/user/search',
 		{
@@ -117,7 +117,7 @@ export const searchUsers = async (name) => {
 	);
 	if (response.status == 200) {
 		const json = await response.json();
-		return json.users;
+		return json.users as User[];
 	} else {
 		throw new Error();
 	}
