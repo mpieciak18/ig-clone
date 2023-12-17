@@ -1,3 +1,4 @@
+import { Post, PostStatsCount, Save } from 'shared';
 import { getToken } from './localstor.js';
 
 // Add post to a new "save"
@@ -36,22 +37,26 @@ export const removeSave = async (id) => {
 	}
 };
 
+interface SaveRecord extends Save {
+	post: Post & PostStatsCount;
+}
+
 // Retrieves saved posts
-export const getSaves = async (limit) => {
+export const getSaves = async (limit: number) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/save/user',
 		{
 			method: 'POST',
-			body: JSON.stringify({ limit: Number(limit) }),
+			body: JSON.stringify({ limit }),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
-		return json.saves;
+		return json.saves as SaveRecord[];
 	} else {
 		throw new Error();
 	}
@@ -68,7 +73,7 @@ export const saveExists = async (id) => {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',
 			},
-		},
+		}
 	);
 	if (response.status == 200) {
 		const json = await response.json();
