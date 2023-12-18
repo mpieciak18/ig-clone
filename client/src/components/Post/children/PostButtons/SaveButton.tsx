@@ -3,13 +3,18 @@ import { useState, useEffect } from 'react';
 import SaveHollow from '../../../../assets/images/save.png';
 import SaveSolid from '../../../../assets/images/save-solid.png';
 import { useAuth } from '../../../../contexts/AuthContext.js';
+import { Save } from 'shared';
 
-const SaveButton = (props) => {
+const SaveButton = (props: {
+	postId: number;
+	postOwnerId: number;
+	redirect: () => void;
+}) => {
 	const { user } = useAuth();
 	const { postId, redirect } = props;
 
-	// Init saveId state
-	const [saveId, setSaveId] = useState(null);
+	// Init save record state
+	const [save, setSave] = useState<Save | null>(null);
 
 	// Init isUpdating state
 	const [isUpdating, setIsUpdating] = useState(false);
@@ -20,13 +25,13 @@ const SaveButton = (props) => {
 	// Add or removes save from post
 	const addRemoveSave = async () => {
 		setIsUpdating(true);
-		if (saveId == null) {
-			const id = await addSave(postId);
-			setSaveId(id);
+		if (save === null) {
+			const newSave = await addSave(postId);
+			setSave(newSave);
 			setImg(SaveSolid);
 		} else {
-			await removeSave(saveId);
-			setSaveId(null);
+			await removeSave(save.id);
+			setSave(null);
 			setImg(SaveHollow);
 		}
 		setIsUpdating(false);
@@ -39,18 +44,13 @@ const SaveButton = (props) => {
 	};
 
 	useEffect(() => {
-		if (user != null) {
-			saveExists(postId).then((save) => {
-				if (save?.id) setSaveId(save.id);
-				else setSaveId(null);
-			});
-		}
-	}, [user]);
+		saveExists(postId).then(setSave);
+	}, []);
 
 	useEffect(() => {
-		if (saveId != null) setImg(SaveSolid);
+		if (save) setImg(SaveSolid);
 		else setImg(SaveHollow);
-	}, [saveId]);
+	}, [save]);
 
 	return (
 		<img
@@ -58,20 +58,20 @@ const SaveButton = (props) => {
 			src={img}
 			onClick={saveButtonFunction}
 			onMouseDown={() => {
-				if (saveId == null) setImg(SaveSolid);
-				else setImg(SaveHollow);
+				if (save) setImg(SaveHollow);
+				else setImg(SaveSolid);
 			}}
 			onMouseUp={() => {
-				if (saveId == null) setImg(SaveHollow);
-				else setImg(SaveSolid);
-			}}
-			onMouseOver={() => {
-				if (saveId == null) setImg(SaveSolid);
+				if (save) setImg(SaveSolid);
 				else setImg(SaveHollow);
 			}}
-			onMouseOut={() => {
-				if (saveId == null) setImg(SaveHollow);
+			onMouseOver={() => {
+				if (save) setImg(SaveHollow);
 				else setImg(SaveSolid);
+			}}
+			onMouseOut={() => {
+				if (save) setImg(SaveSolid);
+				else setImg(SaveHollow);
 			}}
 		/>
 	);

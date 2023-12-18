@@ -2,10 +2,10 @@ import { Post, PostStatsCount, Save } from 'shared';
 import { getToken } from './localstor.js';
 
 // Add post to a new "save"
-export const addSave = async (id) => {
+export const addSave = async (id: number): Promise<Save | null> => {
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/save', {
 		method: 'POST',
-		body: JSON.stringify({ id: Number(id) }),
+		body: JSON.stringify({ id }),
 		headers: {
 			Authorization: `Bearer ${getToken()}`,
 			'Content-Type': 'application/json',
@@ -13,17 +13,17 @@ export const addSave = async (id) => {
 	});
 	if (response.status == 200) {
 		const json = await response.json();
-		return json.save;
+		return json.save as Save | null;
 	} else {
 		throw new Error();
 	}
 };
 
 // Remove saved post
-export const removeSave = async (id) => {
+export const removeSave = async (id: number) => {
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/save', {
 		method: 'DELETE',
-		body: JSON.stringify({ id: Number(id) }),
+		body: JSON.stringify({ id }),
 		headers: {
 			Authorization: `Bearer ${getToken()}`,
 			'Content-Type': 'application/json',
@@ -63,12 +63,12 @@ export const getSaves = async (limit: number) => {
 };
 
 // Check if user saved a certain post
-export const saveExists = async (id) => {
+export const saveExists = async (id: number) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/save/post',
 		{
 			method: 'POST',
-			body: JSON.stringify({ id: Number(id) }),
+			body: JSON.stringify({ id }),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',

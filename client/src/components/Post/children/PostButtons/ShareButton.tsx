@@ -1,8 +1,12 @@
-import { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import ShareHollow from '../../../../assets/images/dm.png';
 import ShareSolid from '../../../../assets/images/dm-solid.png';
 
-const ShareButton = (props) => {
+const ShareButton = (props: {
+	postOwnerId: number;
+	postId: number;
+	setLinkCopied: React.Dispatch<SetStateAction<boolean>>;
+}) => {
 	const { postOwnerId, postId, setLinkCopied } = props;
 
 	// Init icon image source state
