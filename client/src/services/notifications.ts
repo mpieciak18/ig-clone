@@ -1,3 +1,4 @@
+import { Notification, User } from 'shared';
 import { getToken } from './localstor';
 
 interface newNotifBody {
@@ -34,8 +35,12 @@ export const addNotification = async (
 	}
 };
 
+interface NotificationRecord extends Notification {
+	otherUser: User;
+}
+
 // Retrieve logged-in user's unread notifcations
-export const getUnreadNotifications = async (limit) => {
+export const getUnreadNotifications = async (limit: number) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/notification/unread',
 		{
@@ -49,14 +54,14 @@ export const getUnreadNotifications = async (limit) => {
 	);
 	if (response.status == 200) {
 		const json = await response.json();
-		return json.notifications;
+		return json.notifications as NotificationRecord[];
 	} else {
 		throw new Error();
 	}
 };
 
 // Retrieve logged-in user's read notifcations
-export const getReadNotifications = async (limit) => {
+export const getReadNotifications = async (limit: number) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/notification/read',
 		{
@@ -70,7 +75,7 @@ export const getReadNotifications = async (limit) => {
 	);
 	if (response.status == 200) {
 		const json = await response.json();
-		return json.notifications;
+		return json.notifications as NotificationRecord[];
 	} else {
 		throw new Error();
 	}
@@ -89,7 +94,7 @@ export const readNotifications = async () => {
 	);
 	if (response.status == 200) {
 		const json = await response.json();
-		return json.count;
+		return json.count as number;
 	} else {
 		throw new Error();
 	}

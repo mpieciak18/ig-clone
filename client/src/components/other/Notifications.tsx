@@ -8,6 +8,11 @@ import {
 import { timeSince } from '../../other/timeSince';
 import { useAuth } from '../../contexts/AuthContext';
 import { usePopUp } from '../../contexts/PopUpContext';
+import { Notification, User } from 'shared';
+
+interface NotificationRecord extends Notification {
+	otherUser: User;
+}
 
 const Notifications = () => {
 	const { user } = useAuth();
@@ -19,7 +24,9 @@ const Notifications = () => {
 	const [notifsCount, setNotifsCount] = useState(0);
 
 	// Init notifications arr state
-	const [notifsArr, setNotifsArr] = useState([]);
+	const [notifications, setNotifications] = useState<NotificationRecord[]>(
+		[]
+	);
 
 	// Init all loaded state
 	const [allLoaded, setAllLoaded] = useState(false);
@@ -31,8 +38,8 @@ const Notifications = () => {
 	const [whichTab, setWhichTab] = useState('new');
 
 	// Init new & old notifications button classes
-	const [buttonOne, setButtonOne] = useState(null);
-	const [buttonTwo, setButtonTwo] = useState(null);
+	const [buttonOne, setButtonOne] = useState<'active' | 'inactive'>();
+	const [buttonTwo, setButtonTwo] = useState<'active' | 'inactive'>();
 
 	// Change notifsCount, allLoaded, button, and markAllRead states when whichTab changes
 	useEffect(() => {
@@ -45,43 +52,43 @@ const Notifications = () => {
 			setButtonTwo('active');
 		}
 		if (notifsCount == 20) {
-			updateNotifsArr();
+			updateNotifications();
 		} else {
 			setNotifsCount(20);
 		}
 	}, [whichTab]);
 
-	const updateNotifsArr = async () => {
+	const updateNotifications = async () => {
 		if (whichTab == 'new') {
-			getUnreadNotifications(notifsCount).then((newNotifsArr) => {
-				setNotifsArr(newNotifsArr);
-				if (newNotifsArr.length < notifsCount) {
+			getUnreadNotifications(notifsCount).then((newNotifications) => {
+				setNotifications(newNotifications);
+				if (newNotifications.length < notifsCount) {
 					setAllLoaded(true);
 				}
 			});
 		} else {
-			getReadNotifications(notifsCount).then((newNotifsArr) => {
-				setNotifsArr(newNotifsArr);
-				if (newNotifsArr?.length < notifsCount) {
+			getReadNotifications(notifsCount).then((newNotifications) => {
+				setNotifications(newNotifications);
+				if (newNotifications?.length < notifsCount) {
 					setAllLoaded(true);
 				}
 			});
 		}
 	};
 
-	// Change notifsArr state when notifsCount changes
+	// Change notifications state when notifsCount changes
 	useEffect(() => {
 		if (notifsCount > 0) {
-			updateNotifsArr();
+			updateNotifications();
 		} else {
-			setNotifsArr([]);
+			setNotifications([]);
 		}
 	}, [notifsCount]);
 
 	// Load more notifications when user reaches bottom of pop-up
-	const loadMore = async (e) => {
+	const loadMore = async (e: React.UIEvent<HTMLDivElement>) => {
 		if (allLoaded == false && loadingMore == false) {
-			const elem = e.target;
+			const elem = e.target as HTMLDivElement;
 			if (
 				Math.ceil(elem.scrollHeight - elem.scrollTop) ==
 				elem.clientHeight
@@ -133,18 +140,18 @@ const Notifications = () => {
 				</div>
 				<div id='notifs-divider' />
 				<div id='notifs-list' className={buttonOne} onScroll={loadMore}>
-					{notifsArr.map((notif) => {
+					{notifications.map((notif) => {
 						const redirectToProfile = () => {
 							navigate(`/${notif.otherUserId}`);
 							updatePopUp();
 						};
-						let path;
-						let text;
+						let path: string;
+						let text: string;
 						if (notif.type == 'like') {
-							path = `/${user.id}/${notif.postId}`;
+							path = `/${user?.id}/${notif.postId}`;
 							text = 'liked your post.';
 						} else if (notif.type == 'comment') {
-							path = `/${user.id}/${notif.postId}`;
+							path = `/${user?.id}/${notif.postId}`;
 							text = 'commented on a post.';
 						} else if (notif.type == 'follow') {
 							path = `/${notif.otherUserId}`;
@@ -164,7 +171,11 @@ const Notifications = () => {
 									<img
 										className='notif-image'
 										onClick={redirectToProfile}
-										src={notif.otherUser.image}
+										src={
+											notif.otherUser.image
+												? notif.otherUser.image
+												: undefined
+										}
 									/>
 									<div
 										className='notif-text'
@@ -185,7 +196,7 @@ const Notifications = () => {
 						);
 					})}
 				</div>
-				{whichTab == 'new' && notifsArr?.length > 0 ? (
+				{whichTab == 'new' && notifications?.length > 0 ? (
 					<div
 						id='notifs-clear'
 						className='button'
@@ -197,7 +208,7 @@ const Notifications = () => {
 					<div id='notifs-clear' className='message'>
 						No Unread Notifications
 					</div>
-				) : whichTab == 'old' && notifsArr?.length == 0 ? (
+				) : whichTab == 'old' && notifications?.length == 0 ? (
 					<div id='notifs-clear' className='message'>
 						No Read Notifications
 					</div>
