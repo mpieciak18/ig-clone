@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const LinkCopied = (props) => {
+const LinkCopied = (props: { linkCopied: boolean }) => {
 	const { linkCopied } = props;
 
 	const [active, setActive] = useState('inactive');

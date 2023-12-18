@@ -89,11 +89,7 @@ const PostReel = (props: { post: PostRecord }) => {
 						? 'View 1 comment...'
 						: `View all ${commentsNum} comments...`}
 				</Link>
-				<CommentsPreview
-					postId={post.id}
-					postOwnerId={post.user.id}
-					commentsNum={commentsNum}
-				/>
+				<CommentsPreview postId={post.id} commentsNum={commentsNum} />
 				<CommentsBar
 					postId={post.id}
 					postOwnerId={post.user.id}
