@@ -29,11 +29,11 @@ export const findSinglePost = async (id: number) => {
 };
 
 // Retrieve all posts
-export const findPosts = async (limit) => {
+export const findPosts = async (limit: number) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/post/all',
 		{
-			body: JSON.stringify({ limit: Number(limit) }),
+			body: JSON.stringify({ limit }),
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
@@ -43,7 +43,7 @@ export const findPosts = async (limit) => {
 	);
 	if (response.status == 200) {
 		const json = await response.json();
-		return json.posts;
+		return json.posts as PostRecord[];
 	} else {
 		throw new Error();
 	}
@@ -95,19 +95,19 @@ export const newPost = async (caption, image) => {
 };
 
 // Delete a user's post
-export const removePost = async (id) => {
-	const response = await fetch(import.meta.env.VITE_API_URL + '/api/post', {
-		body: JSON.stringify({ id: Number(id) }),
-		method: 'DELETE',
-		headers: {
-			Authorization: `Bearer ${getToken()}`,
-			'Content-Type': 'application/json',
-		},
-	});
-	if (response.status == 200) {
-		const json = await response.json();
-		return json.post;
-	} else {
-		throw new Error();
-	}
-};
+// export const removePost = async (id) => {
+// 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/post', {
+// 		body: JSON.stringify({ id: Number(id) }),
+// 		method: 'DELETE',
+// 		headers: {
+// 			Authorization: `Bearer ${getToken()}`,
+// 			'Content-Type': 'application/json',
+// 		},
+// 	});
+// 	if (response.status == 200) {
+// 		const json = await response.json();
+// 		return json.post;
+// 	} else {
+// 		throw new Error();
+// 	}
+// };

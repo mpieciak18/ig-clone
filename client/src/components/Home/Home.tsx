@@ -4,14 +4,18 @@ import { Navbar } from '../other/Navbar.js';
 import { PostReel } from '../Post/children/PostReel.js';
 import { UserCard } from './children/UserCard.js';
 import { useEffect, useState } from 'react';
-import { Post } from 'shared';
+import { Post, PostStatsCount, User } from 'shared';
+
+interface PostRecord extends Post, PostStatsCount {
+	user: User;
+}
 
 const Home = () => {
 	// Init postsNumber state
 	const [postsNumber, setPostsNumber] = useState(5);
 
 	// Init posts array state
-	const [postsArr, setPostsArr] = useState([]);
+	const [posts, setPosts] = useState<PostRecord[]>([]);
 
 	// Init all loaded state
 	const [allLoaded, setAllLoaded] = useState(false);
@@ -35,11 +39,11 @@ const Home = () => {
 
 	// Update postsArr state when postsNumber state changes
 	useEffect(() => {
-		findPosts(postsNumber).then((newPostsArr) => {
-			if (newPostsArr.length < postsNumber) {
+		findPosts(postsNumber).then((newPosts) => {
+			if (newPosts.length < postsNumber) {
 				setAllLoaded(true);
 			}
-			setPostsArr(newPostsArr);
+			setPosts(newPosts);
 			setIsLoading(false);
 		});
 	}, [postsNumber]);
@@ -50,7 +54,7 @@ const Home = () => {
 			<div id='home-container' onScroll={(e) => loadMore(e)}>
 				<UserCard />
 				<div id='home-posts'>
-					{postsArr.map((post: Post) => {
+					{posts.map((post) => {
 						return <PostReel key={post.id} post={post} />;
 					})}
 				</div>

@@ -6,16 +6,25 @@ import { CommentsPreview } from './Comments/CommentsPreview.js';
 import { PostButtons } from './PostButtons.js';
 import { timeSince } from '../../../other/timeSince.js';
 import { LinkCopied } from './LinkCopied.js';
+import { Post, PostStatsCount, User } from 'shared';
 
-const PostReel = (props) => {
+interface PostRecord extends Post, PostStatsCount {
+	user: User;
+}
+
+const PostReel = (props: { post: PostRecord }) => {
 	// Init props
 	const { post } = props;
 
 	// Init post likes count state
-	const [likesNum, setLikesNum] = useState(post._count.likes);
+	const [likesNum, setLikesNum] = useState<number | undefined>(
+		post._count.likes
+	);
 
 	// Init post comments count state
-	const [commentsNum, setCommentsNum] = useState(post._count.comments);
+	const [commentsNum, setCommentsNum] = useState<number | undefined>(
+		post._count.comments
+	);
 
 	// Set up ref for comment bar / comment button
 	const inputRef = useRef(null);
@@ -29,7 +38,7 @@ const PostReel = (props) => {
 				<Link className='post-user-link' to={`/${post.user.id}`}>
 					<img
 						className='post-user-link-avatar'
-						src={post.user.image}
+						src={post.user?.image || undefined}
 					/>
 					<div className='post-user-link-name-and-username-parent'>
 						<div className='post-user-link-name'>
@@ -61,8 +70,8 @@ const PostReel = (props) => {
 					{likesNum == 0
 						? '0 likes'
 						: likesNum == 1
-							? '1 like'
-							: `${likesNum} likes`}
+						? '1 like'
+						: `${likesNum} likes`}
 				</Link>
 				<div className='post-text-parent'>
 					<Link className='post-text-name' to={`/${post.user.id}`}>
@@ -77,8 +86,8 @@ const PostReel = (props) => {
 					{commentsNum == 0
 						? 'No comments yet...'
 						: commentsNum == 1
-							? 'View 1 comment...'
-							: `View all ${commentsNum} comments...`}
+						? 'View 1 comment...'
+						: `View all ${commentsNum} comments...`}
 				</Link>
 				<CommentsPreview
 					postId={post.id}
