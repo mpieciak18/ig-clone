@@ -54,6 +54,7 @@ export const getSinglePost = async (
 						likes: true,
 					},
 				},
+				user: true,
 			},
 		});
 		if (!post) throw new Error();

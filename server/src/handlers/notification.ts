@@ -1,11 +1,6 @@
 import { NextFunction, Response, Request } from 'express';
 import prisma from '../db.js';
-import {
-	AuthReq,
-	NewNotificationData,
-	NotificationWithOtherUser,
-} from '../types/types.js';
-import { Notification, User } from '@prisma/client';
+import { AuthReq, NewNotificationData } from '../types/types.js';
 
 // Creates a new notification
 export const createNotif = async (

@@ -97,6 +97,7 @@ describe('POST /api/post & DELETE /api/post', () => {
 			.send({ id: post.id });
 		expect(response.status).toBe(200);
 		expect(response.body.post.id).toBe(post.id);
+		expect(response.body.post.user.id).toBe(post.userId);
 	});
 	//
 	it('should fail to get posts by user id due to a non-existent post id & return a 500 code', async () => {
