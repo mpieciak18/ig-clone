@@ -137,3 +137,7 @@ export interface SocketMessageErr {
 export interface HasUsers {
 	users: User[];
 }
+
+export interface HasOtherUser {
+	otherUser: User;
+}
