@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { searchUsers } from '../../services/users.js';
 import { usePopUp } from '../../contexts/PopUpContext.js';
+import { User } from 'shared';
 
-const SearchPopup = (props) => {
+const SearchPopup = (props: { searchVal: string }) => {
 	const { updatePopUp } = usePopUp();
 	const { searchVal } = props;
 
@@ -12,7 +13,7 @@ const SearchPopup = (props) => {
 	const location = useParams();
 
 	// Init results array state
-	const [searchedUsers, setSearchedUsers] = useState([]);
+	const [searchedUsers, setSearchedUsers] = useState<User[]>([]);
 
 	// Closes search
 	const hideSearch = () => {
@@ -24,7 +25,7 @@ const SearchPopup = (props) => {
 		if (searchVal != null) {
 			const doSearch = setTimeout(
 				() => searchUsers(searchVal).then(setSearchedUsers),
-				2000,
+				2000
 			);
 			return () => clearTimeout(doSearch);
 		} else {
@@ -61,7 +62,11 @@ const SearchPopup = (props) => {
 							>
 								<img
 									className='search-result-image'
-									src={searchedUser.image}
+									src={
+										searchedUser.image
+											? searchedUser.image
+											: undefined
+									}
 								/>
 								<div className='search-result-name'>
 									@ {searchedUser.username}
