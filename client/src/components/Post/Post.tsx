@@ -62,7 +62,7 @@ const PostPage = () => {
 	return (
 		<div id='post' className='page'>
 			<Navbar />
-			{popUpState.likesOn && user ? <Likes postId={postId} /> : null}
+			{popUpState.likesOn ? <Likes postId={postId} /> : null}
 			{post && commentsNum && likesNum ? (
 				<div id='single-post-page'>
 					<LinkCopied linkCopied={linkCopied} />

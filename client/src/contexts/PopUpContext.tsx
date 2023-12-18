@@ -40,7 +40,7 @@ export const PopUpProvider = ({ children }: PropsWithChildren) => {
 
 	// Updates pop-ups state. If a popUpState property is passed, then said property is set to true
 	const updatePopUp = (popUp: string | null = null) => {
-		const newState: PopUpType = defaultPopUp;
+		const newState: PopUpType = { ...defaultPopUp };
 
 		for (const key of Object.keys(popUpState)) {
 			if (isKeyOfPopUpType(key)) {
