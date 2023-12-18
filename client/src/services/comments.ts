@@ -3,7 +3,11 @@ import { getToken } from './localstor.js';
 import { Comment, User } from 'shared';
 
 // Create new comment & return comment ID
-export const addComment = async (postOwnerId, postId, message) => {
+export const addComment = async (
+	postOwnerId: number,
+	postId: number,
+	message: string
+) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/comment',
 		{
@@ -29,27 +33,27 @@ export const addComment = async (postOwnerId, postId, message) => {
 };
 
 // Remove comment
-export const removeComment = async (id) => {
-	const response = await fetch(
-		import.meta.env.VITE_API_URL + '/api/comment',
-		{
-			method: 'DELETE',
-			body: JSON.stringify({
-				id: Number(id),
-			}),
-			headers: {
-				Authorization: `Bearer ${getToken()}`,
-				'Content-Type': 'application/json',
-			},
-		}
-	);
-	if (response.status == 200) {
-		const json = await response.json();
-		return json.comment;
-	} else {
-		throw new Error();
-	}
-};
+// export const removeComment = async (id) => {
+// 	const response = await fetch(
+// 		import.meta.env.VITE_API_URL + '/api/comment',
+// 		{
+// 			method: 'DELETE',
+// 			body: JSON.stringify({
+// 				id: Number(id),
+// 			}),
+// 			headers: {
+// 				Authorization: `Bearer ${getToken()}`,
+// 				'Content-Type': 'application/json',
+// 			},
+// 		}
+// 	);
+// 	if (response.status == 200) {
+// 		const json = await response.json();
+// 		return json.comment;
+// 	} else {
+// 		throw new Error();
+// 	}
+// };
 
 interface CommentRecord extends Comment {
 	user: User;
