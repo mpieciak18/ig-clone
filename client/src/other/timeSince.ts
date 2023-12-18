@@ -1,22 +1,9 @@
-const timeSince = (date) => {
-	const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+const timeSince = (date: Date) => {
+	const seconds = Math.floor(
+		(new Date().getTime() - new Date(date).getTime()) / 1000
+	);
 
 	let interval = seconds / 31536000;
-
-	// // Return as years
-	// if (interval >= 2) {
-	//     return `${Math.floor(interval)} years ago`
-	// } else if (interval >= 1) {
-	//     return "1 year ago"
-	// }
-
-	// // Return as months
-	// interval = seconds / 2592000;
-	// if (interval >= 2) {
-	//     return `${Math.floor(interval)} months ago`
-	// } else if (interval >= 1) {
-	//     return "1 month ago"
-	// }
 
 	// Return as weeks
 	interval = seconds / 604800;

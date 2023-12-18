@@ -3,15 +3,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { newPost } from '../../services/posts.js';
 import { ImageInput } from './ImageInput.js';
 import { CaptionFooter } from './CaptionFooter.js';
-import { useAuth } from '../../contexts/AuthContext.js';
+import { UserContext, useAuth } from '../../contexts/AuthContext.js';
 import { usePopUp } from '../../contexts/PopUpContext.js';
 import { deepCopy } from '../../other/deepCopy.js';
 import { setLocalUser } from '../../services/localstor.js';
 
-const NewPost = (props) => {
+const NewPost = () => {
 	const { user, setUser } = useAuth();
 	const { updatePopUp } = usePopUp();
-	const { ref } = props;
 
 	// Init useNavigate function
 	const navigate = useNavigate();
@@ -20,10 +19,10 @@ const NewPost = (props) => {
 	const location = useParams();
 
 	// Init ref for ImageInput component
-	const inputRef = useRef();
+	const inputRef = useRef<HTMLInputElement>(null);
 
 	// Init file state
-	const [file, setFile] = useState(null);
+	const [file, setFile] = useState<File | null>(null);
 
 	// Init caption field value form validation state
 	const [captionPasses, setCaptionPasses] = useState(false);
@@ -32,19 +31,20 @@ const NewPost = (props) => {
 	const [caption, setCaption] = useState('');
 
 	// OnChange event handler for for bio field on form
-	const updateCaption = (e) => setCaption(e.target.value);
+	const updateCaption = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
+		setCaption(e.target.value);
 
 	// Init error message class state
 	const [errorClass, setErrorClass] = useState('inactive');
 
 	// Init form button type state
-	const [button, setButton] = useState('submit');
+	const [button, setButton] = useState<'submit' | 'button'>('submit');
 
 	// Init form buttonc class state
 	const [buttonClass, setButtonClass] = useState('active');
 
 	// Upload file to storage & add new post to firebase
-	const addPost = async (e) => {
+	const addPost = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		// Check validation first
 		if (captionPasses && file) {
@@ -52,15 +52,15 @@ const NewPost = (props) => {
 			try {
 				const post = await newPost(caption, file);
 				if (post?.id) {
-					const updatedUser = await deepCopy(user);
+					const updatedUser = (await deepCopy(user)) as UserContext;
 					updatedUser._count.posts++;
 					await setUser(updatedUser);
 					setLocalUser(updatedUser);
 					updatePopUp();
 					if (location.postOwnerId == null) {
-						navigate(`/${user.id}/${post.id}`);
+						navigate(`/${user?.id}/${post.id}`);
 					} else {
-						navigate(`/${user.id}/${post.id}`);
+						navigate(`/${user?.id}/${post.id}`);
 						window.location.reload();
 					}
 				} else {
@@ -90,7 +90,7 @@ const NewPost = (props) => {
 	}, [file, captionPasses]);
 
 	return (
-		<div id='new-post' ref={ref}>
+		<div id='new-post'>
 			<div id='new-post-parent'>
 				<div id='new-post-error' className={errorClass}>
 					<p>There was an error!</p>

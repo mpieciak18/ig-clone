@@ -1,3 +1,4 @@
+//@ts-ignore
 export function deepCopy(obj) {
 	if (obj === null || typeof obj !== 'object') {
 		return obj;

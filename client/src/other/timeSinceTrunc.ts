@@ -1,5 +1,7 @@
-const timeSinceTrunc = (date) => {
-	const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+const timeSinceTrunc = (date: Date) => {
+	const seconds = Math.floor(
+		(new Date().getTime() - new Date(date).getTime()) / 1000
+	);
 
 	let interval = seconds / 604800;
 

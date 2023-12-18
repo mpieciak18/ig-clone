@@ -8,6 +8,7 @@ import { findUser } from '../../services/users.js';
 import { io, Socket } from 'socket.io-client';
 import { getToken } from '../../services/localstor.js';
 import { Conversation, HasUsers, Message, User, UserStatsCount } from 'shared';
+import { deepCopy } from '../../other/deepCopy.js';
 
 interface ConvoRecord extends Conversation, HasUsers {
 	messages: Message[];
@@ -86,7 +87,7 @@ const Conversation = () => {
 			// Establish WebSocket connection
 			socket.emit('joinConversation', { conversationId: convo.id });
 			socket.on('receiveNewMessage', (newMessage) => {
-				const newConvo = { ...convo };
+				const newConvo = deepCopy(convo);
 				newConvo.messages = [newMessage, ...newConvo.messages];
 				setConvo(newConvo);
 			});

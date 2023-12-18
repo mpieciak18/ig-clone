@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, SetStateAction } from 'react';
 
-const CaptionFooter = (props) => {
+const CaptionFooter = (props: {
+	caption: string;
+	setCaptionPasses: React.Dispatch<SetStateAction<boolean>>;
+}) => {
 	const { setCaptionPasses, caption } = props;
 	const [footerText, setFooterText] = useState('Caption cannot be empty.');
 	const [footerClass, setFooterClass] = useState('grey');

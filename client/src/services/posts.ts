@@ -74,7 +74,7 @@ export const findPostsFromUser = async (id: number, limit: number) => {
 };
 
 // Create new post & return new post data
-export const newPost = async (caption, image) => {
+export const newPost = async (caption: string, image: File) => {
 	const body = new FormData();
 	body.append('caption', caption);
 	const compressedImage = await compressFile(image);
@@ -88,7 +88,7 @@ export const newPost = async (caption, image) => {
 	});
 	if (response.status == 200) {
 		const json = await response.json();
-		return json.post;
+		return json.post as Post;
 	} else {
 		throw new Error();
 	}
