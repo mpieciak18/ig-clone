@@ -4,16 +4,21 @@ import { getLikes } from '../../../services/likes.js';
 import { FollowButton } from '../../other/FollowButton.js';
 import '../styles/Likes.css';
 import { usePopUp } from '../../../contexts/PopUpContext.js';
+import { Like, User } from 'shared';
 
-const Likes = (props) => {
+interface LikeRecord extends Like {
+	user: User;
+}
+
+const Likes = (props: { postId: number }) => {
 	const { updatePopUp } = usePopUp();
 	const { postId } = props;
 
 	// Init likesNumber state
 	const [likesNumber, setLikesNumber] = useState(10);
 
-	// Init users state
-	const [likesArr, setLikesArr] = useState([]);
+	// Init likes array state
+	const [likes, setLikes] = useState<LikeRecord[]>([]);
 
 	// Init all likes loaded state
 	const [allLoaded, setAllLoaded] = useState(false);
@@ -23,19 +28,19 @@ const Likes = (props) => {
 		setLikesNumber(10);
 	}, []);
 
-	// Update likesArr when likesNumber changes (ie, upon render or upon scroll-to-bottom)
+	// Update likes when likesNumber changes (ie, upon render or upon scroll-to-bottom)
 	useEffect(() => {
-		getLikes(postId, likesNumber).then((newLikesArr) => {
-			setLikesArr(newLikesArr);
-			if (newLikesArr.length < likesNumber) {
+		getLikes(postId, likesNumber).then((newLikes) => {
+			setLikes(newLikes);
+			if (newLikes.length < likesNumber) {
 				setAllLoaded(true);
 			}
 		});
 	}, [likesNumber]);
 
 	// Load more likes when user reaches bottom of pop-up
-	const loadMore = (e) => {
-		const elem = e.target;
+	const loadMore = (e: React.UIEvent<HTMLDivElement>) => {
+		const elem = e.target as HTMLDivElement;
 		if (
 			Math.ceil(elem.scrollHeight - elem.scrollTop) ==
 				elem.clientHeight &&
@@ -47,8 +52,8 @@ const Likes = (props) => {
 	};
 
 	// Closes likes pop-up
-	const hideLikes = (e) => {
-		const id = e.target.id;
+	const hideLikes = (e: React.MouseEvent<HTMLDivElement>) => {
+		const id = (e.target as HTMLDivElement).id;
 		if (id == 'likes' || id == 'likes-x-button') {
 			updatePopUp();
 		}
@@ -64,7 +69,7 @@ const Likes = (props) => {
 				</div>
 				<div id='likes-divider' />
 				<div id='likes-list' onScroll={loadMore}>
-					{likesArr.map((like) => (
+					{likes.map((like) => (
 						<div className='like-row' key={like.id}>
 							<Link
 								className='like-row-left'
@@ -72,7 +77,11 @@ const Likes = (props) => {
 							>
 								<img
 									className='like-image'
-									src={like.user.image}
+									src={
+										like.user.image
+											? like.user.image
+											: undefined
+									}
 								/>
 								<div className='like-text'>
 									<div className='like-name'>

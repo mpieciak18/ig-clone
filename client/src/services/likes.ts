@@ -1,5 +1,6 @@
 import { addNotification } from './notifications.js';
 import { getToken } from './localstor.js';
+import { Like, User } from 'shared';
 
 // Add like to post and return the like id
 export const addLike = async (postId: number, postOwnerId: number) => {
@@ -63,15 +64,19 @@ export const likeExists = async (id: number): Promise<number | null> => {
 	}
 };
 
+interface LikeRecord extends Like {
+	user: User;
+}
+
 // Retrieve all likes from a post
-export const getLikes = async (id, limit) => {
+export const getLikes = async (id: number, limit: number) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/like/post',
 		{
 			method: 'POST',
 			body: JSON.stringify({
-				id: Number(id),
-				limit: Number(limit),
+				id,
+				limit,
 			}),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
@@ -81,7 +86,7 @@ export const getLikes = async (id, limit) => {
 	);
 	if (response.status == 200) {
 		const json = await response.json();
-		return json.likes;
+		return json.likes as LikeRecord[];
 	} else {
 		throw new Error();
 	}
