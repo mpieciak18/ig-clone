@@ -3,10 +3,10 @@ import { getToken } from './localstor.js';
 import { Follow, HasOtherUser } from 'shared';
 
 // Add new follow
-export const addFollow = async (id) => {
+export const addFollow = async (id: number): Promise<Follow> => {
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/follow', {
 		method: 'POST',
-		body: JSON.stringify({ id: Number(id) }),
+		body: JSON.stringify({ id }),
 		headers: {
 			Authorization: `Bearer ${getToken()}`,
 			'Content-Type': 'application/json',
@@ -16,17 +16,17 @@ export const addFollow = async (id) => {
 		// add notification to recipient
 		await addNotification('follow', id);
 		const json = await response.json();
-		return json.follow;
+		return json.follow as Follow;
 	} else {
 		throw new Error();
 	}
 };
 
 // Remove follow from other user and self
-export const removeFollow = async (id) => {
+export const removeFollow = async (id: number) => {
 	const response = await fetch(import.meta.env.VITE_API_URL + '/api/follow', {
 		method: 'DELETE',
-		body: JSON.stringify({ id: Number(id) }),
+		body: JSON.stringify({ id }),
 		headers: {
 			Authorization: `Bearer ${getToken()}`,
 			'Content-Type': 'application/json',
@@ -42,12 +42,12 @@ export const removeFollow = async (id) => {
 };
 
 // Check if the signed-in user is following another user (& return follow id)
-export const checkForFollow = async (id) => {
+export const checkForFollow = async (id: number) => {
 	const response = await fetch(
 		import.meta.env.VITE_API_URL + '/api/follow/user',
 		{
 			method: 'POST',
-			body: JSON.stringify({ id: Number(id) }),
+			body: JSON.stringify({ id }),
 			headers: {
 				Authorization: `Bearer ${getToken()}`,
 				'Content-Type': 'application/json',

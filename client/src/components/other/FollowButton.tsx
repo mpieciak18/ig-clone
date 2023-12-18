@@ -19,22 +19,22 @@ const FollowButton = (props: { otherUserId: number }) => {
 
 	// Init states
 
-	const [followingId, setFollowingId] = useState(null);
+	const [followingId, setFollowingId] = useState<number>();
 
 	const [isUpdating, setIsUpdating] = useState(false);
 
-	const [followText, setFollowText] = useState('Follow');
+	const [followText, setFollowText] = useState<'Follow' | 'Unfollow'>(
+		'Follow'
+	);
 
-	const [followButtonClass, setFollowButtonClass] = useState('inactive');
+	const [followButtonClass, setFollowButtonClass] = useState<
+		'active' | 'inactive'
+	>('inactive');
 
 	// Update followingId on user prop change & on render
 	useEffect(() => {
-		if (user == null) {
-			setFollowingId(null);
-		} else {
-			checkForFollow(otherUserId).then(setFollowingId);
-		}
-	}, [user]);
+		checkForFollow(otherUserId).then(setFollowingId);
+	}, []);
 
 	// Update isUpdating, followText, & followButtonClass when followingId changes
 	useEffect(() => {
@@ -60,7 +60,7 @@ const FollowButton = (props: { otherUserId: number }) => {
 			setIsUpdating(true);
 			// Create follow
 			const newFollow = await addFollow(otherUserId);
-			setFollowingId(newFollow.id);
+			if (newFollow.id) setFollowingId(newFollow.id);
 			// Update signed-in user's stats
 			const updatedUser = await deepCopy(user);
 			updatedUser._count.givenFollows++;
@@ -75,7 +75,7 @@ const FollowButton = (props: { otherUserId: number }) => {
 			setIsUpdating(true);
 			// Delete follow
 			await removeFollow(followingId);
-			setFollowingId(null);
+			setFollowingId(undefined);
 			// Update signed-in user's stats
 			const updatedUser = await deepCopy(user);
 			updatedUser._count.givenFollows--;
