@@ -14,7 +14,7 @@ interface ConvoRecord extends Conversation, HasUsers {
 	messages: Message[];
 }
 
-const Conversation = () => {
+const ConvoPage = () => {
 	const navigate = useNavigate();
 
 	// Socket state
@@ -200,4 +200,4 @@ const Conversation = () => {
 	);
 };
 
-export { Conversation };
+export { ConvoPage };

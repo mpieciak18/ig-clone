@@ -2,13 +2,13 @@ import { Routes, Route, HashRouter, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Home } from './components/Home/Home.js';
 import { Messages } from './components/Messages/Messages.js';
-import { Post } from './components/Post/Post.js';
+import { PostPage } from './components/Post/Post.js';
 import { Profile } from './components/Profile/Profile.js';
 import { Settings } from './components/Settings/Settings.js';
 import { Saved } from './components/SavedPosts/Saved.js';
 import { SignUp } from './components/SignUp/SignUp.js';
 import { Login } from './components/Login/Login.js';
-import { Conversation } from './components/Conversation/Conversation.js';
+import { ConvoPage } from './components/Conversation/Conversation.js';
 import { useAuth } from './contexts/AuthContext.js';
 import { getLocalUser } from './services/localstor.js';
 import { HomeLoggedOut } from './components/Home/HomeLoggedOut.js';
@@ -37,12 +37,9 @@ const App = () => {
 			<Routes>
 				<Route path='/' element={<Home />} />
 				<Route path='/messages' element={<Messages />} />
-				<Route path='/:postOwnerId/:postId' element={<Post />} />
+				<Route path='/:postOwnerId/:postId' element={<PostPage />} />
 				<Route path='/:otherUserId' element={<Profile />} />
-				<Route
-					path='/messages/:otherUserId'
-					element={<Conversation />}
-				/>
+				<Route path='/messages/:otherUserId' element={<ConvoPage />} />
 				<Route path='/saved' element={<Saved />} />
 				<Route path='/settings' element={<Settings />} />
 				<Route path='/signup' element={<Navigate to='/' replace />} />

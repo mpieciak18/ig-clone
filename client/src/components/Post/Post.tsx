@@ -17,7 +17,7 @@ interface PostRecord extends Post, PostStatsCount {
 	user: User;
 }
 
-const Post = () => {
+const PostPage = () => {
 	const { user } = useAuth();
 	const { popUpState, updatePopUp } = usePopUp();
 
@@ -125,4 +125,4 @@ const Post = () => {
 	);
 };
 
-export { Post };
+export { PostPage };
