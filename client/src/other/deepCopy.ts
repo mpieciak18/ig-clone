@@ -1,16 +1,23 @@
-//@ts-ignore
-export function deepCopy(obj) {
+export function deepCopy<T>(obj: T): T {
 	if (obj === null || typeof obj !== 'object') {
 		return obj;
 	}
 
-	let copy = obj.constructor();
+	// The constructor might not always exist, or be callable, so we add checks.
+	const constructor = (obj as any).constructor;
+	if (typeof constructor !== 'function') {
+		throw new Error('Cannot copy object without a constructor');
+	}
 
-	for (let attr in obj) {
+	// Create a new instance of the object's class
+	const copy = new constructor();
+
+	for (const attr in obj) {
 		if (Object.prototype.hasOwnProperty.call(obj, attr)) {
-			copy[attr] = deepCopy(obj[attr]);
+			// Recursive copy for properties, with type assertion
+			copy[attr] = deepCopy((obj as any)[attr]);
 		}
 	}
 
-	return copy;
+	return copy as T;
 }

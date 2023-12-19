@@ -148,7 +148,8 @@ export const updateUser = async (
 	});
 	if (response.status == 200) {
 		const json = await response.json();
-		const updatedUser = deepCopy(json.user) as UserContext;
+		const ogUser = json.user as UserContext;
+		const updatedUser = deepCopy(ogUser);
 		updatedUser.token = json.token;
 		return updatedUser;
 	} else {

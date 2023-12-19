@@ -66,10 +66,12 @@ const FollowButton = (props: { otherUserId: number }) => {
 			updatedUser._count.givenFollows++;
 			await setUser(updatedUser);
 			setLocalUser(updatedUser);
-			// Update other user's states
-			const updatedOtherUser = await deepCopy(otherUser);
-			updatedOtherUser._count.givenFollows++;
-			await setOtherUser(updatedOtherUser);
+			// Update other user's states, if applicable
+			if (otherUser) {
+				const updatedOtherUser = await deepCopy(otherUser);
+				updatedOtherUser._count.givenFollows++;
+				await setOtherUser(updatedOtherUser);
+			}
 		} else if (isUpdating == false && followingId != null) {
 			setFollowButtonClass('inactive');
 			setIsUpdating(true);
@@ -82,9 +84,11 @@ const FollowButton = (props: { otherUserId: number }) => {
 			await setUser(updatedUser);
 			setLocalUser(updatedUser);
 			// Update other user's states
-			const updatedOtherUser = await deepCopy(otherUser);
-			updatedOtherUser._count.givenFollows--;
-			await setOtherUser(updatedOtherUser);
+			if (otherUser) {
+				const updatedOtherUser = await deepCopy(otherUser);
+				updatedOtherUser._count.givenFollows--;
+				await setOtherUser(updatedOtherUser);
+			}
 		}
 	};
 

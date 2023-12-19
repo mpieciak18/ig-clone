@@ -52,10 +52,12 @@ const NewPost = () => {
 			try {
 				const post = await newPost(caption, file);
 				if (post?.id) {
-					const updatedUser = (await deepCopy(user)) as UserContext;
-					updatedUser._count.posts++;
-					await setUser(updatedUser);
-					setLocalUser(updatedUser);
+					if (user) {
+						const updatedUser = deepCopy(user);
+						updatedUser._count.posts++;
+						await setUser(updatedUser);
+						setLocalUser(updatedUser);
+					}
 					updatePopUp();
 					if (location.postOwnerId == null) {
 						navigate(`/${user?.id}/${post.id}`);
