@@ -150,7 +150,7 @@ export const updateUser = async (
 		const json = await response.json();
 		const ogUser = json.user as UserContext;
 		const updatedUser = deepCopy(ogUser);
-		updatedUser.token = json.token;
+		updatedUser.token = getToken();
 		return updatedUser;
 	} else {
 		throw new Error();

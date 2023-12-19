@@ -38,10 +38,10 @@ const Settings = () => {
 	const [namePasses, setNamePasses] = useState(true);
 
 	// Init name field value state
-	const [name, setName] = useState<string | null>(null);
+	const [name, setName] = useState<string>(user?.name ? user.name : '');
 
 	// Init bio field value state
-	const [bio, setBio] = useState<string | null>(null);
+	const [bio, setBio] = useState<string>(user?.bio ? user.bio : '');
 
 	// OnChange event handler for for name field on form
 	const updateName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -141,7 +141,7 @@ const Settings = () => {
 								id='settings-name-input'
 								name='name'
 								type='text'
-								value={user.name}
+								value={name}
 								onChange={updateName}
 							></input>
 							<NameFooter
@@ -156,7 +156,7 @@ const Settings = () => {
 							<textarea
 								id='settings-bio-input'
 								name='bio'
-								value={user.bio ? user.bio : ''}
+								value={bio}
 								maxLength={150}
 								onChange={updateBio}
 							/>
