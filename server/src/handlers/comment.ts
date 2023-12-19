@@ -16,6 +16,7 @@ export const createComment = async (
 				postId: req.body.id,
 				userId: (req as AuthReq).user.id,
 			},
+			include: { user: true },
 		});
 		// If no comment is created, handle it at the top-level (server.js) as 500 error
 		if (!comment) throw new Error();

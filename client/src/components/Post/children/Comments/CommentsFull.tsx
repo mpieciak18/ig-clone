@@ -1,5 +1,5 @@
 import { getComments } from '../../../../services/comments.js';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { timeSinceTrunc } from '../../../../other/timeSinceTrunc.js';
 import { Comment, Post, PostStatsCount, User } from 'shared';
@@ -11,8 +11,13 @@ interface CommentRecord extends Comment {
 	user: User;
 }
 
-const CommentsFull = (props: { post: PostRecord; commentsNum: number }) => {
-	const { post, commentsNum } = props;
+const CommentsFull = (props: {
+	post: PostRecord;
+	commentsNum: number;
+	comments: CommentRecord[];
+	setComments: React.Dispatch<SetStateAction<CommentRecord[]>>;
+}) => {
+	const { post, commentsNum, comments, setComments } = props;
 
 	// Init comment quantity (ie, how many comments are rendered) state
 	const [commentQuantity, setCommentQuantity] = useState(10);
@@ -20,20 +25,17 @@ const CommentsFull = (props: { post: PostRecord; commentsNum: number }) => {
 	// Init all loaded state
 	const [allLoaded, setAllLoaded] = useState(false);
 
-	// Init comments array state
-	const [commentsArr, setCommentsArr] = useState<CommentRecord[]>([]);
-
 	// Update commentsArr when commentsNum (total comments on a post) or commentQuantity (how many are rendered) changes
 	// E.g., user submits new comment on a post OR scrolls to load more
 	useEffect(() => {
 		getComments(post.id, commentQuantity)
 			.then((array) => {
-				setCommentsArr(array);
+				setComments(array);
 				if (array.length < commentQuantity) {
 					setAllLoaded(true);
 				}
 			})
-			.catch(() => setCommentsArr([]));
+			.catch(() => setComments([]));
 	}, [commentsNum, commentQuantity]);
 
 	// Load more comments on scroll
@@ -52,8 +54,8 @@ const CommentsFull = (props: { post: PostRecord; commentsNum: number }) => {
 	// Update comments arr state on init render
 	useEffect(() => {
 		getComments(post.id, 10)
-			.then(setCommentsArr)
-			.catch(() => setCommentsArr([]));
+			.then(setComments)
+			.catch(() => setComments([]));
 	}, []);
 
 	// Return component
@@ -78,7 +80,7 @@ const CommentsFull = (props: { post: PostRecord; commentsNum: number }) => {
 				</div>
 				<div className='post-comment-right'>...</div>
 			</div>
-			{commentsArr.map((comment) => (
+			{comments.map((comment) => (
 				<div className='post-comment' key={comment.id}>
 					<div className='post-comment-left'>
 						<Link

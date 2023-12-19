@@ -11,9 +11,13 @@ import { CommentsFull } from './children/Comments/CommentsFull';
 import { LinkCopied } from './children/LinkCopied';
 import { useAuth } from '../../contexts/AuthContext';
 import { usePopUp } from '../../contexts/PopUpContext';
-import { Post, PostStatsCount, User } from 'shared';
+import { Post, PostStatsCount, User, Comment } from 'shared';
 
 interface PostRecord extends Post, PostStatsCount {
+	user: User;
+}
+
+interface CommentRecord extends Comment {
 	user: User;
 }
 
@@ -29,6 +33,9 @@ const PostPage = () => {
 
 	// Init comments num state
 	const [commentsNum, setCommentsNum] = useState<number>();
+
+	// Init comments array state
+	const [comments, setComments] = useState<CommentRecord[]>([]);
 
 	// Init comments num state
 	const [likesNum, setLikesNum] = useState<number>();
@@ -56,6 +63,23 @@ const PostPage = () => {
 			navigate('/signup', { state: { path: path } });
 		} else {
 			updatePopUp('likesOn');
+		}
+	};
+
+	// Adds new comment to post on client side
+	const addCommentToPostState = (comment: CommentRecord) => {
+		if (!post) return;
+		else {
+			const newPost = {
+				...post,
+				user: { ...post.user },
+				_count: {
+					...post._count,
+					comments: post._count.comments + 1,
+				},
+			};
+			setPost(newPost);
+			setComments([comment, ...comments]);
 		}
 	};
 
@@ -92,7 +116,12 @@ const PostPage = () => {
 							<div id='date'>{timeSince(post.createdAt)}</div>
 						</div>
 					</div>
-					<CommentsFull post={post} commentsNum={commentsNum} />
+					<CommentsFull
+						post={post}
+						commentsNum={commentsNum}
+						comments={comments}
+						setComments={setComments}
+					/>
 					<div id='buttons-grid'>
 						<PostButtons
 							postId={postId}
@@ -118,6 +147,7 @@ const PostPage = () => {
 							postOwnerId={postOwnerId}
 							commentsNum={commentsNum}
 							setCommentsNum={setCommentsNum}
+							addCommentToPostState={addCommentToPostState}
 							inputRef={inputRef}
 						/>
 					</div>

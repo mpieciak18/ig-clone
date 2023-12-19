@@ -2,6 +2,10 @@ import { addNotification } from './notifications.js';
 import { getToken } from './localstor.js';
 import { Comment, User } from 'shared';
 
+interface CommentRecord extends Comment {
+	user: User;
+}
+
 // Create new comment & return comment ID
 export const addComment = async (
 	postOwnerId: number,
@@ -26,7 +30,7 @@ export const addComment = async (
 		// add notification to recipient
 		await addNotification('comment', postOwnerId, postId);
 		const json = await response.json();
-		return json.comment;
+		return json.comment as CommentRecord;
 	} else {
 		throw new Error();
 	}
@@ -54,10 +58,6 @@ export const addComment = async (
 // 		throw new Error();
 // 	}
 // };
-
-interface CommentRecord extends Comment {
-	user: User;
-}
 
 // Get comments
 export const getComments = async (id: number, limit: number) => {

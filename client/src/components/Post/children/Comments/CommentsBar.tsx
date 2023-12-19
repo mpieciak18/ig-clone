@@ -1,5 +1,10 @@
+import { User, Comment } from 'shared';
 import { addComment } from '../../../../services/comments.js';
 import { useState } from 'react';
+
+interface CommentRecord extends Comment {
+	user: User;
+}
 
 const CommentsBar = (props: {
 	postId: number;
@@ -7,9 +12,16 @@ const CommentsBar = (props: {
 	commentsNum: number | undefined;
 	setCommentsNum: React.Dispatch<React.SetStateAction<number | undefined>>;
 	inputRef: React.MutableRefObject<HTMLInputElement | null>;
+	addCommentToPostState: (comment: CommentRecord) => void;
 }) => {
-	const { postId, postOwnerId, commentsNum, setCommentsNum, inputRef } =
-		props;
+	const {
+		postId,
+		postOwnerId,
+		commentsNum,
+		setCommentsNum,
+		inputRef,
+		addCommentToPostState,
+	} = props;
 
 	// Set initial comment input value & reset it on submission
 	const [commentValue, setCommentValue] = useState('');
@@ -20,11 +32,16 @@ const CommentsBar = (props: {
 		setCommentValue(val);
 	};
 
-	// Adds comment to comments subcollection of post in firebase
+	// Adds comment to comments of post
 	const addNewComment = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (commentValue.length > 0) {
-			await addComment(postOwnerId, postId, commentValue);
+			const newComment = await addComment(
+				postOwnerId,
+				postId,
+				commentValue
+			);
+			addCommentToPostState(newComment);
 			setCommentValue('');
 			if (commentsNum) setCommentsNum(commentsNum + 1);
 		}
