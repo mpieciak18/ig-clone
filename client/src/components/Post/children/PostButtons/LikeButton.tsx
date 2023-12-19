@@ -43,12 +43,12 @@ const LikeButton = (props: {
 			const id = await addLike(postId, postOwnerId);
 			setLikeId(id);
 			setImg(LikeSolid);
-			if (likesNum) setLikesNum(likesNum + 1);
+			if (likesNum !== undefined) setLikesNum(likesNum + 1);
 		} else {
 			await removeLike(likeId);
 			setLikeId(null);
 			setImg(LikeHollow);
-			if (likesNum) setLikesNum(likesNum - 1);
+			if (likesNum !== undefined) setLikesNum(likesNum - 1);
 		}
 		// enable like button once everything is done
 		setIsUpdating(false);
