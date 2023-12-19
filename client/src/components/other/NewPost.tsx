@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { newPost } from '../../services/posts.js';
 import { ImageInput } from './ImageInput.js';
 import { CaptionFooter } from './CaptionFooter.js';
-import { UserContext, useAuth } from '../../contexts/AuthContext.js';
+import { useAuth } from '../../contexts/AuthContext.js';
 import { usePopUp } from '../../contexts/PopUpContext.js';
 import { deepCopy } from '../../other/deepCopy.js';
 import { setLocalUser } from '../../services/localstor.js';
