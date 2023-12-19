@@ -2,7 +2,6 @@ import { getToken } from './localstor';
 import { compressFile } from './compress';
 import { UserContext } from '../contexts/AuthContext';
 import { User, UserStatsCount } from 'shared';
-import { deepCopy } from '../other/deepCopy';
 
 interface NotUnique {
 	notUnique: string[];
@@ -148,9 +147,12 @@ export const updateUser = async (
 	});
 	if (response.status == 200) {
 		const json = await response.json();
-		const ogUser = json.user as UserContext;
-		const updatedUser = deepCopy(ogUser);
-		updatedUser.token = getToken();
+		const prevUserState = json.user as UserContext;
+		const updatedUser = {
+			...prevUserState,
+			_count: { ...prevUserState._count },
+			token: getToken(),
+		};
 		return updatedUser;
 	} else {
 		throw new Error();

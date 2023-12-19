@@ -8,7 +8,6 @@ import { findUser } from '../../services/users.js';
 import { io, Socket } from 'socket.io-client';
 import { getToken } from '../../services/localstor.js';
 import { Conversation, HasUsers, Message, User, UserStatsCount } from 'shared';
-import { deepCopy } from '../../other/deepCopy.js';
 
 interface ConvoRecord extends Conversation, HasUsers {
 	messages: Message[];
@@ -45,6 +44,17 @@ const ConvoPage = () => {
 
 	// Init convo db record array state
 	const [convo, setConvo] = useState<ConvoRecord | null>(null);
+
+	// Function to updates messages array of convo object (in response to socket receiving new messages)
+	const updateConvoMessages = (message: Message) => {
+		setConvo((prevConvo) => {
+			if (!prevConvo) return null;
+			return {
+				...prevConvo,
+				messages: [message, ...prevConvo.messages],
+			};
+		});
+	};
 
 	// Set initial message input value & reset it on submission
 	const [messageValue, setMessageValue] = useState('');
@@ -97,10 +107,8 @@ const ConvoPage = () => {
 		if (convo?.id && socket) {
 			// Establish WebSocket connection
 			socket.emit('joinConversation', { conversationId: convo.id });
-			socket.on('receiveNewMessage', (newMessage) => {
-				const newConvo = deepCopy(convo);
-				newConvo.messages = [newMessage, ...newConvo.messages];
-				setConvo(newConvo);
+			socket.on('receiveNewMessage', (newMessage: Message) => {
+				updateConvoMessages(newMessage);
 			});
 			// Disconnect from WebSocket on unmount
 			return () => {
@@ -118,6 +126,10 @@ const ConvoPage = () => {
 			const elem = document.getElementById('convo-messages');
 			if (elem !== null) elem.scrollTop = elem.scrollHeight;
 		}
+	}, [convo?.messages]);
+
+	useEffect(() => {
+		console.log(convo?.messages);
 	}, [convo?.messages]);
 
 	// Load more messages when user reaches bottom of messages component

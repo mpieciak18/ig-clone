@@ -5,7 +5,6 @@ import { ImageInput } from './ImageInput.js';
 import { CaptionFooter } from './CaptionFooter.js';
 import { useAuth } from '../../contexts/AuthContext.js';
 import { usePopUp } from '../../contexts/PopUpContext.js';
-import { deepCopy } from '../../other/deepCopy.js';
 import { setLocalUser } from '../../services/localstor.js';
 
 const NewPost = () => {
@@ -53,9 +52,14 @@ const NewPost = () => {
 				const post = await newPost(caption, file);
 				if (post?.id) {
 					if (user) {
-						const updatedUser = deepCopy(user);
-						updatedUser._count.posts++;
-						await setUser(updatedUser);
+						const updatedUser = {
+							...user,
+							_count: {
+								...user._count,
+								posts: user._count.posts + 1,
+							},
+						};
+						setUser(updatedUser);
 						setLocalUser(updatedUser);
 					}
 					updatePopUp();

@@ -6,7 +6,6 @@ import {
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext.js';
-import { deepCopy } from '../../other/deepCopy.js';
 import { setLocalUser } from '../../services/localstor.js';
 import { useProfile } from '../../contexts/ProfileContext.js';
 
@@ -62,15 +61,25 @@ const FollowButton = (props: { otherUserId: number }) => {
 			const newFollow = await addFollow(otherUserId);
 			if (newFollow.id) setFollowingId(newFollow.id);
 			// Update signed-in user's stats
-			const updatedUser = await deepCopy(user);
-			updatedUser._count.givenFollows++;
-			await setUser(updatedUser);
+			const updatedUser = {
+				...user,
+				_count: {
+					...user._count,
+					givenFollows: user._count.givenFollows + 1,
+				},
+			};
+			setUser(updatedUser);
 			setLocalUser(updatedUser);
 			// Update other user's states, if applicable
 			if (otherUser) {
-				const updatedOtherUser = await deepCopy(otherUser);
-				updatedOtherUser._count.givenFollows++;
-				await setOtherUser(updatedOtherUser);
+				const updatedOtherUser = {
+					...otherUser,
+					_count: {
+						...otherUser._count,
+						givenFollows: otherUser._count.givenFollows + 1,
+					},
+				};
+				setOtherUser(updatedOtherUser);
 			}
 		} else if (isUpdating == false && followingId != null) {
 			setFollowButtonClass('inactive');
@@ -79,15 +88,25 @@ const FollowButton = (props: { otherUserId: number }) => {
 			await removeFollow(followingId);
 			setFollowingId(undefined);
 			// Update signed-in user's stats
-			const updatedUser = await deepCopy(user);
-			updatedUser._count.givenFollows--;
-			await setUser(updatedUser);
+			const updatedUser = {
+				...user,
+				_count: {
+					...user._count,
+					givenFollows: user._count.givenFollows - 1,
+				},
+			};
+			setUser(updatedUser);
 			setLocalUser(updatedUser);
 			// Update other user's states
 			if (otherUser) {
-				const updatedOtherUser = await deepCopy(otherUser);
-				updatedOtherUser._count.givenFollows--;
-				await setOtherUser(updatedOtherUser);
+				const updatedOtherUser = {
+					...otherUser,
+					_count: {
+						...otherUser._count,
+						givenFollows: otherUser._count.givenFollows - 1,
+					},
+				};
+				setOtherUser(updatedOtherUser);
 			}
 		}
 	};
