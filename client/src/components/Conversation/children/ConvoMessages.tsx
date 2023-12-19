@@ -5,23 +5,29 @@ import { Message, User, UserStatsCount } from 'shared';
 
 const ConvoMessages = (props: {
 	otherUser: User & UserStatsCount;
-	messages: Message[];
+	messages: Message[] | undefined;
 	loadMore: (e: React.UIEvent<HTMLDivElement>) => void;
+	initNumber: (elem: HTMLDivElement) => void;
 }) => {
 	const { user } = useAuth();
 
-	const { otherUser, messages, loadMore } = props;
+	const { otherUser, messages, loadMore, initNumber } = props;
 
 	const [isInit, setIsInit] = useState(false);
 
 	const ref = useRef<HTMLDivElement>(null);
 
+	useEffect(() => {
+		if (ref.current) {
+			initNumber(ref.current);
+		}
+	}, [ref]);
+
 	// Scroll down when messages changes
 	useEffect(() => {
 		if (isInit == false && messages) {
-			const elem = document.getElementById('convo-messages');
-			if (elem !== null) {
-				elem.scrollTop = elem.scrollHeight;
+			if (ref.current) {
+				ref.current.scrollTop = ref.current.scrollHeight;
 				setIsInit(true);
 			}
 		}
@@ -29,14 +35,14 @@ const ConvoMessages = (props: {
 
 	// Update messages state when messages changes
 	const generateMessages = () => {
-		return messages.toReversed().map((message, i) => {
+		return messages?.toReversed().map((message, i) => {
+			//
 			let sender;
 			if (user?.id == message.senderId) {
 				sender = 'self';
 			} else {
 				sender = 'other';
 			}
-
 			let icon;
 			let name = null;
 			let senderChange = false;
@@ -94,7 +100,7 @@ const ConvoMessages = (props: {
 
 	return (
 		<div id='convo-messages' onScroll={loadMore} ref={ref}>
-			{messages?.length > 0 ? generateMessages() : null}
+			{generateMessages()}
 		</div>
 	);
 };

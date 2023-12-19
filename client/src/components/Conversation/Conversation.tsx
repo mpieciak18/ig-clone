@@ -27,7 +27,18 @@ const ConvoPage = () => {
 	const [otherUser, setOtherUser] = useState<User & UserStatsCount>();
 
 	// Init messages number state
-	const [messagesNumber, setMessagesNumber] = useState(10);
+	const [messagesNumber, setMessagesNumber] = useState<number>();
+
+	// A function to update messages Number after the ConvoMessages child component renders
+	// The purpose is to ensure the minimum number of messages load & render so that scrolling is possible
+	const getInitMessagesNumber = (elem: HTMLDivElement) => {
+		let number = 13;
+		let defaultDenom = 45;
+		if (elem?.clientHeight) {
+			number = Math.ceil(elem.clientHeight / defaultDenom);
+		}
+		setMessagesNumber(number);
+	};
 
 	// Init diffMessNumber state
 	const [diffMessNumber, setDiffMessNumber] = useState(0);
@@ -72,7 +83,7 @@ const ConvoPage = () => {
 		// as tracked by diffMessNumber, then we must clear out diffMessNumber
 		// and add its prev value to messagesNumber, which will retrigger this useEffect.
 		// This will ensure we grab the correct number of messages.
-		if (diffMessNumber > 0) {
+		if (diffMessNumber > 0 && messagesNumber) {
 			const newNum = messagesNumber + diffMessNumber;
 			setDiffMessNumber(0);
 			setMessagesNumber(newNum);
@@ -112,7 +123,7 @@ const ConvoPage = () => {
 	// Load more messages when user reaches bottom of messages component
 	const loadMore = (e: React.UIEvent<HTMLDivElement>) => {
 		const elem = e.target as HTMLDivElement;
-		if (elem.scrollTop == 0) {
+		if (elem.scrollTop == 0 && messagesNumber) {
 			const newMessagesNumber = messagesNumber + diffMessNumber + 10;
 			setDiffMessNumber(0);
 			setMessagesNumber(newMessagesNumber);
@@ -170,11 +181,12 @@ const ConvoPage = () => {
 					) : null}
 					<div id='convo-back-arrow-hidden'>« Go Back</div>
 				</div>
-				{convo && otherUser ? (
+				{otherUser ? (
 					<ConvoMessages
 						otherUser={otherUser}
-						messages={convo.messages}
+						messages={convo?.messages}
 						loadMore={loadMore}
+						initNumber={getInitMessagesNumber}
 					/>
 				) : null}
 				<form id='convo-message-bar' onSubmit={sendMessage}>
