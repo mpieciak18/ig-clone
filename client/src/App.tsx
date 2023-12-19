@@ -1,4 +1,4 @@
-import { Routes, Route, HashRouter, Navigate } from 'react-router-dom';
+import { Route, Navigate, BrowserRouter, Routes } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Home } from './components/Home/Home.js';
 import { Messages } from './components/Messages/Messages.js';
@@ -33,7 +33,7 @@ const App = () => {
 
 	// return routes;
 	return isLoading == false && user ? (
-		<HashRouter>
+		<BrowserRouter>
 			<Routes>
 				<Route path='/' element={<Home />} />
 				<Route path='/messages' element={<Messages />} />
@@ -45,15 +45,15 @@ const App = () => {
 				<Route path='/signup' element={<Navigate to='/' replace />} />
 				<Route path='/login' element={<Navigate to='/' replace />} />
 			</Routes>
-		</HashRouter>
+		</BrowserRouter>
 	) : isLoading == false && !user ? (
-		<HashRouter>
+		<BrowserRouter>
 			<Routes>
 				<Route path='/signup' element={<SignUp />} />
 				<Route path='/login' element={<Login />} />
 				<Route path='*' element={<HomeLoggedOut />} />
 			</Routes>
-		</HashRouter>
+		</BrowserRouter>
 	) : null;
 };
 
