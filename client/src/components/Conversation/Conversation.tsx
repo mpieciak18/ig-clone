@@ -128,10 +128,6 @@ const ConvoPage = () => {
 		}
 	}, [convo?.messages]);
 
-	useEffect(() => {
-		console.log(convo?.messages);
-	}, [convo?.messages]);
-
 	// Load more messages when user reaches bottom of messages component
 	const loadMore = (e: React.UIEvent<HTMLDivElement>) => {
 		const elem = e.target as HTMLDivElement;
