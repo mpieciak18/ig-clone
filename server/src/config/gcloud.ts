@@ -1,11 +1,10 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getDownloadURL, getStorage } from 'firebase-admin/storage';
-import serviceAccount from './gcloudKey.json' assert { type: 'json' };
 import { Bucket, File } from '@google-cloud/storage';
 
 initializeApp({
 	// @ts-ignore
-	credential: cert(serviceAccount),
+	credential: cert(process.env.GCLOUD_KEY),
 	storageBucket: process.env.APP_URL,
 });
 
