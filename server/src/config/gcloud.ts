@@ -2,9 +2,13 @@ import { initializeApp, cert } from 'firebase-admin/app';
 import { getDownloadURL, getStorage } from 'firebase-admin/storage';
 import { Bucket, File } from '@google-cloud/storage';
 
+const base64 = process.env.GCLOUD_KEY;
+const serviceAccount = JSON.parse(
+	Buffer.from(base64 || '', 'base64').toString('ascii')
+);
+
 initializeApp({
-	// @ts-ignore
-	credential: cert(process.env.GCLOUD_KEY),
+	credential: cert(serviceAccount),
 	storageBucket: process.env.APP_URL,
 });
 
