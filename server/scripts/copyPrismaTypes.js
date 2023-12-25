@@ -25,7 +25,7 @@ async function copyPrismaTypes() {
 	try {
 		// Halt function if environment is production
 		if (process.env.NODE_ENV == 'production') {
-			return;
+			process.exit(0);
 		}
 		// Copy node_modules/@prisma
 		const prismaAtClientSource = path.join(
