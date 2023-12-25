@@ -65,7 +65,7 @@ io.on('connection', (socket) => {
 });
 
 httpServer.listen(config.port, () => {
-	console.log(`hello on http://localhost:${config.port}`);
+	console.log('succesfully running');
 });
 
 // error handling
