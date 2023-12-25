@@ -96,6 +96,7 @@ const PostReel = (props: { post: PostRecord }) => {
 					commentsNum={commentsNum}
 					setCommentsNum={setCommentsNum}
 					inputRef={inputRef}
+					addCommentToPostState={null}
 				/>
 			</div>
 		</div>

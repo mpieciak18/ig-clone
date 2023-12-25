@@ -12,7 +12,7 @@ const CommentsBar = (props: {
 	commentsNum: number | undefined;
 	setCommentsNum: React.Dispatch<React.SetStateAction<number | undefined>>;
 	inputRef: React.MutableRefObject<HTMLInputElement | null>;
-	addCommentToPostState: (comment: CommentRecord) => void;
+	addCommentToPostState: ((comment: CommentRecord) => void) | null;
 }) => {
 	const {
 		postId,
@@ -41,7 +41,7 @@ const CommentsBar = (props: {
 				postId,
 				commentValue
 			);
-			addCommentToPostState(newComment);
+			if (addCommentToPostState) addCommentToPostState(newComment);
 			setCommentValue('');
 			if (commentsNum) setCommentsNum(commentsNum + 1);
 		}
