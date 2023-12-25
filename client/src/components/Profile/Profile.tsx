@@ -7,7 +7,7 @@ import { findPostsFromUser } from '../../services/posts.js';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { ProfileProvider } from '../../contexts/ProfileContext.js';
-import { Post, PostStatsCount } from 'shared';
+import { Post, PostStatsCount } from 'types';
 
 interface PostRecord extends Post, PostStatsCount {}
 

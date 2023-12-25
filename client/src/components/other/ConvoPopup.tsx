@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { searchUsers } from '../../services/users.js';
 import './other.css';
 import { usePopUp } from '../../contexts/PopUpContext.js';
-import { User } from 'shared';
+import { User } from 'types';
 
 const ConvoPopup = () => {
 	const { updatePopUp } = usePopUp();

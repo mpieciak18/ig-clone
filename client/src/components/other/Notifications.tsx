@@ -8,7 +8,7 @@ import {
 import { timeSince } from '../../other/timeSince';
 import { useAuth } from '../../contexts/AuthContext';
 import { usePopUp } from '../../contexts/PopUpContext';
-import { Notification, User } from 'shared';
+import { Notification, User } from 'types';
 
 interface NotificationRecord extends Notification {
 	otherUser: User;

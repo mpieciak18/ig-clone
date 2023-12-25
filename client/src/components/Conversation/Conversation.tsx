@@ -7,7 +7,7 @@ import { Navbar } from '../other/Navbar.js';
 import { findUser } from '../../services/users.js';
 import { io, Socket } from 'socket.io-client';
 import { getToken } from '../../services/localstor.js';
-import { Conversation, HasUsers, Message, User, UserStatsCount } from 'shared';
+import { Conversation, HasUsers, Message, User, UserStatsCount } from 'types';
 
 interface ConvoRecord extends Conversation, HasUsers {
 	messages: Message[];

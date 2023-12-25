@@ -1,5 +1,5 @@
 import { PropsWithChildren, createContext, useContext, useState } from 'react';
-import { User, UserStatsCount } from 'shared';
+import { User, UserStatsCount } from 'types';
 
 interface ProfileContextType {
 	otherUser: (User & UserStatsCount) | null;

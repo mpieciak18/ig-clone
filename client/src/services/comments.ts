@@ -1,6 +1,6 @@
 import { addNotification } from './notifications.js';
 import { getToken } from './localstor.js';
-import { Comment, User } from 'shared';
+import { Comment, User } from 'types';
 
 interface CommentRecord extends Comment {
 	user: User;

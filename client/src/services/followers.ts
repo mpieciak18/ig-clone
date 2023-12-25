@@ -1,6 +1,6 @@
 import { addNotification } from './notifications.js';
 import { getToken } from './localstor.js';
-import { Follow, HasOtherUser } from 'shared';
+import { Follow, HasOtherUser } from 'types';
 
 // Add new follow
 export const addFollow = async (id: number): Promise<Follow> => {

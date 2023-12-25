@@ -4,7 +4,7 @@ import { PostPreview } from '../Post/children/PostPreview.js';
 import { useState, useEffect } from 'react';
 import { Navbar } from '../other/Navbar.js';
 import { useAuth } from '../../contexts/AuthContext';
-import { Post, PostStatsCount, Save } from 'shared';
+import { Post, PostStatsCount, Save } from 'types';
 
 interface SaveRecord extends Save {
 	post: Post & PostStatsCount;

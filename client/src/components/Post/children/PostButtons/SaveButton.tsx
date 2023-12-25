@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import SaveHollow from '../../../../assets/images/save.png';
 import SaveSolid from '../../../../assets/images/save-solid.png';
 import { useAuth } from '../../../../contexts/AuthContext.js';
-import { Save } from 'shared';
+import { Save } from 'types';
 
 const SaveButton = (props: {
 	postId: number;

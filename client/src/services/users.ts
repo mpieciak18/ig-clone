@@ -1,7 +1,7 @@
 import { getToken } from './localstor';
 import { compressFile } from './compress';
 import { UserContext } from '../contexts/AuthContext';
-import { User, UserStatsCount } from 'shared';
+import { User, UserStatsCount } from 'types';
 
 interface NotUnique {
 	notUnique: string[];

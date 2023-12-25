@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { timeSince } from '../../../other/timeSince.js';
 import { useAuth } from '../../../contexts/AuthContext.js';
-import { Message, User, UserStatsCount } from 'shared';
+import { Message, User, UserStatsCount } from 'types';
 
 const ConvoMessages = (props: {
 	otherUser: User & UserStatsCount;

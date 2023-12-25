@@ -1,4 +1,4 @@
-import { Notification, User } from 'shared';
+import { Notification, User } from 'types';
 import { getToken } from './localstor';
 
 interface newNotifBody {

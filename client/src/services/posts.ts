@@ -1,6 +1,6 @@
 import { getToken } from './localstor';
 import { compressFile } from './compress';
-import { Post, PostStatsCount, User } from 'shared';
+import { Post, PostStatsCount, User } from 'types';
 
 interface PostRecord extends Post, PostStatsCount {
 	user: User;

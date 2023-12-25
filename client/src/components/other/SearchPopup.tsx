@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { searchUsers } from '../../services/users.js';
 import { usePopUp } from '../../contexts/PopUpContext.js';
-import { User } from 'shared';
+import { User } from 'types';
 
 const SearchPopup = (props: { searchVal: string }) => {
 	const { updatePopUp } = usePopUp();

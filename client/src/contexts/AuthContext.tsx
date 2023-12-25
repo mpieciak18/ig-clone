@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, PropsWithChildren } from 'react';
-import { User, UserStatsCount } from 'shared';
+import { User, UserStatsCount } from 'types';
 
 export interface UserContext extends User, UserStatsCount {
 	token: string;

@@ -4,7 +4,7 @@ import { getLikes } from '../../../services/likes.js';
 import { FollowButton } from '../../other/FollowButton.js';
 import '../styles/Likes.css';
 import { usePopUp } from '../../../contexts/PopUpContext.js';
-import { Like, User } from 'shared';
+import { Like, User } from 'types';
 
 interface LikeRecord extends Like {
 	user: User;

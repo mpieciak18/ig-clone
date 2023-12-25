@@ -7,7 +7,7 @@ import { ConvoPopup } from '../other/ConvoPopup.js';
 import { useAuth } from '../../contexts/AuthContext.js';
 import { usePopUp } from '../../contexts/PopUpContext.js';
 import { MessagesChild } from './children/MessagesChild.js';
-import { Conversation, HasUsers, Message } from 'shared';
+import { Conversation, HasUsers, Message } from 'types';
 
 interface ConvoRecord extends Conversation, HasUsers {
 	messages: Message[];

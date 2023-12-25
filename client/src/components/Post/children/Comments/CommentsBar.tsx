@@ -1,4 +1,4 @@
-import { User, Comment } from 'shared';
+import { User, Comment } from 'types';
 import { addComment } from '../../../../services/comments.js';
 import { useState } from 'react';
 

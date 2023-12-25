@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const serverPath = path.join(__dirname, '../../server');
-const sharedTypesPath = path.join(__dirname, '../../shared/types');
+const sharedTypesPath = path.join(__dirname, '../../client/src/types/shared');
 
 async function copyDirectory(source, destination) {
 	await fs.mkdir(destination, { recursive: true });

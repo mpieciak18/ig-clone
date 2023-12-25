@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { timeSinceTrunc } from '../../../other/timeSinceTrunc';
 import { useAuth } from '../../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
-import { Conversation, HasUsers, Message, User } from 'shared';
+import { Conversation, HasUsers, Message, User } from 'types';
 
 interface ConvoRecord extends Conversation, HasUsers {
 	messages: Message[];

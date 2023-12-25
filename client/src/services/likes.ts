@@ -1,6 +1,6 @@
 import { addNotification } from './notifications.js';
 import { getToken } from './localstor.js';
-import { Like, User } from 'shared';
+import { Like, User } from 'types';
 
 // Add like to post and return the like id
 export const addLike = async (postId: number, postOwnerId: number) => {

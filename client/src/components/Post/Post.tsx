@@ -11,7 +11,7 @@ import { CommentsFull } from './children/Comments/CommentsFull';
 import { LinkCopied } from './children/LinkCopied';
 import { useAuth } from '../../contexts/AuthContext';
 import { usePopUp } from '../../contexts/PopUpContext';
-import { Post, PostStatsCount, User, Comment } from 'shared';
+import { Post, PostStatsCount, User, Comment } from 'types';
 
 interface PostRecord extends Post, PostStatsCount {
 	user: User;

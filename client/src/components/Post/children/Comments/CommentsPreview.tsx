@@ -1,7 +1,7 @@
 import { getComments } from '../../../../services/comments.js';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Comment, User } from 'shared';
+import { Comment, User } from 'types';
 
 interface CommentRecord extends Comment {
 	user: User;

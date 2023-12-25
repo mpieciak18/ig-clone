@@ -1,4 +1,4 @@
-import { Post, PostStatsCount, Save } from 'shared';
+import { Post, PostStatsCount, Save } from 'types';
 import { getToken } from './localstor.js';
 
 // Add post to a new "save"

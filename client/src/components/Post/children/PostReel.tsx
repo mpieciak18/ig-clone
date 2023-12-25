@@ -6,7 +6,7 @@ import { CommentsPreview } from './Comments/CommentsPreview.js';
 import { PostButtons } from './PostButtons.js';
 import { timeSince } from '../../../other/timeSince.js';
 import { LinkCopied } from './LinkCopied.js';
-import { Post, PostStatsCount, User } from 'shared';
+import { Post, PostStatsCount, User } from 'types';
 
 interface PostRecord extends Post, PostStatsCount {
 	user: User;

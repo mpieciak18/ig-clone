@@ -1,6 +1,6 @@
 // import { addNotification } from './notifications.js';
 import { getToken } from './localstor.js';
-import { Conversation, HasUsers, Message } from 'shared';
+import { Conversation, HasUsers, Message } from 'types';
 
 interface ConvoRecord extends Conversation, HasUsers {
 	messages: Message[];

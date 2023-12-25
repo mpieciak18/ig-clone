@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import LikeIcon from '../../../assets/images/like.png';
 import CommentsIcon from '../../../assets/images/messages.png';
-import { Post, PostStatsCount } from 'shared';
+import { Post, PostStatsCount } from 'types';
 
 const PostPreview = (props: { post: Post & PostStatsCount }) => {
 	const { post } = props;

@@ -2,7 +2,7 @@ import { getComments } from '../../../../services/comments.js';
 import { SetStateAction, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { timeSinceTrunc } from '../../../../other/timeSinceTrunc.js';
-import { Comment, Post, PostStatsCount, User } from 'shared';
+import { Comment, Post, PostStatsCount, User } from 'types';
 
 interface PostRecord extends Post, PostStatsCount {
 	user: User;

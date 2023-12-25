@@ -4,7 +4,7 @@ import { FollowButton } from './FollowButton.js';
 import './other.css';
 import { useEffect, useState } from 'react';
 import { usePopUp } from '../../contexts/PopUpContext.js';
-import { Follow, HasOtherUser } from 'shared';
+import { Follow, HasOtherUser } from 'types';
 
 interface FollowRecord extends Follow, HasOtherUser {}
 

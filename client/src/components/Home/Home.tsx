@@ -4,7 +4,7 @@ import { Navbar } from '../other/Navbar.js';
 import { PostReel } from '../Post/children/PostReel.js';
 import { UserCard } from './children/UserCard.js';
 import { useEffect, useState } from 'react';
-import { Post, PostStatsCount, User } from 'shared';
+import { Post, PostStatsCount, User } from 'types';
 
 interface PostRecord extends Post, PostStatsCount {
 	user: User;
