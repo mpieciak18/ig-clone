@@ -64,8 +64,9 @@ io.on('connection', (socket) => {
 	});
 });
 
-httpServer.listen(config.port, () => {
-	console.log('succesfully running');
+const port = process.env.PORT || config.port; // Fallback to config.port if PORT is not set
+httpServer.listen(port, () => {
+	console.log('succesfully running on port ' + port);
 });
 
 // error handling
