@@ -13,9 +13,10 @@ const app = express();
 
 // default middleware
 app.use(
-	cors({
-		origin: process.env.CLIENT_URL,
-	})
+	// cors({
+	// 	origin: process.env.CLIENT_URL,
+	// })
+	cors()
 );
 app.use(morgan('dev'));
 app.use(express.json());
