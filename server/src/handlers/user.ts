@@ -166,7 +166,9 @@ export const updateUser = async (
 		// this is added as an extra step of error handling (in case the update 'runs' but nothing is returned).
 		if (!user) throw new Error();
 		// Delete old image
-		if (oldImage) await deleteFileFromStorage(oldImage);
+		if (oldImage && oldImage !== process.env.DEFAULT_IMG) {
+			await deleteFileFromStorage(oldImage);
+		}
 		// Return updated user data
 		res.json({ user });
 	} catch (e) {
