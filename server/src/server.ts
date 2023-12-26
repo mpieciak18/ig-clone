@@ -12,7 +12,11 @@ import { SyncErr } from './types/types.js';
 const app = express();
 
 // default middleware
-app.use(cors());
+app.use(
+	cors({
+		origin: process.env.CLIENT_URL,
+	})
+);
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
