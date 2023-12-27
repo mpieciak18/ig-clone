@@ -1151,7 +1151,7 @@ div#new-post-image-preview {
 
 #loading-animation-parent {
 	position: fixed;
-	z-index: 0;
+	z-index: 1000;
 	height: 100vh;
 	width: 100vw;
 	top: 0;
