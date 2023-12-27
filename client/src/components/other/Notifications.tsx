@@ -9,12 +9,14 @@ import { timeSince } from '../../other/timeSince';
 import { useAuth } from '../../contexts/AuthContext';
 import { usePopUp } from '../../contexts/PopUpContext';
 import { Notification, User } from 'types';
+import { useLoading } from '../../contexts/LoaderContext';
 
 interface NotificationRecord extends Notification {
 	otherUser: User;
 }
 
 const Notifications = () => {
+	const { setLoading } = useLoading();
 	const { user } = useAuth();
 	const { updatePopUp } = usePopUp();
 
@@ -59,20 +61,27 @@ const Notifications = () => {
 	}, [whichTab]);
 
 	const updateNotifications = async () => {
+		setLoading(true);
 		if (whichTab == 'new') {
-			getUnreadNotifications(notifsCount).then((newNotifications) => {
-				setNotifications(newNotifications);
-				if (newNotifications.length < notifsCount) {
-					setAllLoaded(true);
-				}
-			});
+			getUnreadNotifications(notifsCount)
+				.then((newNotifications) => {
+					setNotifications(newNotifications);
+					if (newNotifications.length < notifsCount) {
+						setAllLoaded(true);
+					}
+					setLoading(false);
+				})
+				.catch(() => setLoading(false));
 		} else {
-			getReadNotifications(notifsCount).then((newNotifications) => {
-				setNotifications(newNotifications);
-				if (newNotifications?.length < notifsCount) {
-					setAllLoaded(true);
-				}
-			});
+			getReadNotifications(notifsCount)
+				.then((newNotifications) => {
+					setNotifications(newNotifications);
+					if (newNotifications?.length < notifsCount) {
+						setAllLoaded(true);
+					}
+					setLoading(false);
+				})
+				.catch(() => setLoading(false));
 		}
 	};
 
@@ -109,7 +118,13 @@ const Notifications = () => {
 	const xButtonClick = () => updatePopUp();
 
 	const clearNotifs = () => {
-		readNotifications().then(() => setNotifsCount(0));
+		setLoading(true);
+		readNotifications()
+			.then(() => {
+				setNotifsCount(0);
+				setLoading(false);
+			})
+			.catch(() => setLoading(false));
 	};
 
 	return (

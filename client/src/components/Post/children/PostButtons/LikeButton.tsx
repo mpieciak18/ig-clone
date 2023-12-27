@@ -3,6 +3,7 @@ import LikeHollow from '../../../../assets/images/like.png';
 import LikeSolid from '../../../../assets/images/like-solid.png';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../../contexts/AuthContext.js';
+import { useLoading } from '../../../../contexts/LoaderContext.js';
 
 const LikeButton = (props: {
 	postId: number;
@@ -12,6 +13,7 @@ const LikeButton = (props: {
 	likesNum: number | undefined;
 }) => {
 	const { user } = useAuth();
+	const { setLoading } = useLoading();
 	const { postId, postOwnerId, redirect, setLikesNum, likesNum } = props;
 
 	const [likeId, setLikeId] = useState<number | null>(null);
@@ -22,7 +24,13 @@ const LikeButton = (props: {
 
 	useEffect(() => {
 		if (user != null) {
-			likeExists(postId).then(setLikeId);
+			setLoading(true);
+			likeExists(postId)
+				.then((id) => {
+					setLikeId(id);
+					setLoading(false);
+				})
+				.catch(() => setLoading(false));
 		}
 	}, [user]);
 
@@ -40,15 +48,17 @@ const LikeButton = (props: {
 		setIsUpdating(true);
 		// perform db updates & state changes
 		if (likeId == null) {
-			const id = await addLike(postId, postOwnerId);
-			setLikeId(id);
-			setImg(LikeSolid);
-			if (likesNum !== undefined) setLikesNum(likesNum + 1);
+			addLike(postId, postOwnerId).then((id) => {
+				setLikeId(id);
+				setImg(LikeSolid);
+				if (likesNum !== undefined) setLikesNum(likesNum + 1);
+			});
 		} else {
-			await removeLike(likeId);
-			setLikeId(null);
-			setImg(LikeHollow);
-			if (likesNum !== undefined) setLikesNum(likesNum - 1);
+			removeLike(likeId).then(() => {
+				setLikeId(null);
+				setImg(LikeHollow);
+				if (likesNum !== undefined) setLikesNum(likesNum - 1);
+			});
 		}
 		// enable like button once everything is done
 		setIsUpdating(false);

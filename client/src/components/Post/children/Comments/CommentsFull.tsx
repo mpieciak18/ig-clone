@@ -3,6 +3,7 @@ import { SetStateAction, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { timeSinceTrunc } from '../../../../other/timeSinceTrunc.js';
 import { Comment, Post, PostStatsCount, User } from 'types';
+import { useLoading } from '../../../../contexts/LoaderContext.js';
 
 interface PostRecord extends Post, PostStatsCount {
 	user: User;
@@ -18,6 +19,7 @@ const CommentsFull = (props: {
 	setComments: React.Dispatch<SetStateAction<CommentRecord[]>>;
 }) => {
 	const { post, commentsNum, comments, setComments } = props;
+	const { setLoading } = useLoading();
 
 	// Init comment quantity (ie, how many comments are rendered) state
 	const [commentQuantity, setCommentQuantity] = useState(10);
@@ -53,9 +55,16 @@ const CommentsFull = (props: {
 
 	// Update comments arr state on init render
 	useEffect(() => {
+		setLoading(true);
 		getComments(post.id, 10)
-			.then(setComments)
-			.catch(() => setComments([]));
+			.then((results) => {
+				setComments(results);
+				setLoading(false);
+			})
+			.catch(() => {
+				setComments([]);
+				setLoading(false);
+			});
 	}, []);
 
 	// Return component

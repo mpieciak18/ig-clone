@@ -4,6 +4,7 @@ import SaveHollow from '../../../../assets/images/save.png';
 import SaveSolid from '../../../../assets/images/save-solid.png';
 import { useAuth } from '../../../../contexts/AuthContext.js';
 import { Save } from 'types';
+import { useLoading } from '../../../../contexts/LoaderContext.js';
 
 const SaveButton = (props: {
 	postId: number;
@@ -12,6 +13,7 @@ const SaveButton = (props: {
 }) => {
 	const { user } = useAuth();
 	const { postId, redirect } = props;
+	const { setLoading } = useLoading();
 
 	// Init save record state
 	const [save, setSave] = useState<Save | null>(null);
@@ -44,7 +46,13 @@ const SaveButton = (props: {
 	};
 
 	useEffect(() => {
-		saveExists(postId).then(setSave);
+		setLoading(true);
+		saveExists(postId)
+			.then((newSave) => {
+				setSave(newSave);
+				setLoading(false);
+			})
+			.catch(() => setLoading(false));
 	}, []);
 
 	useEffect(() => {

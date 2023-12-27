@@ -18,9 +18,12 @@ import MessagesHollow from '../../assets/images/messages.png';
 import MessagesSolid from '../../assets/images/messages-solid.png';
 import { useAuth } from '../../contexts/AuthContext';
 import { usePopUp } from '../../contexts/PopUpContext';
+import { useLoading } from '../../contexts/LoaderContext.js';
+import { Loader } from './Loader.js';
 
 const Navbar = () => {
 	const { user } = useAuth();
+	const { loading } = useLoading();
 	const { popUpState, updatePopUp } = usePopUp();
 
 	const navigate = useNavigate();
@@ -93,6 +96,7 @@ const Navbar = () => {
 
 	return (
 		<div id='navbar'>
+			{loading ? <Loader /> : null}
 			{popUpState.notifsOn ? (
 				<Notifications />
 			) : popUpState.newPostOn ? (

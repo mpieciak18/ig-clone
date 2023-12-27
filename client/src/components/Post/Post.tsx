@@ -12,6 +12,7 @@ import { LinkCopied } from './children/LinkCopied';
 import { useAuth } from '../../contexts/AuthContext';
 import { usePopUp } from '../../contexts/PopUpContext';
 import { Post, PostStatsCount, User, Comment } from 'types';
+import { useLoading } from '../../contexts/LoaderContext.js';
 
 interface PostRecord extends Post, PostStatsCount {
 	user: User;
@@ -22,6 +23,7 @@ interface CommentRecord extends Comment {
 }
 
 const PostPage = () => {
+	const { setLoading } = useLoading();
 	const { user } = useAuth();
 	const { popUpState, updatePopUp } = usePopUp();
 
@@ -45,11 +47,15 @@ const PostPage = () => {
 
 	// Update post state on render
 	useEffect(() => {
-		findSinglePost(postId).then((post) => {
-			setPost(post);
-			setCommentsNum(post._count.comments);
-			setLikesNum(post._count.likes);
-		});
+		setLoading(true);
+		findSinglePost(postId)
+			.then((post) => {
+				setPost(post);
+				setCommentsNum(post._count.comments);
+				setLikesNum(post._count.likes);
+				setLoading(false);
+			})
+			.catch(() => setLoading(false));
 	}, []);
 
 	// Init linkCopied state for share button

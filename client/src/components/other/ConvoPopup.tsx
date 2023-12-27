@@ -4,8 +4,10 @@ import { searchUsers } from '../../services/users.js';
 import './other.css';
 import { usePopUp } from '../../contexts/PopUpContext.js';
 import { User } from 'types';
+import { useLoading } from '../../contexts/LoaderContext.js';
 
 const ConvoPopup = () => {
+	const { setLoading } = useLoading();
 	const { updatePopUp } = usePopUp();
 
 	const navigate = useNavigate();
@@ -27,7 +29,15 @@ const ConvoPopup = () => {
 	// Update results when value changes
 	useEffect(() => {
 		if (value === '') setResults([]);
-		else searchUsers(value).then(setResults);
+		else {
+			setLoading(true);
+			searchUsers(value)
+				.then((newResults) => {
+					setResults(newResults);
+					setLoading(false);
+				})
+				.catch(() => setLoading(false));
+		}
 	}, [value]);
 
 	// Redirects user to searched user's page

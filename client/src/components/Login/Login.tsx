@@ -5,9 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext.js';
 import { setLocalUser } from '../../services/localstor.js';
+import { Loader } from '../other/Loader.js';
+import { useLoading } from '../../contexts/LoaderContext.js';
 
 const Login = () => {
 	const { setUser } = useAuth();
+	const { loading, setLoading } = useLoading();
 
 	const navigate = useNavigate();
 
@@ -24,12 +27,15 @@ const Login = () => {
 
 	const newLogin = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		setLoading(true);
 		try {
 			const signedInUser = await signInUser(email, password);
-			await setUser(signedInUser);
+			setUser(signedInUser);
 			setLocalUser(signedInUser);
+			setLoading(false);
 			navigate('/');
 		} catch (error) {
+			setLoading(false);
 			setErrorClass('active');
 			setTimeout(() => {
 				setErrorClass('inactive');
@@ -40,6 +46,7 @@ const Login = () => {
 	return (
 		<div id='login' className='page'>
 			<div id='navbar-logo-logged-out'>
+				{loading ? <Loader /> : null}
 				<img id='navbar-logo-icon' src={Logo} />
 				<div id='navbar-logo-text'>Markstagram</div>
 			</div>

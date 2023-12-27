@@ -1,6 +1,7 @@
 import { User, Comment } from 'types';
 import { addComment } from '../../../../services/comments.js';
 import { useState } from 'react';
+import { useLoading } from '../../../../contexts/LoaderContext.js';
 
 interface CommentRecord extends Comment {
 	user: User;
@@ -23,6 +24,8 @@ const CommentsBar = (props: {
 		addCommentToPostState,
 	} = props;
 
+	const { setLoading } = useLoading();
+
 	// Set initial comment input value & reset it on submission
 	const [commentValue, setCommentValue] = useState('');
 
@@ -36,14 +39,16 @@ const CommentsBar = (props: {
 	const addNewComment = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (commentValue.length > 0) {
-			const newComment = await addComment(
-				postOwnerId,
-				postId,
-				commentValue
-			);
-			if (addCommentToPostState) addCommentToPostState(newComment);
-			setCommentValue('');
-			if (commentsNum) setCommentsNum(commentsNum + 1);
+			setLoading(true);
+			addComment(postOwnerId, postId, commentValue)
+				.then((newComment) => {
+					if (addCommentToPostState)
+						addCommentToPostState(newComment);
+					setCommentValue('');
+					if (commentsNum) setCommentsNum(commentsNum + 1);
+					setLoading(false);
+				})
+				.catch(() => setLoading(false));
 		}
 	};
 

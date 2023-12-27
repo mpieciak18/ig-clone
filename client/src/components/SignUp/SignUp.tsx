@@ -9,9 +9,11 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { setLocalUser } from '../../services/localstor';
 import { createUser } from '../../services/users';
+import { useLoading } from '../../contexts/LoaderContext.js';
+import { Loader } from '../other/Loader.js';
 
 const SignUp = () => {
-	// Redirect to settings if already signed in
+	const { loading, setLoading } = useLoading();
 	const { setUser } = useAuth();
 
 	const navigate = useNavigate();
@@ -80,6 +82,7 @@ const SignUp = () => {
 	const newSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		// Add new user to services/auth & return any errors
+		setLoading(true);
 		try {
 			const newUser = await createUser(username, name, email, password);
 			// if (newUser.notUnique) {
@@ -87,11 +90,13 @@ const SignUp = () => {
 				handleDups(newUser.notUnique);
 				throw new Error();
 			} else {
-				await setUser(newUser);
+				setUser(newUser);
 				setLocalUser(newUser);
+				setLoading(false);
 				navigate('/settings', { state: { newSignUp: true } });
 			}
 		} catch {
+			setLoading(false);
 			setErrorClass('active');
 			setTimeout(() => {
 				setErrorClass('inactive');
@@ -102,6 +107,7 @@ const SignUp = () => {
 	return (
 		<div id='sign-up' className='page'>
 			<div id='navbar-logo-logged-out'>
+				{loading ? <Loader /> : null}
 				<img id='navbar-logo-icon' src={Logo} />
 				<div id='navbar-logo-text'>Markstagram</div>
 			</div>

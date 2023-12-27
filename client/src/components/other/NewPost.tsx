@@ -6,10 +6,12 @@ import { CaptionFooter } from './CaptionFooter.js';
 import { useAuth } from '../../contexts/AuthContext.js';
 import { usePopUp } from '../../contexts/PopUpContext.js';
 import { setLocalUser } from '../../services/localstor.js';
+import { useLoading } from '../../contexts/LoaderContext.js';
 
 const NewPost = () => {
 	const { user, setUser } = useAuth();
 	const { updatePopUp } = usePopUp();
+	const { setLoading } = useLoading();
 
 	// Init useNavigate function
 	const navigate = useNavigate();
@@ -47,6 +49,7 @@ const NewPost = () => {
 		e.preventDefault();
 		// Check validation first
 		if (captionPasses && file) {
+			setLoading(true);
 			// Check for possible error with adding post to DB
 			try {
 				const post = await newPost(caption, file);
@@ -64,8 +67,10 @@ const NewPost = () => {
 					}
 					updatePopUp();
 					if (location.postOwnerId == null) {
+						setLoading(false);
 						navigate(`/${user?.id}/${post.id}`);
 					} else {
+						setLoading(false);
 						navigate(`/${user?.id}/${post.id}`);
 						window.location.reload();
 					}
@@ -73,6 +78,7 @@ const NewPost = () => {
 					throw new Error();
 				}
 			} catch (e) {
+				setLoading(false);
 				setErrorClass('active');
 				setTimeout(() => {
 					setErrorClass('inactive');

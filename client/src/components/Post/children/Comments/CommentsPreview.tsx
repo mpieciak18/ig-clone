@@ -2,6 +2,7 @@ import { getComments } from '../../../../services/comments.js';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Comment, User } from 'types';
+import { useLoading } from '../../../../contexts/LoaderContext.js';
 
 interface CommentRecord extends Comment {
 	user: User;
@@ -12,6 +13,7 @@ const CommentsPreview = (props: {
 	commentsNum: number | undefined;
 }) => {
 	const { postId, commentsNum } = props;
+	const { setLoading } = useLoading();
 
 	const navigate = useNavigate();
 
@@ -20,9 +22,16 @@ const CommentsPreview = (props: {
 
 	// Update commentsArr when comments count changes and on init render
 	useEffect(() => {
+		setLoading(true);
 		getComments(postId, 2)
-			.then((array) => setCommentsArr(array.toReversed()))
-			.catch(() => setCommentsArr([]));
+			.then((array) => {
+				setCommentsArr(array.toReversed());
+				setLoading(false);
+			})
+			.catch(() => {
+				setCommentsArr([]);
+				setLoading(false);
+			});
 	}, [commentsNum]);
 
 	// Return component

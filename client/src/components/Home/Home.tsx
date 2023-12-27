@@ -5,12 +5,15 @@ import { PostReel } from '../Post/children/PostReel.js';
 import { UserCard } from './children/UserCard.js';
 import { useEffect, useState } from 'react';
 import { Post, PostStatsCount, User } from 'types';
+import { useLoading } from '../../contexts/LoaderContext.js';
 
 interface PostRecord extends Post, PostStatsCount {
 	user: User;
 }
 
 const Home = () => {
+	const { setLoading } = useLoading();
+
 	// Init postsNumber state
 	const [postsNumber, setPostsNumber] = useState(5);
 
@@ -32,6 +35,7 @@ const Home = () => {
 			allLoaded == false &&
 			isLoading == false
 		) {
+			setLoading(true);
 			setIsLoading(true);
 			setPostsNumber(postsNumber + 5);
 		}
@@ -39,13 +43,16 @@ const Home = () => {
 
 	// Update postsArr state when postsNumber state changes
 	useEffect(() => {
-		findPosts(postsNumber).then((newPosts) => {
-			if (newPosts.length < postsNumber) {
-				setAllLoaded(true);
-			}
-			setPosts(newPosts);
-			setIsLoading(false);
-		});
+		findPosts(postsNumber)
+			.then((newPosts) => {
+				if (newPosts.length < postsNumber) {
+					setAllLoaded(true);
+				}
+				setPosts(newPosts);
+				setLoading(false);
+				setIsLoading(false);
+			})
+			.catch(() => setLoading(false));
 	}, [postsNumber]);
 
 	return (

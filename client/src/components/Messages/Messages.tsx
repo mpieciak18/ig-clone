@@ -8,12 +8,14 @@ import { useAuth } from '../../contexts/AuthContext.js';
 import { usePopUp } from '../../contexts/PopUpContext.js';
 import { MessagesChild } from './children/MessagesChild.js';
 import { Conversation, HasUsers, Message } from 'types';
+import { useLoading } from '../../contexts/LoaderContext.js';
 
 interface ConvoRecord extends Conversation, HasUsers {
 	messages: Message[];
 }
 
 const Messages = () => {
+	const { setLoading } = useLoading();
 	const { user } = useAuth();
 	const { popUpState, updatePopUp } = usePopUp();
 
@@ -31,16 +33,20 @@ const Messages = () => {
 
 	// Update convos state when convosCount or user changes
 	useEffect(() => {
-		getConvos(convosCount).then((newConvos) => {
-			if (newConvos != null) {
-				setConvos(newConvos);
-				if (newConvos.length < convosCount) {
-					setAllLoaded(true);
+		setLoading(true);
+		getConvos(convosCount)
+			.then((newConvos) => {
+				if (newConvos != null) {
+					setConvos(newConvos);
+					if (newConvos.length < convosCount) {
+						setAllLoaded(true);
+					}
+				} else {
+					setConvos([]);
 				}
-			} else {
-				setConvos([]);
-			}
-		});
+				setLoading(false);
+			})
+			.catch(() => setLoading(false));
 	}, [convosCount]);
 
 	// Load-more function that updates the convos component

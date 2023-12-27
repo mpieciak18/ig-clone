@@ -3,9 +3,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { searchUsers } from '../../services/users.js';
 import { usePopUp } from '../../contexts/PopUpContext.js';
 import { User } from 'types';
+import { useLoading } from '../../contexts/LoaderContext.js';
 
 const SearchPopup = (props: { searchVal: string }) => {
 	const { updatePopUp } = usePopUp();
+	const { setLoading } = useLoading();
 	const { searchVal } = props;
 
 	const navigate = useNavigate();
@@ -23,8 +25,15 @@ const SearchPopup = (props: { searchVal: string }) => {
 	// Update results when value changes
 	useEffect(() => {
 		if (searchVal != null) {
+			setLoading(true);
 			const doSearch = setTimeout(
-				() => searchUsers(searchVal).then(setSearchedUsers),
+				() =>
+					searchUsers(searchVal)
+						.then((results) => {
+							setSearchedUsers(results);
+							setLoading(false);
+						})
+						.catch(() => setLoading(false)),
 				2000
 			);
 			return () => clearTimeout(doSearch);

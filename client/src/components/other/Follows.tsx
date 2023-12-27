@@ -5,11 +5,13 @@ import './other.css';
 import { useEffect, useState } from 'react';
 import { usePopUp } from '../../contexts/PopUpContext.js';
 import { Follow, HasOtherUser } from 'types';
+import { useLoading } from '../../contexts/LoaderContext.js';
 
 interface FollowRecord extends Follow, HasOtherUser {}
 
 const Follows = (props: { otherUserId: number; initTab: string }) => {
 	const { otherUserId, initTab } = props;
+	const { setLoading } = useLoading();
 	const { updatePopUp } = usePopUp();
 
 	const navigate = useNavigate();
@@ -47,14 +49,25 @@ const Follows = (props: { otherUserId: number; initTab: string }) => {
 	// Change followsArr, allLoaded, and button states when whichTab changes
 	useEffect(() => {
 		setAllLoaded(false);
+		setLoading(true);
 		if (whichTab == 'following') {
 			setButtonOne('active');
 			setButtonTwo('inactive');
-			getFollowing(otherUserId, followsCount).then(setFollowsArr);
+			getFollowing(otherUserId, followsCount)
+				.then((newArr) => {
+					setFollowsArr(newArr);
+					setLoading(false);
+				})
+				.catch(() => setLoading(false));
 		} else {
 			setButtonOne('inactive');
 			setButtonTwo('active');
-			getFollowers(otherUserId, followsCount).then(setFollowsArr);
+			getFollowers(otherUserId, followsCount)
+				.then((newArr) => {
+					setFollowsArr(newArr);
+					setLoading(false);
+				})
+				.catch(() => setLoading(false));
 		}
 	}, [whichTab]);
 
@@ -67,6 +80,7 @@ const Follows = (props: { otherUserId: number; initTab: string }) => {
 				elem.clientHeight
 			) {
 				setIsLoading(true);
+				setLoading(true);
 				const newCount = followsCount + 20;
 				setFollowsCount(newCount);
 				let newFollowsArr;
@@ -81,6 +95,7 @@ const Follows = (props: { otherUserId: number; initTab: string }) => {
 					setAllLoaded(true);
 				}
 				setIsLoading(false);
+				setLoading(false);
 			}
 		}
 	};

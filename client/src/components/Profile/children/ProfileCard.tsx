@@ -5,9 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext.js';
 import { usePopUp } from '../../../contexts/PopUpContext.js';
 import { useProfile } from '../../../contexts/ProfileContext.js';
+import { useLoading } from '../../../contexts/LoaderContext.js';
 
 const ProfileCard = (props: { otherUserId: number }) => {
 	const { user } = useAuth();
+	const { setLoading } = useLoading();
 	const { otherUser, setOtherUser } = useProfile();
 	const { popUpState, updatePopUp } = usePopUp();
 	const { otherUserId } = props;
@@ -42,10 +44,14 @@ const ProfileCard = (props: { otherUserId: number }) => {
 
 	// Update img, otherUser, & otherUserFollowers states on render
 	useEffect(() => {
-		findUser(otherUserId).then((newUser) => {
-			setImg(newUser?.image ? newUser.image : undefined);
-			setOtherUser(newUser);
-		});
+		setLoading(true);
+		findUser(otherUserId)
+			.then((newUser) => {
+				setImg(newUser?.image ? newUser.image : undefined);
+				setOtherUser(newUser);
+				setLoading(false);
+			})
+			.catch(() => setLoading(false));
 	}, []);
 
 	// Update follows state if followsOn state changes

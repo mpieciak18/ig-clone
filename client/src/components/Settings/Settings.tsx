@@ -7,9 +7,11 @@ import { ImageInput } from './children/ImageInput.js';
 import { Navbar } from '../other/Navbar.js';
 import { useAuth } from '../../contexts/AuthContext';
 import { setLocalUser } from '../../services/localstor';
+import { useLoading } from '../../contexts/LoaderContext.js';
 
 const Settings = () => {
 	const { user, setUser } = useAuth();
+	const { setLoading } = useLoading();
 
 	const location = useLocation();
 
@@ -66,17 +68,21 @@ const Settings = () => {
 		e.preventDefault();
 		// Check validation first
 		if (namePasses == true) {
-			try {
-				const updatedUser = await updateUser(name, bio, file);
-				setUser(updatedUser);
-				setLocalUser(updatedUser);
-				navigate(`/${user?.id}`);
-			} catch {
-				setErrorClass('active');
-				setTimeout(() => {
-					setErrorClass('inactive');
-				}, 2000);
-			}
+			setLoading(true);
+			updateUser(name, bio, file)
+				.then((updatedUser) => {
+					setUser(updatedUser);
+					setLocalUser(updatedUser);
+					setLoading(false);
+					navigate(`/${user?.id}`);
+				})
+				.catch(() => {
+					setLoading(false);
+					setErrorClass('active');
+					setTimeout(() => {
+						setErrorClass('inactive');
+					}, 2000);
+				});
 		}
 	};
 

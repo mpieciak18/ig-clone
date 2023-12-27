@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { Navbar } from '../other/Navbar.js';
 import { useAuth } from '../../contexts/AuthContext';
 import { Post, PostStatsCount, Save } from 'types';
+import { useLoading } from '../../contexts/LoaderContext.js';
 
 interface SaveRecord extends Save {
 	post: Post & PostStatsCount;
@@ -12,6 +13,7 @@ interface SaveRecord extends Save {
 
 const Saved = () => {
 	const { user } = useAuth();
+	const { setLoading } = useLoading();
 
 	// Init savesNumber state
 	const [savesNumber, setSavesNumber] = useState(21);
@@ -24,12 +26,16 @@ const Saved = () => {
 
 	// Update savesArr state when savesNumber or user state changes
 	useEffect(() => {
-		getSaves(savesNumber).then((savedArr) => {
-			setSavesArr(savedArr);
-			if (savedArr.length < savesNumber) {
-				setAllLoaded(true);
-			}
-		});
+		setLoading(true);
+		getSaves(savesNumber)
+			.then((savedArr) => {
+				setSavesArr(savedArr);
+				if (savedArr.length < savesNumber) {
+					setAllLoaded(true);
+				}
+				setLoading(true);
+			})
+			.catch(() => setLoading(false));
 	}, [savesNumber, user]);
 
 	// Load-more function that updates the saves reel

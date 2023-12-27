@@ -8,6 +8,7 @@ import { findUser } from '../../services/users.js';
 import { io, Socket } from 'socket.io-client';
 import { getToken } from '../../services/localstor.js';
 import { Conversation, HasUsers, Message, User, UserStatsCount } from 'types';
+import { useLoading } from '../../contexts/LoaderContext.js';
 
 interface ConvoRecord extends Conversation, HasUsers {
 	messages: Message[];
@@ -15,6 +16,7 @@ interface ConvoRecord extends Conversation, HasUsers {
 
 const ConvoPage = () => {
 	const navigate = useNavigate();
+	const { setLoading } = useLoading();
 
 	// Socket state
 	const [socket, setSocket] = useState<Socket>();
@@ -81,7 +83,15 @@ const ConvoPage = () => {
 		initSocket().then((newSocket) => {
 			setSocket(newSocket);
 			if (otherUserId && !otherUser) {
-				findUser(otherUserId).then(setOtherUser);
+				setLoading(true);
+				findUser(otherUserId)
+					.then((newUser) => {
+						setOtherUser(newUser);
+						if (!newUser) {
+							setLoading(false);
+						}
+					})
+					.catch(() => setLoading(false));
 			}
 		});
 	}, []);
@@ -98,7 +108,13 @@ const ConvoPage = () => {
 			setDiffMessNumber(0);
 			setMessagesNumber(newNum);
 		} else if (otherUser && messagesNumber) {
-			getSingleConvo(otherUserId, messagesNumber).then(setConvo);
+			setLoading(true);
+			getSingleConvo(otherUserId, messagesNumber)
+				.then((newConvo) => {
+					setConvo(newConvo);
+					setLoading(false);
+				})
+				.catch(() => setLoading(false));
 		}
 	}, [otherUser, messagesNumber]);
 

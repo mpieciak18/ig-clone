@@ -8,8 +8,10 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext.js';
 import { setLocalUser } from '../../services/localstor.js';
 import { useProfile } from '../../contexts/ProfileContext.js';
+import { useLoading } from '../../contexts/LoaderContext.js';
 
 const FollowButton = (props: { otherUserId: number }) => {
+	const { setLoading } = useLoading();
 	const { user, setUser } = useAuth();
 	const { otherUser, setOtherUser } = useProfile();
 	const { otherUserId } = props;
@@ -32,7 +34,12 @@ const FollowButton = (props: { otherUserId: number }) => {
 
 	// Update followingId on user prop change & on render
 	useEffect(() => {
-		checkForFollow(otherUserId).then(setFollowingId);
+		setLoading(false);
+		checkForFollow(otherUserId)
+			.then((id) => {
+				setFollowingId(id);
+			})
+			.catch(() => setLoading(false));
 	}, []);
 
 	// Update isUpdating, followText, & followButtonClass when followingId changes

@@ -5,12 +5,14 @@ import { FollowButton } from '../../other/FollowButton.js';
 import '../styles/Likes.css';
 import { usePopUp } from '../../../contexts/PopUpContext.js';
 import { Like, User } from 'types';
+import { useLoading } from '../../../contexts/LoaderContext.js';
 
 interface LikeRecord extends Like {
 	user: User;
 }
 
 const Likes = (props: { postId: number }) => {
+	const { setLoading } = useLoading();
 	const { updatePopUp } = usePopUp();
 	const { postId } = props;
 
@@ -30,12 +32,16 @@ const Likes = (props: { postId: number }) => {
 
 	// Update likes when likesNumber changes (ie, upon render or upon scroll-to-bottom)
 	useEffect(() => {
-		getLikes(postId, likesNumber).then((newLikes) => {
-			setLikes(newLikes);
-			if (newLikes.length < likesNumber) {
-				setAllLoaded(true);
-			}
-		});
+		setLoading(true);
+		getLikes(postId, likesNumber)
+			.then((newLikes) => {
+				setLikes(newLikes);
+				if (newLikes.length < likesNumber) {
+					setAllLoaded(true);
+				}
+				setLoading(false);
+			})
+			.catch(() => setLoading(false));
 	}, [likesNumber]);
 
 	// Load more likes when user reaches bottom of pop-up

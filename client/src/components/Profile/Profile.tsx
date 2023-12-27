@@ -8,10 +8,13 @@ import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { ProfileProvider } from '../../contexts/ProfileContext.js';
 import { Post, PostStatsCount } from 'types';
+import { useLoading } from '../../contexts/LoaderContext.js';
 
 interface PostRecord extends Post, PostStatsCount {}
 
 const Profile = () => {
+	const { setLoading } = useLoading();
+
 	// Get other user id from url parameters
 	const otherUserId = Number(useParams().otherUserId);
 
@@ -26,16 +29,20 @@ const Profile = () => {
 
 	// Update posts state when postsNumber state changes
 	useEffect(() => {
-		findPostsFromUser(otherUserId, postsNumber).then((newPosts) => {
-			if (newPosts.length > 0) {
-				setPosts(newPosts);
-				if (newPosts.length < postsNumber) {
-					setAllLoaded(true);
+		setLoading(true);
+		findPostsFromUser(otherUserId, postsNumber)
+			.then((newPosts) => {
+				if (newPosts.length > 0) {
+					setPosts(newPosts);
+					if (newPosts.length < postsNumber) {
+						setAllLoaded(true);
+					}
+				} else {
+					setPosts([]);
 				}
-			} else {
-				setPosts([]);
-			}
-		});
+				setLoading(false);
+			})
+			.catch(() => setLoading(false));
 	}, [postsNumber]);
 
 	// Load-more function that updates the posts reel
