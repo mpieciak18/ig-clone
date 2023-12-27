@@ -35,7 +35,6 @@ Additionally, the client has been rewritten from Javascript to Typescript, as we
 <a href="https://www.postgresql.org/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original.svg" alt="postgres" width="50" height="50"/> </a>
 <a href="https://vitejs.dev/" target="_blank"> <img src="./client/public/images/vite.svg" alt="vite" width="50" height="50"/> </a>
 <a href="https://socket.io/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/socketio/socketio-original.svg" alt="socket.io" width="50" height="50"/> </a>
-<a href="https://jwt.io/" target="_blank"> <img src="./client/public/images/jwt.png" alt="jwt.io" width="50" height="50"/> </a>
 </p>
 
 ## Former Technologies Used
@@ -49,7 +48,7 @@ Additionally, the client has been rewritten from Javascript to Typescript, as we
 ## App Features
 
 1. Enjoy responsive styling tailored for both desktop and mobile, created from scratch in vanilla CSS.
-2. Create your own account and log in / log out whenever you please, facilitated by Express & JWT.io.
+2. Create your own account and log in / log out whenever you please, facilitated by Express.
 3. Add posts by uploading photos & adding captions, which are stored & retrieved from the app's relational database (Postgres) and storage (Firebase Storage).
 4. View a set number of posts on a given page (ie, home, profile, or saved), and load more by scrolling down the page.
 5. View individual post pages and scroll through its full list of comments.
