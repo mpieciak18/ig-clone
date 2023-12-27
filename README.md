@@ -6,7 +6,9 @@ This project is from the [the Odin Project](https://www.theodinproject.com) (spe
 
 ~~[Click here] to read more about the project specifications.~~ (Update: the Odin Project has restructured their Full Stack Javascript curriculum since version 1.0 of this app was created, and the original link no longer works. [Click here](https://www.theodinproject.com/lessons/nodejs-odin-book) for what this project has since been ported to.)
 
-Version 2.0 has replaced Firebase as its server (for database API calls & authentication) with its own server, built in Typescript, Node, Express, Prisma, and Postgres. Additionally, the client has been rewritten from Javascript to Typescript, as well as converted from CRA to Vite.
+Version 2.0 has replaced Firebase as its server (for database API calls & authentication) with its own server, built in Typescript, Node, Express, Prisma, and Postgres.
+
+Additionally, the client has been rewritten from Javascript to Typescript, as well as converted from CRA to Vite.
 
 ![Live preview of the Markstagram app](./client/public/images/sample.gif)
 
@@ -33,6 +35,7 @@ Version 2.0 has replaced Firebase as its server (for database API calls & authen
 <a href="https://www.postgresql.org/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original.svg" alt="postgres" width="50" height="50"/> </a>
 <a href="https://vitejs.dev/" target="_blank"> <img src="./client/public/images/vite.svg" alt="vite" width="50" height="50"/> </a>
 <a href="https://socket.io/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/socketio/socketio-original.svg" alt="socket.io" width="50" height="50"/> </a>
+<a href="https://jwt.io/" target="_blank"> <img src="./client/public/images/jwt.png" alt="jwt.io" width="50" height="50"/> </a>
 </p>
 
 ## Former Technologies Used
