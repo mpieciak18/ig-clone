@@ -43,6 +43,7 @@ const Home = () => {
 
 	// Update postsArr state when postsNumber state changes
 	useEffect(() => {
+		setLoading(true);
 		findPosts(postsNumber)
 			.then((newPosts) => {
 				if (newPosts.length < postsNumber) {
